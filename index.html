@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>利客来 - 科技赋能商业</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="js/menu.js"></script>
+    <script src="js/nav-component.js"></script>
+    <script>
+        // 加载统一导航组件
+        loadNavigation('', 'front');
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>欢迎使用利客来智能营销获客平台</h2>
+                <p>利客来帮助企业智能获客、运营提效</p>
+            </div>
+            <div class="page-content">
+                <div class="dashboard-section">
+                    <div class="dashboard-cards">
+                        <div class="dashboard-card">
+                              <a href="pages/marketing/information-extraction-assistant.html">
+                                  <img src="images/ai-marketing.jpg" alt="AI智能营销获客" style="width:100%;height:auto;border-radius:8px;">
+                              </a>
+                          </div>
+                        <div class="dashboard-card">
+                              <a href="pages/sales/sales-script-generation.html">
+                                  <img src="images/ai-sales.jpg" alt="AI智能销售转化" style="width:100%;height:auto;border-radius:8px;">
+                              </a>
+                          </div>
+                        <div class="dashboard-card">
+                            <img src="images/ai-brand.jpg" alt="AI智慧品牌建设" style="width:100%;height:auto;border-radius:8px;">
+                        </div>
+                        <div class="dashboard-card">
+                            <img src="images/knowledge-base.jpg" alt="企业知识库资源共享" style="width:100%;height:auto;border-radius:8px;">
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <h3>快速访问</h3>
+                        <div class="quick-links">
+                            <a>信息提取助手</a>
+                            <a>销冠话术生成</a>
+                            <a>违禁词检查助手</a>
+                            <a>广告语生成</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // 页面加载时设置当前用户名和处理登出功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取并显示当前用户名
+            const currentUsername = localStorage.getItem('currentUsername');
+            if (currentUsername) {
+                document.getElementById('current-user').textContent = currentUsername;
+            }
+            
+            // 登出功能实现
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    // 显示确认对话框
+                    if (confirm('确定要退出登录吗？')) {
+                        // 清除登录状态
+                        localStorage.removeItem('userLoggedIn');
+                        localStorage.removeItem('currentUsername');
+                        
+                        // 重定向到登录页
+                        window.location.href = 'login.html';
+                    }
+                });
+            }
+            
+            // 检查登录状态，如果未登录则重定向（可选，视需求开启）
+            // const isLoggedIn = localStorage.getItem('userLoggedIn');
+            // if (!isLoggedIn) {
+            //     window.location.href = 'login.html';
+            // }
+        });
+    </script>
+</body>
+</html>

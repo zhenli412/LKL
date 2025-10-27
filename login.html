@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>利客来 - 系统登录</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 登录页面专用样式 */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+        }
+        
+        .login-wrapper {
+            display: flex;
+            max-width: 900px;
+            width: 100%;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .login-left {
+            width: 45%;
+            background: linear-gradient(135deg, #7C3AED 0%, #4A1D96 100%);
+            padding: 60px 40px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .login-right {
+            width: 55%;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-logo img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+        }
+        
+        .login-logo h2 {
+            font-size: 24px;
+            color: #fff;
+            margin: 0;
+        }
+        
+        .login-logo p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 5px 0 0 0;
+        }
+        
+        .login-slogan {
+            margin-top: auto;
+        }
+        
+        .login-slogan h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .login-slogan ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .login-slogan li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .login-slogan li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #a78bfa;
+            font-weight: bold;
+        }
+        
+        .login-form {
+            width: 100%;
+        }
+        
+        .login-header {
+            margin-bottom: 30px;
+        }
+        
+        .login-header h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #7C3AED;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: #94a3b8;
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #7C3AED;
+        }
+        
+        .remember-me label {
+            margin: 0;
+            color: #666;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .forgot-password {
+            color: #7C3AED;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+        
+        .forgot-password:hover {
+            color: #6d28d9;
+            text-decoration: underline;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background-color: #7C3AED;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-button:hover {
+            background-color: #6d28d9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+        
+        .login-button:active {
+            transform: translateY(0);
+        }
+        
+        .login-button:disabled {
+            background-color: #d8b4fe;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .register-link a {
+            color: #7C3AED;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            color: #10b981;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 16px;
+            pointer-events: none;
+        }
+        
+        .input-with-icon {
+            padding-left: 44px;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+        
+        .toggle-password:hover {
+            color: #7C3AED;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .login-wrapper {
+                flex-direction: column;
+            }
+            
+            .login-left {
+                width: 100%;
+                padding: 40px 20px;
+                text-align: center;
+            }
+            
+            .login-right {
+                width: 100%;
+                padding: 40px 20px;
+            }
+            
+            .login-slogan li {
+                text-align: left;
+                max-width: 300px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        /* 加载动画 */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 键盘焦点动画 */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(124, 58, 237, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
+        }
+        
+        .form-input:focus {
+            animation: pulse 1s;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    
+    <div class="login-container">
+        <div class="login-wrapper">
+            <!-- 左侧品牌区域 -->
+            <div class="login-left">
+                <div class="login-logo">
+                    <img src="images/logo.svg" alt="利客来Logo">
+                    <h2>利客来</h2>
+                    <p>利润客户立刻来！</p>
+                </div>
+                
+                <div class="login-slogan">
+                    <h3>我们的优势</h3>
+                    <ul>
+                        <li>智能客户管理系统</li>
+                        <li>高效的销售转化工具</li>
+                        <li>完善的数据分析报表</li>
+                        <li>安全可靠的数据保障</li>
+                        <li>专业的技术支持团队</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 右侧登录表单 -->
+            <div class="login-right">
+                <div class="login-header">
+                    <h2>欢迎回来</h2>
+                    <p>请输入您的账号和密码进行登录</p>
+                </div>
+                
+                <form id="login-form" class="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="username">用户名/手机号</label>
+                        <div class="input-group">
+                            <span class="input-icon">👤</span>
+                            <input type="text" id="username" class="form-input input-with-icon" 
+                                   placeholder="请输入用户名或手机号" required>
+                        </div>
+                        <div id="username-error" class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <div class="input-group">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="password" class="form-input input-with-icon" 
+                                   placeholder="请输入密码" required>
+                            <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+                        </div>
+                        <div id="password-error" class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me">记住我7天</label>
+                        </div>
+                        <a href="#" class="forgot-password" onclick="showForgotPasswordModal(); return false;">忘记密码？</a>
+                    </div>
+                    
+                    <button type="submit" id="login-button" class="login-button">
+                        <span id="button-text">登录系统</span>
+                        <span id="loading-spinner" class="loading-spinner" style="display: none;"></span>
+                    </button>
+                    
+                    <div class="register-link">
+                        还没有账号？<a href="register.html">立即注册</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 忘记密码模态框 -->
+    <div id="forgot-password-modal" class="modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeForgotPasswordModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>找回密码</h3>
+                <button class="modal-close" onclick="closeForgotPasswordModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="forgot-password-form" onsubmit="handleForgotPassword(event)">
+                    <div class="form-group">
+                        <label for="forgot-phone">手机号</label>
+                        <div class="input-group">
+                            <span class="input-icon">📱</span>
+                            <input type="tel" id="forgot-phone" class="form-input input-with-icon" 
+                                   placeholder="请输入注册时的手机号" required>
+                        </div>
+                        <div id="forgot-phone-error" class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="forgot-code">验证码</label>
+                        <div class="input-group">
+                            <span class="input-icon">🔑</span>
+                            <input type="text" id="forgot-code" class="form-input input-with-icon" 
+                                   placeholder="请输入验证码" required>
+                            <button type="button" id="forgot-send-code" class="send-code-btn" 
+                                    onclick="sendForgotPasswordCode()">获取验证码</button>
+                        </div>
+                        <div id="forgot-code-error" class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-password">新密码</label>
+                        <div class="input-group">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="new-password" class="form-input input-with-icon" 
+                                   placeholder="请设置新密码" required>
+                            <span class="toggle-password" onclick="togglePasswordVisibility('new-password')">👁️</span>
+                        </div>
+                        <div id="new-password-error" class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-new-password">确认新密码</label>
+                        <div class="input-group">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="confirm-new-password" class="form-input input-with-icon" 
+                                   placeholder="请确认新密码" required>
+                            <span class="toggle-password" onclick="togglePasswordVisibility('confirm-new-password')">👁️</span>
+                        </div>
+                        <div id="confirm-new-password-error" class="error-message"></div>
+                    </div>
+                    
+                    <button type="submit" id="reset-password-btn" class="login-button">
+                        <span id="reset-button-text">重置密码</span>
+                        <span id="reset-loading-spinner" class="loading-spinner" style="display: none;"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        /* 模态框样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 1001;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-close:hover {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        /* 发送验证码按钮样式 */
+        .send-code-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .send-code-btn:hover:not(:disabled) {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .send-code-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        .send-code-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+    
+    <script>
+        // 登录处理函数
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            // 重置错误信息
+            document.getElementById('username-error').style.display = 'none';
+            document.getElementById('password-error').style.display = 'none';
+            
+            // 获取表单数据
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+            
+            // 简单验证
+            let isValid = true;
+            
+            if (!username) {
+                showError('username-error', '请输入用户名或手机号');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showError('password-error', '请输入密码');
+                isValid = false;
+            } else if (password.length < 6) {
+                showError('password-error', '密码长度不能少于6位');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // 显示加载状态
+            showLoading(true);
+            
+            // 模拟登录请求
+            setTimeout(() => {
+                // 这里应该是实际的登录API调用
+                // 模拟成功登录
+                if (username && password) {
+                    // 如果选择记住我，可以存储到localStorage
+                    if (rememberMe) {
+                        localStorage.setItem('rememberedUser', username);
+                    } else {
+                        localStorage.removeItem('rememberedUser');
+                    }
+                    
+                    // 设置登录状态
+                    localStorage.setItem('userLoggedIn', 'true');
+                    localStorage.setItem('currentUsername', username);
+                    
+                    // 显示登录成功提示
+                    const loginButton = document.getElementById('login-button');
+                    buttonText.textContent = '登录成功';
+                    loginButton.style.backgroundColor = '#10b981';
+                    
+                    // 延迟后跳转到首页
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 800);
+                } else {
+                    showError('password-error', '用户名或密码错误');
+                    showLoading(false);
+                }
+            }, 1500);
+        }
+        
+        // 显示错误信息
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+        
+        // 切换加载状态
+        function showLoading(isLoading) {
+            const button = document.getElementById('login-button');
+            const buttonText = document.getElementById('button-text');
+            const spinner = document.getElementById('loading-spinner');
+            
+            if (isLoading) {
+                button.disabled = true;
+                buttonText.textContent = '登录中';
+                spinner.style.display = 'inline-block';
+            } else {
+                button.disabled = false;
+                buttonText.textContent = '登录系统';
+                spinner.style.display = 'none';
+            }
+        }
+        
+        // 切换密码可见性
+        function togglePasswordVisibility(inputId = 'password') {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '👁️‍🗨️';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️';
+            }
+        }
+        
+        // 页面加载时检查记住的用户
+        document.addEventListener('DOMContentLoaded', function() {
+            const rememberedUser = localStorage.getItem('rememberedUser');
+            if (rememberedUser) {
+                document.getElementById('username').value = rememberedUser;
+                document.getElementById('remember-me').checked = true;
+            }
+            
+            // 添加键盘事件监听
+            document.getElementById('username').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('password').focus();
+                }
+            });
+            
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleLogin(e);
+                }
+            });
+        });
+        
+        // 显示忘记密码模态框
+        function showForgotPasswordModal() {
+            const modal = document.getElementById('forgot-password-modal');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+            
+            // 添加淡入动画
+            setTimeout(() => {
+                modal.querySelector('.modal-content').style.transform = 'translateY(0)';
+                modal.querySelector('.modal-overlay').style.opacity = '1';
+            }, 10);
+        }
+        
+        // 关闭忘记密码模态框
+        function closeForgotPasswordModal() {
+            const modal = document.getElementById('forgot-password-modal');
+            modal.querySelector('.modal-content').style.transform = 'translateY(-20px)';
+            modal.querySelector('.modal-overlay').style.opacity = '0';
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // 恢复背景滚动
+                
+                // 重置表单
+                document.getElementById('forgot-password-form').reset();
+                document.querySelectorAll('#forgot-password-form .error-message').forEach(el => {
+                    el.textContent = '';
+                });
+            }, 300);
+        }
+        
+        // 发送验证码
+        function sendForgotPasswordCode() {
+            const phoneInput = document.getElementById('forgot-phone');
+            const phoneError = document.getElementById('forgot-phone-error');
+            const sendCodeBtn = document.getElementById('forgot-send-code');
+            
+            // 验证手机号
+            const phoneRegex = /^1[3-9]\d{9}$/;
+            if (!phoneRegex.test(phoneInput.value)) {
+                phoneError.textContent = '请输入正确的手机号';
+                return;
+            }
+            
+            phoneError.textContent = '';
+            
+            // 禁用按钮并开始倒计时
+            let countdown = 60;
+            sendCodeBtn.disabled = true;
+            sendCodeBtn.textContent = `${countdown}秒后重试`;
+            sendCodeBtn.style.backgroundColor = '#ccc';
+            
+            const timer = setInterval(() => {
+                countdown--;
+                sendCodeBtn.textContent = `${countdown}秒后重试`;
+                
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    sendCodeBtn.disabled = false;
+                    sendCodeBtn.textContent = '获取验证码';
+                    sendCodeBtn.style.backgroundColor = '#3b82f6';
+                }
+            }, 1000);
+            
+            // 模拟发送验证码请求
+            setTimeout(() => {
+                showNotification('验证码已发送，请注意查收');
+            }, 500);
+        }
+        
+        // 处理重置密码
+        function handleForgotPassword(event) {
+            event.preventDefault();
+            
+            // 重置错误信息
+            const errorElements = [
+                'forgot-phone-error', 'forgot-code-error', 
+                'new-password-error', 'confirm-new-password-error'
+            ];
+            errorElements.forEach(id => {
+                document.getElementById(id).textContent = '';
+                document.getElementById(id).style.display = 'none';
+            });
+            
+            // 获取表单数据
+            const phone = document.getElementById('forgot-phone').value;
+            const code = document.getElementById('forgot-code').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-new-password').value;
+            
+            // 验证
+            let isValid = true;
+            
+            // 验证手机号
+            const phoneRegex = /^1[3-9]\d{9}$/;
+            if (!phoneRegex.test(phone)) {
+                showError('forgot-phone-error', '请输入正确的手机号');
+                isValid = false;
+            }
+            
+            // 验证验证码
+            if (!code.trim() || code.length !== 6 || !/^\d+$/.test(code)) {
+                showError('forgot-code-error', '请输入6位数字验证码');
+                isValid = false;
+            }
+            
+            // 验证新密码
+            if (!newPassword || newPassword.length < 6) {
+                showError('new-password-error', '密码长度至少为6位');
+                isValid = false;
+            }
+            
+            // 验证确认密码
+            if (newPassword !== confirmPassword) {
+                showError('confirm-new-password-error', '两次输入的密码不一致');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // 显示加载状态
+                const resetBtn = document.getElementById('reset-password-btn');
+                const resetBtnText = document.getElementById('reset-button-text');
+                const resetSpinner = document.getElementById('reset-loading-spinner');
+                
+                resetBtn.disabled = true;
+                resetBtnText.textContent = '重置中';
+                resetSpinner.style.display = 'inline-block';
+                
+                // 模拟重置密码请求
+                setTimeout(() => {
+                    // 更新按钮状态为成功
+                    resetBtnText.textContent = '重置成功';
+                    resetSpinner.style.display = 'none';
+                    resetBtn.style.backgroundColor = '#10b981';
+                    
+                    // 显示成功提示
+                    showNotification('密码重置成功，请使用新密码登录');
+                    
+                    // 延迟关闭模态框
+                    setTimeout(() => {
+                        closeForgotPasswordModal();
+                    }, 1500);
+                }, 1500);
+            }
+        }
+        
+        // 显示通知
+        function showNotification(message) {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #10b981;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 6px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 2000;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            
+            // 添加到页面
+            document.body.appendChild(notification);
+            
+            // 显示通知
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // 3秒后隐藏通知
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
