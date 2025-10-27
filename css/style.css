@@ -41,7 +41,7 @@ html, body {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 0 0px;
-    height: 60px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -55,26 +55,23 @@ html, body {
 .logo-container {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0px;
 }
 
 .logo-image {
     width: 222px;
-    height: 42px;
-    margin-right: 1px;
+    height: 50px;
+    padding-top: 5px;
     object-fit: contain;
 }
 .slogan {
-    font-size: 24px;
-    font-family: 'MicrosoftYaHeiLite','微软雅黑', 'Microsoft YaHei', 'Arial', sans-serif;
-    font-style: italic;
-    color: #1831a1; /* 淡灰色 */
+    font-size: 18px;
+    font-family: SF Pro SC,SF Pro Display,SF Pro Icons,PingFang SC,'微软雅黑',Helvetica Neue,Helvetica,Arial,sans-serif;
+    color: #60ade0; /* 淡灰色 */
 }
 .logo-text {
-    font-size: 30px;
+    font-size: 24px;
     color: #1831a1; /* 使用品牌主色调 */
-    font-weight: bold;
-    margin: 0;
 }
 .logo-text2 {
     font-size: 20px;
@@ -192,7 +189,7 @@ html, body {
 }
 
 .nav-item.level-1 > .nav-header:hover {
-    background-color: #f5f7fa;
+    background-color: #ebeef5;
 }
 
 .nav-item.level-2 > .nav-header {
@@ -444,12 +441,12 @@ body.admin-role .nav-item.level-1.personal-menu {
 
 .page-header h2 {
     font-size: 24px;
-    color: #333;
+    color: #666;
     margin-bottom: 8px;
 }
 
 .page-header p {
-    color: #666;
+    color: #999;
 }
 
 .page-content {
@@ -549,9 +546,10 @@ body.admin-role .nav-item.level-1.personal-menu {
 }
 
 .quick-actions {
-    background-color: #f8f9fa;
+    background-color: #f0f0f0;
     padding: 20px;
     border-radius: 8px;
+    margin-top: 15px;
 }
 
 .quick-actions h3 {
@@ -567,7 +565,7 @@ body.admin-role .nav-item.level-1.personal-menu {
 
 .quick-links a {
     text-decoration: none;
-    color: #4A90E2;
+    color: #1831a1;
     background-color: white;
     padding: 8px 16px;
     border-radius: 20px;
