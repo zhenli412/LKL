@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>利客来 - 智能营销获客平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/menu.js"></script>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="top-navbar">
+        <div class="logo">
+            <h1>利客来</h1>
+            <p class="slogan">利润客户立刻来！</p>
+        </div>
+        <div class="user-info">
+            <span class="role-switcher">
+                <button id="role-front" class="role-btn active">前台</button>
+                <button id="role-company" class="role-btn">企业后台</button>
+                <button id="role-admin" class="role-btn">ADMIN</button>
+            </span>
+            <div class="user-avatar">
+                <img src="images/avatar.svg" alt="用户头像">
+                <span>用户名</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar">
+            <nav class="main-nav">
+                <!-- 企业知识库 -->
+                <div class="nav-item level-1">
+                    <div class="nav-header">
+                        <span class="nav-icon">📚</span>
+                        <span class="nav-title">企业知识库</span>
+                        <span class="expand-icon">▶</span>
+                    </div>
+                    <div class="nav-children">
+                        <div class="nav-item level-2">
+                            <span class="nav-icon">📂</span>
+                            <span class="nav-title">自定义目录1</span>
+                        </div>
+                        <div class="nav-item level-2">
+                            <span class="nav-icon">📂</span>
+                            <span class="nav-title">自定义目录2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 个人知识库 -->
+                <div class="nav-item level-1">
+                    <div class="nav-header">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-title">个人知识库</span>
+                        <span class="expand-icon">▶</span>
+                    </div>
+                    <div class="nav-children">
+                        <div class="nav-item level-2">
+                            <span class="nav-icon">📋</span>
+                            <span class="nav-title">选题库</span>
+                        </div>
+                        <div class="nav-item level-2">
+                            <span class="nav-icon">📄</span>
+                            <span class="nav-title">文案库</span>
+                        </div>
+                        <div class="nav-item level-2">
+                            <span class="nav-icon">💾</span>
+                            <span class="nav-title">备选库</span>
+                        </div>
+                        <div class="nav-item level-2">
+                            <span class="nav-icon">📂</span>
+                            <span class="nav-title">自定义目录1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 营销获客部 -->
+                <div class="nav-item level-1">
+                    <div class="nav-header">
+                        <span class="nav-icon">🚀</span>
+                        <span class="nav-title">营销获客部</span>
+                        <span class="expand-icon">▶</span>
+                    </div>
+                    <div class="nav-children">
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">🎯</span>
+                                <span class="nav-title">选题策划岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/marketing/info-extraction.html" class="nav-item level-3">
+                                    <span class="nav-icon">🔍</span>
+                                    <span class="nav-title">信息提取助手</span>
+                                </a>
+                                <a href="pages/marketing/copy-extraction.html" class="nav-item level-3">
+                                    <span class="nav-icon">📋</span>
+                                    <span class="nav-title">文案提取助手</span>
+                                </a>
+                                <a href="pages/marketing/structure-analysis.html" class="nav-item level-3">
+                                    <span class="nav-icon">🧩</span>
+                                    <span class="nav-title">结构分析助手</span>
+                                </a>
+                                <a href="pages/marketing/topic-generation.html" class="nav-item level-3">
+                                    <span class="nav-icon">💡</span>
+                                    <span class="nav-title">选题生成助手</span>
+                                </a>
+                                <a href="pages/marketing/influencer-analysis.html" class="nav-item level-3">
+                                    <span class="nav-icon">👤</span>
+                                    <span class="nav-title">达人分析助手</span>
+                                </a>
+                                <a href="pages/marketing/copy-rewrite.html" class="nav-item level-3">
+                                    <span class="nav-icon">✍️</span>
+                                    <span class="nav-title">文案二创助手</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">📝</span>
+                                <span class="nav-title">校审岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/marketing/prohibited-words-check.html" class="nav-item level-3">
+                                    <span class="nav-icon">🚫</span>
+                                    <span class="nav-title">违禁词检查助手</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">🎬</span>
+                                <span class="nav-title">视频剪辑岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/marketing/digital-human-generation.html" class="nav-item level-3">
+                                    <span class="nav-icon">👤</span>
+                                    <span class="nav-title">数字人生成助手</span>
+                                </a>
+                                <a href="pages/marketing/video-mix.html" class="nav-item level-3">
+                                    <span class="nav-icon">🎥</span>
+                                    <span class="nav-title">视频混剪助手</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">📹</span>
+                                <span class="nav-title">直播岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/marketing/audio-text-extraction.html" class="nav-item level-3">
+                                    <span class="nav-icon">🎤</span>
+                                    <span class="nav-title">语音文本提炼助手</span>
+                                </a>
+                                <a href="pages/marketing/live-script-generation.html" class="nav-item level-3">
+                                    <span class="nav-icon">📝</span>
+                                    <span class="nav-title">直播话术生成助手</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">🔄</span>
+                                <span class="nav-title">矩阵岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/marketing/batch-rewrite.html" class="nav-item level-3">
+                                    <span class="nav-icon">⚡</span>
+                                    <span class="nav-title">批量二创助手</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">📤</span>
+                                <span class="nav-title">运营推送岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/marketing/matrix-publish.html" class="nav-item level-3">
+                                    <span class="nav-icon">�</span>
+                                    <span class="nav-title">矩阵发布助手</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 销售转化部 -->
+                <div class="nav-item level-1">
+                    <div class="nav-header">
+                        <span class="nav-icon">💰</span>
+                        <span class="nav-title">销售转化部</span>
+                        <span class="expand-icon">▶</span>
+                    </div>
+                    <div class="nav-children">
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">�</span>
+                                <span class="nav-title">销售岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/sales/sales-script-generation.html" class="nav-item level-3">
+                                    <span class="nav-icon">💬</span>
+                                    <span class="nav-title">销冠话术生成助手</span>
+                                </a>
+                                <a href="pages/sales/performance-analysis.html" class="nav-item level-3">
+                                    <span class="nav-icon">�</span>
+                                    <span class="nav-title">业绩分析助手</span>
+                                </a>
+                                <a href="pages/sales/script-diagnosis.html" class="nav-item level-3">
+                                    <span class="nav-icon">🔍</span>
+                                    <span class="nav-title">话术诊断助手</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">�</span>
+                                <span class="nav-title">销售助理岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/sales/personal-ip-creation.html" class="nav-item level-3">
+                                    <span class="nav-icon">👤</span>
+                                    <span class="nav-title">个人IP打造助手</span>
+                                </a>
+                                <a href="pages/sales/moments-copy.html" class="nav-item level-3">
+                                    <span class="nav-icon">📱</span>
+                                    <span class="nav-title">朋友圈文案助手</span>
+                                </a>
+                                <a href="pages/sales/activity-planning.html" class="nav-item level-3">
+                                    <span class="nav-icon">🎯</span>
+                                    <span class="nav-title">活动策划助手</span>
+                                </a>
+                                <a href="pages/sales/sales-letter.html" class="nav-item level-3">
+                                    <span class="nav-icon">✉️</span>
+                                    <span class="nav-title">销售信助手</span>
+                                </a>
+                                <a href="pages/sales/selling-point-extraction.html" class="nav-item level-3">
+                                    <span class="nav-icon">⭐</span>
+                                    <span class="nav-title">卖点提炼助手</span>
+                                </a>
+                                <a href="pages/sales/competition-research.html" class="nav-item level-3">
+                                    <span class="nav-icon">🔍</span>
+                                    <span class="nav-title">竞品调研助手</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">💬</span>
+                                <span class="nav-title">客服岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/sales/intelligent-customer-service.html" class="nav-item level-3">
+                                    <span class="nav-icon">🤖</span>
+                                    <span class="nav-title">智能客服助手</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 品牌部 -->
+                <div class="nav-item level-1">
+                    <div class="nav-header">
+                        <span class="nav-icon">�</span>
+                        <span class="nav-title">品牌部</span>
+                        <span class="expand-icon">▶</span>
+                    </div>
+                    <div class="nav-children">
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">�️</span>
+                                <span class="nav-title">品牌岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/brand/brand-story.html" class="nav-item level-3">
+                                    <span class="nav-icon">📖</span>
+                                    <span class="nav-title">品牌故事</span>
+                                </a>
+                                <a href="pages/brand/slogan-generation.html" class="nav-item level-3">
+                                    <span class="nav-icon">💬</span>
+                                    <span class="nav-title">广告语生成</span>
+                                </a>
+                                <a href="pages/brand/official-document.html" class="nav-item level-3">
+                                    <span class="nav-icon">📄</span>
+                                    <span class="nav-title">公文写作</span>
+                                </a>
+                                <a href="pages/brand/speech-draft.html" class="nav-item level-3">
+                                    <span class="nav-icon">🎤</span>
+                                    <span class="nav-title">发言稿写作</span>
+                                </a>
+                                <a href="pages/brand/product-naming.html" class="nav-item level-3">
+                                    <span class="nav-icon">🏷️</span>
+                                    <span class="nav-title">产品起名器</span>
+                                </a>
+                                <a href="pages/brand/trending-marketing.html" class="nav-item level-3">
+                                    <span class="nav-icon">🔥</span>
+                                    <span class="nav-title">热点营销文案</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 支持部 -->
+                <div class="nav-item level-1">
+                    <div class="nav-header">
+                        <span class="nav-icon">🛠️</span>
+                        <span class="nav-title">支持部</span>
+                        <span class="expand-icon">▶</span>
+                    </div>
+                    <div class="nav-children">
+                        <div class="nav-item level-2">
+                            <div class="nav-header">
+                                <span class="nav-icon">👨‍�</span>
+                                <span class="nav-title">支持岗</span>
+                                <span class="expand-icon">▶</span>
+                            </div>
+                            <div class="nav-children">
+                                <a href="pages/support/legal-documents.html" class="nav-item level-3">
+                                    <span class="nav-icon">⚖️</span>
+                                    <span class="nav-title">合同法务文书</span>
+                                </a>
+                                <a href="pages/support/jd-generation.html" class="nav-item level-3">
+                                    <span class="nav-icon">📋</span>
+                                    <span class="nav-title">岗位职责JD生成</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>欢迎使用利客来智能营销获客平台</h2>
+                <p>帮助企业智能获客、运营提效</p>
+            </div>
+            <div class="page-content">
+                <div class="dashboard-section">
+                    <div class="dashboard-cards">
+                        <div class="dashboard-card">
+                            <h3>� 营销获客</h3>
+                            <p>智能分析市场趋势，精准获客</p>
+                            <a href="pages/marketing/info-extraction.html">开始使用</a>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>� 销售转化</h3>
+                            <p>优化销售流程，提高转化率</p>
+                            <a href="pages/sales/sales-script-generation.html">开始使用</a>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>🏆 品牌建设</h3>
+                            <p>打造企业形象，提升品牌价值</p>
+                            <a href="pages/brand/brand-story.html">开始使用</a>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>🏢 企业管理</h3>
+                            <p>管理企业资源，提高运营效率</p>
+                            <a href="pages/company/knowledge-base-management.html">进入管理</a>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <h3>快速访问</h3>
+                        <div class="quick-links">
+                            <a href="pages/marketing/info-extraction.html">信息提取助手</a>
+                            <a href="pages/sales/sales-script-generation.html">销冠话术生成</a>
+                            <a href="pages/marketing/topic-generation.html">选题生成助手</a>
+                            <a href="pages/brand/slogan-generation.html">广告语生成</a>
+                        </div>
+                    </div>
+                    
+                    <div class="platform-info">
+                        <h3>平台简介</h3>
+                        <p>利客来是一款整合了多个AI智能体的营销获客平台，为企业提供全方位的营销和运营解决方案。通过智能技术帮助企业高效获客、提升转化率、优化运营流程，实现业务增长。</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
