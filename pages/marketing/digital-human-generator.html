@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字人生成助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* 定义CSS变量，便于统一管理样式 */
+        :root {
+            --primary-color: #1890ff;
+            --primary-hover: #40a9ff;
+            --border-color: #e8e8e8;
+            --text-primary: #262626;
+            --text-secondary: #595959;
+            --text-tertiary: #8c8c8c;
+            --bg-primary: #ffffff;
+            --bg-secondary: #fafafa;
+            --bg-hover: #f5f5f5;
+            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+        
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: flex;
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-light);
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-layout {
+                flex-direction: column;
+                padding: 16px;
+            }
+        }
+        
+        .comparison-panel {
+            flex: 1;
+            background-color: var(--bg-primary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-primary);
+        }
+        
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .panel-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            min-height: 300px;
+        }
+        
+        .panel-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+        }
+        
+        /* 参数设置样式 */
+        .parameter-group {
+            margin-bottom: 20px;
+        }
+        
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .parameter-group select,
+        .parameter-group input[type="text"],
+        .parameter-group input[type="number"] {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            background-color: var(--bg-primary);
+        }
+        
+        .parameter-group select:focus,
+        .parameter-group input[type="text"]:focus,
+        .parameter-group input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+        
+        /* 文件上传样式 */
+        .file-upload-section {
+            position: relative;
+        }
+        
+        .file-upload-section input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+        
+        .file-upload-section button {
+            width: 100%;
+        }
+        
+        /* 选项组样式 */
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option-group label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        
+        /* 按钮样式 */
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            min-height: 36px;
+        }
+        
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .action-button.primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .action-button.primary:active {
+            transform: translateY(0);
+        }
+        
+        .action-button.secondary {
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+            border-color: var(--border-color);
+        }
+        
+        .action-button.secondary:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background-color: var(--bg-primary);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        /* 结果显示样式 */
+        .result-content {
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            transition: var(--transition);
+        }
+        
+        .result-content.loading {
+            background-color: rgba(24, 144, 255, 0.05);
+        }
+        
+        .character-preview {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        .preview-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: var(--bg-secondary);
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 16px 0;
+            font-size: 14px;
+            color: var(--text-tertiary);
+            transition: var(--transition);
+        }
+        
+        .character-preview:hover .preview-placeholder {
+            border-color: var(--primary-color);
+            color: var(--text-secondary);
+        }
+        
+        .placeholder-text {
+            color: var(--text-tertiary);
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        /* 使用指南样式 */
+        .usage-guide {
+            max-width: 1400px;
+            margin: 24px auto 40px;
+            padding: 20px 24px;
+            background-color: var(--bg-primary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+        }
+        
+        .usage-guide h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 16px 0;
+        }
+        
+        .usage-guide ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .usage-guide li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .usage-guide li::before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+        
+        /* 加载动画 */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(24, 144, 255, 0.2);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .comparison-layout {
+                margin: 0 16px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .action-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 加载统一导航组件，设置基础路径为上上级目录，激活marketing角色
+        loadNavigation('../../', 'marketing');
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>数字人生成助手</h2>
+                <p>快速创建专业数字人形象，助力视频内容制作</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 左右对比布局 -->
+                <div class="comparison-layout">
+                    <!-- 左侧面板 - 参数设置 -->
+                    <div class="comparison-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">数字人参数设置</h3>
+                        </div>
+                        <div class="panel-content">
+                            <div class="parameter-group">
+                                <label>选择形象类型</label>
+                                <select id="character-type">
+                                    <option value="male-professional">男性专业形象</option>
+                                    <option value="female-professional">女性专业形象</option>
+                                    <option value="casual-male">休闲男性</option>
+                                    <option value="casual-female">休闲女性</option>
+                                    <option value="custom">自定义</option>
+                                </select>
+                            </div>
+                            
+                            <div class="parameter-group">
+                                <label>选择服装风格</label>
+                                <select id="clothing-style">
+                                    <option value="business">商务正装</option>
+                                    <option value="casual">休闲装</option>
+                                    <option value="creative">创意装</option>
+                                    <option value="sports">运动装</option>
+                                </select>
+                            </div>
+                            
+                            <div class="parameter-group">
+                                <label>上传参考图片（可选）</label>
+                                <div class="file-upload-section">
+                                    <input type="file" id="reference-upload" accept=".jpg,.png">
+                                    <button id="upload-btn" class="action-button secondary">上传图片</button>
+                                </div>
+                            </div>
+                            
+                            <h4 style="margin-top: 24px; margin-bottom: 16px; font-size: 16px; font-weight: 600; color: var(--text-primary);">高级设置</h4>
+                            <div class="option-group">
+                                <label><input type="checkbox" checked> 高清渲染</label>
+                                <label><input type="checkbox"> 动画表情</label>
+                                <label><input type="checkbox"> 语音同步</label>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="button-group">
+                                <button id="generate-btn" class="action-button primary">生成数字人</button>
+                                <button id="reset-btn" class="action-button secondary">重置设置</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧面板 - 生成结果 -->
+                    <div class="comparison-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">生成结果</h3>
+                            <button id="download-btn" class="action-button secondary" disabled>下载数字人</button>
+                        </div>
+                        <div class="panel-content">
+                            <div id="character-result" class="result-content">
+                                <p class="placeholder-text">生成的数字人将显示在这里...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="usage-guide">
+                    <h3>使用指南</h3>
+                    <ul>
+                        <li>选择数字人的基本形象类型</li>
+                        <li>设置服装风格和其他参数</li>
+                        <li>可选：上传参考图片以获得更符合期望的结果</li>
+                        <li>点击「生成数字人」按钮开始创建</li>
+                        <li>生成完成后可预览并下载数字人资源</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // 数字人生成助手交互逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const generateBtn = document.getElementById('generate-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const uploadBtn = document.getElementById('upload-btn');
+            const downloadBtn = document.getElementById('download-btn');
+            const characterType = document.getElementById('character-type');
+            const clothingStyle = document.getElementById('clothing-style');
+            const referenceUpload = document.getElementById('reference-upload');
+            const characterResult = document.getElementById('character-result');
+            
+            // 上传图片功能
+            uploadBtn.addEventListener('click', function() {
+                referenceUpload.click();
+            });
+            
+            referenceUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // 显示上传成功的视觉反馈
+                    uploadBtn.textContent = '已上传: ' + file.name;
+                    uploadBtn.classList.add('primary');
+                    uploadBtn.classList.remove('secondary');
+                }
+            });
+            
+            // 生成数字人功能
+            generateBtn.addEventListener('click', function() {
+                // 显示加载状态
+                characterResult.innerHTML = '';
+                characterResult.classList.add('loading');
+                
+                const spinner = document.createElement('div');
+                spinner.className = 'loading-spinner';
+                
+                const loadingText = document.createElement('p');
+                loadingText.className = 'placeholder-text';
+                loadingText.textContent = '正在生成数字人，请稍候...';
+                
+                characterResult.appendChild(spinner);
+                characterResult.appendChild(loadingText);
+                
+                // 禁用生成按钮防止重复点击
+                generateBtn.disabled = true;
+                generateBtn.style.opacity = '0.6';
+                
+                // 模拟生成过程（实际项目中会替换为真实的API调用）
+                setTimeout(function() {
+                    // 移除加载状态
+                    characterResult.classList.remove('loading');
+                    
+                    // 生成预览内容
+                    const previewDiv = document.createElement('div');
+                    previewDiv.className = 'character-preview';
+                    
+                    // 创建预览图片（使用占位图）
+                    const previewImg = document.createElement('img');
+                    previewImg.src = 'https://via.placeholder.com/300x300?text=数字人预览';
+                    previewImg.alt = '生成的数字人预览';
+                    previewImg.style.width = '100%';
+                    previewImg.style.borderRadius = 'var(--border-radius)';
+                    previewImg.style.boxShadow = 'var(--shadow-light)';
+                    
+                    // 创建数字人信息
+                    const infoDiv = document.createElement('div');
+                    infoDiv.style.marginTop = '16px';
+                    
+                    const typeText = document.createElement('p');
+                    typeText.style.fontSize = '14px';
+                    typeText.style.color = 'var(--text-secondary)';
+                    typeText.style.margin = '8px 0';
+                    typeText.textContent = '形象类型: ' + characterType.options[characterType.selectedIndex].text;
+                    
+                    const styleText = document.createElement('p');
+                    styleText.style.fontSize = '14px';
+                    styleText.style.color = 'var(--text-secondary)';
+                    styleText.style.margin = '8px 0';
+                    styleText.textContent = '服装风格: ' + clothingStyle.options[clothingStyle.selectedIndex].text;
+                    
+                    // 添加信息到预览区域
+                    infoDiv.appendChild(typeText);
+                    infoDiv.appendChild(styleText);
+                    previewDiv.appendChild(previewImg);
+                    previewDiv.appendChild(infoDiv);
+                    
+                    // 清空并添加预览内容
+                    characterResult.innerHTML = '';
+                    characterResult.appendChild(previewDiv);
+                    
+                    // 启用下载按钮
+                    downloadBtn.disabled = false;
+                    
+                    // 重新启用生成按钮
+                    generateBtn.disabled = false;
+                    generateBtn.style.opacity = '1';
+                    
+                }, 2000); // 模拟2秒生成时间
+            });
+            
+            // 重置功能
+            resetBtn.addEventListener('click', function() {
+                // 重置选择器
+                characterType.selectedIndex = 0;
+                clothingStyle.selectedIndex = 0;
+                
+                // 重置复选框
+                const checkboxes = document.querySelectorAll('.option-group input[type="checkbox"]');
+                checkboxes.forEach((checkbox, index) => {
+                    checkbox.checked = index === 0; // 只有第一个默认勾选
+                });
+                
+                // 重置文件上传
+                referenceUpload.value = '';
+                uploadBtn.textContent = '上传图片';
+                uploadBtn.classList.remove('primary');
+                uploadBtn.classList.add('secondary');
+                
+                // 重置结果区域
+                characterResult.innerHTML = '<p class="placeholder-text">生成的数字人将显示在这里...</p>';
+                downloadBtn.disabled = true;
+            });
+            
+            // 下载功能
+            downloadBtn.addEventListener('click', function() {
+                if (!downloadBtn.disabled) {
+                    // 显示下载提示（实际项目中会替换为真实的下载逻辑）
+                    alert('数字人资源下载已开始，请稍候...');
+                    
+                    // 模拟下载过程中的视觉反馈
+                    const originalText = downloadBtn.textContent;
+                    downloadBtn.textContent = '下载中...';
+                    downloadBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        downloadBtn.textContent = originalText;
+                        downloadBtn.disabled = false;
+                    }, 1500);
+                }
+            });
+        });
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 文件上传功能
+            const referenceUpload = document.getElementById('reference-upload');
+            const uploadBtn = document.getElementById('upload-btn');
+            
+            uploadBtn.addEventListener('click', function() {
+                referenceUpload.click();
+            });
+            
+            referenceUpload.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    const fileName = this.files[0].name;
+                    alert(`参考图片 ${fileName} 已选择`);
+                }
+            });
+            
+            // 重置按钮功能
+            const resetBtn = document.getElementById('reset-btn');
+            
+            resetBtn.addEventListener('click', function() {
+                document.getElementById('character-type').value = 'male-professional';
+                document.getElementById('clothing-style').value = 'business';
+                document.getElementById('character-result').innerHTML = '<p class="placeholder-text">生成的数字人将显示在这里...</p>';
+                referenceUpload.value = '';
+            });
+            
+            // 生成按钮功能
+            const generateBtn = document.getElementById('generate-btn');
+            const characterResult = document.getElementById('character-result');
+            
+            generateBtn.addEventListener('click', function() {
+                characterResult.innerHTML = '<p>正在生成数字人，请稍候...</p>';
+                // 模拟生成过程
+                setTimeout(function() {
+                    characterResult.innerHTML = '<div class="character-preview">\n' +
+                        '<p>数字人生成成功！</p>\n' +
+                        '<div class="preview-placeholder">[数字人预览图]</div>\n' +
+                        '<p>形象类型：' + document.getElementById('character-type').options[document.getElementById('character-type').selectedIndex].text + '</p>\n' +
+                        '<p>服装风格：' + document.getElementById('clothing-style').options[document.getElementById('clothing-style').selectedIndex].text + '</p>\n' +
+                        '</div>';
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>

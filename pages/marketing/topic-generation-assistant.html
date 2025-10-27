@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选题生成助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 0px;
+        }
+        
+        .comparison-panel {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+        
+        .input-panel {
+            border: 1px solid #e8e8e8;
+        }
+        
+        .output-panel {
+            border: 1px solid #e8e8e8;
+            min-height: 500px;
+        }
+        
+        .input-section {
+            margin-bottom: 24px;
+        }
+        
+        .input-section label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .input-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .input-section textarea:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+        
+        .topic-settings,
+        .style-options {
+            margin-bottom: 24px;
+        }
+        
+        .topic-settings h4,
+        .style-options h4 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #333;
+        }
+        
+        .setting-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .setting-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .setting-group label span {
+            width: 90px;
+            flex-shrink: 0;
+        }
+        
+        .setting-group select {
+            padding: 6px 10px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: white;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .setting-group select:focus {
+            outline: none;
+            border-color: #1890ff;
+        }
+        
+        .setting-group input[type="number"] {
+            padding: 6px 10px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 80px;
+        }
+        
+        .setting-group input[type="number"]:focus {
+            outline: none;
+            border-color: #1890ff;
+        }
+        
+        .option-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .option-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .option-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .result-header h4 {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            margin: 0;
+        }
+        
+        .result-content {
+            min-height: 300px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #666;
+        }
+        
+        .placeholder-text {
+            color: #999;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+        
+        .loading-text {
+            color: #1890ff;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+        
+        .result-item h5 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #333;
+        }
+        
+        .result-item ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+        
+        .result-item li {
+            padding: 12px 0;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s ease;
+        }
+        
+        .result-item li:hover {
+            color: #1890ff;
+            transform: translateX(4px);
+        }
+        
+        .usage-guide {
+            background: #fafafa;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .usage-guide h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #333;
+        }
+        
+        .usage-guide ul {
+            padding-left: 20px;
+            margin: 0;
+            color: #666;
+        }
+        
+        .usage-guide li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .action-button {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .action-button.primary {
+            background-color: #1890ff;
+            color: white;
+        }
+        
+        .action-button.primary:hover:not(:disabled) {
+            background-color: #40a9ff;
+        }
+        
+        .action-button.primary:active:not(:disabled) {
+            background-color: #096dd9;
+        }
+        
+        .action-button.secondary {
+            background-color: white;
+            color: #666;
+            border: 1px solid #d9d9d9;
+        }
+        
+        .action-button.secondary:hover:not(:disabled) {
+            color: #40a9ff;
+            border-color: #40a9ff;
+        }
+        
+        .action-button.secondary:active:not(:disabled) {
+            color: #096dd9;
+            border-color: #096dd9;
+        }
+        
+        .action-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .option-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .setting-group label {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .setting-group label span {
+                width: auto;
+                margin-bottom: 4px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 加载统一导航组件，设置基础路径为上上级目录，激活marketing角色，指定当前页面路径
+        loadNavigation('../../', 'marketing', 'pages/marketing/topic-generation-assistant.html');
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>选题生成助手</h2>
+                <p>智能生成优质内容选题，提升内容曝光率和用户关注度</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 左右对比布局 -->
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <h3>关键词与设置</h3>
+                        
+                        <div class="input-section">
+                            <label for="keyword-input">输入关键词或主题</label>
+                            <textarea id="keyword-input" placeholder="请输入核心关键词或主题方向，多个关键词请用逗号分隔..." rows="4"></textarea>
+                            
+                            <div class="topic-settings">
+                                <h4>选题设置</h4>
+                                <div class="setting-group">
+                                    <label>
+                                        <span>内容类型：</span>
+                                        <select id="content-type">
+                                            <option value="article">文章</option>
+                                            <option value="video">视频</option>
+                                            <option value="social">社交媒体</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <span>目标平台：</span>
+                                        <select id="target-platform">
+                                            <option value="all">全部平台</option>
+                                            <option value="weibo">微博</option>
+                                            <option value="wechat">微信</option>
+                                            <option value="douyin">抖音</option>
+                                            <option value="zhihu">知乎</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <span>生成数量：</span>
+                                        <input type="number" id="topic-count" min="1" max="20" value="5">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="style-options">
+                            <h4>选题风格</h4>
+                            <div class="option-group">
+                                <label><input type="checkbox" checked> 问题引导型</label>
+                                <label><input type="checkbox" checked> 揭秘型</label>
+                                <label><input type="checkbox"> 经验分享型</label>
+                                <label><input type="checkbox"> 数据解读型</label>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button id="generate-btn" class="action-button primary">生成选题</button>
+                            <button id="clear-btn" class="action-button secondary">清空</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h4>选题结果</h4>
+                            <button id="copy-result-btn" class="action-button secondary" disabled>复制结果</button>
+                        </div>
+                        <div id="topic-result" class="result-content">
+                            <p class="placeholder-text">生成的选题将显示在这里...</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- 使用指南区域 - 移至功能操作区下方 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入关键词：</strong>输入核心关键词或主题方向，多个关键词请用逗号分隔
+                </div>
+                <div class="help-item">
+                    <strong>2. 设置选题参数：</strong>选择内容类型、目标平台和生成数量
+                </div>
+                <div class="help-item">
+                    <strong>3. 选择风格：</strong>选择偏好的选题风格，如问题引导型、揭秘型等
+                </div>
+                <div class="help-item">
+                    <strong>4. 生成选题：</strong>点击「生成选题」按钮获取创意选题
+                </div>
+                <div class="help-item">
+                    <strong>5. 复制结果：</strong>可复制生成的选题用于内容创作
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有元素
+            const keywordInput = document.getElementById('keyword-input');
+            const contentType = document.getElementById('content-type');
+            const targetPlatform = document.getElementById('target-platform');
+            const topicCount = document.getElementById('topic-count');
+            const topicResult = document.getElementById('topic-result');
+            const generateBtn = document.getElementById('generate-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const copyResultBtn = document.getElementById('copy-result-btn');
+            
+            // 成功提示函数
+            function showSuccessToast(message) {
+                // 检查是否已存在toast元素
+                let toast = document.getElementById('success-toast');
+                if (toast) {
+                    // 如果已存在，移除旧的
+                    toast.remove();
+                }
+                
+                // 创建新的toast元素
+                toast = document.createElement('div');
+                toast.id = 'success-toast';
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: #52c41a;
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 6px;
+                    box-shadow: 0 4px 12px rgba(82, 196, 26, 0.35);
+                    z-index: 9999;
+                    transition: opacity 0.3s ease;
+                    font-size: 14px;
+                    pointer-events: none;
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // 3秒后自动消失
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => {
+                        if (document.body.contains(toast)) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+            
+            // 生成选题按钮事件
+            generateBtn.addEventListener('click', function() {
+                if (keywordInput.value.trim()) {
+                    // 禁用生成按钮防止重复点击
+                    generateBtn.disabled = true;
+                    topicResult.innerHTML = '<p class="loading-text">正在生成选题，请稍候...</p>';
+                    
+                    // 模拟生成过程
+                    setTimeout(() => {
+                        const count = parseInt(topicCount.value);
+                        let topicsHtml = '<div class="result-item"><h5>生成的优质选题</h5><ul>';
+                        
+                        // 根据数量生成选题
+                        for (let i = 1; i <= count; i++) {
+                            let topic = '';
+                            if (i % 4 === 1) {
+                                topic = `为什么说${keywordInput.value}是2023年最值得关注的趋势？`;
+                            } else if (i % 4 === 2) {
+                                topic = `揭秘：行业专家从不外传的${keywordInput.value}秘诀`;
+                            } else if (i % 4 === 3) {
+                                topic = `${keywordInput.value}实战经验分享：从入门到精通`;
+                            } else {
+                                topic = `${keywordInput.value}数据分析：90%的人都不知道的关键发现`;
+                            }
+                            topicsHtml += `<li>${topic}</li>`;
+                        }
+                        
+                        topicsHtml += '</ul></div>';
+                        topicResult.innerHTML = topicsHtml;
+                        // 启用复制按钮
+                        copyResultBtn.disabled = false;
+                        // 重新启用生成按钮
+                        generateBtn.disabled = false;
+                    }, 1500);
+                } else {
+                    showSuccessToast('请输入关键词或主题');
+                }
+            });
+            
+            // 清空按钮事件
+            clearBtn.addEventListener('click', function() {
+                keywordInput.value = '';
+                contentType.value = 'article';
+                targetPlatform.value = 'all';
+                topicCount.value = '5';
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = checkbox.id === 'style-1' || checkbox.id === 'style-2';
+                });
+                topicResult.innerHTML = '<p class="placeholder-text">生成的选题将显示在这里...</p>';
+                // 禁用复制按钮
+                copyResultBtn.disabled = true;
+            });
+            
+            // 复制结果按钮事件
+            copyResultBtn.addEventListener('click', function() {
+                const resultText = topicResult.innerText;
+                if (resultText !== '生成的选题将显示在这里...' && resultText !== '正在生成选题，请稍候...') {
+                    navigator.clipboard.writeText(resultText).then(() => {
+                        showSuccessToast('结果已复制到剪贴板');
+                    }).catch(() => {
+                        showSuccessToast('复制失败，请手动复制');
+                    });
+                } else {
+                    showSuccessToast('暂无结果可复制');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

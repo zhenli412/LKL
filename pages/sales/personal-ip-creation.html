@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人IP打造助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/nav-component.js"></script>
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+            margin-bottom: 30px;
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            height: fit-content;
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-section select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        .input-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-section input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        .input-section input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 选项组样式 */
+        .options-group {
+            margin-bottom: 24px;
+        }
+
+        .options-group h4 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .option-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        /* 操作按钮样式 */
+        .action-buttons {
+            margin-top: auto;
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .action-button.primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .action-button.small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* 结果区域样式 */
+        .result-output {
+            flex-grow: 1;
+            min-height: 400px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--secondary-color);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        .result-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        /* IP策略项目样式 */
+        .ip-strategy-item {
+            margin-bottom: 16px;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            background-color: var(--secondary-color);
+        }
+
+        .ip-strategy-item strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .ip-strategy-item.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        /* 帮助说明区域样式 */
+        .help-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+        }
+
+        .help-section h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .help-item {
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        .help-item strong {
+            color: var(--text-color);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div id="top-nav-container"></div>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h1>个人IP打造助手</h1>
+                <p>创建专业且有吸引力的个人品牌形象，提升个人影响力和业务转化能力</p>
+            </div>
+            
+            <div class="page-content">
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <h3>个人IP设置</h3>
+                        
+                        <div class="input-section">
+                            <label for="name">姓名/昵称</label>
+                            <input type="text" id="name" placeholder="请输入您的姓名或昵称">
+                        </div>
+
+                        <div class="input-section">
+                            <label for="industry">所属行业</label>
+                            <select id="industry">
+                                <option value="">请选择行业</option>
+                                <option value="tech">科技</option>
+                                <option value="finance">金融</option>
+                                <option value="education">教育</option>
+                                <option value="health">医疗健康</option>
+                                <option value="retail">零售</option>
+                                <option value="real-estate">房地产</option>
+                                <option value="insurance">保险</option>
+                                <option value="consulting">咨询</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="expertise">专业领域/技能</label>
+                            <input type="text" id="expertise" placeholder="例如：销售、营销、技术开发、企业管理等">
+                        </div>
+
+                        <div class="input-section">
+                            <label for="experience">工作经验</label>
+                            <select id="experience">
+                                <option value="">请选择工作经验年限</option>
+                                <option value="1-3">1-3年</option>
+                                <option value="3-5">3-5年</option>
+                                <option value="5-8">5-8年</option>
+                                <option value="8-10">8-10年</option>
+                                <option value="10+">10年以上</option>
+                            </select>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="target-audience">目标受众</label>
+                            <textarea id="target-audience" placeholder="描述您希望影响的目标人群，例如：中小企业主、创业者、职场人士等"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="personal-characteristics">个人特点/风格</label>
+                            <textarea id="personal-characteristics" placeholder="描述您的个人特点和希望展现的风格，例如：专业、亲和力强、幽默风趣、深入浅出等"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="achievements">主要成就/案例</label>
+                            <textarea id="achievements" placeholder="请简要描述您的主要职业成就或成功案例"></textarea>
+                        </div>
+
+                        <div class="options-group">
+                            <h4>IP内容方向</h4>
+                            <div class="option-item">
+                                <input type="checkbox" id="direction-knowledge" value="knowledge" checked>
+                                <label for="direction-knowledge">专业知识分享</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="direction-case" value="case" checked>
+                                <label for="direction-case">案例分析讲解</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="direction-tips" value="tips" checked>
+                                <label for="direction-tips">实用技巧分享</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="direction-insight" value="insight" checked>
+                                <label for="direction-insight">行业洞察观点</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="direction-personal" value="personal" checked>
+                                <label for="direction-personal">个人成长分享</label>
+                            </div>
+                        </div>
+
+                        <div class="options-group">
+                            <h4>IP表现形式偏好</h4>
+                            <div class="option-item">
+                                <input type="radio" name="content-format" id="format-text" value="text" checked>
+                                <label for="format-text">文字内容（文章、朋友圈等）</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="content-format" id="format-video" value="video">
+                                <label for="format-video">视频内容（短视频、直播等）</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="content-format" id="format-image" value="image">
+                                <label for="format-image">图文内容（海报、图表等）</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="content-format" id="format-combined" value="combined">
+                                <label for="format-combined">综合形式</label>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="generate-btn" class="action-button primary">生成IP打造方案</button>
+                            <button id="reset-btn" class="action-button secondary">重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧输出面板 -->
+                    <div class="comparison-panel output-panel">
+                        <h3>IP打造方案</h3>
+                        
+                        <div class="result-controls">
+                            <button id="copy-btn" class="action-button secondary small">复制方案</button>
+                            <button id="generate-content-btn" class="action-button primary small">生成示例内容</button>
+                            <button id="download-btn" class="action-button secondary small">导出方案</button>
+                        </div>
+
+                        <div id="result-output" class="result-output">
+                            个人IP打造方案将显示在这里。请在左侧填写您的信息并点击"生成IP打造方案"按钮。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 帮助说明 -->
+                <div class="help-section">
+                    <h3>使用帮助</h3>
+                    <div class="help-item">
+                        <strong>什么是个人IP？</strong> 个人IP是指个人在特定领域内的专业形象和影响力，能够帮助您建立个人品牌认知，提升专业信任度。
+                    </div>
+                    <div class="help-item">
+                        <strong>如何打造有吸引力的个人IP？</strong> 明确专业定位、保持内容一致性、展现个人特色、持续输出优质内容是打造个人IP的关键。
+                    </div>
+                    <div class="help-item">
+                        <strong>个人IP的价值？</strong> 良好的个人IP可以帮助您提升行业影响力、增加业务机会、获取更多资源和合作可能。
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载导航组件
+            loadNavigation('../../', 'sales', 'sales/personal-ip-creation.html');
+            
+            // 生成IP打造方案按钮事件
+            document.getElementById('generate-btn').addEventListener('click', function() {
+                generateIPStrategy();
+            });
+            
+            // 重置按钮事件
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                resetForm();
+            });
+            
+            // 复制方案按钮事件
+            document.getElementById('copy-btn').addEventListener('click', function() {
+                copyToClipboard();
+            });
+            
+            // 生成示例内容按钮事件
+            document.getElementById('generate-content-btn').addEventListener('click', function() {
+                generateSampleContent();
+            });
+            
+            // 导出方案按钮事件
+            document.getElementById('download-btn').addEventListener('click', function() {
+                downloadStrategy();
+            });
+        });
+        
+        // 生成IP打造方案函数
+        function generateIPStrategy() {
+            // 获取表单数据
+            const name = document.getElementById('name').value.trim() || '[您的姓名]';
+            const industry = document.getElementById('industry').value;
+            const expertise = document.getElementById('expertise').value.trim() || '[专业领域]';
+            const experience = document.getElementById('experience').value;
+            const targetAudience = document.getElementById('target-audience').value.trim() || '[目标受众]';
+            const personalCharacteristics = document.getElementById('personal-characteristics').value.trim() || '[个人特点]';
+            const achievements = document.getElementById('achievements').value.trim() || '[主要成就]';
+            
+            // 获取选择的内容方向
+            const selectedDirections = [];
+            document.querySelectorAll('.options-group input[type="checkbox"]:checked').forEach(checkbox => {
+                selectedDirections.push(checkbox.value);
+            });
+            
+            // 获取选择的内容形式
+            const selectedFormat = document.querySelector('.options-group input[type="radio"]:checked').value;
+            
+            // 显示加载状态
+            document.getElementById('result-output').innerHTML = '正在生成个人IP打造方案...';
+            
+            // 模拟API延迟
+            setTimeout(() => {
+                let strategyOutput = `# ${name}的个人IP打造方案\n\n`;
+                
+                // 1. IP定位概述
+                strategyOutput += `## 1. IP定位概述\n\n`;
+                strategyOutput += `- **IP核心定位**: ${expertise}领域专业顾问\n`;
+                strategyOutput += `- **目标受众**: ${targetAudience}\n`;
+                strategyOutput += `- **个人风格**: ${personalCharacteristics}\n`;
+                strategyOutput += `- **差异化优势**: 基于${experience || '多年'}行业经验，专注解决${industry ? getIndustryName(industry) : ''}领域核心痛点\n\n`;
+                
+                // 2. 个人品牌故事
+                strategyOutput += `## 2. 个人品牌故事\n\n`;
+                strategyOutput += `### 起源故事\n`;
+                strategyOutput += `${name}在${getIndustryName(industry)}行业深耕${experience || '多年'}，从基层做起，经历了行业的起伏变迁。这段经历不仅积累了专业知识，更培养了对行业的深刻理解和解决复杂问题的能力。\n\n`;
+                
+                strategyOutput += `### 转折点\n`;
+                strategyOutput += `在职业生涯中，${name}意识到分享知识和经验不仅可以帮助他人成长，也能建立个人影响力。于是开始在社交媒体和行业活动中分享专业见解，逐渐形成了个人风格。\n\n`;
+                
+                strategyOutput += `### 成就展示\n`;
+                strategyOutput += `${achievements}\n\n`;
+                
+                // 3. 内容策略
+                strategyOutput += `## 3. 内容策略\n\n`;
+                strategyOutput += `### 内容方向\n`;
+                if (selectedDirections.includes('knowledge')) {
+                    strategyOutput += `- **专业知识分享**: 深入解析行业理论和方法论，提供系统化的知识体系\n`;
+                }
+                if (selectedDirections.includes('case')) {
+                    strategyOutput += `- **案例分析讲解**: 分享真实案例，拆解成功要素和可复制经验\n`;
+                }
+                if (selectedDirections.includes('tips')) {
+                    strategyOutput += `- **实用技巧分享**: 提供立即可用的操作指南和技巧\n`;
+                }
+                if (selectedDirections.includes('insight')) {
+                    strategyOutput += `- **行业洞察观点**: 解读行业趋势，提供前瞻性分析\n`;
+                }
+                if (selectedDirections.includes('personal')) {
+                    strategyOutput += `- **个人成长分享**: 分享职业发展心得和成长历程\n`;
+                }
+                strategyOutput += `\n`;
+                
+                strategyOutput += `### 内容形式\n`;
+                if (selectedFormat === 'text' || selectedFormat === 'combined') {
+                    strategyOutput += `- **文字内容**: 800-1500字的深度文章，300字以内的朋友圈短内容\n`;
+                }
+                if (selectedFormat === 'video' || selectedFormat === 'combined') {
+                    strategyOutput += `- **视频内容**: 3-5分钟的知识讲解，1-2分钟的要点分享\n`;
+                }
+                if (selectedFormat === 'image' || selectedFormat === 'combined') {
+                    strategyOutput += `- **图文内容**: 信息图表，思维导图，经验总结图\n`;
+                }
+                strategyOutput += `\n`;
+                
+                // 4. 传播渠道
+                strategyOutput += `## 4. 传播渠道策略\n\n`;
+                strategyOutput += `- **主阵地**: 根据内容形式选择1-2个主要平台深耕\n`;
+                strategyOutput += `- **辅助渠道**: 扩展3-5个辅助平台增加曝光\n`;
+                strategyOutput += `- **社群运营**: 建立私域流量池，深度连接目标受众\n`;
+                strategyOutput += `- **行业活动**: 积极参与线上线下行业活动，增加曝光和连接\n\n`;
+                
+                // 5. 内容日历规划
+                strategyOutput += `## 5. 内容日历规划\n\n`;
+                strategyOutput += `- **发布频率**: 每周2-3篇固定内容\n`;
+                strategyOutput += `- **内容节奏**: 深度内容与轻量内容相结合\n`;
+                strategyOutput += `- **热点结合**: 适时结合行业热点和节日策划专题内容\n\n`;
+                
+                // 6. 差异化策略
+                strategyOutput += `## 6. 差异化策略\n\n`;
+                strategyOutput += `- **语言风格**: 保持${personalCharacteristics}的表达风格，形成独特识别度\n`;
+                strategyOutput += `- **内容角度**: 从${expertise}专业出发，提供差异化视角\n`;
+                strategyOutput += `- **互动方式**: 建立独特的互动机制，增强粉丝参与感\n\n`;
+                
+                // 7. 个人标识系统
+                strategyOutput += `## 7. 个人标识系统\n\n`;
+                strategyOutput += `- **个人口号**: 建议创建一句简洁有力的个人口号\n`;
+                strategyOutput += `- **视觉标识**: 统一的头像、配色方案和排版风格\n`;
+                strategyOutput += `- **签名风格**: 独特的签名和结尾方式\n\n`;
+                
+                // 8. 变现路径规划
+                strategyOutput += `## 8. 变现路径规划\n\n`;
+                strategyOutput += `- **咨询服务**: 提供一对一专业咨询\n`;
+                strategyOutput += `- **知识产品**: 开发线上课程或电子书\n`;
+                strategyOutput += `- **合作机会**: 寻求行业合作和品牌代言\n`;
+                strategyOutput += `- **社群变现**: 建立付费社群提供深度服务\n\n`;
+                
+                // 9. 长期建设计划
+                strategyOutput += `## 9. 长期建设计划\n\n`;
+                strategyOutput += `- **短期目标** (3个月): 建立基础内容库，积累初始粉丝\n`;
+                strategyOutput += `- **中期目标** (6-12个月): 扩大影响力，形成稳定内容输出机制\n`;
+                strategyOutput += `- **长期目标** (1-3年): 成为行业有影响力的KOL，实现多元变现\n\n`;
+                
+                // 10. 执行建议
+                strategyOutput += `## 10. 执行建议\n\n`;
+                strategyOutput += `- **内容先行**: 持续输出高质量内容是基础\n`;
+                strategyOutput += `- **真诚为本**: 保持真实，不夸大，不虚构\n`;
+                strategyOutput += `- **持续学习**: 不断更新知识体系，保持专业前沿性\n`;
+                strategyOutput += `- **耐心积累**: IP建设是长期过程，需要持续投入和坚持\n`;
+                
+                // 显示结果
+                document.getElementById('result-output').innerHTML = strategyOutput;
+            }, 2000);
+        }
+        
+        // 获取行业中文名
+        function getIndustryName(industry) {
+            const industryMap = {
+                'tech': '科技',
+                'finance': '金融',
+                'education': '教育',
+                'health': '医疗健康',
+                'retail': '零售',
+                'real-estate': '房地产',
+                'insurance': '保险',
+                'consulting': '咨询',
+                'other': '其他'
+            };
+            return industryMap[industry] || '';
+        }
+        
+        // 重置表单函数
+        function resetForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('industry').value = '';
+            document.getElementById('expertise').value = '';
+            document.getElementById('experience').value = '';
+            document.getElementById('target-audience').value = '';
+            document.getElementById('personal-characteristics').value = '';
+            document.getElementById('achievements').value = '';
+            
+            // 重置所有复选框为选中状态
+            const checkboxes = document.querySelectorAll('.options-group input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            
+            // 重置单选框
+            document.getElementById('format-text').checked = true;
+            
+            // 重置结果输出
+            document.getElementById('result-output').innerHTML = '个人IP打造方案将显示在这里。请在左侧填写您的信息并点击"生成IP打造方案"按钮。';
+        }
+        
+        // 复制方案到剪贴板
+        function copyToClipboard() {
+            const resultText = document.getElementById('result-output').innerText;
+            navigator.clipboard.writeText(resultText).then(() => {
+                alert('IP打造方案已复制到剪贴板');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        }
+        
+        // 生成示例内容
+        function generateSampleContent() {
+            // 获取当前方案内容
+            const strategyContent = document.getElementById('result-output').innerText;
+            
+            // 检查是否有生成方案
+            if (strategyContent.includes('请在左侧填写您的信息')) {
+                alert('请先生成个人IP打造方案');
+                return;
+            }
+            
+            // 显示加载状态
+            document.getElementById('result-output').innerHTML = '正在生成示例内容...';
+            
+            // 模拟API延迟
+            setTimeout(() => {
+                let sampleContent = `# 个人IP示例内容\n\n`;
+                
+                sampleContent += `## 示例一：专业知识文章标题\n`;
+                sampleContent += `「[领域]人必看：如何用3步解决90%的[痛点问题]」\n\n`;
+                
+                sampleContent += `## 示例二：案例分析标题\n`;
+                sampleContent += `「从0到100万业绩的实战拆解：我是如何帮助客户实现3个月翻倍增长的」\n\n`;
+                
+                sampleContent += `## 示例三：朋友圈短内容\n`;
+                sampleContent += `今天和一位创业者聊到团队管理问题，发现很多人都在犯同一个错误：过度关注结果而忽视过程。\n\n其实好的结果从来不是偶然，而是系统化流程运作的必然。分享3个提升团队效率的小技巧：\n1. 明确目标分解，让每个人知道自己的核心KPI\n2. 建立每日复盘机制，及时调整方向\n3. 善用工具辅助，减少重复性工作\n\n你在团队管理中遇到过什么挑战？欢迎评论区交流~ #团队管理 #效率提升\n\n`;
+                
+                sampleContent += `## 示例四：短视频脚本大纲\n`;
+                sampleContent += `**标题**：「5分钟掌握[技能]，让你的[价值]提升10倍」\n\n**开场** (0-15秒):\n大家好，我是[姓名]，今天要和大家分享一个能让你快速提升[技能]的方法。\n\n**痛点引入** (15-45秒):\n很多人在[领域]经常遇到[具体痛点]，导致[后果]，但其实解决方法很简单。\n\n**方法论分享** (45-180秒):\n今天我要分享的方法只有三步：\n1. [方法一] (具体操作+案例)\n2. [方法二] (具体操作+案例)\n3. [方法三] (具体操作+案例)\n\n**效果展示** (180-240秒):\n我有一位学员使用这套方法后，在[时间]内就实现了[具体成果]。\n\n**行动召唤** (240-300秒):\n如果你也想掌握这个方法，欢迎评论区留言「学习」，我会分享更详细的操作指南。\n记得关注我，每周分享实用干货，让你的[领域]能力持续提升！\n`;
+                
+                // 显示示例内容
+                document.getElementById('result-output').innerHTML = sampleContent;
+            }, 1500);
+        }
+        
+        // 导出方案
+        function downloadStrategy() {
+            const content = document.getElementById('result-output').innerText;
+            
+            // 检查是否有生成方案
+            if (content.includes('请在左侧填写您的信息')) {
+                alert('请先生成个人IP打造方案');
+                return;
+            }
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '个人IP打造方案.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 页面加载完成后初始化导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保loadNavigation函数存在后再调用
+            if (window.loadNavigation) {
+                loadNavigation('../../', 'sales', 'sales/personal-ip-creation.html');
+            } else {
+                console.error('loadNavigation函数未定义');
+            }
+        });    
+    </script>
+</body>
+</html>

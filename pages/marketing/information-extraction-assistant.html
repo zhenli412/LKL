@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信息提取助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+            margin-bottom: 0px;
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            height: fit-content;
+            min-height: 366px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 文件上传区域样式 */
+        .file-upload-section {
+            margin-top: 16px;
+            position: relative;
+        }
+
+        .file-upload-section input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .file-upload-section button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--secondary-color);
+            border: 1px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            color: var(--text-color);
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .file-upload-section button:hover {
+            background-color: #e5e7eb;
+            border-color: var(--primary-color);
+        }
+
+        /* 拖拽上传区域样式 */
+        .file-drop-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 16px;
+            transition: var(--transition);
+            background-color: #f9fafb;
+        }
+
+        .file-drop-area.active {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        .file-drop-area p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .file-drop-area .file-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        /* 提取选项样式 */
+        .extraction-options {
+            margin-bottom: 24px;
+            
+        }
+
+        .extraction-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 功能选项卡样式 */
+        .function-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold; 
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-light);
+            font-size: 16px;
+            font-weight: bold; 
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* 必填项标记 */
+        .required {
+            color: var(--error-color);
+            font-weight: normal;
+        }
+
+        /* 输入字段样式 */
+        .input-section input[type="text"],
+        .input-section input[type="number"],
+        .input-section select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .input-section input[type="text"]:focus,
+        .input-section input[type="number"]:focus,
+        .input-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 采集方式选择样式 */
+        .collection-method-container {
+            display: flex;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .collection-method-label {
+            flex: 1;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: white;
+            color: var(--text-color);
+            position: relative;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .collection-method-label.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .collection-method-radio {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        /* 平台选择样式 */
+        .platform-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .platform-options label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .platform-options label:hover {
+            background-color: #e5e7eb;
+        }
+
+        .platform-options input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        /* 提取方式选择样式 */
+        .extraction-method {
+            display: flex;
+            border: 1px solid var(--border-color);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .extraction-method label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* 表格样式 */
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .result-table th,
+        .result-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-table th {
+            background-color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .result-table tr:hover {
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 知识库保存弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .modal {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .modal-close:hover {
+            color: var(--text-color);
+        }
+
+        .modal-content {
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
+            margin: 0;
+        }
+
+        .result-content {
+
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        .result-item {
+            margin-bottom: 24px;
+            padding: 16px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .result-item h5 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .keyword-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .keyword-tags .tag {
+            padding: 6px 12px;
+            background-color: var(--secondary-color);
+            border-radius: 16px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .entity-list {
+            margin-top: 0;
+            padding-left: 20px;
+        }
+
+        .entity-list li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 提取进度条样式 */
+        .progress-container {
+            width: 80%;
+            max-width: 400px;
+            height: 8px;
+            background-color: var(--secondary-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        /* 提取状态文本 */
+        .extraction-status {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 8px;
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 加载统一导航组件，设置基础路径为上上级目录，激活marketing角色
+        loadNavigation('../../', 'marketing');
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>信息提取助手</h2>
+                <p>智能提取达人、视频和评论数据，助力市场分析</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 功能切换选项卡 - 直接添加内联事件处理 -->
+                <div class="function-tabs">
+                    <button class="tab-btn active" onclick="switchToTab('influencer-data')">达人数据</button>
+                    <button class="tab-btn" onclick="switchToTab('video-data')">视频数据</button>
+                    <button class="tab-btn" onclick="switchToTab('comment-data')">评论数据</button>
+                </div>
+                
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <!-- 达人数据面板 -->
+                        <div class="tab-content" id="influencer-data">
+                            <h3 class="result-header">达人数据提取</h3>
+                            
+                            <!-- 采集方式选择 - 内联点击事件版本 -->
+                            <div class="input-section">
+                                <label>采集方式 <span class="required">*</span></label>
+                                <div class="collection-method-container" style="display: flex; border-radius: 4px; overflow: hidden;">
+                                    <div id="method-link-tab" class="collection-method-tab active" style="padding: 8px 16px; background: #1E88E5; color: white; border: none; cursor: pointer; user-select: none; flex: 1; text-align: center;" onclick="switchCollectionMethod('link')">
+                                        达人链接
+                                    </div>
+                                    <div id="method-keyword-tab" class="collection-method-tab" style="padding: 8px 16px; background: #fff; color: #333; border: none; cursor: pointer; user-select: none; flex: 1; text-align: center;" onclick="switchCollectionMethod('keyword')">
+                                        达人关键词
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 达人链接方式输入 -->
+                            <div id="link-method-panel">
+                                <div class="input-section">
+                                    <label for="influencer-link">达人主页链接地址 <span class="required">*</span></label>
+                                    <input type="text" id="influencer-link" placeholder="请输入达人主页链接地址">
+                                </div>
+                            </div>
+                            
+                            <!-- 达人关键词方式输入 -->
+                            <div id="keyword-method-panel" style="display: none;">
+                                <div class="input-section">
+                                    <label for="influencer-keyword">达人关键词 <span class="required">*</span></label>
+                                    <input type="text" id="influencer-keyword" placeholder="请输入达人关键词">
+                                </div>
+                                
+                                <div class="input-section">
+                                    <label for="influencer-fans">粉丝数量</label>
+                                    <select id="influencer-fans">
+                                        <option value="">不限</option>
+                                        <option value="1000000-10000000">100w-1000w</option>
+                                        <option value="10000-1000000">1w-100w</option>
+                                        <option value="1000-10000">1000-1w</option>
+                                        <option value="0-1000">0-1000</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="input-section">
+                                    <label for="influencer-type">用户类型</label>
+                                    <select id="influencer-type">
+                                        <option value="">不限</option>
+                                        <option value="normal">普通用户</option>
+                                        <option value="enterprise">企业认证</option>
+                                        <option value="personal">个人认证</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="input-section">
+                                    <label for="influencer-platform">支持平台</label>
+                                    <div class="platform-options">
+                                        <label><input type="checkbox" value="douyin" checked> 抖音</label>
+                                        <label><input type="checkbox" value="xiaohongshu" checked> 小红书</label>
+                                        <label><input type="checkbox" value="wechat" checked> 公众号</label>
+                                        <label><input type="checkbox" value="bilibili" checked> Bilibili</label>
+                                        <label><input type="checkbox" value="video号" checked> 视频号</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="input-section">
+                                    <label for="influencer-count">导出数量 <span class="required">*</span></label>
+                                    <input type="number" id="influencer-count" min="1" max="1000" placeholder="请输入导出数量">
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button id="clear-influencer-btn" class="secondary-btn">清空</button>
+                                <button id="extract-influencer-btn" class="action-button">开始提取</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 视频数据面板 -->
+                        <div class="tab-content" id="video-data" style="display: none;">
+                            <h3 class="result-header">视频数据提取</h3>
+                            <div class="input-section">
+                                <label>采集方式 <span class="required">*</span></label>
+                                <div class="extraction-method" style="display: flex; border-radius: 4px; overflow: hidden; margin-bottom: 15px;">
+                                    <div id="video-method-keyword" class="video-method-tab active" style="padding: 8px 16px; background: #1E88E5; color: white; border: none; cursor: pointer; user-select: none; flex: 1; text-align: center;" onclick="switchVideoMethod('keyword')">
+                                        关键词搜索
+                                    </div>
+                                    <div id="video-method-account" class="video-method-tab" style="padding: 8px 16px; background: #fff; color: #333; border: none; cursor: pointer; user-select: none; flex: 1; text-align: center;" onclick="switchVideoMethod('account')">
+                                        达人对标账号
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="keyword-search-panel">
+                                <div class="input-section">
+                                    <label for="video-keyword">关键词 <span class="required">*</span></label>
+                                    <input type="text" id="video-keyword" placeholder="请输入搜索关键词">
+                                </div>
+                                
+                                <div class="input-section">
+                                    <label for="video-sort">排序方式 <span class="required">*</span></label>
+                                    <select id="video-sort">
+                                        <option value="likes">点赞最多</option>
+                                        <option value="latest">最新发布</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="input-section">
+                                    <label for="video-time">发布时间</label>
+                                    <select id="video-time">
+                                        <option value="">不限</option>
+                                        <option value="day">一天内</option>
+                                        <option value="week">一周内</option>
+                                        <option value="half-year">半年内</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="input-section">
+                                    <label for="video-duration">视频时长</label>
+                                    <select id="video-duration">
+                                        <option value="">不限</option>
+                                        <option value="short">1分钟以内</option>
+                                        <option value="medium">1-5分钟</option>
+                                        <option value="long">5分钟以上</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div id="account-search-panel" style="display: none;">
+                                <div class="input-section">
+                                    <label for="account-link">达人对标账号链接 <span class="required">*</span></label>
+                                    <input type="text" id="account-link" placeholder="请输入账号链接">
+                                </div>
+                            </div>
+                            
+                            <div class="input-section">
+                                <label for="video-platform">支持平台</label>
+                                <div class="platform-options">
+                                    <label><input type="checkbox" value="douyin" checked> 抖音</label>
+                                    <label><input type="checkbox" value="xiaohongshu" checked> 小红书</label>
+                                    <label><input type="checkbox" value="wechat" checked> 公众号</label>
+                                    <label><input type="checkbox" value="bilibili" checked> Bilibili</label>
+                                    <label><input type="checkbox" value="video号" checked> 视频号</label>
+                                </div>
+                            </div>
+                            
+                            <div class="input-section">
+                                <label for="video-count">导出数量 <span class="required">*</span></label>
+                                <input type="number" id="video-count" min="1" max="1000" placeholder="请输入导出数量">
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button id="clear-video-btn" class="secondary-btn">清空</button>
+                                <button id="extract-video-btn" class="action-button">开始提取</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 评论数据面板 -->
+                        <div class="tab-content" id="comment-data" style="display: none;">
+                            <h3 class="result-header">评论数据提取</h3>
+                            
+                            <div class="input-section">
+                                <label for="video-url">视频链接 <span class="required">*</span></label>
+                                <input type="text" id="video-url" placeholder="请输入视频链接">
+                            </div>
+                            
+                            <div class="input-section">
+                                <label for="comment-count">导出数量 <span class="required">*</span></label>
+                                <input type="number" id="comment-count" min="1" max="1000" placeholder="请输入导出数量">
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button id="clear-comment-btn" class="secondary-btn">清空</button>
+                                <button id="extract-comment-btn" class="action-button">开始提取</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>提取结果</h3>
+
+                        </div>
+                        <div id="extraction-result" class="result-content">
+                            <p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="position: absolute; bottom: 20px; right: 20px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                        <span style="font-size: 18px;">📝</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 使用指南区域 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 选择提取功能：</strong>根据需求选择达人数据、视频数据或评论数据提取
+                </div>
+                <div class="help-item">
+                    <strong>2. 设置提取参数：</strong>填写相应的关键词、链接或筛选条件
+                </div>
+                <div class="help-item">
+                    <strong>3. 开始提取：</strong>点击「开始提取」按钮获取数据
+                </div>
+                <div class="help-item">
+                    <strong>4. 查看结果：</strong>在右侧面板查看提取结果表格
+                </div>
+                <div class="help-item">
+                    <strong>5. 导出或保存：</strong>可以导出数据或保存到个人知识库
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 成功提示组件 -->
+    <div class="success-toast" id="success-toast">操作成功</div>
+    
+    <!-- 知识库保存弹窗 -->
+    <div class="modal-overlay" id="knowledge-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>保存到个人知识库</h3>
+                <button class="modal-close" id="close-modal">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="input-section">
+                    <label>
+                        <input type="radio" name="save-type" value="new" checked> 保存到新目录
+                    </label>
+                </div>
+                <div class="input-section" id="new-folder-section">
+                    <label for="new-folder-name">新目录名称</label>
+                    <input type="text" id="new-folder-name" placeholder="请输入新目录名称">
+                </div>
+                <div class="input-section">
+                    <label>
+                        <input type="radio" name="save-type" value="existing"> 保存到已有目录
+                    </label>
+                </div>
+                <div class="input-section" id="existing-folder-section" style="display: none;">
+                    <label for="existing-folder">选择目录</label>
+                    <select id="existing-folder">
+                        <option value="">请选择目录</option>
+                        <option value="marketing">营销数据</option>
+                        <option value="competition">竞品分析</option>
+                        <option value="influencer">达人研究</option>
+                        <option value="video">视频分析</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="secondary-btn" id="cancel-save">取消</button>
+                <button class="action-button" id="confirm-save">确认保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM元素引用
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const successToast = document.getElementById('success-toast');
+            const extractionResult = document.getElementById('extraction-result');
+            const knowledgeModal = document.getElementById('knowledge-modal');
+            // 使用取消按钮作为关闭模态框的按钮
+            const closeModalBtn = document.getElementById('cancel-save');
+            const cancelSaveBtn = document.getElementById('cancel-save');
+            const confirmSaveBtn = document.getElementById('confirm-save');
+            const saveTypeRadios = document.querySelectorAll('input[name="save-type"]');
+            const newFolderSection = document.getElementById('new-folder-section');
+            const existingFolderSection = document.getElementById('existing-folder-section');
+            
+            // 达人数据相关元素
+            const clearInfluencerBtn = document.getElementById('clear-influencer-btn');
+            const extractInfluencerBtn = document.getElementById('extract-influencer-btn');
+            
+            // 视频数据相关元素
+            const videoMethodRadios = document.querySelectorAll('input[name="video-method"]');
+            const keywordSearchPanel = document.getElementById('keyword-search-panel');
+            const accountSearchPanel = document.getElementById('account-search-panel');
+            const clearVideoBtn = document.getElementById('clear-video-btn');
+            const extractVideoBtn = document.getElementById('extract-video-btn');
+            
+            // 评论数据相关元素
+            const clearCommentBtn = document.getElementById('clear-comment-btn');
+            const extractCommentBtn = document.getElementById('extract-comment-btn');
+            
+            // 结果操作按钮
+            const downloadResultBtn = document.getElementById('download-result-btn');
+            const saveToKnowledgeBtn = document.getElementById('save-to-knowledge-btn');
+            
+            // 显示成功提示
+            function showSuccessToast(message) {
+                successToast.textContent = message || '操作成功';
+                successToast.classList.add('show');
+                setTimeout(() => {
+                    successToast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // 简单直接的标签切换函数 - 全局可用
+            window.switchToTab = function(tabId) {
+                console.log('切换到标签:', tabId);
+                
+                // 获取所有标签按钮和内容面板
+                const tabs = document.querySelectorAll('.tab-btn');
+                const panels = ['influencer-data', 'video-data', 'comment-data'];
+                
+                // 移除所有标签的活动状态
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                
+                // 隐藏所有内容面板
+                panels.forEach(panel => {
+                    const element = document.getElementById(panel);
+                    if (element) {
+                        element.style.display = 'none';
+                    }
+                });
+                
+                // 激活当前选中的标签和面板
+                const activeTab = document.querySelector(`.tab-btn[onclick="switchToTab('${tabId}')"]`);
+                const activePanel = document.getElementById(tabId);
+                
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                }
+                
+                if (activePanel) {
+                    activePanel.style.display = 'block';
+                    console.log('成功显示面板:', tabId);
+                } else {
+                    console.error('未找到面板元素:', tabId);
+                }
+                
+                // 重置结果区域
+                extractionResult.innerHTML = '<p class="placeholder-text">请设置参数后，点击「开始提取」按钮</p>';
+            }
+            
+            // 确保初始状态正确
+            console.log('确保初始状态正确');
+            document.getElementById('influencer-data').style.display = 'block';
+            document.getElementById('video-data').style.display = 'none';
+            document.getElementById('comment-data').style.display = 'none';
+            
+            // 为所有标签按钮添加样式，确保可点击性
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                tab.style.cursor = 'pointer';
+                tab.style.userSelect = 'none';
+                tab.style.pointerEvents = 'auto';
+                tab.style.zIndex = '100';
+            });
+            console.log('已设置所有标签按钮为可点击状态');
+            
+            // 全局的采集方式切换函数，供内联onclick调用
+            window.switchCollectionMethod = function(method) {
+                console.log('调用全局切换函数，切换到方式:', method);
+                
+                const linkTab = document.getElementById('method-link-tab');
+                const keywordTab = document.getElementById('method-keyword-tab');
+                const linkMethodPanel = document.getElementById('link-method-panel');
+                const keywordMethodPanel = document.getElementById('keyword-method-panel');
+
+                // 确保所有元素存在
+                if (linkTab && keywordTab && linkMethodPanel && keywordMethodPanel) {
+                    console.log('切换元素存在，执行切换逻辑');
+                    
+                    // 重置所有标签样式
+                    linkTab.classList.remove('active');
+                    keywordTab.classList.remove('active');
+                    linkTab.style.background = '#fff';
+                    keywordTab.style.background = '#fff';
+                    linkTab.style.color = '#333';
+                    keywordTab.style.color = '#333';
+                    
+                    // 隐藏所有面板
+                    linkMethodPanel.style.display = 'none';
+                    keywordMethodPanel.style.display = 'none';
+                    
+                    // 设置选中的标签和面板
+                    if (method === 'link') {
+                        linkTab.classList.add('active');
+                        linkTab.style.background = '#1E88E5';
+                        linkTab.style.color = 'white';
+                        linkMethodPanel.style.display = 'block';
+                        console.log('已切换到达人链接面板');
+                    } else if (method === 'keyword') {
+                        keywordTab.classList.add('active');
+                        keywordTab.style.background = '#1E88E5';
+                        keywordTab.style.color = 'white';
+                        keywordMethodPanel.style.display = 'block';
+                        console.log('已切换到达人关键词面板');
+                    }
+                } else {
+                    console.error('切换元素不存在');
+                    console.log('linkTab:', linkTab);
+                    console.log('keywordTab:', keywordTab);
+                    console.log('linkMethodPanel:', linkMethodPanel);
+                    console.log('keywordMethodPanel:', keywordMethodPanel);
+                }
+            };
+            
+            // 页面加载时初始化
+            window.addEventListener('load', function() {
+                console.log('页面加载完成，初始化默认采集方式');
+                window.switchCollectionMethod('link');
+            });
+            
+            // 采集方式切换功能已通过新的标签点击事件实现
+            
+            // 全局的视频提取方式切换函数，供内联onclick调用
+            window.switchVideoMethod = function(method) {
+                console.log('切换视频提取方式:', method);
+                
+                const keywordTab = document.getElementById('video-method-keyword');
+                const accountTab = document.getElementById('video-method-account');
+                const keywordPanel = document.getElementById('keyword-search-panel');
+                const accountPanel = document.getElementById('account-search-panel');
+
+                // 确保所有元素存在
+                if (keywordTab && accountTab && keywordPanel && accountPanel) {
+                    // 重置所有标签样式
+                    keywordTab.classList.remove('active');
+                    accountTab.classList.remove('active');
+                    keywordTab.style.background = '#fff';
+                    accountTab.style.background = '#fff';
+                    keywordTab.style.color = '#333';
+                    accountTab.style.color = '#333';
+                    
+                    // 隐藏所有面板
+                    keywordPanel.style.display = 'none';
+                    accountPanel.style.display = 'none';
+                    
+                    // 设置选中的标签和面板
+                    if (method === 'keyword') {
+                        keywordTab.classList.add('active');
+                        keywordTab.style.background = '#1E88E5';
+                        keywordTab.style.color = 'white';
+                        keywordPanel.style.display = 'block';
+                    } else if (method === 'account') {
+                        accountTab.classList.add('active');
+                        accountTab.style.background = '#1E88E5';
+                        accountTab.style.color = 'white';
+                        accountPanel.style.display = 'block';
+                    }
+                }
+            };
+            
+            // 页面加载时初始化视频提取方式
+            window.addEventListener('load', function() {
+                // 初始化视频提取方式为关键词搜索
+                setTimeout(() => {
+                    if (window.switchVideoMethod) {
+                        window.switchVideoMethod('keyword');
+                    }
+                }, 100);
+            });
+            
+            // 知识库保存类型切换
+            saveTypeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'new') {
+                        newFolderSection.style.display = 'block';
+                        existingFolderSection.style.display = 'none';
+                    } else {
+                        newFolderSection.style.display = 'none';
+                        existingFolderSection.style.display = 'block';
+                    }
+                });
+            });
+            
+            // 打开知识库保存弹窗
+            if (saveToKnowledgeBtn) {
+                saveToKnowledgeBtn.addEventListener('click', function() {
+                    if (extractionResult && (extractionResult.innerHTML.includes('placeholder-text') || extractionResult.innerHTML.includes('loading-text'))) {
+                        alert('没有可保存的结果');
+                        return;
+                    }
+                    if (knowledgeModal) {
+                        knowledgeModal.style.display = 'flex';
+                    }
+                });
+            }
+            
+            // 关闭知识库保存弹窗
+            function closeModal() {
+                knowledgeModal.style.display = 'none';
+            }
+            
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', closeModal);
+            }
+            cancelSaveBtn.addEventListener('click', closeModal);
+            
+            // 点击弹窗外部关闭
+            knowledgeModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            // 模拟获取个人知识库二级类目
+            function loadKnowledgeBaseCategories() {
+                // 模拟从系统获取个人知识库的二级类目
+                // 实际应用中，这里应该是一个API调用
+                const categories = {
+                    'marketing': [
+                        { id: 'marketing-social', name: '社媒营销' },
+                        { id: 'marketing-content', name: '内容营销' },
+                        { id: 'marketing-kol', name: 'KOL合作' }
+                    ],
+                    'competition': [
+                        { id: 'competition-analysis', name: '竞品分析' },
+                        { id: 'competition-price', name: '价格监测' },
+                        { id: 'competition-strategy', name: '策略研究' }
+                    ],
+                    'influencer': [
+                        { id: 'influencer-fashion', name: '时尚达人' },
+                        { id: 'influencer-food', name: '美食达人' },
+                        { id: 'influencer-travel', name: '旅行达人' },
+                        { id: 'influencer-digital', name: '数码达人' }
+                    ],
+                    'video': [
+                        { id: 'video-fashion', name: '时尚视频' },
+                        { id: 'video-food', name: '美食视频' },
+                        { id: 'video-travel', name: '旅行视频' },
+                        { id: 'video-education', name: '教育视频' }
+                    ]
+                };
+                
+                return categories;
+            }
+            
+            // 加载知识库二级类目到下拉框
+            function populateSubCategories() {
+                const mainCategorySelect = document.getElementById('existing-folder');
+                const subCategorySelect = document.getElementById('existing-subfolder');
+                
+                if (!subCategorySelect) {
+                    // 如果还没有二级类目选择框，创建它
+                    const existingFolderSection = document.getElementById('existing-folder-section');
+                    const subCategoryHTML = `
+                        <div class="input-section" id="existing-subfolder-section" style="display: none;">
+                            <label for="existing-subfolder">选择子目录</label>
+                            <select id="existing-subfolder">
+                                <option value="">请选择子目录</option>
+                            </select>
+                        </div>
+                    `;
+                    existingFolderSection.insertAdjacentHTML('beforeend', subCategoryHTML);
+                }
+            }
+            
+            // 初始化知识库保存弹窗功能
+            function initKnowledgeBaseModal() {
+                populateSubCategories();
+                
+                // 当选择主目录时，更新子目录选项
+                document.getElementById('existing-folder').addEventListener('change', function() {
+                    const selectedCategory = this.value;
+                    const subCategorySelect = document.getElementById('existing-subfolder');
+                    const subCategorySection = document.getElementById('existing-subfolder-section');
+                    
+                    // 清空子目录选项
+                    subCategorySelect.innerHTML = '<option value="">请选择子目录</option>';
+                    
+                    if (selectedCategory) {
+                        // 获取并添加子目录选项
+                        const categories = loadKnowledgeBaseCategories();
+                        const subCategories = categories[selectedCategory] || [];
+                        
+                        if (subCategories.length > 0) {
+                            subCategorySection.style.display = 'block';
+                            subCategories.forEach(category => {
+                                const option = document.createElement('option');
+                                option.value = category.id;
+                                option.textContent = category.name;
+                                subCategorySelect.appendChild(option);
+                            });
+                        } else {
+                            subCategorySection.style.display = 'none';
+                        }
+                    } else {
+                        subCategorySection.style.display = 'none';
+                    }
+                });
+            }
+            
+            // 初始化知识库弹窗
+            initKnowledgeBaseModal();
+            
+            // 确认保存到知识库
+            if (confirmSaveBtn) {
+                confirmSaveBtn.addEventListener('click', function() {
+                    const saveType = document.querySelector('input[name="save-type"]:checked').value;
+                
+                if (saveType === 'new') {
+                    const folderName = document.getElementById('new-folder-name').value.trim();
+                    if (!folderName) {
+                        alert('请输入新目录名称');
+                        return;
+                    }
+                    
+                    // 模拟保存到新目录
+                    // 在实际应用中，这里应该是一个API调用，将数据保存到服务器
+                    console.log('保存到新目录:', folderName);
+                    console.log('保存的数据:', window.currentExtractionData);
+                    
+                    showSuccessToast(`已成功保存到新目录：${folderName}`);
+                } else {
+                    const folderId = document.getElementById('existing-folder').value;
+                    if (!folderId) {
+                        alert('请选择已有目录');
+                        return;
+                    }
+                    
+                    const subFolderId = document.getElementById('existing-subfolder')?.value;
+                    const folderName = document.getElementById('existing-folder').options[document.getElementById('existing-folder').selectedIndex].text;
+                    let subFolderName = '';
+                    
+                    if (subFolderId && document.getElementById('existing-subfolder-section').style.display !== 'none') {
+                        subFolderName = document.getElementById('existing-subfolder').options[document.getElementById('existing-subfolder').selectedIndex].text;
+                    }
+                    
+                    // 模拟保存到已有目录
+                    // 在实际应用中，这里应该是一个API调用，将数据保存到服务器
+                    console.log('保存到已有目录:', folderName, subFolderName ? `/${subFolderName}` : '');
+                    console.log('保存的数据:', window.currentExtractionData);
+                    
+                    if (subFolderName) {
+                        showSuccessToast(`已成功保存到目录：${folderName} / ${subFolderName}`);
+                    } else {
+                        showSuccessToast(`已成功保存到目录：${folderName}`);
+                    }
+                }
+                
+                closeModal();
+            });
+            }
+            
+            // 达人数据清空
+            if (clearInfluencerBtn) {
+                clearInfluencerBtn.addEventListener('click', function() {
+                    // 清空达人链接输入
+                    const influencerLinkInput = document.getElementById('influencer-link');
+                    if (influencerLinkInput) influencerLinkInput.value = '';
+                    // 清空达人关键词相关输入
+                    const influencerKeywordInput = document.getElementById('influencer-keyword');
+                    if (influencerKeywordInput) influencerKeywordInput.value = '';
+                document.getElementById('influencer-fans').value = '';
+                document.getElementById('influencer-type').value = '';
+                document.getElementById('influencer-count').value = '';
+                document.querySelectorAll('#influencer-data .platform-options input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                showSuccessToast('已清空达人数据输入');
+            });
+            }
+            
+            // 视频数据清空
+            clearVideoBtn.addEventListener('click', function() {
+                document.getElementById('video-keyword').value = '';
+                document.getElementById('account-link').value = '';
+                document.getElementById('video-count').value = '';
+                document.querySelectorAll('#video-data .platform-options input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                showSuccessToast('已清空视频数据输入');
+            });
+            
+            // 评论数据清空
+            clearCommentBtn.addEventListener('click', function() {
+                document.getElementById('video-url').value = '';
+                document.getElementById('comment-count').value = '';
+                showSuccessToast('已清空评论数据输入');
+            });
+            
+            // 模拟提取进度的函数
+            function simulateExtractionProgress(extractionType, onComplete) {
+                // 显示带进度条的加载状态
+                extractionResult.innerHTML = `
+                    <div class="loading-text">
+                        <span class="loading-spinner"></span>
+                        <div>正在提取${extractionType}数据，请稍候...</div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="extraction-progress"></div>
+                        </div>
+                        <div class="extraction-status" id="extraction-status">准备中...</div>
+                    </div>
+                `;
+                
+                const progressBar = document.getElementById('extraction-progress');
+                const statusText = document.getElementById('extraction-status');
+                let progress = 0;
+                const statusMessages = [
+                    '正在连接数据源...',
+                    '正在获取原始数据...',
+                    '正在解析数据...',
+                    '正在格式化结果...',
+                    '准备完成...'
+                ];
+                
+                const interval = setInterval(() => {
+                    progress += 2;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    // 更新状态文本
+                    const statusIndex = Math.floor(progress / 20);
+                    if (statusIndex < statusMessages.length) {
+                        statusText.textContent = statusMessages[statusIndex];
+                    }
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        // 延迟一点时间再显示结果，让用户看到100%的进度
+                        setTimeout(() => {
+                            onComplete();
+                        }, 300);
+                    }
+                }, 50);
+            }
+            
+            // 达人数据提取
+            extractInfluencerBtn.addEventListener('click', function() {
+                const method = document.querySelector('input[name="collection-method"]:checked').value;
+                const selectedPlatforms = Array.from(document.querySelectorAll('#influencer-data .platform-options input[type="checkbox"]:checked'))
+                    .map(checkbox => checkbox.value);
+                
+                let isValid = true;
+                let message = '';
+                let params = { platforms: selectedPlatforms };
+                
+                if (method === 'link') {
+                    // 达人链接方式验证
+                    const link = document.getElementById('influencer-link').value.trim();
+                    if (!link) {
+                        isValid = false;
+                        message = '请输入达人主页链接地址';
+                    }
+                    params.link = link;
+                    params.method = 'link';
+                } else {
+                    // 达人关键词方式验证
+                    const keyword = document.getElementById('influencer-keyword').value.trim();
+                    const count = document.getElementById('influencer-count').value.trim();
+                    const fansRange = document.getElementById('influencer-fans').value;
+                    const userType = document.getElementById('influencer-type').value;
+                    
+                    if (!keyword) {
+                        isValid = false;
+                        message = '请输入达人关键词';
+                    } else if (!count || isNaN(count) || count < 1 || count > 1000) {
+                        isValid = false;
+                        message = '请输入有效的导出数量（1-1000）';
+                    }
+                    
+                    params.keyword = keyword;
+                    params.count = count;
+                    params.fansRange = fansRange;
+                    params.userType = userType;
+                    params.method = 'keyword';
+                }
+                
+                if (!isValid) {
+                    alert(message);
+                    return;
+                }
+                
+                // 记录当前提取的参数，用于保存到知识库
+                window.currentExtractionData = {
+                    type: 'influencer',
+                    params: params,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // 模拟提取过程，带进度显示
+                simulateExtractionProgress('达人', () => {
+                    // 模拟达人数据
+                    let influencerData;
+                    let statsInfo = '';
+                    
+                    if (method === 'link') {
+                        // 达人链接方式的模拟数据
+                        influencerData = [
+                            { link: params.link, douyinId: 'dy123456', name: '时尚达人小王', intro: '专注时尚搭配分享', age: '28', gender: '女', fans: '1,200,000', likes: '15,000,000', follows: '350', works: '320', location: '上海' }
+                        ];
+                        
+                        // 构建统计信息
+                        statsInfo = `
+                            <div>达人链接: ${params.link}</div>
+                            <div>平台数: ${selectedPlatforms.length}</div>
+                            <div>实际结果: ${influencerData.length} 条</div>
+                            <div>提取时间: ${new Date().toLocaleString()}</div>
+                        `;
+                    } else {
+                        // 达人关键词方式的模拟数据
+                        influencerData = [
+                            { link: 'https://example.com/influencer1', douyinId: 'dy123456', name: '时尚达人小王', intro: '专注时尚搭配分享', age: '28', gender: '女', fans: '1,200,000', likes: '15,000,000', follows: '350', works: '320', location: '上海' },
+                            { link: 'https://example.com/influencer2', douyinId: 'dy654321', name: '美食博主小李', intro: '探寻全国各地美食', age: '32', gender: '男', fans: '850,000', likes: '9,200,000', follows: '280', works: '410', location: '北京' },
+                            { link: 'https://example.com/influencer3', douyinId: 'dy987654', name: '旅行达人小张', intro: '带你看遍世界美景', age: '26', gender: '男', fans: '2,300,000', likes: '28,000,000', follows: '150', works: '180', location: '广州' },
+                        ];
+                        
+                        // 根据粉丝数量过滤数据（简单模拟）
+                        if (params.fansRange) {
+                            const fanFilters = {
+                                '100w-1000w': (fans) => fans >= 1000000 && fans < 10000000,
+                                '1w-100w': (fans) => fans >= 10000 && fans < 1000000,
+                                '1000-1w': (fans) => fans >= 1000 && fans < 10000,
+                                '0-1000': (fans) => fans >= 0 && fans < 1000
+                            };
+                            
+                            const filterFn = fanFilters[params.fansRange];
+                            if (filterFn) {
+                                influencerData = influencerData.filter(item => {
+                                    const fansNum = parseInt(item.fans.replace(/,/g, ''));
+                                    return filterFn(fansNum);
+                                });
+                            }
+                        }
+                        
+                        // 构建统计信息
+                        statsInfo = `
+                            <div>关键词: ${params.keyword}</div>
+                            <div>导出数量: ${params.count}</div>
+                            <div>粉丝数量: ${params.fansRange || '不限'}</div>
+                            <div>用户类型: ${params.userType || '不限'}</div>
+                            <div>平台数: ${selectedPlatforms.length}</div>
+                            <div>实际结果: ${influencerData.length} 条</div>
+                            <div>提取时间: ${new Date().toLocaleString()}</div>
+                        `;
+                    }
+                    
+                    // 构建表格，添加统计信息
+                    let tableHTML = `
+                        <div style="margin-bottom: 16px; padding: 12px; background-color: var(--secondary-color); border-radius: var(--border-radius);">
+                            <div style="font-weight: 600; margin-bottom: 8px;">提取统计</div>
+                            <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                                ${statsInfo}
+                            </div>
+                        </div>
+                        <table class="result-table">
+                            <thead>
+                                <tr>
+                                    <th>达人链接</th>
+                                    <th>抖音号</th>
+                                    <th>达人昵称</th>
+                                    <th>达人简介</th>
+                                    <th>年龄</th>
+                                    <th>性别</th>
+                                    <th>粉丝数</th>
+                                    <th>获赞</th>
+                                    <th>关注</th>
+                                    <th>作品数</th>
+                                    <th>IP属地</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    influencerData.forEach(item => {
+                        tableHTML += `
+                            <tr>
+                                <td><a href="${item.link}" target="_blank" style="color: var(--primary-color);">查看</a></td>
+                                <td>${item.douyinId}</td>
+                                <td style="font-weight: 500;">${item.name}</td>
+                                <td>${item.intro}</td>
+                                <td>${item.age}</td>
+                                <td>${item.gender}</td>
+                                <td style="color: var(--primary-color); font-weight: 500;">${item.fans}</td>
+                                <td>${item.likes}</td>
+                                <td>${item.follows}</td>
+                                <td>${item.works}</td>
+                                <td>${item.location}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableHTML += '</tbody></table>';
+                    extractionResult.innerHTML = tableHTML;
+                    showSuccessToast('达人数据提取完成');
+                });
+            });
+            
+            // 视频数据提取
+            extractVideoBtn.addEventListener('click', function() {
+                const method = document.querySelector('input[name="video-method"]:checked').value;
+                const count = document.getElementById('video-count').value.trim();
+                const selectedPlatforms = Array.from(document.querySelectorAll('#video-data .platform-options input[type="checkbox"]:checked'))
+                    .map(checkbox => checkbox.value);
+                
+                let isValid = true;
+                let message = '';
+                let keyword = '';
+                let accountLink = '';
+                let sortBy = '';
+                let timeRange = '';
+                let duration = '';
+                
+                if (method === 'keyword') {
+                    keyword = document.getElementById('video-keyword').value.trim();
+                    sortBy = document.getElementById('video-sort').value;
+                    timeRange = document.getElementById('video-time').value;
+                    duration = document.getElementById('video-duration').value;
+                    
+                    if (!keyword) {
+                        isValid = false;
+                        message = '请输入搜索关键词';
+                    } else if (!count || isNaN(count) || count < 1 || count > 1000) {
+                        isValid = false;
+                        message = '请输入有效的导出数量（1-1000）';
+                    }
+                } else {
+                    accountLink = document.getElementById('account-link').value.trim();
+                    
+                    if (!accountLink) {
+                        isValid = false;
+                        message = '请输入达人对标账号链接';
+                    } else if (!count || isNaN(count) || count < 1 || count > 1000) {
+                        isValid = false;
+                        message = '请输入有效的导出数量（1-1000）';
+                    }
+                }
+                
+                if (!isValid) {
+                    alert(message);
+                    return;
+                }
+                
+                // 记录当前提取的参数，用于保存到知识库
+                window.currentExtractionData = {
+                    type: 'video',
+                    params: {
+                        method,
+                        keyword,
+                        accountLink,
+                        count,
+                        sortBy,
+                        timeRange,
+                        duration,
+                        platforms: selectedPlatforms
+                    },
+                    timestamp: new Date().toISOString()
+                };
+                
+                // 模拟提取过程，带进度显示
+                simulateExtractionProgress('视频', () => {
+                    // 模拟视频数据
+                    const videoData = [
+                        { title: '最新时尚搭配技巧分享', link: 'https://example.com/video1', keywords: '时尚,搭配,穿搭', likes: '120,000', shares: '8,500', comments: '3,200', publishDate: '2024-01-15', duration: '03:45' },
+                        { title: '家常菜谱教程 - 红烧肉', link: 'https://example.com/video2', keywords: '美食,烹饪,红烧肉', likes: '89,000', shares: '5,200', comments: '1,800', publishDate: '2024-01-14', duration: '05:20' },
+                        { title: '旅行Vlog - 三亚五日游', link: 'https://example.com/video3', keywords: '旅行,Vlog,三亚', likes: '230,000', shares: '12,000', comments: '4,500', publishDate: '2024-01-13', duration: '08:10' },
+                    ];
+                    
+                    // 构建表格，添加统计信息
+                    let tableHTML = `
+                        <div style="margin-bottom: 16px; padding: 12px; background-color: var(--secondary-color); border-radius: var(--border-radius);">
+                            <div style="font-weight: 600; margin-bottom: 8px;">提取统计</div>
+                            <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                                <div>提取方式: ${method === 'keyword' ? '关键词搜索' : '达人对标账号'}</div>
+                                ${method === 'keyword' ? `<div>关键词: ${keyword}</div>` : `<div>账号链接: ${accountLink}</div>`}
+                                <div>导出数量: ${count}</div>
+                                <div>平台数: ${selectedPlatforms.length}</div>
+                                <div>实际结果: ${videoData.length} 条</div>
+                                <div>提取时间: ${new Date().toLocaleString()}</div>
+                            </div>
+                        </div>
+                        <table class="result-table">
+                            <thead>
+                                <tr>
+                                    <th>标题</th>
+                                    <th>链接</th>
+                                    <th>关键词</th>
+                                    <th>发布时间</th>
+                                    <th>视频时长</th>
+                                    <th>点赞数</th>
+                                    <th>分享数</th>
+                                    <th>评论数</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    videoData.forEach(item => {
+                        tableHTML += `
+                            <tr>
+                                <td style="font-weight: 500;">${item.title}</td>
+                                <td><a href="${item.link}" target="_blank" style="color: var(--primary-color);">查看</a></td>
+                                <td>${item.keywords}</td>
+                                <td>${item.publishDate}</td>
+                                <td>${item.duration}</td>
+                                <td style="color: var(--primary-color); font-weight: 500;">${item.likes}</td>
+                                <td>${item.shares}</td>
+                                <td>${item.comments}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableHTML += '</tbody></table>';
+                    extractionResult.innerHTML = tableHTML;
+                    showSuccessToast('视频数据提取完成');
+                });
+            });
+            
+            // 评论数据提取
+            extractCommentBtn.addEventListener('click', function() {
+                const videoUrl = document.getElementById('video-url').value.trim();
+                const count = document.getElementById('comment-count').value.trim();
+                
+                if (!videoUrl) {
+                    alert('请输入视频链接');
+                    return;
+                }
+                
+                if (!count || isNaN(count) || count < 1 || count > 1000) {
+                    alert('请输入有效的导出数量（1-1000）');
+                    return;
+                }
+                
+                // 记录当前提取的参数，用于保存到知识库
+                window.currentExtractionData = {
+                    type: 'comment',
+                    params: {
+                        videoUrl,
+                        count
+                    },
+                    timestamp: new Date().toISOString()
+                };
+                
+                // 模拟提取过程，带进度显示
+                simulateExtractionProgress('评论', () => {
+                    // 模拟评论数据，增加更多字段和真实感
+                    const commentData = [
+                        { 
+                            comment: '内容很实用，学到了很多！这个技巧我正好需要，谢谢分享。', 
+                            subComments: '3', 
+                            likes: '128',
+                            publishTime: '2小时前',
+                            videoInfo: '时尚搭配技巧分享', 
+                            userInfo: '时尚爱好者',
+                            userLevel: 'Lv.3',
+                            sentiment: '正面'
+                        },
+                        { 
+                            comment: '这个方法真的有效，感谢分享！我已经试过了，效果不错。', 
+                            subComments: '5', 
+                            likes: '89',
+                            publishTime: '5小时前',
+                            videoInfo: '时尚搭配技巧分享', 
+                            userInfo: '穿搭新手',
+                            userLevel: 'Lv.2',
+                            sentiment: '正面'
+                        },
+                        { 
+                            comment: '期待更多这样的内容，希望能多出一些冬季穿搭的教程。', 
+                            subComments: '0', 
+                            likes: '45',
+                            publishTime: '昨天',
+                            videoInfo: '时尚搭配技巧分享', 
+                            userInfo: '日常关注者',
+                            userLevel: 'Lv.1',
+                            sentiment: '中性'
+                        },
+                    ];
+                    
+                    // 计算情感分析统计
+                    const sentimentStats = commentData.reduce((stats, comment) => {
+                        stats[comment.sentiment] = (stats[comment.sentiment] || 0) + 1;
+                        return stats;
+                    }, {});
+                    
+                    // 构建表格，添加统计信息和情感分析
+                    let tableHTML = `
+                        <div style="margin-bottom: 16px; padding: 12px; background-color: var(--secondary-color); border-radius: var(--border-radius);">
+                            <div style="font-weight: 600; margin-bottom: 8px;">提取统计</div>
+                            <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                                <div>视频链接: ${videoUrl}</div>
+                                <div>导出数量: ${count}</div>
+                                <div>实际结果: ${commentData.length} 条</div>
+                                <div>正面评论: ${sentimentStats['正面'] || 0} 条</div>
+                                <div>中性评论: ${sentimentStats['中性'] || 0} 条</div>
+                                <div>负面评论: ${sentimentStats['负面'] || 0} 条</div>
+                                <div>提取时间: ${new Date().toLocaleString()}</div>
+                            </div>
+                        </div>
+                        <table class="result-table">
+                            <thead>
+                                <tr>
+                                    <th>评论内容</th>
+                                    <th>点赞数</th>
+                                    <th>子评论数</th>
+                                    <th>发布时间</th>
+                                    <th>用户信息</th>
+                                    <th>用户等级</th>
+                                    <th>情感分析</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    commentData.forEach(item => {
+                        // 根据情感设置不同颜色
+                        let sentimentColor = '';
+                        if (item.sentiment === '正面') sentimentColor = 'style="color: var(--success-color); font-weight: 500;"';
+                        else if (item.sentiment === '负面') sentimentColor = 'style="color: var(--error-color); font-weight: 500;"';
+                        else sentimentColor = 'style="color: var(--warning-color); font-weight: 500;"';
+                        
+                        tableHTML += `
+                            <tr>
+                                <td style="max-width: 250px;">${item.comment}</td>
+                                <td style="color: var(--primary-color); font-weight: 500;">${item.likes}</td>
+                                <td>${item.subComments}</td>
+                                <td>${item.publishTime}</td>
+                                <td>${item.userInfo}</td>
+                                <td>${item.userLevel}</td>
+                                <td ${sentimentColor}>${item.sentiment}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableHTML += '</tbody></table>';
+                    extractionResult.innerHTML = tableHTML;
+                    showSuccessToast('评论数据提取完成');
+                });
+            });
+            
+            // 导出结果
+            if (downloadResultBtn) {
+                downloadResultBtn.addEventListener('click', function() {
+                    if (extractionResult && (extractionResult.innerHTML.includes('placeholder-text') || extractionResult.innerHTML.includes('loading-text'))) {
+                        alert('没有可导出的结果');
+                        return;
+                    }
+                
+                // 获取当前激活的标签页
+                const activeTab = document.querySelector('.tab-btn.active').getAttribute('data-tab');
+                let fileName = '';
+                
+                if (activeTab === 'influencer-data') {
+                    fileName = '达人数据';
+                } else if (activeTab === 'video-data') {
+                    fileName = '视频数据';
+                } else if (activeTab === 'comment-data') {
+                    fileName = '评论数据';
+                }
+                
+                // 创建CSV格式数据
+                const table = extractionResult.querySelector('table');
+                if (table) {
+                    let csvContent = [];
+                    
+                    // 获取表头
+                    const headers = table.querySelectorAll('thead th');
+                    const headerRow = Array.from(headers).map(header => header.textContent);
+                    csvContent.push(headerRow.join(','));
+                    
+                    // 获取数据行
+                    const rows = table.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        const dataRow = Array.from(cells).map(cell => {
+                            const text = cell.textContent.trim();
+                            return '"' + text + '"';
+                        });
+                        csvContent.push(dataRow.join(','));
+                    });
+                    
+                    // 下载文件
+                    const blob = new Blob([csvContent.join('\n')], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${fileName}_${new Date().toISOString().slice(0, 10)}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showSuccessToast('数据已导出为CSV文件');
+                }
+            });
+            }
+        });
+    </script>
+</body>
+</html>

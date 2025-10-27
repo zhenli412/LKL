@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卖点提炼助手 - LKL智能助手</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/nav-component.js"></script>
+    <style>
+        /* 定义CSS变量 */
+        :root {
+            --primary-color: #1E88E5;
+            --primary-light: #64B5F6;
+            --primary-dark: #0D47A1;
+            --secondary-color: #FF6F00;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --background-color: #F5F5F5;
+            --card-background: #FFFFFF;
+            --border-color: #E0E0E0;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --error-color: #F44336;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+        }
+
+        /* 卖点提炼助手特定样式 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .comparison-panel {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow);
+        }
+
+        .input-panel {
+            grid-column: 1;
+        }
+
+        .output-panel {
+            grid-column: 2;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: var(--spacing-sm);
+        }
+
+        .input-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .input-group input[type="text"],
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: var(--spacing-sm);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input[type="text"]:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .input-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .options-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .options-group h4 {
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: var(--spacing-sm);
+        }
+
+        .option-item label {
+            font-weight: normal;
+            margin-bottom: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--text-secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #616161;
+        }
+
+        .btn-small {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            font-size: 0.875rem;
+        }
+
+        .result-output {
+            min-height: 400px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            background-color: #FAFAFA;
+        }
+
+        .result-controls {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            justify-content: flex-end;
+        }
+
+        .selling-point {
+            background-color: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .selling-point h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+        }
+
+        .selling-point p {
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-secondary);
+        }
+
+        .selling-point .tag {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-right: var(--spacing-xs);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        /* 帮助说明区域 */
+        .help-section {
+            background-color: #E3F2FD;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .help-section h4 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+
+        .help-section ul {
+            margin-bottom: 0;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-panel {
+                grid-column: 1;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏容器 -->
+    <div id="top-nav-container"></div>
+    
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside id="side-nav-container" class="sidebar"></aside>
+        
+        <!-- 主内容区域 -->
+        <main class="content">
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h1>卖点提炼助手</h1>
+                <p>深入分析产品特点，提炼最具吸引力的核心卖点</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 帮助说明 -->
+                <div class="help-section">
+                    <h4>📝 使用指南</h4>
+                    <ul>
+                        <li>填写产品/服务的基本信息和详细描述</li>
+                        <li>描述目标客户群体和他们的需求</li>
+                        <li>选择需要提炼的卖点类型</li>
+                        <li>点击提炼按钮获取分析结果</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-layout">
+                    <!-- 输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <h2 class="panel-title">产品信息</h2>
+                        
+                        <div class="input-group">
+                            <label for="product-name">产品/服务名称</label>
+                            <input type="text" id="product-name" placeholder="输入您的产品或服务名称">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="product-category">产品/服务类别</label>
+                            <select id="product-category">
+                                <option value="software">软件/应用</option>
+                                <option value="hardware">硬件/设备</option>
+                                <option value="service">服务</option>
+                                <option value="digital">数字产品</option>
+                                <option value="physical">实体产品</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="product-description">产品/服务详细描述</label>
+                            <textarea id="product-description" placeholder="详细描述产品的功能、特性、材质、规格等信息"></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="target-audience">目标客户群体</label>
+                            <textarea id="target-audience" placeholder="描述您的目标客户群体，包括人口统计特征、痛点和需求"></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="competitors">主要竞争对手（可选）</label>
+                            <textarea id="competitors" placeholder="列出2-3个主要竞争对手，每个竞争对手占一行"></textarea>
+                        </div>
+
+                        <div class="options-group">
+                            <h4>卖点类型</h4>
+                            <div class="option-item">
+                                <input type="checkbox" id="type-functional" checked>
+                                <label for="type-functional">功能卖点</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="type-emotional" checked>
+                                <label for="type-emotional">情感卖点</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="type-economic" checked>
+                                <label for="type-economic">经济卖点</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="type-differential" checked>
+                                <label for="type-differential">差异化卖点</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="type-social" checked>
+                                <label for="type-social">社交认同卖点</label>
+                            </div>
+                        </div>
+
+                        <div class="options-group">
+                            <h4>输出格式</h4>
+                            <div class="option-item">
+                                <input type="checkbox" id="format-brief" checked>
+                                <label for="format-brief">简洁版卖点</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="format-detailed" checked>
+                                <label for="format-detailed">详细版卖点</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="format-marketing">
+                                <label for="format-marketing">营销话术建议</label>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="extract-points" class="btn btn-primary">提炼卖点</button>
+                            <button id="reset-form" class="btn btn-secondary">重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 输出面板 -->
+                    <div class="comparison-panel output-panel">
+                        <h2 class="panel-title">提炼结果</h2>
+                        <div id="selling-points-output" class="result-output">
+                            提炼的卖点将在这里显示...
+                        </div>
+                        <div class="result-controls">
+                            <button id="copy-result" class="btn btn-secondary btn-small">复制</button>
+                            <button id="refine-points" class="btn btn-secondary btn-small">优化提炼</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/nav-component.js"></script>
+    <script>
+
+        // 提炼卖点函数
+        function extractSellingPoints() {
+            // 获取表单数据
+            var productName = document.getElementById('product-name').value || '您的产品';
+            var productCategory = document.getElementById('product-category').value;
+            var productDescription = document.getElementById('product-description').value || '这是一款优质的产品，具有多种功能和优势。';
+            var targetAudience = document.getElementById('target-audience').value || '有相关需求的客户';
+            var competitors = document.getElementById('competitors').value || '竞争对手A\n竞争对手B';
+            
+            // 获取选中的卖点类型
+            var typeFunctional = document.getElementById('type-functional').checked;
+            var typeEmotional = document.getElementById('type-emotional').checked;
+            var typeEconomic = document.getElementById('type-economic').checked;
+            var typeDifferential = document.getElementById('type-differential').checked;
+            var typeSocial = document.getElementById('type-social').checked;
+            
+            // 获取选中的输出格式
+            var formatBrief = document.getElementById('format-brief').checked;
+            var formatDetailed = document.getElementById('format-detailed').checked;
+            var formatMarketing = document.getElementById('format-marketing').checked;
+
+            // 模拟提炼卖点
+            var output = '';
+            
+            // 根据产品类别生成不同的卖点模板
+            const functionalPoints = [
+                '强大的核心功能，满足用户日常需求',
+                '智能化设计，操作简单便捷',
+                '高度可定制，适应不同场景',
+                '多平台兼容，随时随地使用',
+                '专业级性能，快速响应'
+            ];
+            
+            const emotionalPoints = [
+                '提升生活品质，享受优质体验',
+                '增强自信心，展现个人魅力',
+                '创造舒适感，营造温馨氛围',
+                '释放压力，焕发活力',
+                '满足个性化需求，彰显独特品味'
+            ];
+            
+            const economicPoints = [
+                '高性价比，投资回报显著',
+                '节省时间成本，提高效率',
+                '降低运营成本，增加收益',
+                '持久耐用，减少更换频率',
+                '完善的售后服务，无后顾之忧'
+            ];
+            
+            const differentialPoints = [
+                '独家专利技术，市场领先',
+                '创新设计理念，引领行业潮流',
+                '专属定制服务，独一无二',
+                '突破传统限制，解决行业痛点',
+                '跨界融合，带来全新体验'
+            ];
+            
+            const socialPoints = [
+                '深受用户喜爱，口碑传播广泛',
+                '行业权威推荐，品质有保障',
+                '众多成功案例，值得信赖',
+                '活跃的用户社区，交流分享',
+                '社会责任担当，传递正能量'
+            ];
+            
+            // 生成卖点内容
+            if (formatBrief) {
+                output += '<h3>📌 核心卖点（简洁版）</h3>';
+                output += '<div class="selling-points-list">';
+                
+                let pointsAdded = 0;
+                
+                if (typeFunctional && pointsAdded < 3) {
+                    output += `<div class="selling-point">
+                        <h4>${functionalPoints[0]}</h4>
+                        <span class="tag">功能型</span>
+                    </div>`;
+                    pointsAdded++;
+                }
+                
+                if (typeDifferential && pointsAdded < 3) {
+                    output += `<div class="selling-point">
+                        <h4>${differentialPoints[0]}</h4>
+                        <span class="tag">差异化</span>
+                    </div>`;
+                    pointsAdded++;
+                }
+                
+                if (typeEconomic && pointsAdded < 3) {
+                    output += `<div class="selling-point">
+                        <h4>${economicPoints[0]}</h4>
+                        <span class="tag">经济型</span>
+                    </div>`;
+                    pointsAdded++;
+                }
+                
+                output += '</div>';
+                output += '<hr>';
+            }
+            
+            if (formatDetailed) {
+                output += '<h3>📊 详细卖点分析</h3>';
+                
+                if (typeFunctional) {
+                    output += `<div class="selling-point">
+                        <h4>🔧 功能卖点</h4>
+                        <p>基于${productName}的设计理念，我们提炼出以下功能优势：</p>
+                        <ul>
+                            <li>${functionalPoints[0]}</li>
+                            <li>${functionalPoints[1]}</li>
+                            <li>${functionalPoints[2]}</li>
+                        </ul>
+                        <span class="tag">核心优势</span>
+                    </div>`;
+                }
+                
+                if (typeEmotional) {
+                    output += `<div class="selling-point">
+                        <h4>❤️ 情感卖点</h4>
+                        <p>对于${targetAudience}，${productName}能够带来以下情感价值：</p>
+                        <ul>
+                            <li>${emotionalPoints[0]}</li>
+                            <li>${emotionalPoints[2]}</li>
+                        </ul>
+                        <span class="tag">情感连接</span>
+                    </div>`;
+                }
+                
+                if (typeEconomic) {
+                    output += `<div class="selling-point">
+                        <h4>💰 经济卖点</h4>
+                        <p>${productName}为用户带来的经济效益：</p>
+                        <ul>
+                            <li>${economicPoints[0]}</li>
+                            <li>${economicPoints[1]}</li>
+                            <li>${economicPoints[3]}</li>
+                        </ul>
+                        <span class="tag">价值回报</span>
+                    </div>`;
+                }
+                
+                if (typeDifferential) {
+                    output += `<div class="selling-point">
+                        <h4>✨ 差异化卖点</h4>
+                        <p>相比${competitors.split('\n')[0]}和${competitors.split('\n')[1]}，${productName}的独特之处：</p>
+                        <ul>
+                            <li>${differentialPoints[0]}</li>
+                            <li>${differentialPoints[2]}</li>
+                        </ul>
+                        <span class="tag">竞争优势</span>
+                    </div>`;
+                }
+                
+                if (typeSocial) {
+                    output += `<div class="selling-point">
+                        <h4>👥 社交认同卖点</h4>
+                        <p>${productName}在市场和用户群体中的认可度：</p>
+                        <ul>
+                            <li>${socialPoints[0]}</li>
+                            <li>${socialPoints[2]}</li>
+                        </ul>
+                        <span class="tag">社会认可</span>
+                    </div>`;
+                }
+                
+                output += '<hr>';
+            }
+            
+            if (formatMarketing) {
+                output += '<h3>💡 营销话术建议</h3>';
+                output += `<div class="selling-point">
+                    <h4>核心宣传语</h4>
+                    <p>"${productName}，${functionalPoints[0]}，${economicPoints[0]}！"</p>
+                </div>`;
+                
+                output += `<div class="selling-point">
+                    <h4>产品描述建议</h4>
+                    <p>无论您是${targetAudience}中的哪一类，${productName}都能为您提供${functionalPoints[1]}的体验。我们的${differentialPoints[0]}，确保您获得最优质的产品和服务。选择${productName}，就是选择${emotionalPoints[0]}！</p>
+                </div>`;
+            }
+            
+            // 如果没有选择任何卖点类型，显示提示
+            if (!typeFunctional && !typeEmotional && !typeEconomic && !typeDifferential && !typeSocial) {
+                output = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">请至少选择一种卖点类型</div>';
+            }
+            
+            // 显示结果
+            document.getElementById('selling-points-output').innerHTML = output || '请选择卖点类型和输出格式';
+        }
+
+        // 重置表单函数
+        function resetSellingPointsForm() {
+            document.getElementById('product-name').value = '';
+            document.getElementById('product-category').value = 'software';
+            document.getElementById('product-description').value = '';
+            document.getElementById('target-audience').value = '';
+            document.getElementById('competitors').value = '';
+            document.getElementById('type-functional').checked = true;
+            document.getElementById('type-emotional').checked = true;
+            document.getElementById('type-economic').checked = true;
+            document.getElementById('type-differential').checked = true;
+            document.getElementById('type-social').checked = true;
+            document.getElementById('format-brief').checked = true;
+            document.getElementById('format-detailed').checked = true;
+            document.getElementById('format-marketing').checked = false;
+            document.getElementById('selling-points-output').innerHTML = '提炼的卖点将在这里显示...';
+        }
+
+        // 复制结果函数
+        function copySellingPoints() {
+            var output = document.getElementById('selling-points-output');
+            var text = output.innerText;
+            navigator.clipboard.writeText(text)
+                .then(function() {
+                    alert('复制成功！');
+                })
+                .catch(function(err) {
+                    console.error('复制失败:', err);
+                });
+        }
+
+        // 优化提炼函数
+        function refineSellingPoints() {
+            // 重新提炼，这里可以添加一些随机变化
+            document.getElementById('extract-points').click();
+            alert('已重新优化提炼结果！');
+        }
+
+        // 绑定事件监听器
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化导航组件
+            if (window.loadNavigation) {
+                loadNavigation('../../', 'sales', 'sales/selling-point-extraction.html');
+            } else {
+                console.error('loadNavigation函数未定义');
+            }
+            
+            // 绑定其他事件
+            document.getElementById('extract-points').addEventListener('click', extractSellingPoints);
+            document.getElementById('reset-form').addEventListener('click', resetSellingPointsForm);
+            document.getElementById('copy-result').addEventListener('click', copySellingPoints);
+            document.getElementById('refine-points').addEventListener('click', refineSellingPoints);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动策划助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/nav-component.js"></script>
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+        
+        /* 紧凑布局样式 */
+        .content > div {
+            padding: 0 !important;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+            margin-bottom: 30px;
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            height: fit-content;
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-section textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-section select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        .input-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-section input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        .input-section input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-section input[type="number"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        .input-section input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 日期时间选择器样式 */
+        .date-time-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* 选项组样式 */
+        .options-group {
+            margin-bottom: 24px;
+        }
+
+        .options-group h4 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .option-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        /* 操作按钮样式 */
+        .action-buttons {
+            margin-top: auto;
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .action-button.primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .action-button.small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* 结果区域样式 */
+        .result-output {
+            flex-grow: 1;
+            min-height: 400px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--secondary-color);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        .result-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        /* 策划方案卡片样式 */
+        .plan-section {
+            margin-bottom: 24px;
+            padding: 20px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .plan-section h4 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .plan-section p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .plan-section ul {
+            margin-top: 8px;
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .plan-section li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .plan-section li strong {
+            color: var(--text-color);
+        }
+
+        /* 时间轴样式 */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: -37px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .timeline-time {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .timeline-content {
+            color: var(--text-color);
+        }
+
+        /* 预算表格样式 */
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            margin-bottom: 20px;
+        }
+
+        .budget-table th,
+        .budget-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .budget-table th {
+            background-color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .budget-table tr:last-child td {
+            font-weight: 600;
+            border-bottom: none;
+        }
+
+        /* 帮助说明区域样式 */
+        .help-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+        }
+
+        .help-section h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .help-item {
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        .help-item strong {
+            color: var(--text-color);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .date-time-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div id="top-nav-container"></div>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h1>活动策划助手</h1>
+                <p>快速生成专业的活动策划方案，包括主题设计、流程规划、预算分配和推广策略</p>
+            </div>
+            
+            <div class="page-content">
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <h3>活动设置</h3>
+                        
+                        <div class="input-section">
+                            <label for="event-name">活动名称</label>
+                            <input type="text" id="event-name" placeholder="请输入活动名称">
+                        </div>
+
+                        <div class="input-section">
+                            <label for="event-purpose">活动目的</label>
+                            <select id="event-purpose">
+                                <option value="">请选择活动目的</option>
+                                <option value="promotion">产品推广</option>
+                                <option value="marketing">品牌营销</option>
+                                <option value="customer-acquisition">获客转化</option>
+                                <option value="customer-loyalty">客户维护</option>
+                                <option value="education">知识普及</option>
+                                <option value="networking">社交交流</option>
+                                <option value="launch">新品发布</option>
+                                <option value="celebration">周年庆典</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="event-description">活动背景/简介</label>
+                            <textarea id="event-description" placeholder="请简要描述活动背景和期望达到的效果"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="industry">所属行业</label>
+                            <select id="industry">
+                                <option value="">请选择行业</option>
+                                <option value="tech">科技</option>
+                                <option value="finance">金融</option>
+                                <option value="education">教育</option>
+                                <option value="health">医疗健康</option>
+                                <option value="retail">零售</option>
+                                <option value="real-estate">房地产</option>
+                                <option value="insurance">保险</option>
+                                <option value="beauty">美妆</option>
+                                <option value="food">餐饮</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="target-audience">目标受众</label>
+                            <input type="text" id="target-audience" placeholder="例如：潜在客户、现有客户、合作伙伴等">
+                        </div>
+
+                        <div class="input-section">
+                            <label for="audience-size">预计参与人数</label>
+                            <input type="number" id="audience-size" placeholder="请输入预计参与人数" min="0">
+                        </div>
+
+                        <div class="input-section">
+                            <label for="event-date">活动日期</label>
+                            <div class="date-time-container">
+                                <input type="text" id="event-date" placeholder="YYYY-MM-DD">
+                                <input type="text" id="event-time" placeholder="HH:MM">
+                            </div>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="event-duration">活动时长（小时）</label>
+                            <input type="number" id="event-duration" placeholder="请输入活动预计时长" min="0" step="0.5">
+                        </div>
+
+                        <div class="input-section">
+                            <label for="event-location">活动地点</label>
+                            <select id="event-location">
+                                <option value="">请选择活动形式</option>
+                                <option value="online">线上直播</option>
+                                <option value="offline">线下场地</option>
+                                <option value="hybrid">线上线下结合</option>
+                            </select>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="event-budget">活动预算（元）</label>
+                            <input type="number" id="event-budget" placeholder="请输入活动总预算" min="0">
+                        </div>
+
+                        <div class="options-group">
+                            <h4>活动形式</h4>
+                            <div class="option-item">
+                                <input type="radio" name="event-format" id="format-conference" value="conference" checked>
+                                <label for="format-conference">会议/讲座</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="event-format" id="format-workshop" value="workshop">
+                                <label for="format-workshop">工作坊/培训</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="event-format" id="format-exhibition" value="exhibition">
+                                <label for="format-exhibition">展览/展示</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="event-format" id="format-party" value="party">
+                                <label for="format-party">派对/聚会</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="event-format" id="format-competition" value="competition">
+                                <label for="format-competition">比赛/竞赛</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="event-format" id="format-other" value="other">
+                                <label for="format-other">其他形式</label>
+                            </div>
+                        </div>
+
+                        <div class="options-group">
+                            <h4>活动亮点/环节</h4>
+                            <div class="option-item">
+                                <input type="checkbox" id="highlight-speech" value="speech">
+                                <label for="highlight-speech">嘉宾演讲</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="highlight-panel" value="panel">
+                                <label for="highlight-panel">圆桌讨论</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="highlight-interactive" value="interactive">
+                                <label for="highlight-interactive">互动游戏</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="highlight-demo" value="demo">
+                                <label for="highlight-demo">产品演示</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="highlight-lucky-draw" value="lucky-draw">
+                                <label for="highlight-lucky-draw">抽奖环节</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="highlight-networking" value="networking">
+                                <label for="highlight-networking">社交交流</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="highlight-qanda" value="qanda">
+                                <label for="highlight-qanda">问答环节</label>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="generate-btn" class="action-button primary">生成策划方案</button>
+                            <button id="reset-btn" class="action-button secondary">重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧输出面板 -->
+                    <div class="comparison-panel output-panel">
+                        <h3>策划方案</h3>
+                        
+                        <div class="result-controls">
+                            <button id="copy-btn" class="action-button secondary small">复制方案</button>
+                            <button id="download-btn" class="action-button primary small">下载方案</button>
+                        </div>
+
+                        <div id="result-output" class="result-output">
+                            活动策划方案将显示在这里。请在左侧填写活动相关信息并点击"生成策划方案"按钮。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 帮助说明 -->
+                <div class="help-section">
+                    <h3>使用帮助</h3>
+                    <div class="help-item">
+                        <strong>活动策划要点：</strong> 明确活动目标是成功策划的关键，所有环节和资源都应围绕目标展开。
+                    </div>
+                    <div class="help-item">
+                        <strong>预算分配建议：</strong> 通常场地费用占30-40%，宣传费用占20-30%，嘉宾费用占15-20%，餐饮和物料占10-15%，其他占5-10%。
+                    </div>
+                    <div class="help-item">
+                        <strong>时间规划建议：</strong> 大型活动建议提前1-3个月开始筹备，小型活动提前2-4周规划。
+                    </div>
+                    <div class="help-item">
+                        <strong>活动执行要点：</strong> 建立详细的时间表和责任人制度，准备应急预案，活动后及时进行总结和反馈收集。
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载导航组件并处理高亮
+            if (window.loadNavigation) {
+                loadNavigation('../../', 'sales', 'sales/event-planning.html');
+            } else {
+                console.error('loadNavigation函数未定义');
+            }
+            
+            // 生成策划方案按钮事件
+            document.getElementById('generate-btn').addEventListener('click', function() {
+                generateEventPlan();
+            });
+            
+            // 重置按钮事件
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                resetForm();
+            });
+            
+            // 复制方案按钮事件
+            document.getElementById('copy-btn').addEventListener('click', function() {
+                copyPlanToClipboard();
+            });
+            
+            // 下载方案按钮事件
+            document.getElementById('download-btn').addEventListener('click', function() {
+                downloadPlan();
+            });
+        });
+        
+        // 生成活动策划方案函数
+        function generateEventPlan() {
+            // 获取表单数据
+            const eventName = document.getElementById('event-name').value.trim() || '[活动名称]';
+            const eventPurpose = document.getElementById('event-purpose').value;
+            const eventDescription = document.getElementById('event-description').value.trim() || '[活动背景]';
+            const industry = document.getElementById('industry').value;
+            const targetAudience = document.getElementById('target-audience').value.trim() || '[目标受众]';
+            const audienceSize = document.getElementById('audience-size').value || '0';
+            const eventDate = document.getElementById('event-date').value.trim() || '[待定]';
+            const eventTime = document.getElementById('event-time').value.trim() || '[待定]';
+            const eventDuration = document.getElementById('event-duration').value || '2';
+            const eventLocation = document.getElementById('event-location').value;
+            const eventBudget = document.getElementById('event-budget').value || '0';
+            
+            // 获取选择的活动形式
+            const eventFormat = document.querySelector('input[name="event-format"]:checked').value;
+            
+            // 获取活动亮点/环节
+            const highlights = [];
+            if (document.getElementById('highlight-speech').checked) highlights.push('嘉宾演讲');
+            if (document.getElementById('highlight-panel').checked) highlights.push('圆桌讨论');
+            if (document.getElementById('highlight-interactive').checked) highlights.push('互动游戏');
+            if (document.getElementById('highlight-demo').checked) highlights.push('产品演示');
+            if (document.getElementById('highlight-lucky-draw').checked) highlights.push('抽奖环节');
+            if (document.getElementById('highlight-networking').checked) highlights.push('社交交流');
+            if (document.getElementById('highlight-qanda').checked) highlights.push('问答环节');
+            
+            // 显示加载状态
+            document.getElementById('result-output').innerHTML = '正在生成活动策划方案...';
+            
+            // 模拟API延迟
+            setTimeout(() => {
+                // 生成策划方案内容
+                let planOutput = '';
+                
+                // 1. 活动概述部分
+                planOutput += `<div class="plan-section">
+                    <h4>一、活动概述</h4>
+                    <p><strong>活动名称：</strong>${eventName}</p>
+                    <p><strong>活动目的：</strong>${getPurposeName(eventPurpose)}</p>
+                    <p><strong>活动背景：</strong>${eventDescription}</p>
+                    <p><strong>所属行业：</strong>${getIndustryName(industry)}</p>
+                    <p><strong>目标受众：</strong>${targetAudience}</p>
+                    <p><strong>预计参与人数：</strong>${audienceSize}人</p>
+                    <p><strong>活动时间：</strong>${eventDate} ${eventTime}</p>
+                    <p><strong>活动时长：</strong>${eventDuration}小时</p>
+                    <p><strong>活动形式：</strong>${getLocationName(eventLocation)} ${getFormatName(eventFormat)}</p>
+                    <p><strong>活动预算：</strong>¥${parseFloat(eventBudget).toLocaleString()}</p>
+                </div>`;
+                
+                // 2. 活动亮点部分
+                planOutput += `<div class="plan-section">
+                    <h4>二、活动亮点</h4>
+                    <ul>`;
+                
+                if (highlights.length > 0) {
+                    highlights.forEach((highlight, index) => {
+                        planOutput += `<li><strong>${index + 1}. ${highlight}</strong> - ${getHighlightDescription(highlight)}</li>`;
+                    });
+                } else {
+                    planOutput += `<li><strong>1. 互动体验</strong> - 通过多种互动形式增强参与者体验</li>
+                    <li><strong>2. 专业分享</strong> - 邀请行业专家进行深度分享</li>
+                    <li><strong>3. 社交交流</strong> - 提供优质社交平台，促进资源对接</li>`;
+                }
+                
+                planOutput += `</ul>
+                </div>`;
+                
+                // 3. 活动流程部分
+                planOutput += `<div class="plan-section">
+                    <h4>三、活动流程</h4>
+                    <div class="timeline">`;
+                
+                // 生成活动时间轴
+                planOutput += generateEventTimeline(parseFloat(eventDuration), highlights);
+                
+                planOutput += `</div>
+                </div>`;
+                
+                // 4. 预算分配部分
+                planOutput += `<div class="plan-section">
+                    <h4>四、预算分配</h4>
+                    <table class="budget-table">
+                        <tr>
+                            <th>项目</th>
+                            <th>预算金额</th>
+                            <th>占比</th>
+                        </tr>`;
+                
+                // 生成预算表格
+                const budgetDetails = generateBudgetBreakdown(parseFloat(eventBudget));
+                let totalBudget = 0;
+                
+                budgetDetails.forEach(item => {
+                    totalBudget += item.amount;
+                    planOutput += `<tr>
+                        <td>${item.name}</td>
+                        <td>¥${item.amount.toLocaleString()}</td>
+                        <td>${item.percentage}%</td>
+                    </tr>`;
+                });
+                
+                planOutput += `<tr>
+                    <td>总计</td>
+                    <td>¥${totalBudget.toLocaleString()}</td>
+                    <td>100%</td>
+                </tr>
+                </table>
+                </div>`;
+                
+                // 5. 推广方案部分
+                planOutput += `<div class="plan-section">
+                    <h4>五、推广方案</h4>
+                    <ul>
+                        <li><strong>线上推广：</strong>${generateOnlinePromotion()}</li>
+                        <li><strong>线下推广：</strong>${generateOfflinePromotion()}</li>
+                        <li><strong>媒体合作：</strong>${generateMediaCooperation()}</li>
+                        <li><strong>推广时间表：</strong>${generatePromotionSchedule()}</li>
+                    </ul>
+                </div>`;
+                
+                // 6. 执行与分工部分
+                planOutput += `<div class="plan-section">
+                    <h4>六、执行与分工</h4>
+                    <ul>
+                        <li><strong>策划组：</strong>负责活动整体策划、流程设计和方案优化</li>
+                        <li><strong>执行组：</strong>负责活动现场布置、设备调试和流程执行</li>
+                        <li><strong>宣传组：</strong>负责活动宣传推广、媒体对接和素材制作</li>
+                        <li><strong>后勤组：</strong>负责嘉宾接待、餐饮安排和应急处理</li>
+                    </ul>
+                </div>`;
+                
+                // 7. 应急预案部分
+                planOutput += `<div class="plan-section">
+                    <h4>七、应急预案</h4>
+                    <ul>
+                        <li><strong>人员不足：</strong>准备机动人员，必要时可临时调配</li>
+                        <li><strong>设备故障：</strong>准备备用设备，提前一天进行全面调试</li>
+                        <li><strong>时间延误：</strong>设置缓冲时间，关键环节有备选方案</li>
+                        <li><strong>突发情况：</strong>制定详细的应急处理流程，明确责任人</li>
+                    </ul>
+                </div>`;
+                
+                // 8. 效果评估部分
+                planOutput += `<div class="plan-section">
+                    <h4>八、效果评估</h4>
+                    <ul>
+                        <li><strong>参与度指标：</strong>实际参与人数、互动环节参与率</li>
+                        <li><strong>满意度指标：</strong>活动后满意度调查、反馈评分</li>
+                        <li><strong>转化指标：</strong>活动后的销售转化、客户咨询量</li>
+                        <li><strong>品牌指标：</strong>社交媒体曝光量、媒体报道数量</li>
+                    </ul>
+                </div>`;
+                
+                // 显示结果
+                document.getElementById('result-output').innerHTML = planOutput;
+            }, 1500);
+        }
+        
+        // 获取活动目的中文名
+        function getPurposeName(purpose) {
+            const purposeMap = {
+                'promotion': '产品推广',
+                'marketing': '品牌营销',
+                'customer-acquisition': '获客转化',
+                'customer-loyalty': '客户维护',
+                'education': '知识普及',
+                'networking': '社交交流',
+                'launch': '新品发布',
+                'celebration': '周年庆典',
+                'other': '其他'
+            };
+            return purposeMap[purpose] || '提升品牌影响力，促进业务发展';
+        }
+        
+        // 获取行业中文名
+        function getIndustryName(industry) {
+            const industryMap = {
+                'tech': '科技',
+                'finance': '金融',
+                'education': '教育',
+                'health': '医疗健康',
+                'retail': '零售',
+                'real-estate': '房地产',
+                'insurance': '保险',
+                'beauty': '美妆',
+                'food': '餐饮',
+                'other': '其他'
+            };
+            return industryMap[industry] || '通用行业';
+        }
+        
+        // 获取活动地点中文名
+        function getLocationName(location) {
+            const locationMap = {
+                'online': '线上直播',
+                'offline': '线下场地',
+                'hybrid': '线上线下结合'
+            };
+            return locationMap[location] || '待定';
+        }
+        
+        // 获取活动形式中文名
+        function getFormatName(format) {
+            const formatMap = {
+                'conference': '会议/讲座',
+                'workshop': '工作坊/培训',
+                'exhibition': '展览/展示',
+                'party': '派对/聚会',
+                'competition': '比赛/竞赛',
+                'other': '其他形式'
+            };
+            return formatMap[format] || '';
+        }
+        
+        // 获取活动亮点描述
+        function getHighlightDescription(highlight) {
+            const descriptionMap = {
+                '嘉宾演讲': '邀请行业专家或意见领袖进行专业分享，提升活动专业性和吸引力',
+                '圆桌讨论': '组织嘉宾围绕热点话题进行深度探讨，激发思想碰撞',
+                '互动游戏': '设计有趣的互动环节，增强参与者体验和记忆点',
+                '产品演示': '现场展示产品功能和优势，直观呈现产品价值',
+                '抽奖环节': '设置精美奖品，提高参与者积极性和活动气氛',
+                '社交交流': '创造轻松的交流环境，促进参与者之间的资源对接和合作',
+                '问答环节': '提供参与者与嘉宾直接交流的机会，解答疑问'
+            };
+            return descriptionMap[highlight] || '';
+        }
+        
+        // 生成活动时间轴
+        function generateEventTimeline(duration, highlights) {
+            let timeline = '';
+            let currentHour = 9; // 假设活动从上午9点开始
+            let currentMinute = 0;
+            
+            // 签到环节
+            timeline += `<div class="timeline-item">
+                <div class="timeline-time">${formatTime(currentHour, currentMinute)} - ${formatTime(currentHour, currentMinute + 30)}</div>
+                <div class="timeline-content">签到入场、资料发放、自由交流</div>
+            </div>`;
+            
+            currentMinute += 30;
+            if (currentMinute >= 60) {
+                currentHour++;
+                currentMinute -= 60;
+            }
+            
+            // 开场环节
+            timeline += `<div class="timeline-item">
+                <div class="timeline-time">${formatTime(currentHour, currentMinute)} - ${formatTime(currentHour, currentMinute + 15)}</div>
+                <div class="timeline-content">主持人开场、活动介绍、嘉宾介绍</div>
+            </div>`;
+            
+            currentMinute += 15;
+            if (currentMinute >= 60) {
+                currentHour++;
+                currentMinute -= 60;
+            }
+            
+            // 根据活动形式和亮点生成主要环节
+            if (highlights.includes('嘉宾演讲')) {
+                timeline += `<div class="timeline-item">
+                    <div class="timeline-time">${formatTime(currentHour, currentMinute)} - ${formatTime(currentHour, currentMinute + 45)}</div>
+                    <div class="timeline-content">主题演讲：行业趋势分析与未来展望</div>
+                </div>`;
+                
+                currentMinute += 45;
+                if (currentMinute >= 60) {
+                    currentHour++;
+                    currentMinute -= 60;
+                }
+            }
+            
+            if (highlights.includes('圆桌讨论') || highlights.includes('问答环节')) {
+                timeline += `<div class="timeline-item">
+                    <div class="timeline-time">${formatTime(currentHour, currentMinute)} - ${formatTime(currentHour, currentMinute + 30)}</div>
+                    <div class="timeline-content">圆桌讨论/问答环节：热点话题深度探讨</div>
+                </div>`;
+                
+                currentMinute += 30;
+                if (currentMinute >= 60) {
+                    currentHour++;
+                    currentMinute -= 60;
+                }
+            }
+            
+            // 茶歇环节
+            timeline += `<div class="timeline-item">
+                <div class="timeline-time">${formatTime(currentHour, currentMinute)} - ${formatTime(currentHour, currentMinute + 15)}</div>
+                <div class="timeline-content">茶歇休息、自由交流、合作洽谈</div>
+            </div>`;
+            
+            currentMinute += 15;
+            if (currentMinute >= 60) {
+                currentHour++;
+                currentMinute -= 60;
+            }
+            
+            if (highlights.includes('产品演示')) {
+                timeline += `<div class="timeline-item">
+                    <div class="timeline-time">${formatTime(currentHour, currentMinute)} - ${formatTime(currentHour, currentMinute + 30)}</div>
+                    <div class="timeline-content">产品演示：核心功能展示与使用场景分享</div>
+                </div>`;
+                
+                currentMinute += 30;
+                if (currentMinute >= 60) {
+                    currentHour++;
+                    currentMinute -= 60;
+                }
+            }
+            
+            if (highlights.includes('互动游戏') || highlights.includes('抽奖环节')) {
+                timeline += `<div class="timeline-item">
+                    <div class="timeline-time">${formatTime(currentHour, currentMinute)} - ${formatTime(currentHour, currentMinute + 20)}</div>
+                    <div class="timeline-content">互动游戏/抽奖环节：增强参与感与活动气氛</div>
+                </div>`;
+                
+                currentMinute += 20;
+                if (currentMinute >= 60) {
+                    currentHour++;
+                    currentMinute -= 60;
+                }
+            }
+            
+            if (highlights.includes('社交交流')) {
+                timeline += `<div class="timeline-item">
+                    <div class="timeline-time">${formatTime(currentHour, currentMinute)} - ${formatTime(currentHour, currentMinute + 25)}</div>
+                    <div class="timeline-content">社交交流环节：资源对接与合作洽谈</div>
+                </div>`;
+                
+                currentMinute += 25;
+                if (currentMinute >= 60) {
+                    currentHour++;
+                    currentMinute -= 60;
+                }
+            }
+            
+            // 总结环节
+            timeline += `<div class="timeline-item">
+                <div class="timeline-time">${formatTime(currentHour, currentMinute)} - ${formatTime(currentHour, currentMinute + 15)}</div>
+                <div class="timeline-content">活动总结、后续安排、合影留念</div>
+            </div>`;
+            
+            return timeline;
+        }
+        
+        // 格式化时间
+        function formatTime(hour, minute) {
+            return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        }
+        
+        // 生成预算分配
+        function generateBudgetBreakdown(totalBudget) {
+            if (totalBudget <= 0) {
+                totalBudget = 50000; // 默认预算
+            }
+            
+            const breakdown = [
+                { name: '场地费用', amount: totalBudget * 0.35 },
+                { name: '宣传推广', amount: totalBudget * 0.25 },
+                { name: '嘉宾费用', amount: totalBudget * 0.15 },
+                { name: '餐饮茶歇', amount: totalBudget * 0.10 },
+                { name: '物料制作', amount: totalBudget * 0.08 },
+                { name: '设备租赁', amount: totalBudget * 0.05 },
+                { name: '其他费用', amount: totalBudget * 0.02 }
+            ];
+            
+            // 计算百分比并四舍五入金额
+            return breakdown.map(item => ({
+                name: item.name,
+                amount: Math.round(item.amount),
+                percentage: Math.round((item.amount / totalBudget) * 100)
+            }));
+        }
+        
+        // 生成线上推广方案
+        function generateOnlinePromotion() {
+            return '社交媒体宣传（微信公众号、朋友圈、微博、小红书等）；行业论坛与社群推广；邮件营销；KOL合作推广；直播预热等。';
+        }
+        
+        // 生成线下推广方案
+        function generateOfflinePromotion() {
+            return '行业展会宣传；写字楼电梯广告；合作企业内部推广；线下地推活动；DM单页发放等。';
+        }
+        
+        // 生成媒体合作方案
+        function generateMediaCooperation() {
+            return '邀请行业媒体参与报道；发布新闻稿至各媒体平台；行业协会合作推广；媒体专访等。';
+        }
+        
+        // 生成推广时间表
+        function generatePromotionSchedule() {
+            return '活动前30天：开始筹备宣传物料；活动前15天：正式启动线上宣传；活动前7天：加大宣传力度，发布倒计时信息；活动前3天：最终确认与提醒；活动当天：实时报道与互动。';
+        }
+        
+        // 重置表单函数
+        function resetForm() {
+            document.getElementById('event-name').value = '';
+            document.getElementById('event-purpose').value = '';
+            document.getElementById('event-description').value = '';
+            document.getElementById('industry').value = '';
+            document.getElementById('target-audience').value = '';
+            document.getElementById('audience-size').value = '';
+            document.getElementById('event-date').value = '';
+            document.getElementById('event-time').value = '';
+            document.getElementById('event-duration').value = '';
+            document.getElementById('event-location').value = '';
+            document.getElementById('event-budget').value = '';
+            
+            // 重置单选框
+            document.getElementById('format-conference').checked = true;
+            
+            // 重置复选框
+            document.getElementById('highlight-speech').checked = false;
+            document.getElementById('highlight-panel').checked = false;
+            document.getElementById('highlight-interactive').checked = false;
+            document.getElementById('highlight-demo').checked = false;
+            document.getElementById('highlight-lucky-draw').checked = false;
+            document.getElementById('highlight-networking').checked = false;
+            document.getElementById('highlight-qanda').checked = false;
+            
+            // 重置结果输出
+            document.getElementById('result-output').innerHTML = '活动策划方案将显示在这里。请在左侧填写活动相关信息并点击"生成策划方案"按钮。';
+        }
+        
+        // 复制方案到剪贴板
+        function copyPlanToClipboard() {
+            const planContent = document.getElementById('result-output').textContent;
+            
+            if (planContent.includes('请在左侧填写活动相关信息')) {
+                alert('请先生成策划方案');
+                return;
+            }
+            
+            navigator.clipboard.writeText(planContent).then(() => {
+                alert('策划方案已复制到剪贴板');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        }
+        
+        // 下载方案
+        function downloadPlan() {
+            const eventName = document.getElementById('event-name').value.trim() || '活动策划方案';
+            const planContent = document.getElementById('result-output').textContent;
+            
+            if (planContent.includes('请在左侧填写活动相关信息')) {
+                alert('请先生成策划方案');
+                return;
+            }
+            
+            // 创建Blob对象
+            const blob = new Blob([planContent], { type: 'text/plain;charset=utf-8' });
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${eventName}.txt`;
+            
+            // 触发下载
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // 释放URL对象
+            URL.revokeObjectURL(link.href);
+        }
+    </script>
+</body>
+</html>

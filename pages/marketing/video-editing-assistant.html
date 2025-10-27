@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频剪辑助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 加载统一导航组件，设置基础路径为上上级目录，激活marketing角色
+        loadNavigation('../../', 'marketing');
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>视频剪辑助手</h2>
+                <p>智能辅助视频剪辑，快速完成剪辑、特效添加和字幕生成</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 左右对比布局 -->
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <h3>视频上传与设置</h3>
+                        
+                        <div class="input-section">
+                            <label for="video-upload">上传视频文件</label>
+                            <div class="file-upload-area" id="video-upload-area">
+                                <input type="file" id="video-upload" accept="video/*">
+                                <div class="upload-icon">📁</div>
+                                <div class="upload-text">
+                                    <div>点击或拖拽文件到此处上传</div>
+                                    <div>支持 MP4、MOV、AVI 格式，最大 100MB</div>
+                                </div>
+                            </div>
+                            <div id="file-info" class="file-info" style="display: none;">
+                                <span class="file-name" id="file-name"></span>
+                                <span class="remove-file" id="remove-file">移除</span>
+                            </div>
+                        </div>
+                        
+                        <div class="editing-options">
+                            <h4>剪辑选项</h4>
+                            <div class="option-group">
+                                <div class="option-item">
+                                    <label>视频比例：</label>
+                                    <select id="aspect-ratio">
+                                        <option value="16:9">16:9 (宽屏)</option>
+                                        <option value="9:16">9:16 (竖屏)</option>
+                                        <option value="1:1">1:1 (方形)</option>
+                                        <option value="4:3">4:3 (标准)</option>
+                                    </select>
+                                </div>
+                                <div class="option-item">
+                                    <label>输出格式：</label>
+                                    <select id="output-format">
+                                        <option value="mp4">MP4</option>
+                                        <option value="mov">MOV</option>
+                                        <option value="avi">AVI</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" checked> 自动裁剪</label>
+                                <label><input type="checkbox" checked> 优化画质</label>
+                                <label><input type="checkbox"> 添加水印</label>
+                                <label><input type="checkbox"> 背景音乐</label>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button id="edit-btn" class="action-button primary" disabled>开始剪辑</button>
+                            <button id="reset-btn" class="action-button secondary" disabled>重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h4>剪辑结果</h4>
+                            <button id="download-btn" class="action-button secondary" disabled>下载视频</button>
+                        </div>
+                        <div id="editing-result" class="result-content">
+                            <p class="placeholder-text">剪辑后的视频将在这里显示...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="usage-guide">
+                    <h3>使用指南</h3>
+                    <ul>
+                        <li>上传需要剪辑的视频文件</li>
+                        <li>选择所需的剪辑功能选项</li>
+                        <li>点击「开始剪辑」按钮</li>
+                        <li>等待剪辑完成后预览效果</li>
+                        <li>满意后点击「下载视频」获取成品</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有元素
+            const videoUpload = document.getElementById('video-upload');
+            const videoUploadArea = document.getElementById('video-upload-area');
+            const fileInfo = document.getElementById('file-info');
+            const fileName = document.getElementById('file-name');
+            const removeFile = document.getElementById('remove-file');
+            const editBtn = document.getElementById('edit-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const editingResult = document.getElementById('editing-result');
+            const downloadBtn = document.getElementById('download-btn');
+            
+            // 成功提示函数
+            function showSuccessToast(message) {
+                // 检查是否已存在toast元素
+                let toast = document.getElementById('success-toast');
+                if (toast) {
+                    // 如果已存在，移除旧的
+                    toast.remove();
+                }
+                
+                // 创建新的toast元素
+                toast = document.createElement('div');
+                toast.id = 'success-toast';
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: #52c41a;
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 6px;
+                    box-shadow: 0 4px 12px rgba(82, 196, 26, 0.35);
+                    z-index: 9999;
+                    transition: opacity 0.3s ease;
+                    font-size: 14px;
+                    pointer-events: none;
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // 3秒后自动消失
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => {
+                        if (document.body.contains(toast)) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+            
+            // 错误提示函数
+            function showErrorToast(message) {
+                // 检查是否已存在toast元素
+                let toast = document.getElementById('error-toast');
+                if (toast) {
+                    // 如果已存在，移除旧的
+                    toast.remove();
+                }
+                
+                // 创建新的toast元素
+                toast = document.createElement('div');
+                toast.id = 'error-toast';
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: #ff4d4f;
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 6px;
+                    box-shadow: 0 4px 12px rgba(255, 77, 79, 0.35);
+                    z-index: 9999;
+                    transition: opacity 0.3s ease;
+                    font-size: 14px;
+                    pointer-events: none;
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // 3秒后自动消失
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => {
+                        if (document.body.contains(toast)) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+            
+            // 处理文件上传
+            videoUpload.addEventListener('change', handleFileUpload);
+            
+            // 拖拽上传功能
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                videoUploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                videoUploadArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                videoUploadArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                videoUploadArea.classList.add('active');
+            }
+            
+            function unhighlight() {
+                videoUploadArea.classList.remove('active');
+            }
+            
+            videoUploadArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length) {
+                    handleFile(files[0]);
+                }
+            }
+            
+            function handleFileUpload() {
+                if (videoUpload.files.length) {
+                    handleFile(videoUpload.files[0]);
+                }
+            }
+            
+            function handleFile(file) {
+                // 检查文件类型
+                const validTypes = ['video/mp4', 'video/quicktime', 'video/avi'];
+                if (!validTypes.includes(file.type)) {
+                    showErrorToast('请上传 MP4、MOV 或 AVI 格式的视频文件');
+                    return;
+                }
+                
+                // 检查文件大小
+                if (file.size > 100 * 1024 * 1024) { // 100MB
+                    showErrorToast('文件大小不能超过 100MB');
+                    return;
+                }
+                
+                // 显示文件信息
+                fileName.textContent = file.name;
+                fileInfo.style.display = 'flex';
+                
+                // 启用按钮
+                editBtn.disabled = false;
+                resetBtn.disabled = false;
+            }
+            
+            // 移除文件
+            removeFile.addEventListener('click', function() {
+                videoUpload.value = '';
+                fileInfo.style.display = 'none';
+                editBtn.disabled = true;
+                resetBtn.disabled = true;
+                downloadBtn.disabled = true;
+                editingResult.innerHTML = '<p class="placeholder-text">剪辑后的视频将在这里显示...</p>';
+            });
+            
+            // 重置按钮
+            resetBtn.addEventListener('click', function() {
+                videoUpload.value = '';
+                fileInfo.style.display = 'none';
+                editBtn.disabled = true;
+                resetBtn.disabled = true;
+                downloadBtn.disabled = true;
+                editingResult.innerHTML = '<p class="placeholder-text">剪辑后的视频将在这里显示...</p>';
+                
+                // 重置选项
+                document.getElementById('aspect-ratio').value = '16:9';
+                document.getElementById('output-format').value = 'mp4';
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    if (checkbox.nextSibling.textContent.trim() === '自动裁剪' || 
+                        checkbox.nextSibling.textContent.trim() === '优化画质') {
+                        checkbox.checked = true;
+                    } else {
+                        checkbox.checked = false;
+                    }
+                });
+                
+                showSuccessToast('已重置所有设置');
+            });
+            
+            // 开始剪辑
+            editBtn.addEventListener('click', function() {
+                // 禁用按钮防止重复点击
+                editBtn.disabled = true;
+                editingResult.innerHTML = '<p class="loading-text">正在剪辑视频，请稍候...</p>';
+                
+                // 模拟剪辑过程
+                setTimeout(() => {
+                    const aspectRatio = document.getElementById('aspect-ratio').value;
+                    const outputFormat = document.getElementById('output-format').value;
+                    
+                    // 构建结果HTML
+                    const resultHtml = `
+                        <div class="video-result">
+                            <div class="video-preview">
+                                <video controls>
+                                    <source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                            <div class="video-info">
+                                <div class="video-info-item">
+                                    <span class="video-info-label">文件格式：</span>
+                                    <span class="video-info-value">${outputFormat.toUpperCase()}</span>
+                                </div>
+                                <div class="video-info-item">
+                                    <span class="video-info-label">视频比例：</span>
+                                    <span class="video-info-value">${aspectRatio}</span>
+                                </div>
+                                <div class="video-info-item">
+                                    <span class="video-info-label">视频时长：</span>
+                                    <span class="video-info-value">5.0秒</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    editingResult.innerHTML = resultHtml;
+                    downloadBtn.disabled = false;
+                    showSuccessToast('视频剪辑完成');
+                }, 2000);
+            });
+            
+            // 下载视频
+            downloadBtn.addEventListener('click', function() {
+                // 模拟下载
+                showSuccessToast('视频正在下载中...');
+            });
+        });
+    </script>
+</body>
+</html>

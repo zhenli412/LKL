@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>直播话术生成助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+            margin-bottom: 30px;
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            height: fit-content;
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
+            margin: 0;
+        }
+
+        .result-content {
+            flex: 1;
+            min-height: 400px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 加载统一导航组件，设置基础路径为上上级目录，激活marketing角色
+        loadNavigation('../../', 'marketing');
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>直播话术生成助手</h2>
+                <p>智能生成直播开场白、产品介绍、互动问答等话术内容</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 左右对比布局 -->
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <h3>直播话术设置</h3>
+                        
+                        <div class="input-section">
+                            <label for="product-info">产品信息</label>
+                            <textarea id="product-info" placeholder="请详细描述您的产品，包括功能、优势、使用场景等" rows="5"></textarea>
+                        </div>
+
+                        <div class="parameter-group">
+                            <label>选择话术类型</label>
+                            <select id="script-type">
+                                <option value="opening">直播开场白</option>
+                                <option value="product-intro">产品介绍</option>
+                                <option value="promotion">促销话术</option>
+                                <option value="qa">问答话术</option>
+                                <option value="closing">结束语</option>
+                            </select>
+                        </div>
+
+                        <div class="parameter-group">
+                            <label>直播风格</label>
+                            <select id="live-style">
+                                <option value="professional">专业严谨</option>
+                                <option value="casual">轻松随意</option>
+                                <option value="enthusiastic">热情洋溢</option>
+                                <option value="humorous">幽默风趣</option>
+                            </select>
+                        </div>
+
+                        <div class="script-options">
+                            <h4>话术选项</h4>
+                            <div class="option-group">
+                                <label><input type="checkbox" checked> 突出卖点</label>
+                                <label><input type="checkbox" checked> 引导互动</label>
+                                <label><input type="checkbox"> 制造紧迫感</label>
+                                <label><input type="checkbox"> 加入口语化表达</label>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="generate-btn" class="action-button">生成话术</button>
+                            <button id="clear-btn" class="action-button secondary">清空</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>生成结果</h3>
+                            <div class="result-actions">
+                            <button id="copy-btn" class="action-button secondary">复制话术</button>
+                            <button id="export-btn" class="action-button secondary">导出话术</button>
+                        </div>
+                        </div>
+
+                        <div id="script-result" class="result-content">
+                            <p class="placeholder-text">请点击左侧"生成话术"按钮生成直播话术</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 使用指南 -->
+                <div class="usage-guide">
+                    <h3>使用指南</h3>
+                    <ul>
+                        <li>在左侧填写产品详细信息，包括功能、优势和使用场景</li>
+                        <li>选择话术类型和直播风格，以匹配您的直播需求</li>
+                        <li>可自定义选择需要的话术模块，如开场白、产品特点等</li>
+                        <li>点击"生成话术"按钮获取专业的直播话术内容</li>
+                        <li>生成的话术可复制或导出为文本文件使用</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 成功提示组件 -->
+    <div id="success-toast" class="success-toast">
+        <span id="success-message">操作成功</span>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取元素
+            const generateButton = document.getElementById('generate-btn');
+            const clearButton = document.getElementById('clear-btn');
+            const copyButton = document.getElementById('copy-btn');
+            const exportButton = document.getElementById('export-btn');
+            const productInput = document.getElementById('product-info');
+            const scriptResult = document.getElementById('script-result');
+            const successToast = document.getElementById('success-toast');
+            const successMessage = document.getElementById('success-message');
+            
+            // 显示成功提示
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successToast.classList.add('show');
+                
+                setTimeout(() => {
+                    successToast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // 清空按钮功能
+            clearButton.addEventListener('click', function() {
+                productInput.value = '';
+                scriptResult.innerHTML = '<p class="placeholder-text">请点击左侧"生成话术"按钮生成直播话术</p>';
+                showSuccess('表单已清空');
+            });
+            
+            // 生成按钮功能
+            generateButton.addEventListener('click', function() {
+                if (!productInput.value.trim()) {
+                    showSuccess('请输入产品信息');
+                    return;
+                }
+                
+                // 禁用按钮，显示加载状态
+                generateButton.disabled = true;
+                scriptResult.innerHTML = '<div class="loading-text"><div class="loading-spinner"></div>正在生成话术...</div>';
+                
+                // 模拟生成过程
+                setTimeout(function() {
+                    const scriptType = document.getElementById('script-type').options[document.getElementById('script-type').selectedIndex].text;
+                    const liveStyle = document.getElementById('live-style').options[document.getElementById('live-style').selectedIndex].text;
+                    
+                    scriptResult.innerHTML = `<div class="script-content">\n` +
+                        `<h5>${scriptType} (${liveStyle}风格)</h5>\n` +
+                        `<p>亲爱的观众朋友们，大家好！欢迎来到我们的直播间！</p>\n` +
+                        `<p>今天给大家带来的是我们的优质产品，根据您提供的信息，这款产品...</p>\n` +
+                        `<p>它的最大卖点是...</p>\n` +
+                        `<p>现在下单还有特别优惠...</p>\n` +
+                        `<p>大家有什么问题可以在评论区留言，我会为大家一一解答！</p>\n` +
+                        `</div>`;
+                        
+                    // 启用按钮，显示成功提示
+                    generateButton.disabled = false;
+                    showSuccess('话术生成成功');
+                }, 1500);
+            });
+            
+            // 复制按钮功能
+            copyButton.addEventListener('click', function() {
+                const resultText = scriptResult.innerText;
+                if (resultText && resultText !== '请点击左侧"生成话术"按钮生成直播话术' && !resultText.includes('正在生成话术')) {
+                    navigator.clipboard.writeText(resultText).then(function() {
+                        showSuccess('话术已复制到剪贴板');
+                    }).catch(function() {
+                        showSuccess('复制失败，请手动复制');
+                    });
+                } else {
+                    showSuccess('暂无内容可复制');
+                }
+            });
+            
+            // 导出按钮功能
+            exportButton.addEventListener('click', function() {
+                const resultText = scriptResult.innerText;
+                if (resultText && resultText !== '请点击左侧"生成话术"按钮生成直播话术' && !resultText.includes('正在生成话术')) {
+                    const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = '直播话术_' + new Date().toISOString().slice(0, 10) + '.txt';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    showSuccess('结果已导出');
+                } else {
+                    showSuccess('暂无内容可导出');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

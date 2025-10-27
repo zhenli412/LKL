@@ -1,0 +1,416 @@
+<!-- 统一左侧导航组件 -->
+<nav class="main-nav">
+    <!-- 企业管理部 -->
+    <div class="nav-item level-1 company-menu {{isCompanyActive ? 'expanded' : ''}}">
+        <div class="nav-header">
+            <span class="nav-icon">🏢</span>
+            <span class="nav-title">企业管理部</span>
+            <span class="expand-icon unicode-chevron"></span>
+        </div>
+        <div class="nav-children">
+            <div class="nav-item level-2 {{isCompanyActive ? 'expanded' : ''}}">
+                <div class="nav-header">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-title">企业管理员</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/company/knowledge-base-management.html" class="nav-item level-3">
+                        <span class="nav-icon">📚</span>
+                        <span class="nav-title">知识库管理</span>
+                    </a>
+                    <a href="{{basePath}}pages/company/account-management.html" class="nav-item level-3">
+                        <span class="nav-icon">👥</span>
+                        <span class="nav-title">账号管理</span>
+                    </a>
+                    <a href="{{basePath}}pages/company/usage-recharge.html" class="nav-item level-3">
+                        <span class="nav-icon">💰</span>
+                        <span class="nav-title">用量及充值管理</span>
+                    </a>
+                    <a href="{{basePath}}pages/marketing/company-info-extraction.html" class="nav-item level-3 {{isCurrentPage('company-info-extraction.html') ? 'active' : ''}}">
+                        <span class="nav-icon">🔍</span>
+                        <span class="nav-title">信息提取助手</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 企业知识库 -->
+    <div class="nav-item level-1 knowledge-menu {{isKnowledgeActive ? 'expanded' : ''}}">
+        <div class="nav-header">
+            <span class="nav-icon">🗂️</span>
+            <span class="nav-title">企业知识库</span>
+            <span class="expand-icon unicode-chevron"></span>
+        </div>
+        <div class="nav-children">
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">📑</span>
+                    <span class="nav-title">企业手册</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-title">产品说明</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">🎬</span>
+                    <span class="nav-title">企业视频</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">📁</span>
+                    <span class="nav-title">其他资料</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 个人知识库 -->
+    <div class="nav-item level-1 personal-menu {{isPersonalActive ? 'expanded' : ''}}">
+        <div class="nav-header">
+            <span class="nav-icon">📚</span>
+            <span class="nav-title">个人知识库</span>
+            <span class="expand-icon unicode-chevron"></span>
+        </div>
+        <div class="nav-children">
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">✏️</span>
+                    <span class="nav-title">选题库</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">🗂️</span>
+                    <span class="nav-title">文案库</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">🗂️</span>
+                    <span class="nav-title">素材库</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 营销获客部 -->
+    <div class="nav-item level-1 marketing-menu {{isMarketingActive ? 'expanded' : ''}}">
+        <div class="nav-header">
+            <span class="nav-icon">📊</span>
+            <span class="nav-title">营销获客部</span>
+            <span class="expand-icon unicode-chevron"></span>
+        </div>
+        <div class="nav-children">
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-title">选题策划岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/marketing/information-extraction-assistant.html" class="nav-item level-3 {{isCurrentPage('information-extraction-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">📋</span>
+                        <span class="nav-title">信息提取助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/marketing/copywriting-extraction-assistant.html" class="nav-item level-3 {{isCurrentPage('copywriting-extraction-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-title">文案提取助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/marketing/structure-analysis-assistant.html" class="nav-item level-3 {{isCurrentPage('structure-analysis-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">🏗️</span>
+                        <span class="nav-title">结构分析助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/marketing/topic-generation-assistant.html" class="nav-item level-3 {{isCurrentPage('topic-generation-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">💡</span>
+                        <span class="nav-title">选题生成助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/marketing/influencer-analysis-assistant.html" class="nav-item level-3 {{isCurrentPage('influencer-analysis-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">👤</span>
+                        <span class="nav-title">达人分析助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/marketing/copywriting-rewrite-assistant.html" class="nav-item level-3 {{isCurrentPage('copywriting-rewrite-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">🔄</span>
+                        <span class="nav-title">文案二创助手</span>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">💡</span>
+                    <span class="nav-title">校审岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/marketing/prohibited-words-check.html" class="nav-item level-3 {{isCurrentPage('prohibited-words-check.html') ? 'active' : ''}}">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-title">违禁词检查助手</span>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">🎬</span>
+                    <span class="nav-title">视频剪辑岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/marketing/digital-human-generator.html" class="nav-item level-3 {{isCurrentPage('digital-human-generator.html') ? 'active' : ''}}">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-title">数字人生成助手</span>
+                    </a>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/marketing/video-editing-assistant.html" class="nav-item level-3 {{isCurrentPage('video-editing-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-title">视频剪辑助手</span>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">📹</span>
+                    <span class="nav-title">直播岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/marketing/live-script-generator.html" class="nav-item level-3 {{isCurrentPage('live-script-generator.html') ? 'active' : ''}}">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-title">直播话术生成助手</span>
+                    </a>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/marketing/voice-text-extraction.html" class="nav-item level-3 {{isCurrentPage('voice-text-extraction.html') ? 'active' : ''}}">
+                        <span class="nav-icon">⚠️</span>
+                        <span class="nav-title">语音文本提炼助手</span>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">🔄</span>
+                    <span class="nav-title">矩阵岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/marketing/batch-rewrite-assistant.html" class="nav-item level-3 {{isCurrentPage('batch-rewrite-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">⚡</span>
+                        <span class="nav-title">批量二创助手</span>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">📤</span>
+                    <span class="nav-title">运营推送岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/marketing/matrix-publish-assistant.html" class="nav-item level-3 {{isCurrentPage('matrix-publish-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">🚀</span>
+                        <span class="nav-title">矩阵发布助手</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 销售转化部 -->
+    <div class="nav-item level-1 sales-menu {{isSalesActive ? 'expanded' : ''}}">
+        <div class="nav-header">
+            <span class="nav-icon">💰</span>
+            <span class="nav-title">销售转化部</span>
+            <span class="expand-icon unicode-chevron"></span>
+        </div>
+        <div class="nav-children">
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-title">销售岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/sales/sales-script-generation.html" class="nav-item level-3 {{isCurrentPage('sales-script-generation.html') ? 'active' : ''}}">
+                        <span class="nav-icon">💬</span>
+                        <span class="nav-title">销冠话术生成助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/sales/performance-analysis.html" class="nav-item level-3 {{isCurrentPage('performance-analysis.html') ? 'active' : ''}}">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-title">业绩分析助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/sales/script-diagnosis.html" class="nav-item level-3 {{isCurrentPage('script-diagnosis.html') ? 'active' : ''}}">
+                        <span class="nav-icon">🔍</span>
+                        <span class="nav-title">话术诊断助手</span>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-title">销售助理岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/sales/personal-ip-creation.html" class="nav-item level-3 {{isCurrentPage('personal-ip-creation.html') ? 'active' : ''}}">
+                        <span class="nav-icon">👤</span>
+                        <span class="nav-title">个人IP打造助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/sales/moments-copy.html" class="nav-item level-3 {{isCurrentPage('moments-copy.html') ? 'active' : ''}}">
+                        <span class="nav-icon">📱</span>
+                        <span class="nav-title">朋友圈文案助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/sales/event-planning.html" class="nav-item level-3 {{isCurrentPage('event-planning.html') ? 'active' : ''}}">
+                        <span class="nav-icon">🎯</span>
+                        <span class="nav-title">活动策划助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/sales/sales-letter-assistant.html" class="nav-item level-3 {{isCurrentPage('sales-letter-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">✉️</span>
+                        <span class="nav-title">销售信助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/sales/selling-point-extraction.html" class="nav-item level-3 {{isCurrentPage('selling-point-extraction.html') ? 'active' : ''}}">
+                        <span class="nav-icon">⭐</span>
+                        <span class="nav-title">卖点提炼助手</span>
+                    </a>
+                    <a href="{{basePath}}pages/sales/competitor-research.html" class="nav-item level-3 {{isCurrentPage('competitor-research.html') ? 'active' : ''}}">
+                        <span class="nav-icon">🔍</span>
+                        <span class="nav-title">竞品调研助手</span>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">💬</span>
+                    <span class="nav-title">客服岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/sales/customer-service-assistant.html" class="nav-item level-3 {{isCurrentPage('customer-service-assistant.html') ? 'active' : ''}}">
+                        <span class="nav-icon">🤖</span>
+                        <span class="nav-title">智能客服助手</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 品牌部 -->
+    <div class="nav-item level-1 brand-menu {{isBrandActive ? 'expanded' : ''}}">
+        <div class="nav-header">
+            <span class="nav-icon">🏆</span>
+            <span class="nav-title">品牌部</span>
+            <span class="expand-icon unicode-chevron"></span>
+        </div>
+        <div class="nav-children">
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">🎨</span>
+                    <span class="nav-title">品牌岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <div class="nav-item level-3">
+                        <span class="nav-icon">📖</span>
+                        <span class="nav-title">品牌故事</span>
+                    </div>
+                    <div class="nav-item level-3">
+                        <span class="nav-icon">💬</span>
+                        <span class="nav-title">广告语生成</span>
+                    </div>
+                    <div class="nav-item level-3">
+                        <span class="nav-icon">📄</span>
+                        <span class="nav-title">公文写作</span>
+                    </div>
+                    <div class="nav-item level-3">
+                        <span class="nav-icon">🎤</span>
+                        <span class="nav-title">发言稿写作</span>
+                    </div>
+                    <div class="nav-item level-3">
+                        <span class="nav-icon">🏷️</span>
+                        <span class="nav-title">产品起名器</span>
+                    </div>
+                    <div class="nav-item level-3">
+                        <span class="nav-icon">🔥</span>
+                        <span class="nav-title">热点营销文案</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 支持部 -->
+    <div class="nav-item level-1 support-menu {{isSupportActive ? 'expanded' : ''}}">
+        <div class="nav-header">
+            <span class="nav-icon">🛠️</span>
+            <span class="nav-title">支持部</span>
+            <span class="expand-icon unicode-chevron"></span>
+        </div>
+        <div class="nav-children">
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">👨‍💼</span>
+                    <span class="nav-title">支持岗</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <div class="nav-item level-3">
+                        <span class="nav-icon">⚖️</span>
+                        <span class="nav-title">合同法务文书</span>
+                    </div>
+                    <div class="nav-item level-3">
+                        <span class="nav-icon">📋</span>
+                        <span class="nav-title">岗位职责JD生成</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 平台管理部 -->
+    <div class="nav-item level-1 admin-menu {{isAdminActive ? 'expanded' : ''}}">
+        <div class="nav-header">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-title">平台管理部</span>
+            <span class="expand-icon unicode-chevron"></span>
+        </div>
+        <div class="nav-children">
+            <div class="nav-item level-2">
+                <div class="nav-header">
+                    <span class="nav-icon">👑</span>
+                    <span class="nav-title">ADMIN管理</span>
+                    <span class="expand-icon unicode-chevron"></span>
+                </div>
+                <div class="nav-children">
+                    <a href="{{basePath}}pages/admin/shell-management.html" class="nav-item level-3 {{isCurrentPage('shell-management.html') ? 'active' : ''}}">
+                        <span class="nav-icon">🖥️</span>
+                        <span class="nav-title">套壳管理</span>
+                    </a>
+                    <a href="{{basePath}}pages/admin/account-permission.html" class="nav-item level-3 {{isCurrentPage('account-permission.html') ? 'active' : ''}}">
+                        <span class="nav-icon">🔐</span>
+                        <span class="nav-title">账号及权限管理</span>
+                    </a>
+                    <a href="{{basePath}}pages/admin/pricing-management.html" class="nav-item level-3 {{isCurrentPage('pricing-management.html') ? 'active' : ''}}">
+                        <span class="nav-icon">💰</span>
+                        <span class="nav-title">计价管理</span>
+                    </a>
+                    <a href="{{basePath}}pages/admin/other-management.html" class="nav-item level-3 {{isCurrentPage('other-management.html') ? 'active' : ''}}">
+                        <span class="nav-icon">📋</span>
+                        <span class="nav-title">其他管理</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

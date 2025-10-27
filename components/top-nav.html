@@ -1,0 +1,144 @@
+<!-- 顶部导航栏组件 -->
+<header>
+    <style>
+        .top-nav {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+            
+        .website-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #13245b; /* 深蓝色 */
+        }
+        
+
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .role-switcher {
+            display: flex;
+            gap: 5px;
+            background-color: #f0f2f5;
+            padding: 3px;
+            border-radius: 4px;
+        }
+        
+        .role-btn {
+            padding: 4px 12px;
+            border: none;
+            background: transparent;
+            color: #666;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .role-btn:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #4A90E2;
+        }
+        
+        .role-btn.active {
+            background-color: #fff;
+            color: #4A90E2;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        #current-user {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .logout-btn {
+            padding: 5px 12px;
+            background-color: transparent;
+            border: 1px solid #d9d9d9;
+            color: #666;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+        
+        .logout-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+        
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 确保主内容区域有足够的顶部间距，避免被固定导航栏遮挡 */
+        body {
+            padding-top: 60px;
+        }
+    </style>
+    
+    <div class="top-nav">
+        <div class="logo-container">
+            <a href="../../index.html" class="logo-link">
+                <img src="../../images/logo.png" alt="利客来" class="logo-image">
+            </a>
+            <div class="logo-text">           
+                <div class="slogan">AI智能巧获客，利润客户立刻来！</div>
+            </div>
+        </div>
+        
+        <div class="user-info">
+            <div class="role-switcher">
+                <button class="role-btn active" id="role-front">前台</button>
+                <button class="role-btn" id="role-company">企业</button>
+                <button class="role-btn" id="role-admin">管理</button>
+            </div>
+            
+            <div class="user-profile">
+                <span id="current-user">登录用户名</span>
+                <button id="logout-btn" class="logout-btn">登出</button>
+                <div class="avatar">
+                    <span class="avatar-placeholder">LK</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

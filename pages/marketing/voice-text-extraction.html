@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语音文本提炼助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* 自定义页面样式 */
+        .comparison-layout {
+            display: flex;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xxl);
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-layout {
+                flex-direction: column;
+            }
+        }
+        
+        .comparison-panel {
+            flex: 1;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .panel-header {
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-secondary);
+        }
+        
+        .panel-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .panel-content {
+            padding: var(--spacing-xl);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 6px;
+            padding: var(--spacing-xxl);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: var(--spacing-lg);
+            background-color: #fafafa;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .file-upload-area:hover,
+        .file-upload-area.active {
+            border-color: var(--accent-color);
+            background-color: rgba(0, 120, 212, 0.04);
+        }
+        
+        .file-upload-area input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+        
+        .file-upload-area:hover .upload-icon {
+            opacity: 0.8;
+        }
+        
+        .upload-text {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .upload-text div:first-child {
+            font-weight: 500;
+            margin-bottom: var(--spacing-xs);
+            color: var(--text-primary);
+        }
+        
+        .upload-text div:last-child {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-md);
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: var(--spacing-lg);
+            font-size: 14px;
+        }
+        
+        .file-name {
+            color: var(--text-primary);
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            margin-right: var(--spacing-md);
+        }
+        
+        .remove-file {
+            color: var(--accent-color);
+            cursor: pointer;
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .remove-file:hover {
+            background-color: rgba(0, 120, 212, 0.1);
+        }
+        
+        .extraction-options {
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .extraction-options h4 {
+            margin: 0 0 var(--spacing-lg) 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .option-group {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .option-item label {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-right: var(--spacing-md);
+            min-width: 100px;
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: var(--spacing-xs);
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .checkbox-group label:hover {
+            background-color: var(--bg-hover);
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            margin-right: var(--spacing-md);
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-color);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: auto;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .result-header h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        .result-content {
+            flex: 1;
+            padding: var(--spacing-xl);
+            overflow-y: auto;
+            line-height: 1.7;
+        }
+        
+        .text-result {
+            color: var(--text-primary);
+        }
+        
+        .text-result h4 {
+            margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+            padding-bottom: var(--spacing-xs);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .text-result p {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .loading-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 150px;
+            color: var(--text-tertiary);
+            font-style: italic;
+        }
+        
+        .usage-guide {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: var(--spacing-xl);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .usage-guide h3 {
+            margin: 0 0 var(--spacing-lg) 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .usage-guide ul {
+            margin: 0;
+            padding-left: var(--spacing-xl);
+        }
+        
+        .usage-guide li {
+            margin-bottom: var(--spacing-md);
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        
+        /* 禁用状态样式增强 */
+        .action-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .action-button:disabled:hover {
+            transform: none;
+            background-color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 加载统一导航组件，设置基础路径为上上级目录，激活marketing角色
+        loadNavigation('../../', 'marketing');
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>语音文本提炼助手</h2>
+                <p>将语音内容转换为文本并智能提炼关键信息，提高内容处理效率</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 左右对比布局 -->
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <div class="panel-header">
+                            <h3>语音文件上传与设置</h3>
+                        </div>
+                        <div class="panel-content">
+                            
+                            <div class="input-section">
+                                <div class="file-upload-area" id="voice-upload-area">
+                                    <input type="file" id="voice-upload" accept=".mp3,.wav,.m4a">
+                                    <div class="upload-icon">🎤</div>
+                                    <div class="upload-text">
+                                        <div>点击或拖拽文件到此处上传</div>
+                                        <div>支持 MP3、WAV、M4A 格式，最大 20MB</div>
+                                    </div>
+                                </div>
+                                <div id="file-info" class="file-info" style="display: none;">
+                                    <span class="file-name" id="file-name"></span>
+                                    <span class="remove-file" id="remove-file">移除</span>
+                                </div>
+                            </div>
+                            
+                            <div class="extraction-options">
+                                <h4>提炼选项</h4>
+                                <div class="option-group">
+                                    <div class="option-item">
+                                        <label for="language-type">语言类型：</label>
+                                        <select id="language-type" class="settings-select">
+                                            <option value="zh">中文</option>
+                                            <option value="en">英文</option>
+                                            <option value="mix">中英混合</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="auto-segment" checked> 自动分段</label>
+                                    <label><input type="checkbox" id="keywords" checked> 关键词提取</label>
+                                    <label><input type="checkbox" id="emotion-analysis"> 情感分析</label>
+                                    <label><input type="checkbox" id="summary"> 摘要生成</label>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button id="extract-btn" class="action-button primary" disabled>开始提炼</button>
+                                <button id="reset-btn" class="action-button secondary" disabled>重置</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h4>提炼结果</h4>
+                            <div class="result-actions">
+                                <button id="copy-btn" class="action-button secondary small" disabled>复制文本</button>
+                                <button id="download-btn" class="action-button secondary small" disabled>下载文本</button>
+                            </div>
+                        </div>
+                        <div id="extraction-result" class="result-content">
+                            <p class="placeholder-text">提炼的文本结果将在这里显示...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="usage-guide">
+                    <h3>使用指南</h3>
+                    <ul>
+                        <li>上传需要转换的语音文件（MP3、WAV、M4A格式，最大20MB）</li>
+                        <li>选择语言类型和所需的提炼选项</li>
+                        <li>点击「开始提炼」按钮处理语音内容</li>
+                        <li>等待处理完成后查看转换和分析结果</li>
+                        <li>可复制文本或下载完整结果文件</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有元素
+            const voiceUpload = document.getElementById('voice-upload');
+            const voiceUploadArea = document.getElementById('voice-upload-area');
+            const fileInfo = document.getElementById('file-info');
+            const fileName = document.getElementById('file-name');
+            const removeFile = document.getElementById('remove-file');
+            const extractBtn = document.getElementById('extract-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const extractionResult = document.getElementById('extraction-result');
+            const copyBtn = document.getElementById('copy-btn');
+            const downloadBtn = document.getElementById('download-btn');
+            const languageType = document.getElementById('language-type');
+            const autoSegment = document.getElementById('auto-segment');
+            const keywords = document.getElementById('keywords');
+            const emotionAnalysis = document.getElementById('emotion-analysis');
+            const summary = document.getElementById('summary');
+            
+            // 成功提示函数
+            function showSuccessToast(message) {
+                // 检查是否已存在toast元素
+                let toast = document.getElementById('success-toast');
+                if (toast) {
+                    // 如果已存在，移除旧的
+                    toast.remove();
+                }
+                
+                // 创建新的toast元素
+                toast = document.createElement('div');
+                toast.id = 'success-toast';
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: #52c41a;
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 6px;
+                    box-shadow: 0 4px 12px rgba(82, 196, 26, 0.35);
+                    z-index: 9999;
+                    transition: opacity 0.3s ease, transform 0.3s ease;
+                    font-size: 14px;
+                    pointer-events: none;
+                    transform: translate(-50%, -10px);
+                    opacity: 0;
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // 显示动画
+                setTimeout(() => {
+                    toast.style.opacity = '1';
+                    toast.style.transform = 'translate(-50%, 0)';
+                }, 10);
+                
+                // 3秒后自动消失
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translate(-50%, -10px)';
+                    setTimeout(() => {
+                        if (document.body.contains(toast)) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+            
+            // 错误提示函数
+            function showErrorToast(message) {
+                // 检查是否已存在toast元素
+                let toast = document.getElementById('error-toast');
+                if (toast) {
+                    // 如果已存在，移除旧的
+                    toast.remove();
+                }
+                
+                // 创建新的toast元素
+                toast = document.createElement('div');
+                toast.id = 'error-toast';
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: #ff4d4f;
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 6px;
+                    box-shadow: 0 4px 12px rgba(255, 77, 79, 0.35);
+                    z-index: 9999;
+                    transition: opacity 0.3s ease, transform 0.3s ease;
+                    font-size: 14px;
+                    pointer-events: none;
+                    transform: translate(-50%, -10px);
+                    opacity: 0;
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // 显示动画
+                setTimeout(() => {
+                    toast.style.opacity = '1';
+                    toast.style.transform = 'translate(-50%, 0)';
+                }, 10);
+                
+                // 3秒后自动消失
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translate(-50%, -10px)';
+                    setTimeout(() => {
+                        if (document.body.contains(toast)) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+            
+            // 为上传区域添加点击事件
+            voiceUploadArea.addEventListener('click', function() {
+                voiceUpload.click();
+            });
+            
+            // 处理文件上传
+            voiceUpload.addEventListener('change', handleFileUpload);
+            
+            // 拖拽上传功能
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                voiceUploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                voiceUploadArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                voiceUploadArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                voiceUploadArea.classList.add('active');
+            }
+            
+            function unhighlight() {
+                voiceUploadArea.classList.remove('active');
+            }
+            
+            voiceUploadArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length) {
+                    handleFile(files[0]);
+                }
+            }
+            
+            function handleFileUpload() {
+                if (voiceUpload.files.length) {
+                    handleFile(voiceUpload.files[0]);
+                }
+            }
+            
+            function handleFile(file) {
+                // 检查文件类型
+                const validTypes = ['.mp3', '.wav', '.m4a'];
+                const fileExt = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+                if (!validTypes.includes(fileExt)) {
+                    showErrorToast('请上传 MP3、WAV 或 M4A 格式的语音文件');
+                    return;
+                }
+                
+                // 检查文件大小
+                if (file.size > 20 * 1024 * 1024) { // 20MB
+                    showErrorToast('文件大小不能超过 20MB');
+                    return;
+                }
+                
+                // 显示文件信息
+                fileName.textContent = file.name;
+                fileInfo.style.display = 'flex';
+                
+                // 启用按钮
+                extractBtn.disabled = false;
+                resetBtn.disabled = false;
+                
+                // 视觉反馈
+                voiceUploadArea.classList.add('active');
+                setTimeout(() => {
+                    voiceUploadArea.classList.remove('active');
+                }, 300);
+            }
+            
+            // 移除文件
+            removeFile.addEventListener('click', function() {
+                voiceUpload.value = '';
+                fileInfo.style.display = 'none';
+                extractBtn.disabled = true;
+                resetBtn.disabled = true;
+                copyBtn.disabled = true;
+                downloadBtn.disabled = true;
+                extractionResult.innerHTML = '<p class="placeholder-text">提炼的文本结果将在这里显示...</p>';
+            });
+            
+            // 重置按钮
+            resetBtn.addEventListener('click', function() {
+                voiceUpload.value = '';
+                fileInfo.style.display = 'none';
+                extractBtn.disabled = true;
+                resetBtn.disabled = true;
+                copyBtn.disabled = true;
+                downloadBtn.disabled = true;
+                extractionResult.innerHTML = '<p class="placeholder-text">提炼的文本结果将在这里显示...</p>';
+                
+                // 重置选项
+                languageType.value = 'zh';
+                autoSegment.checked = true;
+                keywords.checked = true;
+                emotionAnalysis.checked = false;
+                summary.checked = false;
+                
+                showSuccessToast('已重置所有设置');
+            });
+            
+            // 开始提炼
+            extractBtn.addEventListener('click', function() {
+                // 禁用按钮防止重复点击
+                extractBtn.disabled = true;
+                
+                // 显示加载状态，添加动画效果
+                extractionResult.innerHTML = `
+                    <div class="loading-text">
+                        <svg class="loading-spinner" width="20" height="20" viewBox="0 0 24 24" style="margin-right: 10px; animation: spin 1s linear infinite;">
+                            <circle cx="12" cy="12" r="10" stroke="var(--accent-color)" stroke-width="3" fill="none" stroke-dasharray="60" stroke-dashoffset="0"></circle>
+                        </svg>
+                        正在提炼文本，请稍候...
+                    </div>
+                `;
+                
+                // 添加旋转动画样式
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes spin {
+                        from { transform: rotate(0deg); }
+                        to { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                // 模拟提炼过程
+                setTimeout(() => {
+                    // 获取选中的选项
+                    const isEmotionAnalysis = emotionAnalysis.checked;
+                    const isSummaryGeneration = summary.checked;
+                    
+                    // 构建结果HTML
+                    let resultHtml = `
+                        <div class="text-result">
+                            <h4>语音转文字结果</h4>
+                            <p>各位尊敬的客户，欢迎收听本期的产品介绍会。今天我要为大家介绍的是我们公司最新推出的智能办公解决方案，它集成了文档处理、数据分析和团队协作等多种功能。</p>
+                            <p>首先，这款解决方案最大的优势在于它的智能化程度非常高。通过AI技术，系统能够自动识别文档中的关键信息，生成数据分析报告，大大提高了工作效率。</p>
+                            <p>其次，在安全性方面，我们采用了业界领先的加密技术，确保您的数据安全不受威胁。同时，多端同步功能让您可以在任何设备上无缝办公。</p>
+                            
+                            <h4>关键词提取</h4>
+                            <p class="keywords-list">• 智能办公解决方案 • AI技术 • 数据安全 • 多端同步 • 工作效率</p>
+                    `;
+                    
+                    // 添加情感分析结果
+                    if (isEmotionAnalysis) {
+                        resultHtml += `
+                            <h4>情感分析</h4>
+                            <p>整体情感倾向：积极正面</p>
+                            <p>主要情感标签：专业、热情、自信</p>
+                        `;
+                    }
+                    
+                    // 添加摘要生成结果
+                    if (isSummaryGeneration) {
+                        resultHtml += `
+                            <h4>内容摘要</h4>
+                            <p>本次产品介绍会主要推荐了一款集成了文档处理、数据分析和团队协作功能的智能办公解决方案。该方案通过AI技术提高工作效率，采用高级加密技术确保数据安全，并支持多端同步办公。</p>
+                        `;
+                    }
+                    
+                    resultHtml += '</div>';
+                    extractionResult.innerHTML = resultHtml;
+                    copyBtn.disabled = false;
+                    downloadBtn.disabled = false;
+                    showSuccessToast('文本提炼完成');
+                    
+                    // 清理动画样式
+                    document.head.removeChild(style);
+                }, 2500);
+            });
+            
+            // 复制文本
+            copyBtn.addEventListener('click', function() {
+                // 获取文本内容
+                const textContent = extractionResult.innerText;
+                
+                // 使用现代的复制API
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textContent).then(() => {
+                        showSuccessToast('文本已复制到剪贴板');
+                    }).catch(() => {
+                        showErrorToast('复制失败，请手动复制');
+                    });
+                } else {
+                    // 回退方案
+                    const tempTextArea = document.createElement('textarea');
+                    tempTextArea.value = textContent;
+                    document.body.appendChild(tempTextArea);
+                    tempTextArea.select();
+                    
+                    try {
+                        document.execCommand('copy');
+                        showSuccessToast('文本已复制到剪贴板');
+                    } catch (err) {
+                        showErrorToast('复制失败，请手动复制');
+                    }
+                    
+                    document.body.removeChild(tempTextArea);
+                }
+            });
+            
+            // 下载文本
+            downloadBtn.addEventListener('click', function() {
+                // 获取文本内容
+                const textContent = extractionResult.innerText;
+                
+                // 创建Blob对象
+                const blob = new Blob([textContent], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                
+                // 创建下载链接
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '语音提炼结果.txt';
+                document.body.appendChild(a);
+                a.click();
+                
+                // 清理
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 0);
+                
+                showSuccessToast('文本已开始下载');
+            });
+        });
+    </script>
+</body>
+</html>

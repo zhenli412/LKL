@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>业绩分析助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/nav-component.js"></script>
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+            margin-bottom: 30px;
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            height: fit-content;
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-section select,
+        .input-section input[type="text"],
+        .input-section input[type="number"] {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .input-section select:focus,
+        .input-section input[type="text"]:focus,
+        .input-section input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 选项组样式 */
+        .options-group {
+            margin-bottom: 24px;
+        }
+
+        .options-group h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        .action-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .action-button.primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .action-button.small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* 结果区域样式 */
+        .result-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .result-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .result-output {
+            flex: 1;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            min-height: 300px;
+            overflow-y: auto;
+        }
+
+        .result-section {
+            margin-bottom: 20px;
+        }
+
+        .result-section h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .metric-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background-color: white;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .metric-change {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .metric-change.positive {
+            color: var(--success-color);
+        }
+
+        .metric-change.negative {
+            color: var(--error-color);
+        }
+
+        /* 图表占位区域 */
+        .chart-placeholder {
+            height: 200px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* 帮助区域样式 */
+        .help-section {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            margin-bottom: 30px;
+        }
+
+        .help-section h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .help-item {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .help-item:before {
+            content: "•";
+            color: var(--primary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .metric-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h1>业绩分析助手</h1>
+                <p>全面分析销售数据，发现业绩瓶颈，提供优化建议，提升团队销售能力</p>
+            </div>
+            
+            <div class="page-content">
+
+            <!-- 功能区：左右对比布局 -->
+            <div class="comparison-layout">
+                <!-- 左侧输入面板 -->
+                <div class="comparison-panel input-panel">
+                    <h3>分析设置</h3>
+                    
+                    <div class="input-section">
+                        <label for="analysis-period">分析周期</label>
+                        <select id="analysis-period">
+                            <option value="month">近一个月</option>
+                            <option value="quarter" selected>近一季度</option>
+                            <option value="half-year">近半年</option>
+                            <option value="year">近一年</option>
+                            <option value="custom">自定义</option>
+                        </select>
+                    </div>
+
+                    <div class="input-section">
+                        <label for="sales-data">销售数据（可选）</label>
+                        <textarea id="sales-data" placeholder="请粘贴销售数据，格式：日期,销售额,客户数,转化率\n例如：\n2024-01-01,50000,20,15%\n2024-01-02,55000,22,18%"></textarea>
+                    </div>
+
+                    <div class="input-section">
+                        <label for="target-revenue">目标销售额</label>
+                        <input type="number" id="target-revenue" placeholder="请输入目标销售额" value="1000000">
+                    </div>
+
+                    <div class="options-group">
+                        <h4>分析维度</h4>
+                        <div class="option-item">
+                            <input type="checkbox" id="option-overall" checked>
+                            <label for="option-overall">整体业绩概览</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="option-trend" checked>
+                            <label for="option-trend">趋势分析</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="option-customer" checked>
+                            <label for="option-customer">客户分析</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="option-product" checked>
+                            <label for="option-product">产品分析</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="checkbox" id="option-recommendation" checked>
+                            <label for="option-recommendation">优化建议</label>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="reset-btn" class="action-button secondary">重置</button>
+                        <button id="analyze-btn" class="action-button primary">开始分析</button>
+                    </div>
+                </div>
+
+                <!-- 右侧输出面板 -->
+                <div class="comparison-panel output-panel">
+                    <h3>分析结果</h3>
+                    
+                    <div class="result-container">
+                        <div class="result-controls">
+                            <button id="copy-btn" class="action-button secondary small">复制结果</button>
+                            <button id="download-btn" class="action-button secondary small">导出报告</button>
+                        </div>
+                        
+                        <div id="result-output" class="result-output">
+                            <div class="placeholder-text">
+                                <p>请在左侧设置分析参数并点击「开始分析」按钮</p>
+                                <p>业绩分析报告将显示在这里</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 帮助说明区 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">选择合适的分析周期，系统将自动分析该时间段内的销售数据</div>
+                <div class="help-item">可选择性输入销售数据，支持CSV格式粘贴，或使用系统默认示例数据</div>
+                <div class="help-item">设置目标销售额，系统将评估完成情况并提供针对性建议</div>
+                <div class="help-item">选择需要的分析维度，可多选</div>
+                <div class="help-item">点击「开始分析」按钮获取报告，包含关键指标、趋势图表和优化建议</div>
+            </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 导航组件脚本 -->
+    <script src="../../js/nav-component.js"></script>
+    
+    <script>
+        // 初始化导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 使用统一的导航加载函数
+            loadNavigation('../../', 'sales', 'sales/performance-analysis.html');
+            
+            // 分析按钮点击事件
+            document.getElementById('analyze-btn').addEventListener('click', function() {
+                analyzePerformance();
+            });
+            
+            // 重置按钮点击事件
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                resetForm();
+            });
+            
+            // 复制按钮点击事件
+            document.getElementById('copy-btn').addEventListener('click', function() {
+                copyToClipboard();
+            });
+            
+            // 下载按钮点击事件
+            document.getElementById('download-btn').addEventListener('click', function() {
+                downloadReport();
+            });
+        });
+        
+        // 业绩分析函数
+        function analyzePerformance() {
+            // 获取表单数据
+            const period = document.getElementById('analysis-period').value;
+            const targetRevenue = document.getElementById('target-revenue').value || 1000000;
+            
+            // 获取选中的分析维度
+            const selectedDimensions = [];
+            if (document.getElementById('option-overall').checked) selectedDimensions.push('overall');
+            if (document.getElementById('option-trend').checked) selectedDimensions.push('trend');
+            if (document.getElementById('option-customer').checked) selectedDimensions.push('customer');
+            if (document.getElementById('option-product').checked) selectedDimensions.push('product');
+            if (document.getElementById('option-recommendation').checked) selectedDimensions.push('recommendation');
+            
+            // 模拟生成分析结果
+            let resultHtml = '';
+            
+            // 根据周期设置数据
+            const periodText = period === 'month' ? '近一个月' : 
+                              period === 'quarter' ? '近一季度' : 
+                              period === 'half-year' ? '近半年' : 
+                              period === 'year' ? '近一年' : '自定义周期';
+            
+            if (selectedDimensions.includes('overall')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>📊 整体业绩概览（${periodText}）</h4>
+                        <div class="metric-cards">
+                            <div class="metric-card">
+                                <div class="metric-value">¥852,600</div>
+                                <div class="metric-label">实际销售额</div>
+                                <div class="metric-change positive">↑12.8% 环比增长</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">85.3%</div>
+                                <div class="metric-label">目标达成率</div>
+                                <div class="metric-change negative">↓14.7% 未达标</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">328</div>
+                                <div class="metric-label">成交客户数</div>
+                                <div class="metric-change positive">↑8.5% 环比增长</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">22.6%</div>
+                                <div class="metric-label">销售转化率</div>
+                                <div class="metric-change positive">↑3.2% 环比增长</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (selectedDimensions.includes('trend')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>📈 趋势分析</h4>
+                        <div class="chart-placeholder">
+                            [销售额趋势图表]
+                        </div>
+                        <p><strong>关键发现：</strong></p>
+                        <ul>
+                            <li>月度销售额呈现波动上升趋势，平均增长率8.3%</li>
+                            <li>第二周通常为销售低谷期，需要加强营销活动</li>
+                            <li>周末销售额明显高于工作日，建议增加周末销售资源配置</li>
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (selectedDimensions.includes('customer')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>👥 客户分析</h4>
+                        <div class="chart-placeholder">
+                            [客户类型分布图表]
+                        </div>
+                        <p><strong>客户构成：</strong></p>
+                        <ul>
+                            <li>中小企业客户占比68%，贡献52%的销售额</li>
+                            <li>大型企业客户占比15%，贡献35%的销售额</li>
+                            <li>个人客户占比17%，贡献13%的销售额</li>
+                        </ul>
+                        <p><strong>客户地域分布：</strong>华东地区占比42%，华北地区占比28%，华南地区占比18%，其他地区占比12%</p>
+                    </div>
+                `;
+            }
+            
+            if (selectedDimensions.includes('product')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>🛍️ 产品分析</h4>
+                        <div class="chart-placeholder">
+                            [产品销售占比图表]
+                        </div>
+                        <p><strong>产品表现：</strong></p>
+                        <ul>
+                            <li>核心产品A销售额占比45%，利润率32%</li>
+                            <li>新产品B销售额占比28%，增长迅速但利润率较低</li>
+                            <li>服务类产品C销售额占比27%，利润率最高(45%)</li>
+                        </ul>
+                        <p><strong>热销组合：</strong>A+B组合销售转化率提升40%，建议加强捆绑销售策略</p>
+                    </div>
+                `;
+            }
+            
+            if (selectedDimensions.includes('recommendation')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>💡 优化建议</h4>
+                        <p><strong>短期改进（1-2个月）：</strong></p>
+                        <ul>
+                            <li>加强第二周营销活动，针对销售低谷期制定专项推广计划</li>
+                            <li>优化大型企业客户跟进流程，提高成交率</li>
+                            <li>增加周末销售资源配置，把握高转化时段</li>
+                        </ul>
+                        <p><strong>中长期策略（3-6个月）：</strong></p>
+                        <ul>
+                            <li>提升新产品B的利润率，优化成本结构</li>
+                            <li>加强A+B产品组合销售，制定阶梯式价格策略</li>
+                            <li>拓展华南市场，复制华东地区成功经验</li>
+                            <li>开发针对大型企业客户的定制化解决方案</li>
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            // 显示结果
+            document.getElementById('result-output').innerHTML = resultHtml;
+        }
+        
+        // 重置表单函数
+        function resetForm() {
+            document.getElementById('analysis-period').value = 'quarter';
+            document.getElementById('sales-data').value = '';
+            document.getElementById('target-revenue').value = '1000000';
+            
+            document.getElementById('result-output').innerHTML = `
+                <div class="placeholder-text">
+                    <p>请在左侧设置分析参数并点击「开始分析」按钮</p>
+                    <p>业绩分析报告将显示在这里</p>
+                </div>
+            `;
+        }
+        
+        // 复制到剪贴板函数
+        function copyToClipboard() {
+            const resultText = document.getElementById('result-output').innerText;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(resultText)
+                    .then(() => {
+                        alert('已复制到剪贴板');
+                    })
+                    .catch(err => {
+                        console.error('复制失败:', err);
+                        alert('复制失败，请手动复制');
+                    });
+            } else {
+                // 兼容性处理
+                const textArea = document.createElement('textarea');
+                textArea.value = resultText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('已复制到剪贴板');
+            }
+        }
+        
+        // 下载报告函数
+        function downloadReport() {
+            const resultText = document.getElementById('result-output').innerText;
+            
+            const blob = new Blob([resultText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `业绩分析报告_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 加载导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNavigation('../../', 'sales', 'sales/performance-analysis.html');
+        });
+    </script>
+</body>
+</html>

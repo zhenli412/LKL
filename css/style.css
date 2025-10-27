@@ -1,0 +1,997 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 全局样式 */
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f7fa;
+    height: 100%;
+    overflow: auto; /* 允许滚动 */
+}
+
+/* 自定义滚动条样式 */
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* 顶部导航栏 */
+.top-navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0 0px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-image {
+    width: 222px;
+    height: 52px;
+    margin-right: 1px;
+    object-fit: contain;
+}
+.slogan {
+    font-size: 24px;
+    font-family: 'MicrosoftYaHeiLite','微软雅黑', 'Microsoft YaHei', 'Arial', sans-serif;
+    font-style: italic;
+    color: #1831a1; /* 淡灰色 */
+}
+.logo-text {
+    font-size: 30px;
+    color: #1831a1; /* 使用品牌主色调 */
+    font-weight: bold;
+    margin: 0;
+}
+.logo-text2 {
+    font-size: 20px;
+    color: #60ade0; /* 使用品牌主色调 */
+    font-weight: bold;
+    margin: 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.role-switcher {
+    display: flex;
+    gap: 5px;
+    background-color: #f0f2f5;
+    padding: 3px;
+    border-radius: 4px;
+}
+
+.role-btn {
+    padding: 4px 12px;
+    border: none;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.role-btn.active {
+    background-color: #fff;
+    color: #4A90E2;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 用户头像已移除，保留文本样式 */
+.user-avatar span {
+    color: #7C3AED;
+    font-weight: 500;
+}
+
+.logout-button {
+    margin-left: 10px;
+    padding: 4px 12px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #dc2626;
+    transform: translateY(-1px);
+}
+
+.logout-button:active {
+    transform: translateY(0);
+}
+
+/* 主容器 */
+.main-container {
+    display: flex;
+    margin-top: 60px;
+}
+
+/* 左侧导航菜单 */
+.sidebar,
+.nav-container {
+    width: 240px;
+    background-color: #fff;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    left: 0;
+    top: 60px;
+    bottom: 0;
+    overflow-y: auto;
+    /* 隐藏滚动条但保持滚动功能 */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Chrome, Safari 和 Opera 隐藏滚动条 */
+.sidebar::-webkit-scrollbar,
+.nav-container::-webkit-scrollbar {
+    display: none;
+}
+
+.main-nav {
+    padding: 10px 0;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-item.level-1 > .nav-header {
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-item.level-1 > .nav-header:hover {
+    background-color: #f5f7fa;
+}
+
+.nav-item.level-2 > .nav-header {
+    padding: 10px 20px 10px 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-item.level-2 > .nav-header:hover {
+    background-color: #f5f7fa;
+}
+
+/* 确保所有二级菜单项的样式统一，无论是否有子菜单 */
+.nav-item.level-2 > .nav-header .nav-title {
+    flex-grow: 1;
+}
+
+/* 统一二级类目样式 - 确保视觉一致性 */
+.nav-item.level-2 > .nav-header {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.nav-item.level-2 > .nav-header > .expand-icon {
+    margin-left: auto;
+    opacity: 0.5; /* 视觉上区分有子菜单的项 */
+    pointer-events: none; /* 禁用空展开图标的点击事件 */
+}
+
+/* 有三级类目的二级菜单的展开图标样式 */
+.nav-item.level-2.expanded > .nav-header > .expand-icon,
+.nav-item.level-2:has(.nav-children) > .nav-header > .expand-icon {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 确保导航链接样式统一 */
+.nav-link {
+    color: inherit;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+}
+
+.nav-item.level-3 {
+    padding: 8px 20px 8px 60px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+/* 角色切换菜单显示控制 */
+/* 默认状态：显示普通菜单 */
+.nav-item.level-1 {
+    display: block;
+}
+
+/* 默认隐藏企业和管理员菜单 */
+.nav-item.level-1.company-menu,
+.nav-item.level-1.admin-menu {
+    display: none;
+}
+
+/* 确保企业知识库和个人知识库在所有角色下都能显示 */
+.nav-item.level-1.knowledge-menu,
+.nav-item.level-1.personal-menu {
+    display: block !important;
+}
+
+/* 当body有company-role类时，显示企业管理菜单和知识库 */
+body.company-role .nav-item.level-1 {
+    display: none;
+}
+body.company-role .nav-item.level-1.company-menu,
+body.company-role .nav-item.level-1.knowledge-menu,
+body.company-role .nav-item.level-1.personal-menu {
+    display: block !important;
+}
+
+/* 当body有admin-role类时，显示平台管理菜单和知识库 */
+body.admin-role .nav-item.level-1 {
+    display: none;
+}
+body.admin-role .nav-item.level-1.admin-menu,
+body.admin-role .nav-item.level-1.knowledge-menu,
+body.admin-role .nav-item.level-1.personal-menu {
+    display: block !important;
+}
+
+.nav-item.level-3:hover {
+    background-color: #e6f2ff;
+    color: #4A90E2;
+}
+
+.nav-item.level-3.active {
+    background-color: #4A90E2;
+    color: #fff;
+}
+
+.nav-icon {
+    font-size: 16px;
+    width: 25px;
+}
+
+.nav-title {
+    flex: 1;
+    font-size: 15px;
+}
+
+.expand-icon {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+/* 方案1: 使用CSS边框创建三角形 (推荐) */
+.expand-icon.css-arrow {
+    font-size: 0;
+    width: 0;
+    height: 0;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 6px solid #666;
+    display: inline-block;
+}
+
+/* 方案2: 使用不同的Unicode字符 */
+.expand-icon.unicode-chevron::before {
+    content: "›";
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.expand-icon.unicode-plus::before {
+    content: "+";
+}
+
+.expand-icon.unicode-minus::before {
+    content: "−";
+}
+
+/* 方案3: 使用CSS transform创建的箭头 */
+.expand-icon.transform-arrow {
+    width: 8px;
+    height: 8px;
+    position: relative;
+    font-size: 0;
+    display: inline-block;
+}
+
+.expand-icon.transform-arrow::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #666;
+    transform: rotate(45deg);
+    transform-origin: left center;
+}
+
+.expand-icon.transform-arrow::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #666;
+    transform: rotate(-45deg);
+    transform-origin: left center;
+}
+
+/* 导航菜单展开状态 */
+.nav-item.expanded > .nav-header .expand-icon {
+    transform: rotate(90deg);
+}
+
+/* 确保所有二级菜单项的视觉效果统一 */
+.nav-item.level-2 > .nav-header .nav-title {
+    flex-grow: 1;
+}
+
+/* 统一所有二级菜单的展开/折叠交互效果 */
+.nav-item.level-2.expanded > .nav-header {
+    background-color: #f5f7fa;
+}
+
+/* 确保展开图标在所有二级菜单中显示一致 */
+.nav-item.level-2 > .nav-header .expand-icon {
+    opacity: 0.7;
+}
+
+.nav-item.level-2.expanded > .nav-header .expand-icon {
+    opacity: 1;
+}
+
+/* 展开状态时对不同样式的特殊处理 */
+.nav-item.expanded > .nav-header .expand-icon.css-arrow {
+    transform: rotate(90deg);
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid #666;
+}
+
+.nav-item.expanded > .nav-header .expand-icon.unicode-plus::before {
+    content: "−";
+    /* 加号不需要旋转，直接替换为减号 */
+}
+
+/* 方案4: SVG图标方案 (在HTML中使用) */
+.expand-icon.svg-icon svg {
+    width: 12px;
+    height: 12px;
+    fill: #666;
+    transition: transform 0.3s ease;
+}
+
+.nav-item.expanded > .nav-header .expand-icon.svg-icon svg {
+    transform: rotate(90deg);
+}
+
+.nav-item > .nav-children {
+    display: none;
+}
+
+.nav-item.expanded > .nav-children {
+    display: block;
+}
+
+/* 主内容区域 */
+.content {
+    flex: 1;
+    margin-left: 240px;
+    padding: 20px;
+    background-color: #f5f7fa;
+}
+
+.page-header {
+    margin-bottom: 20px;
+}
+
+.page-header h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.page-header p {
+    color: #666;
+}
+
+.page-content {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.input-section {
+    font-family: '微软雅黑', sans-serif;
+}
+/* 仪表盘样式 */
+.tool-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 左右布局容器 */
+.tool-layout {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* 左侧面板 */
+.tool-left-panel {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #e4e7ed;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 右侧面板 */
+.tool-right-panel {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #e4e7ed;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 面板标题 */
+.panel-title {
+    background: #fafafa;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #303133;
+    border-bottom: 1px solid #e4e7ed;
+}
+
+/* 面板内容 */
+.panel-content {
+    padding: 20px;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 20px;
+}
+
+.dashboard-card {
+    padding: 0px;
+    border-radius: 1px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.dashboard-card p {
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.dashboard-card a {
+    color: white;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-card a:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.quick-actions {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.quick-actions h3 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.quick-links a {
+    text-decoration: none;
+    color: #4A90E2;
+    background-color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.quick-links a:hover {
+    background-color: #4A90E2;
+    color: white;
+    border-color: #4A90E2;
+}
+
+.platform-info {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #4A90E2;
+}
+
+.platform-info h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.platform-info p {
+    color: #666;
+    line-height: 1.8;
+}
+
+/* 功能页面样式 */
+.function-section {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.function-description {
+    line-height: 1.8;
+}
+
+.function-description strong {
+    color: #333;
+}
+
+.help-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: var(--border-radius);
+}
+
+.help-section h3 {
+    color: #1a68b3;
+    margin-bottom: 15px;
+}
+
+.help-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.help-list li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.help-list li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #4A90E2;
+    font-weight: bold;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    
+    .content {
+        margin-left: 200px;
+    }
+    
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 角色切换相关样式 */
+.company-role-only,
+.admin-role-only {
+    display: none;
+}
+
+body.company-role .company-role-only {
+    display: block;
+}
+
+body.admin-role .admin-role-only {
+    display: block;
+}
+
+body.company-role .nav-item.level-1:not(.company-role-only) {
+    display: none;
+}
+
+body.admin-role .nav-item.level-1:not(.admin-role-only) {
+    display: none;
+}
+
+/* 侧边栏滚动行为 - 保持滚动功能但隐藏滚动条 */
+.sidebar, .nav-container {
+    overflow-y: auto;
+    /* 已经通过上面的全局样式隐藏了滚动条 */
+}
+
+/* 结果内容样式 */
+.result-content {
+    background: #fff;
+    border: 1px solid #e4e7ed;
+    border-radius: 6px;
+    padding: 15px;
+    min-height: 150px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #303133;
+}
+
+/* 输入方式样式 */
+.input-method {
+    margin-bottom: 20px;
+    background: #fff;
+    border-radius: 6px;
+    padding: 15px;
+    border: 1px solid #e4e7ed;
+}
+
+.input-method h4 {
+    margin: 0 0 10px 0;
+    color: #1890ff;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Windows设置界面风格样式 */
+:root {
+    /* Windows主题颜色 */
+    --bg-primary: #F3F3F3;
+    --bg-secondary: #FFFFFF;
+    --bg-hover: #F2F2F2;
+    --bg-active: #E8E8E8;
+    --text-primary: #1A1A1A;
+    --text-secondary: #6E6E6E;
+    --text-tertiary: #8A8A8A;
+    --border-color: #DDDDDD;
+    --accent-color: #0078D4;
+    --accent-hover: #0063B1;
+    --success-bg: #E6F4EA;
+    --success-text: #0D6E3E;
+    --success-border: #4CAF50;
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-xxl: 24px;
+}
+
+/* 页面基础样式 - Windows设置界面风格 */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', 'Microsoft YaHei', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.5;
+}
+
+.page-content {
+    padding: var(--spacing-xl);
+    overflow-y: auto;
+}
+
+/* Windows设置布局 */
+.settings-layout {
+    display: flex;
+    gap: var(--spacing-xl);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.settings-section,
+.results-section {
+    flex: 1;
+}
+
+/* Windows卡片样式 */
+.settings-card {
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: var(--spacing-xl);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+/* 卡片头部样式 */
+.settings-header {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+}
+
+.settings-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* 卡片内容样式 */
+.settings-content {
+    padding: var(--spacing-xl);
+}
+
+/* 设置组样式 */
+.settings-group {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.settings-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    display: block;
+}
+
+/* 输入框样式 - Windows风格 */
+.settings-textarea {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+    resize: vertical;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.settings-textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
+}
+
+/* 下拉选择器样式 */
+.knowledge-selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.selector-item {
+    width: 100%;
+}
+
+.settings-select {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.settings-select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
+}
+
+/* 复选框样式 */
+.checkbox-group {
+    margin-bottom: var(--spacing-xl);
+}
+
+.checkbox-item {
+    display: block;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-xs) 0;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-right: var(--spacing-md);
+    accent-color: var(--accent-color);
+}
+
+/* Windows按钮样式 */
+.button-group {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.action-button {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+}
+
+.action-button.primary {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.action-button.primary:hover {
+    background-color: var(--accent-hover);
+}
+
+.action-button.secondary {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.action-button.secondary:hover {
+    background-color: var(--bg-hover);
+}
+
+.action-button.small {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 13px;
+}
+
+/* 结果区域样式 */
+.result-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.result-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.result-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.result-output {
+    min-height: 250px;
+    padding: var(--spacing-lg);
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.result-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* 占位文本样式 */
+.placeholder-text {
+    color: var(--text-tertiary);
+    font-style: italic;
+}
+
+/* 使用指南样式 */
+.guide-list {
+    padding-left: var(--spacing-xl);
+    margin: 0;
+}
+
+.guide-list li {
+    margin-bottom: var(--spacing-md);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* 修正文本样式 */
+.processed-text {
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.corrected {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+    padding: 2px 4px;
+    border-radius: 2px;
+    font-weight: 500;
+    border: 1px solid var(--success-border);
+}

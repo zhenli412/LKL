@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>话术诊断助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/nav-component.js"></script>
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+            margin-bottom: 30px;
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            height: fit-content;
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-section textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-section select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        .input-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 选项组样式 */
+        .options-group {
+            margin-bottom: 24px;
+        }
+
+        .options-group h4 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .option-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 操作按钮样式 */
+        .action-buttons {
+            margin-top: auto;
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .action-button.primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .action-button.small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* 结果区域样式 */
+        .result-output {
+            flex-grow: 1;
+            min-height: 400px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--secondary-color);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        .result-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        /* 诊断结果项目样式 */
+        .diagnosis-item {
+            margin-bottom: 16px;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            background-color: var(--secondary-color);
+        }
+
+        .diagnosis-item strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .diagnosis-item.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .diagnosis-item.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .diagnosis-item.error {
+            border-left: 4px solid var(--error-color);
+        }
+
+        /* 帮助说明区域样式 */
+        .help-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: var(--border-radius);
+        }
+
+        .help-section h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .help-item {
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        .help-item strong {
+            color: var(--text-color);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div id="top-nav-container"></div>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h1>话术诊断助手</h1>
+                <p>分析现有销售话术，识别问题并提供优化建议，提升话术效果和转化率</p>
+            </div>
+            
+            <div class="page-content">
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <h3>话术诊断设置</h3>
+                        
+                        <div class="input-section">
+                            <label for="script-text">需要诊断的话术内容</label>
+                            <textarea id="script-text" placeholder="请粘贴需要诊断的销售话术内容"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="industry">所属行业</label>
+                            <select id="industry">
+                                <option value="">请选择行业</option>
+                                <option value="tech">科技</option>
+                                <option value="finance">金融</option>
+                                <option value="education">教育</option>
+                                <option value="health">医疗健康</option>
+                                <option value="retail">零售</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="target-audience">目标客户群体</label>
+                            <input type="text" id="target-audience" placeholder="例如：中小企业主、年轻白领等">
+                        </div>
+
+                        <!-- 诊断选项组 -->
+                        <div class="options-group">
+                            <h4>诊断维度（可多选）</h4>
+                            <div class="option-item">
+                                <input type="checkbox" id="option-structure" checked>
+                                <label for="option-structure">结构完整性</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="option-emotion" checked>
+                                <label for="option-emotion">情感感染力</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="option-persuasion" checked>
+                                <label for="option-persuasion">说服力</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="option-language" checked>
+                                <label for="option-language">语言表达</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="option-objection" checked>
+                                <label for="option-objection">异议处理</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="option-closing" checked>
+                                <label for="option-closing">促成能力</label>
+                            </div>
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="action-buttons">
+                            <button id="reset-btn" class="action-button secondary">重置</button>
+                            <button id="diagnose-btn" class="action-button primary">开始诊断</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <h3>诊断结果</h3>
+                        <div class="result-controls">
+                            <button id="copy-btn" class="action-button secondary small">复制结果</button>
+                            <button id="optimize-btn" class="action-button secondary small">生成优化版本</button>
+                        </div>
+                        
+                        <div id="result-output" class="result-output">
+                            诊断结果将显示在这里。请在左侧输入需要诊断的话术内容并点击"开始诊断"按钮。
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            
+            <!-- 帮助说明区域 - 移至page-content外部 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入话术内容：</strong>在左侧文本框中粘贴需要诊断的销售话术
+                </div>
+                <div class="help-item">
+                    <strong>2. 选择诊断选项：</strong>选择您希望从哪些维度进行诊断
+                </div>
+                <div class="help-item">
+                    <strong>3. 开始诊断：</strong>点击"开始诊断"按钮，系统将分析您的话术
+                </div>
+                <div class="help-item">
+                    <strong>4. 查看结果：</strong>右侧将显示详细的诊断结果，包括问题分析和优化建议
+                </div>
+                <div class="help-item">
+                    <strong>5. 生成优化版本：</strong>可选择根据诊断建议生成优化后的话术版本
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 初始化事件监听和导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 使用统一的导航加载函数
+            loadNavigation('../../', 'sales', 'sales/script-diagnosis.html');
+            
+            // 诊断按钮点击事件
+            document.getElementById('diagnose-btn').addEventListener('click', function() {
+                diagnoseScript();
+            });
+            
+            // 重置按钮点击事件
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                resetForm();
+            });
+            
+            // 复制按钮点击事件
+            document.getElementById('copy-btn').addEventListener('click', function() {
+                copyToClipboard();
+            });
+            
+            // 优化按钮点击事件
+            document.getElementById('optimize-btn').addEventListener('click', function() {
+                generateOptimizedScript();
+            });
+        });
+        
+        // 话术诊断函数
+        function diagnoseScript() {
+            // 获取表单数据
+            const scriptText = document.getElementById('script-text').value.trim();
+            const industry = document.getElementById('industry').value;
+            const targetAudience = document.getElementById('target-audience').value.trim();
+            
+            // 获取选中的诊断维度
+            const selectedDimensions = [];
+            const checkboxes = document.querySelectorAll('.options-group input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedDimensions.push(checkbox.id.replace('option-', ''));
+                }
+            });
+            
+            // 简单验证
+            if (!scriptText) {
+                alert('请输入需要诊断的话术内容');
+                return;
+            }
+            
+            // 模拟诊断过程（实际应用中应调用API）
+            const resultOutput = document.getElementById('result-output');
+            resultOutput.innerHTML = '正在进行话术诊断...';
+            
+            // 模拟API延迟
+            setTimeout(() => {
+                // 生成模拟诊断结果
+                let diagnosisResult = `# 话术诊断报告\n\n`;
+                diagnosisResult += `## 整体评分: 75/100\n\n`;
+                
+                // 结构完整性分析
+                if (selectedDimensions.includes('structure')) {
+                    diagnosisResult += `## 1. 结构完整性\n`;
+                    diagnosisResult += `- 评分: 80/100\n`;
+                    diagnosisResult += `- 优势: 包含了产品介绍和核心卖点\n`;
+                    diagnosisResult += `- 问题: 缺少开场白和明确的收尾部分\n`;
+                    diagnosisResult += `- 建议: 在话术开始增加个性化开场白，在结束部分添加明确的下一步行动建议\n\n`;
+                }
+                
+                // 情感感染力分析
+                if (selectedDimensions.includes('emotion')) {
+                    diagnosisResult += `## 2. 情感感染力\n`;
+                    diagnosisResult += `- 评分: 65/100\n`;
+                    diagnosisResult += `- 优势: 信息较为客观准确\n`;
+                    diagnosisResult += `- 问题: 缺乏情感共鸣点，语气过于正式\n`;
+                    diagnosisResult += `- 建议: 加入客户可能面临的痛点描述，使用更亲切自然的语言\n\n`;
+                }
+                
+                // 说服力分析
+                if (selectedDimensions.includes('persuasion')) {
+                    diagnosisResult += `## 3. 说服力\n`;
+                    diagnosisResult += `- 评分: 70/100\n`;
+                    diagnosisResult += `- 优势: 列出了产品的主要功能\n`;
+                    diagnosisResult += `- 问题: 缺乏具体数据支撑和成功案例\n`;
+                    diagnosisResult += `- 建议: 增加相关数据和客户成功案例，突出产品带来的实际价值\n\n`;
+                }
+                
+                // 语言表达分析
+                if (selectedDimensions.includes('language')) {
+                    diagnosisResult += `## 4. 语言表达\n`;
+                    diagnosisResult += `- 评分: 85/100\n`;
+                    diagnosisResult += `- 优势: 语言清晰，逻辑连贯\n`;
+                    diagnosisResult += `- 问题: 部分专业术语过多，可能影响理解\n`;
+                    diagnosisResult += `- 建议: 适当简化专业术语，增加更通俗易懂的解释\n\n`;
+                }
+                
+                // 异议处理分析
+                if (selectedDimensions.includes('objection')) {
+                    diagnosisResult += `## 5. 异议处理\n`;
+                    diagnosisResult += `- 评分: 60/100\n`;
+                    diagnosisResult += `- 优势: 提及了产品优势\n`;
+                    diagnosisResult += `- 问题: 没有针对可能的客户异议提供应对策略\n`;
+                    diagnosisResult += `- 建议: 预测客户可能提出的2-3个主要异议，并准备相应的回应话术\n\n`;
+                }
+                
+                // 促成能力分析
+                if (selectedDimensions.includes('closing')) {
+                    diagnosisResult += `## 6. 促成能力\n`;
+                    diagnosisResult += `- 评分: 70/100\n`;
+                    diagnosisResult += `- 优势: 包含了产品价值点\n`;
+                    diagnosisResult += `- 问题: 缺乏明确的行动召唤和紧迫感\n`;
+                    diagnosisResult += `- 建议: 增加明确的行动召唤，可考虑加入限时优惠或稀缺性元素\n\n`;
+                }
+                
+                // 总结建议
+                diagnosisResult += `## 总结建议\n`;
+                diagnosisResult += `1. 完善话术结构，确保开场白和收尾部分清晰有力\n`;
+                diagnosisResult += `2. 增强情感共鸣，使用更亲切的语言风格\n`;
+                diagnosisResult += `3. 增加数据和案例支撑，提升说服力\n`;
+                diagnosisResult += `4. 预测并准备应对可能的客户异议\n`;
+                diagnosisResult += `5. 强化促成部分，明确后续行动步骤\n`;
+                
+                // 显示诊断结果
+                resultOutput.innerHTML = diagnosisResult;
+            }, 1500);
+        }
+        
+        // 重置表单函数
+        function resetForm() {
+            document.getElementById('script-text').value = '';
+            document.getElementById('industry').value = '';
+            document.getElementById('target-audience').value = '';
+            
+            // 重置所有复选框为选中状态
+            const checkboxes = document.querySelectorAll('.options-group input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            
+            // 重置结果输出
+            document.getElementById('result-output').innerHTML = '诊断结果将显示在这里。请在左侧输入需要诊断的话术内容并点击"开始诊断"按钮。';
+        }
+        
+        // 复制结果到剪贴板
+        function copyToClipboard() {
+            const resultText = document.getElementById('result-output').innerText;
+            navigator.clipboard.writeText(resultText).then(() => {
+                alert('诊断结果已复制到剪贴板');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        }
+        
+        // 生成优化版本
+        function generateOptimizedScript() {
+            // 获取当前诊断结果
+            const diagnosisResult = document.getElementById('result-output').innerText;
+            
+            // 检查是否有诊断结果
+            if (diagnosisResult.includes('请在左侧输入需要诊断的话术内容')) {
+                alert('请先进行话术诊断');
+                return;
+            }
+            
+            // 模拟生成优化版本
+            const resultOutput = document.getElementById('result-output');
+            resultOutput.innerHTML = '正在生成优化版本...';
+            
+            // 模拟API延迟
+            setTimeout(() => {
+                let optimizedResult = `# 优化后的话术版本\n\n`;
+                
+                optimizedResult += `## 开场白\n`;
+                optimizedResult += `您好[客户姓名]，我是[您的姓名]，来自[公司名称]。最近我们在与很多[客户所属行业]的企业合作，了解到大家都在面临[相关痛点]的挑战，不知道您是否也有类似的困扰？\n\n`;
+                
+                optimizedResult += `## 需求确认\n`;
+                optimizedResult += `在我们的服务过程中，发现像[客户公司规模]这样的企业通常会关注[具体需求点]。请问您在这方面有什么具体的期望或挑战吗？\n\n`;
+                
+                optimizedResult += `## 产品介绍\n`;
+                optimizedResult += `基于您提到的需求，我们的[产品/服务名称]正好能够帮助您解决这些问题。与传统方案相比，我们的解决方案具有[核心优势]，已经帮助[具体数字]家类似企业实现了[具体成果]。\n\n`;
+                
+                optimizedResult += `## 价值展示\n`;
+                optimizedResult += `举个例子，我们的客户[案例公司]在使用我们的服务后，在[时间周期]内就实现了[具体业绩改善]，ROI达到了[具体数字]。\n\n`;
+                
+                optimizedResult += `## 异议处理\n`;
+                optimizedResult += `- 关于价格：虽然初期投入看似较高，但考虑到[长期价值]，实际上能够帮您节省[具体成本]。\n`;
+                optimizedResult += `- 关于实施：我们有专业的实施团队，平均实施周期仅为[时间]，并且提供[培训支持]。\n`;
+                optimizedResult += `- 关于效果：我们提供[试用/演示]，让您可以在全面合作前充分评估效果。\n\n`;
+                
+                optimizedResult += `## 促成行动\n`;
+                optimizedResult += `考虑到您的需求紧迫性，我们目前有一个针对新客户的[特别优惠]，如果您能在[时间限制]内确认合作，还可以获得[额外福利]。您觉得我们是否可以安排下一步的[具体行动，如演示/试用]？\n\n`;
+                
+                optimizedResult += `## 后续跟进\n`;
+                optimizedResult += `非常感谢您的时间。我会在[具体时间]发送今天讨论的要点和下一步计划到您的邮箱。如果您有任何其他问题，随时可以联系我。\n`;
+                
+                // 显示优化结果
+                resultOutput.innerHTML = optimizedResult;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

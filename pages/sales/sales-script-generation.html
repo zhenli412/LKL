@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>销冠话术生成助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/nav-component.js"></script>
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+            margin-bottom: 30px;
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            height: fit-content;
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-section select,
+        .input-section input[type="text"] {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .input-section select:focus,
+        .input-section input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 选项组样式 */
+        .options-group {
+            margin-bottom: 24px;
+        }
+
+        .options-group h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        .action-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .action-button.primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .action-button.small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* 结果区域样式 */
+        .result-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .result-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .result-output {
+            flex: 1;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            min-height: 300px;
+            overflow-y: auto;
+        }
+
+        .result-section {
+            margin-bottom: 20px;
+        }
+
+        .result-section h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* 帮助区域样式 */
+        .help-section {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            margin-bottom: 30px;
+        }
+
+        .help-section h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .help-item {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .help-item:before {
+            content: "•";
+            color: var(--primary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div id="top-nav-container"></div>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h1>销冠话术生成助手</h1>
+                <p>基于行业经验和销售数据，快速生成高效的销售话术，提升转化率</p>
+            </div>
+            
+            <div class="page-content">
+                
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <h3>话术设置</h3>
+                        
+                        <div class="input-section">
+                            <label for="product-name">产品/服务名称</label>
+                            <input type="text" id="product-name" placeholder="请输入产品或服务名称">
+                        </div>
+
+                        <div class="input-section">
+                            <label for="industry">所属行业</label>
+                            <select id="industry">
+                                <option value="">请选择行业</option>
+                                <option value="tech">科技</option>
+                                <option value="finance">金融</option>
+                                <option value="education">教育</option>
+                                <option value="health">医疗健康</option>
+                                <option value="retail">零售</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="target-audience">目标客户群体</label>
+                            <input type="text" id="target-audience" placeholder="例如：中小企业主、年轻白领等">
+                        </div>
+
+                        <div class="input-section">
+                            <label for="product-features">核心功能/卖点</label>
+                            <textarea id="product-features" placeholder="请列出产品的核心功能或卖点，每行一个" rows="4"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="competitors">主要竞争对手</label>
+                            <input type="text" id="competitors" placeholder="可选：请输入主要竞争对手的名称">
+                        </div>
+
+                        <!-- 选项组 -->
+                        <div class="options-group">
+                            <h4>话术类型（可多选）</h4>
+                            <div class="option-item">
+                                <input type="checkbox" id="option-cold-call" checked>
+                                <label for="option-cold-call">电话开场白</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="option-proposal" checked>
+                                <label for="option-proposal">产品介绍</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="option-objection" checked>
+                                <label for="option-objection">异议处理</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="option-closing" checked>
+                                <label for="option-closing">促成交易</label>
+                            </div>
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="action-buttons">
+                            <button id="reset-btn" class="action-button secondary">重置</button>
+                            <button id="generate-btn" class="action-button primary">生成话术</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <h3>生成结果</h3>
+                        <div class="result-controls">
+                            <button id="copy-btn" class="action-button secondary small">复制结果</button>
+                            <button id="download-btn" class="action-button secondary small">导出话术</button>
+                        </div>
+                        
+                        <div id="result-output" class="result-output">
+                            <div class="placeholder-text">
+                                <p>请在左侧填写产品信息并点击「生成话术」按钮</p>
+                                <p>生成的销售话术将显示在这里</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 帮助说明区 -->
+                <div class="help-section">
+                    <h3>使用指南</h3>
+                    <div class="help-item">填写产品名称、行业、目标客户群体等基础信息，越详细生成的话术越精准</div>
+                    <div class="help-item">核心功能/卖点是生成话术的关键，请尽可能全面地列出产品的优势</div>
+                    <div class="help-item">选择需要的话术类型，可多选</div>
+                    <div class="help-item">点击「生成话术」按钮获取结果，可复制或导出使用</div>
+                    <div class="help-item">生成的话术可根据实际情况进行调整和优化</div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // 生成话术函数
+        function generateScript() {
+            // 获取表单数据
+            const productName = document.getElementById('product-name').value || '优质产品';
+            const industry = document.getElementById('industry').value || '科技';
+            const targetAudience = document.getElementById('target-audience').value || '企业客户';
+            const productFeatures = document.getElementById('product-features').value || '高性能,低成本,易操作';
+            const competitors = document.getElementById('competitors').value || '市场同类产品';
+            
+            // 获取选中的话术类型
+            const selectedTypes = [];
+            if (document.getElementById('option-cold-call').checked) selectedTypes.push('cold-call');
+            if (document.getElementById('option-proposal').checked) selectedTypes.push('proposal');
+            if (document.getElementById('option-objection').checked) selectedTypes.push('objection');
+            if (document.getElementById('option-closing').checked) selectedTypes.push('closing');
+            
+            // 模拟生成结果
+            let resultHtml = '';
+            
+            if (selectedTypes.includes('cold-call')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>📞 电话开场白</h4>
+                        <p>您好，我是${productName}的客户经理[姓名]。我们专注于为${targetAudience}提供高效的${industry}解决方案。</p>
+                        <p>最近我们帮助了多家类似企业在[相关领域]提升了30%的效率，想简单了解一下您在这方面是否有类似需求？</p>
+                    </div>
+                `;
+            }
+            
+            if (selectedTypes.includes('proposal')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>💡 产品介绍</h4>
+                        <p>${productName}是一款专为${targetAudience}设计的${industry}解决方案，它具有以下核心优势：</p>
+                        <ul>
+                            <li>高效便捷：操作简单，快速上手，节省50%的时间成本</li>
+                            <li>安全可靠：采用行业领先的安全技术，保障数据安全</li>
+                            <li>智能分析：内置AI分析功能，提供精准的决策支持</li>
+                            <li>定制服务：根据您的实际需求提供个性化解决方案</li>
+                        </ul>
+                        <p>相比${competitors}，我们在[性能/价格/服务]方面具有明显优势。</p>
+                    </div>
+                `;
+            }
+            
+            if (selectedTypes.includes('objection')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>🔍 异议处理</h4>
+                        <p><strong>价格顾虑：</strong>我理解您对价格的关注。${productName}虽然前期投入略高，但考虑到它能为您节省的时间成本和提升的工作效率，投资回报率通常在3-6个月内即可实现。</p>
+                        <p><strong>实施周期：</strong>我们有专业的实施团队，通常在2-4周内即可完成部署，不会影响您的正常业务运营。</p>
+                        <p><strong>功能需求：</strong>我们支持根据客户需求进行定制开发，如果您有特殊的功能需求，我们的技术团队可以为您提供解决方案。</p>
+                    </div>
+                `;
+            }
+            
+            if (selectedTypes.includes('closing')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>✅ 促成交易</h4>
+                        <p>基于我们的讨论，${productName}确实能很好地满足您的需求。我们可以为您提供一个月的免费试用期，让您亲身体验产品的价值。</p>
+                        <p>如果您今天决定合作，我们还可以为您提供[专属优惠/增值服务]。您看是现在就签约，还是需要我为您准备更详细的方案？</p>
+                    </div>
+                `;
+            }
+            
+            // 显示结果
+            document.getElementById('result-output').innerHTML = resultHtml;
+        }
+        
+        // 重置表单函数
+        function resetForm() {
+            document.getElementById('product-name').value = '';
+            document.getElementById('industry').value = '';
+            document.getElementById('target-audience').value = '';
+            document.getElementById('product-features').value = '';
+            document.getElementById('competitors').value = '';
+            
+            document.getElementById('result-output').innerHTML = `
+                <div class="placeholder-text">
+                    <p>请在左侧填写产品信息并点击「生成话术」按钮</p>
+                    <p>生成的销售话术将显示在这里</p>
+                </div>
+            `;
+        }
+        
+        // 复制到剪贴板函数
+        function copyToClipboard() {
+            const resultText = document.getElementById('result-output').innerText;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(resultText)
+                    .then(() => {
+                        alert('已复制到剪贴板');
+                    })
+                    .catch(err => {
+                        console.error('复制失败:', err);
+                        alert('复制失败，请手动复制');
+                    });
+            } else {
+                // 兼容性处理
+                const textArea = document.createElement('textarea');
+                textArea.value = resultText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('已复制到剪贴板');
+            }
+        }
+        
+        // 下载话术函数
+        function downloadScript() {
+            const productName = document.getElementById('product-name').value || '销售话术';
+            const resultText = document.getElementById('result-output').innerText;
+            
+            const blob = new Blob([resultText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${productName}_销售话术.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 初始化事件监听和导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 使用统一的导航加载函数
+            loadNavigation('../../', 'sales', 'sales/sales-script-generation.html');
+            
+            // 生成按钮点击事件
+            document.getElementById('generate-btn').addEventListener('click', function() {
+                generateScript();
+            });
+            
+            // 重置按钮点击事件
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                resetForm();
+            });
+            
+            // 复制按钮点击事件
+            document.getElementById('copy-btn').addEventListener('click', function() {
+                copyToClipboard();
+            });
+            
+            // 下载按钮点击事件
+            document.getElementById('download-btn').addEventListener('click', function() {
+                downloadScript();
+            });
+        });    
+    </script>
+</body>
+</html>

@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文案提取助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #3B82F6;
+            --primary-hover: #2563EB;
+            --secondary-color: #F3F4F6;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --border-color: #E5E7EB;
+            --success-color: #10B981;
+            --danger-color: #EF4444;
+            --border-radius: 8px;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+            width: 100%;
+            align-items: stretch;
+        }
+        
+        /* 面板基础样式 */
+        .comparison-panel {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            height: 480px;
+        }
+        
+        /* 左侧面板 */
+        .input-panel {
+            min-height: 500px;
+            border: 1px solid #e8e8e8;
+        }
+        
+        /* 右侧面板 */
+        .output-panel {
+            min-height: 500px;
+            border: 1px solid #e8e8e8;
+        }
+        
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 15px;
+        }
+        
+        .input-section label {
+            display: none;
+        }
+        
+        .input-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            resize: vertical;
+            min-height: 200px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .result-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* 文件上传区域 */
+        .file-upload-section {
+            margin-top: 16px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .file-drop-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--secondary-color);
+            margin-top: 12px;
+        }
+        
+        .file-drop-area:hover,
+        .file-drop-area.highlight {
+            border-color: var(--primary-color);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        
+        .file-drop-text {
+            color: var(--text-secondary);
+        }
+        
+        .file-tip {
+            font-size: 12px;
+            margin-top: 4px;
+            color: var(--text-secondary);
+        }
+        
+        #file-upload {
+            display: none;
+        }
+        
+        /* 提取选项样式 */
+        .extraction-options {
+            margin-bottom: 24px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+        }
+        
+        .extraction-options h4 {
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .option-group label:hover {
+            color: var(--primary-color);
+        }
+        
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+        }
+        
+        .action-button {
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .action-button.primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .action-button.secondary {
+            background-color: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .action-button.secondary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .action-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* 结果面板样式 */
+        .result-header {
+            margin-bottom: 16px;
+        }
+        
+        .result-header h4 {
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .result-content {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        
+        .placeholder-text {
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 40px 0;
+            margin: 0;
+        }
+        
+        .result-item {
+            margin-bottom: 20px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+        }
+        
+        .result-item h5 {
+            margin: 0 0 12px 0;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+        
+        .result-item ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .result-item li {
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        /* 加载动画 */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 加载状态布局 */
+        .loading-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-secondary);
+        }
+        
+        .result-content.loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        /* 加号图标样式 */
+        .icon-plus {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
+            font-size: 18px;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        
+        /* 进度条样式 */
+        .progress-container {
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-status {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        
+        /* 视频链接和文案内容样式 */
+        .video-link-info {
+            margin-bottom: 10px;
+        }
+        
+        .video-url {
+            font-size: 13px;
+            color: var(--text-secondary);
+            word-break: break-all;
+            margin: 5px 0 10px 0;
+        }
+        
+        .copywriting-content h6 {
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .copywriting-content p {
+            margin: 0;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+        
+        /* 结果分隔线样式 */
+        .result-divider {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        
+        /* 结果统计信息样式 */
+        .result-summary {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            border-radius: 4px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: var(--text-primary);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .close-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .save-type-selection {
+            margin-bottom: 20px;
+        }
+        
+        .save-type-selection label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+        
+        .save-type-selection input[type="radio"] {
+            margin-right: 8px;
+        }
+        
+        .save-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .save-section input[type="text"],
+        .save-section select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .save-section input[type="text"]:focus,
+        .save-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.1);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* 使用指南样式 */
+        .usage-guide {
+            margin-top: 24px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            grid-column: 1 / -1;
+        }
+        
+        .usage-guide h3 {
+            margin-top: 0;
+            color: var(--text-primary);
+        }
+        
+        .usage-guide ul {
+            margin-bottom: 0;
+        }
+        
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .result-actions .action-button {
+            padding: 8px 16px;
+            font-size: 13px;
+            flex: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-panel {
+                min-height: auto;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <!-- 成功提示组件 -->
+    <div id="success-toast" class="success-toast">操作成功</div>
+    
+    <script>
+        // 加载统一导航组件，设置基础路径为上上级目录，激活marketing角色，指定当前页面路径
+        loadNavigation('../../', 'marketing', 'pages/marketing/copywriting-extraction-assistant.html');
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>文案提取助手</h2>
+                <p>智能识别并提取各类素材中的优质文案片段，助力内容创作</p>
+            </div>
+            
+            <div class="page-content">
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <h3>短视频链接输入</h3>
+                        
+                        <!-- 链接输入区域 -->
+                        <div class="input-section">
+                            <label for="video-links-input"></label>
+                            <textarea id="video-links-input" placeholder="请输入短视频链接（多条请换行分隔）"></textarea>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button id="extract-btn" class="action-button primary">提取文案</button>
+                            <button id="clear-btn" class="action-button secondary">清空</button>
+                        </div>
+                        
+                        <!-- 提取进度条 -->
+                        <div id="extraction-progress-container" class="progress-container">
+                            <div class="progress-bar">
+                                <div id="extraction-progress" class="progress-fill"></div>
+                            </div>
+                            <div id="extraction-status" class="progress-status"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>提取结果</h3>
+                        </div>
+                        
+                        <!-- 结果内容区域 -->
+                        <div id="copywriting-result" class="result-content">
+                            <p class="placeholder-text">提取结果将显示在这里...</p>
+                        </div>
+                        
+                        <!-- 保存按钮 -->
+                        <div class="result-actions">
+                            <button id="copy-result-btn" class="action-button secondary" disabled>复制结果</button>
+                            <button id="save-to-knowledge-btn" class="action-button primary" disabled>
+                                <span class="icon-plus">+</span> 保存至个人知识库
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 使用指南区域 - 移至功能操作区下方 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入内容：</strong>粘贴短视频链接（多条请换行分隔）
+                </div>
+                <div class="help-item">
+                    <strong>2. 开始提取：</strong>点击「提取文案」按钮进行文案智能识别
+                </div>
+                <div class="help-item">
+                    <strong>3. 查看结果：</strong>查看提取结果，可复制或保存至知识库
+                </div>
+                <div class="help-item">
+                    <strong>4. 继续使用：</strong>提取完成后可继续提取新的内容
+                </div>
+            </div>
+            
+            <style>
+                /* 使用指南样式 */
+                .help-section {
+                    background-color: var(--secondary-color);
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin-top: 30px;
+                }
+            </style>
+        </main>
+    </div>
+    
+    <!-- 知识库保存弹窗 -->
+    <div id="knowledge-base-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>保存到个人知识库</h3>
+                <button id="close-modal-btn" class="close-btn">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="save-type-selection">
+                    <label><input type="radio" name="save-type" value="new-folder" checked> 新建目录</label>
+                    <label><input type="radio" name="save-type" value="existing-folder"> 已有目录</label>
+                </div>
+                
+                <div id="new-folder-section" class="save-section">
+                    <label for="new-folder-name">目录名称</label>
+                    <input type="text" id="new-folder-name" placeholder="请输入新目录名称">
+                </div>
+                
+                <div id="existing-folder-section" class="save-section" style="display: none;">
+                    <label for="category-select">选择一级类目</label>
+                    <select id="category-select">
+                        <option value="">请选择一级类目</option>
+                        <option value="1">视频营销素材</option>
+                        <option value="2">文案模板库</option>
+                        <option value="3">竞品分析</option>
+                        <option value="4">用户反馈</option>
+                    </select>
+                    
+                    <label for="subcategory-select" style="margin-top: 15px;">选择二级类目</label>
+                    <select id="subcategory-select" disabled>
+                        <option value="">请先选择一级类目</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-save-btn" class="action-button secondary">取消</button>
+                <button id="confirm-save-btn" class="action-button primary">确认保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 文案提取助手页面逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM元素
+            const videoLinksInput = document.getElementById('video-links-input');
+            const extractBtn = document.getElementById('extract-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const copywritingResult = document.getElementById('copywriting-result');
+            const copyResultBtn = document.getElementById('copy-result-btn');
+            const saveToKnowledgeBtn = document.getElementById('save-to-knowledge-btn');
+            const progressContainer = document.getElementById('extraction-progress-container');
+            const extractionProgress = document.getElementById('extraction-progress');
+            const extractionStatus = document.getElementById('extraction-status');
+            
+            // 知识库保存弹窗相关元素
+            const knowledgeBaseModal = document.getElementById('knowledge-base-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const cancelSaveBtn = document.getElementById('cancel-save-btn');
+            const confirmSaveBtn = document.getElementById('confirm-save-btn');
+            const saveTypeRadios = document.querySelectorAll('input[name="save-type"]');
+            const newFolderSection = document.getElementById('new-folder-section');
+            const existingFolderSection = document.getElementById('existing-folder-section');
+            const categorySelect = document.getElementById('category-select');
+            const subcategorySelect = document.getElementById('subcategory-select');
+            
+            // 模拟的二级类目数据
+            const subcategories = {
+                '1': [
+                    { id: '1-1', name: '抖音短视频' },
+                    { id: '1-2', name: '快手短视频' },
+                    { id: '1-3', name: '视频号短视频' },
+                    { id: '1-4', name: '小红书短视频' }
+                ],
+                '2': [
+                    { id: '2-1', name: '产品介绍文案' },
+                    { id: '2-2', name: '营销活动文案' },
+                    { id: '2-3', name: '品牌故事文案' },
+                    { id: '2-4', name: '用户见证文案' }
+                ],
+                '3': [
+                    { id: '3-1', name: '竞品营销策略' },
+                    { id: '3-2', name: '竞品内容分析' },
+                    { id: '3-3', name: '竞品差异化' },
+                    { id: '3-4', name: '竞品优势借鉴' }
+                ],
+                '4': [
+                    { id: '4-1', name: '正面反馈' },
+                    { id: '4-2', name: '负面反馈' },
+                    { id: '4-3', name: '功能建议' },
+                    { id: '4-4', name: '用户期望' }
+                ]
+            };
+            
+            // 成功提示组件
+            function showSuccessToast(message) {
+                const toast = document.getElementById('success-toast');
+                toast.textContent = message || '操作成功';
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // 更新进度条
+            function updateProgress(percentage, status) {
+                extractionProgress.style.width = percentage + '%';
+                extractionStatus.textContent = status;
+            }
+            
+            // 模拟提取进度
+            function simulateExtractionProgress(links, callback) {
+                let processed = 0;
+                const total = links.length;
+                
+                progressContainer.style.display = 'block';
+                updateProgress(0, `开始处理 ${total} 个视频链接`);
+                
+                const processNext = () => {
+                    if (processed < total) {
+                        // 模拟处理一个链接需要的时间
+                        setTimeout(() => {
+                            processed++;
+                            const progress = Math.round((processed / total) * 100);
+                            updateProgress(progress, `正在提取第 ${processed} 个视频的文案...`);
+                            processNext();
+                        }, 500); // 每个链接处理500ms
+                    } else {
+                        // 全部处理完成
+                        setTimeout(() => {
+                            progressContainer.style.display = 'none';
+                            callback();
+                        }, 500);
+                    }
+                };
+                
+                processNext();
+            }
+            
+            // 提取按钮点击事件
+            extractBtn.addEventListener('click', function() {
+                // 检查是否有输入内容
+                const inputLinks = videoLinksInput.value.trim();
+                
+                if (!inputLinks) {
+                    showSuccessToast('请输入短视频链接');
+                    return;
+                }
+                
+                // 分割链接并过滤空行
+                const links = inputLinks.split('\n')
+                    .map(link => link.trim())
+                    .filter(link => link);
+                
+                if (links.length === 0) {
+                    showSuccessToast('请输入有效的短视频链接');
+                    return;
+                }
+                
+                // 显示加载状态
+                extractBtn.disabled = true;
+                extractBtn.innerHTML = '<span class="loading-spinner"></span> 提取中...';
+                copywritingResult.innerHTML = '<div class="loading-text">正在分析视频内容并提取文案...</div>';
+                
+                // 重置按钮状态
+                copyResultBtn.disabled = true;
+                saveToKnowledgeBtn.disabled = true;
+                
+                // 模拟提取进度
+                simulateExtractionProgress(links, function() {
+                    // 生成模拟的提取结果
+                    const resultHTML = generateExtractionResult(links);
+                    copywritingResult.innerHTML = resultHTML;
+                    
+                    // 恢复按钮状态
+                    extractBtn.disabled = false;
+                    extractBtn.innerHTML = '提取文案';
+                    
+                    // 启用操作按钮
+                    setTimeout(() => {
+                        copyResultBtn.disabled = false;
+                        saveToKnowledgeBtn.disabled = false;
+                    }, 100);
+                    
+                    // 显示成功提示
+                    showSuccessToast(`成功提取 ${links.length} 个视频的文案`);
+                });
+            });
+            
+            // 清空按钮点击事件
+            clearBtn.addEventListener('click', function() {
+                videoLinksInput.value = '';
+                copywritingResult.innerHTML = '<p class="placeholder-text">提取结果将显示在这里...</p>';
+                progressContainer.style.display = 'none';
+                updateProgress(0, '');
+                copyResultBtn.disabled = true;
+                saveToKnowledgeBtn.disabled = true;
+                showSuccessToast('已清空输入内容');
+            });
+            
+            // 复制结果按钮点击事件
+            copyResultBtn.addEventListener('click', function() {
+                const resultText = getResultText();
+                if (resultText && !resultText.includes('提取结果将显示在这里...') && !resultText.includes('正在分析')) {
+                    navigator.clipboard.writeText(resultText)
+                        .then(function() {
+                            showSuccessToast('结果已复制到剪贴板');
+                        })
+                        .catch(function() {
+                            showSuccessToast('复制失败，请手动复制');
+                        });
+                } else {
+                    showSuccessToast('没有可复制的结果');
+                }
+            });
+            
+            // 保存到知识库按钮点击事件
+            saveToKnowledgeBtn.addEventListener('click', function() {
+                knowledgeBaseModal.style.display = 'block';
+            });
+            
+            // 关闭弹窗事件
+            closeModalBtn.addEventListener('click', closeKnowledgeBaseModal);
+            cancelSaveBtn.addEventListener('click', closeKnowledgeBaseModal);
+            
+            // 点击弹窗外部关闭
+            window.addEventListener('click', function(event) {
+                if (event.target === knowledgeBaseModal) {
+                    closeKnowledgeBaseModal();
+                }
+            });
+            
+            // 保存类型切换事件
+            saveTypeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'new-folder') {
+                        newFolderSection.style.display = 'block';
+                        existingFolderSection.style.display = 'none';
+                    } else {
+                        newFolderSection.style.display = 'none';
+                        existingFolderSection.style.display = 'block';
+                    }
+                });
+            });
+            
+            // 一级类目选择事件
+            categorySelect.addEventListener('change', function() {
+                const categoryId = this.value;
+                
+                if (categoryId && subcategories[categoryId]) {
+                    // 启用二级类目选择框
+                    subcategorySelect.disabled = false;
+                    subcategorySelect.innerHTML = '<option value="">请选择二级类目</option>';
+                    
+                    // 添加二级类目选项
+                    subcategories[categoryId].forEach(subcat => {
+                        const option = document.createElement('option');
+                        option.value = subcat.id;
+                        option.textContent = subcat.name;
+                        subcategorySelect.appendChild(option);
+                    });
+                } else {
+                    // 禁用二级类目选择框
+                    subcategorySelect.disabled = true;
+                    subcategorySelect.innerHTML = '<option value="">请先选择一级类目</option>';
+                }
+            });
+            
+            // 确认保存事件
+            confirmSaveBtn.addEventListener('click', function() {
+                const selectedType = document.querySelector('input[name="save-type"]:checked').value;
+                let savePath = '';
+                let isValid = false;
+                
+                if (selectedType === 'new-folder') {
+                    const newFolderName = document.getElementById('new-folder-name').value.trim();
+                    if (newFolderName) {
+                        savePath = `新建目录/${newFolderName}`;
+                        isValid = true;
+                    } else {
+                        showSuccessToast('请输入目录名称');
+                    }
+                } else {
+                    const categoryId = categorySelect.value;
+                    const subcategoryId = subcategorySelect.value;
+                    
+                    if (categoryId && subcategoryId) {
+                        const categoryName = categorySelect.options[categorySelect.selectedIndex].text;
+                        const subcategoryName = subcategorySelect.options[subcategorySelect.selectedIndex].text;
+                        savePath = `${categoryName}/${subcategoryName}`;
+                        isValid = true;
+                    } else {
+                        showSuccessToast('请选择完整的目录路径');
+                    }
+                }
+                
+                if (isValid) {
+                    // 模拟保存操作
+                    confirmSaveBtn.disabled = true;
+                    confirmSaveBtn.innerHTML = '<span class="loading-spinner"></span> 保存中...';
+                    
+                    setTimeout(() => {
+                        showSuccessToast(`已成功保存至个人知识库：${savePath}`);
+                        closeKnowledgeBaseModal();
+                        
+                        // 恢复按钮状态
+                        confirmSaveBtn.disabled = false;
+                        confirmSaveBtn.innerHTML = '确认保存';
+                    }, 1000);
+                }
+            });
+            
+            // 关闭知识库保存弹窗
+            function closeKnowledgeBaseModal() {
+                knowledgeBaseModal.style.display = 'none';
+                // 重置表单
+                document.getElementById('new-folder-name').value = '';
+                categorySelect.value = '';
+                subcategorySelect.disabled = true;
+                subcategorySelect.innerHTML = '<option value="">请先选择一级类目</option>';
+                document.querySelector('input[name="save-type"][value="new-folder"]').checked = true;
+                newFolderSection.style.display = 'block';
+                existingFolderSection.style.display = 'none';
+            }
+            
+            // 获取结果文本
+            function getResultText() {
+                // 创建一个临时元素来提取纯文本
+                const tempElement = document.createElement('div');
+                tempElement.innerHTML = copywritingResult.innerHTML;
+                return tempElement.textContent || tempElement.innerText || '';
+            }
+            
+            // 生成模拟提取结果
+            function generateExtractionResult(links) {
+                let resultHTML = '';
+                
+                // 为每个链接生成对应的文案
+                links.forEach((link, index) => {
+                    // 生成模拟文案
+                    const videoTitle = `视频标题示例 ${index + 1}`;
+                    const copywriting = getRandomCopywriting(index);
+                    
+                    resultHTML += `
+                        <div class="result-item">
+                            <div class="video-link-info">
+                                <h5>视频 ${index + 1}</h5>
+                                <p class="video-url">${link}</p>
+                            </div>
+                            <div class="copywriting-content">
+                                <h6>${videoTitle}</h6>
+                                <p>${copywriting}</p>
+                            </div>
+                        </div>
+                        <hr class="result-divider">
+                    `;
+                });
+                
+                // 添加统计信息
+                resultHTML += `
+                    <div class="result-summary">
+                        <p>共提取 ${links.length} 个视频的文案</p>
+                    </div>
+                `;
+                
+                return resultHTML;
+            }
+            
+            // 获取随机文案
+            function getRandomCopywriting(index) {
+                const copywritingExamples = [
+                    "大家好！今天我要给大家分享一个超实用的生活小技巧，让你的生活更加便捷。首先，准备好你需要的材料，然后按照我的步骤一步步来操作，你会发现原来生活可以如此简单！如果你觉得这个视频对你有帮助，记得点赞收藏并分享给你的朋友们哦！",
+                    "欢迎来到我的频道！今天我们要探讨的话题是如何提高工作效率。在这个快节奏的时代，时间就是金钱，掌握高效的工作方法至关重要。接下来，我将分享三个我个人一直在使用的效率提升秘诀，希望能够帮助到正在努力奋斗的你！",
+                    "嘿，各位小伙伴！今天我要向大家介绍一款我最近发现的宝藏产品。它不仅价格实惠，而且质量超级好，已经成为了我日常生活中不可或缺的一部分。让我来给大家详细展示一下它的功能和使用方法，相信你看完之后也会爱上它的！",
+                    "大家好啊！周末愉快！今天我想和大家聊一聊关于健康生活的话题。在忙碌的工作之余，我们往往忽略了自己的身体健康。其实，只需要从日常生活中的小事做起，就能让我们的身体更加健康。接下来，我将分享几个简单易行的健康小贴士，让我们一起变得更加健康吧！",
+                    "Hello everyone！欢迎回到我的频道！今天我要给大家带来一个超酷的创意DIY教程，只需要用家里常见的材料，就能做出独一无二的手工艺品。这个教程非常适合初学者，跟着我的步骤一步一步来，你也能成为DIY达人！记得在评论区分享你的作品哦！"
+                ];
+                
+                return copywritingExamples[index % copywritingExamples.length];
+            }
+        });
+    </script>
+</body>
+</html>
