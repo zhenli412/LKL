@@ -38,20 +38,19 @@
             border-radius: 12px;
             padding: 15px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            display: flex;
             flex-direction: column;
-            height: 480px;
+            height: 280px;
         }
         
         /* 左侧面板 */
         .input-panel {
-            min-height: 500px;
+            min-height: 370px;
             border: 1px solid #e8e8e8;
         }
         
         /* 右侧面板 */
         .output-panel {
-            min-height: 500px;
+            min-height: 370px;
             border: 1px solid #e8e8e8;
         }
         
@@ -77,7 +76,6 @@
         }
         
         .result-actions {
-            display: flex;
             justify-content: flex-end;
             margin-top: 15px;
             padding-top: 15px;
@@ -93,7 +91,6 @@
         /* 文件上传区域 */
         .file-upload-section {
             margin-top: 16px;
-            display: flex;
             gap: 12px;
         }
         
@@ -208,9 +205,7 @@
         }
         
         /* 结果面板样式 */
-        .result-header {
-            margin-bottom: 16px;
-        }
+
         
         .result-header h4 {
             color: var(--text-primary);
@@ -222,6 +217,7 @@
             padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
+            background-color: var(--secondary-color);
             overflow-y: auto;
             margin-bottom: 15px;
         }
@@ -579,7 +575,7 @@
                 <div class="comparison-layout">
                     <!-- 左侧输入面板 -->
                     <div class="comparison-panel input-panel">
-                        <h3>短视频链接输入</h3>
+                        <h3 class="result-header">短视频链接输入</h3>
                         
                         <!-- 链接输入区域 -->
                         <div class="input-section">
@@ -608,17 +604,14 @@
                         </div>
                         
                         <!-- 结果内容区域 -->
-                        <div id="copywriting-result" class="result-content">
-                            <p class="placeholder-text">提取结果将显示在这里...</p>
-                        </div>
-                        
-                        <!-- 保存按钮 -->
-                        <div class="result-actions">
-                            <button id="copy-result-btn" class="action-button secondary" disabled>复制结果</button>
-                            <button id="save-to-knowledge-btn" class="action-button primary" disabled>
-                                <span class="icon-plus">+</span> 保存至个人知识库
+                        <div id="copywriting-result" class="result-content" style="position: relative;">
+                            <p class="placeholder-text">点击「开始提取」按钮，提取结果将显示在这里...</p>
+                            <button id="save-to-knowledge-btn" class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
                             </button>
                         </div>
+                        
+
                     </div>
                 </div>
             </div>
@@ -643,7 +636,7 @@
             <style>
                 /* 使用指南样式 */
                 .help-section {
-                    background-color: var(--secondary-color);
+                    background-color:#ffffff;
                     border-radius: 8px;
                     padding: 20px;
                     margin-top: 30px;
@@ -701,7 +694,6 @@
             const extractBtn = document.getElementById('extract-btn');
             const clearBtn = document.getElementById('clear-btn');
             const copywritingResult = document.getElementById('copywriting-result');
-            const copyResultBtn = document.getElementById('copy-result-btn');
             const saveToKnowledgeBtn = document.getElementById('save-to-knowledge-btn');
             const progressContainer = document.getElementById('extraction-progress-container');
             const extractionProgress = document.getElementById('extraction-progress');
@@ -816,8 +808,7 @@
                 extractBtn.innerHTML = '<span class="loading-spinner"></span> 提取中...';
                 copywritingResult.innerHTML = '<div class="loading-text">正在分析视频内容并提取文案...</div>';
                 
-                // 重置按钮状态
-                copyResultBtn.disabled = true;
+                // 禁用按钮
                 saveToKnowledgeBtn.disabled = true;
                 
                 // 模拟提取进度
@@ -832,7 +823,6 @@
                     
                     // 启用操作按钮
                     setTimeout(() => {
-                        copyResultBtn.disabled = false;
                         saveToKnowledgeBtn.disabled = false;
                     }, 100);
                     
@@ -847,26 +837,11 @@
                 copywritingResult.innerHTML = '<p class="placeholder-text">提取结果将显示在这里...</p>';
                 progressContainer.style.display = 'none';
                 updateProgress(0, '');
-                copyResultBtn.disabled = true;
                 saveToKnowledgeBtn.disabled = true;
                 showSuccessToast('已清空输入内容');
             });
             
-            // 复制结果按钮点击事件
-            copyResultBtn.addEventListener('click', function() {
-                const resultText = getResultText();
-                if (resultText && !resultText.includes('提取结果将显示在这里...') && !resultText.includes('正在分析')) {
-                    navigator.clipboard.writeText(resultText)
-                        .then(function() {
-                            showSuccessToast('结果已复制到剪贴板');
-                        })
-                        .catch(function() {
-                            showSuccessToast('复制失败，请手动复制');
-                        });
-                } else {
-                    showSuccessToast('没有可复制的结果');
-                }
-            });
+
             
             // 保存到知识库按钮点击事件
             saveToKnowledgeBtn.addEventListener('click', function() {
@@ -977,13 +952,7 @@
                 existingFolderSection.style.display = 'none';
             }
             
-            // 获取结果文本
-            function getResultText() {
-                // 创建一个临时元素来提取纯文本
-                const tempElement = document.createElement('div');
-                tempElement.innerHTML = copywritingResult.innerHTML;
-                return tempElement.textContent || tempElement.innerText || '';
-            }
+
             
             // 生成模拟提取结果
             function generateExtractionResult(links) {

@@ -64,11 +64,19 @@ html, body {
     padding-top: 5px;
     object-fit: contain;
 }
+.slogan-l {
+    width: 250px;
+    font-size: 18px;
+    font-family: SF Pro SC,SF Pro Display,SF Pro Icons,PingFang SC,'微软雅黑',Helvetica Neue,Helvetica,Arial,sans-serif;
+    color: #f09541; /* 淡灰色 */
+}
 .slogan {
+    width: 250px;
     font-size: 18px;
     font-family: SF Pro SC,SF Pro Display,SF Pro Icons,PingFang SC,'微软雅黑',Helvetica Neue,Helvetica,Arial,sans-serif;
     color: #60ade0; /* 淡灰色 */
 }
+
 .logo-text {
     font-size: 24px;
     color: #1831a1; /* 使用品牌主色调 */
@@ -441,7 +449,7 @@ body.admin-role .nav-item.level-1.personal-menu {
 
 .page-header h2 {
     font-size: 24px;
-    color: #666;
+    color: #555;
     margin-bottom: 8px;
 }
 
@@ -644,6 +652,9 @@ body.admin-role .nav-item.level-1.personal-menu {
     left: 0;
     color: #4A90E2;
     font-weight: bold;
+}
+.help-item{
+    height: 32px;
 }
 
 /* 响应式设计 */
@@ -992,4 +1003,13 @@ body {
     border-radius: 2px;
     font-weight: 500;
     border: 1px solid var(--success-border);
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
 }
