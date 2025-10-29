@@ -312,6 +312,7 @@ body.admin-role .nav-item.level-1.personal-menu {
 .nav-title {
     flex: 1;
     font-size: 15px;
+    text-decoration: none;
 }
 
 .expand-icon {
@@ -623,7 +624,7 @@ body.admin-role .nav-item.level-1.personal-menu {
 .help-section {
     margin-top: 30px;
     padding: 20px;
-    background-color: var(--white);
+    background-color:#FFFFFF;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     border-radius: var(--border-radius);
 }

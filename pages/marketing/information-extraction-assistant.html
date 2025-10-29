@@ -64,7 +64,6 @@
             margin-top: 0;
             margin-bottom: 20px;
             color: var(--text-color);
-            font-size: 1.25rem;
             font-weight: 600;
         }
 
@@ -663,7 +662,7 @@
         <main class="content">
             <div class="page-header">
                 <h2>信息提取助手</h2>
-                <p>智能提取达人、视频和评论数据，助力市场分析</p>
+                <p>智能提取达人、视频和评论数据，并以excel表格方式展现，提供下载，助力市场分析。</p>
             </div>
             
             <div class="page-content">
@@ -693,8 +692,19 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- 达人链接方式输入 -->
+
+                                <div class="input-section">
+                                    <label for="influencer-platform">支持平台</label>
+                                    <div class="platform-options">
+                                        <label><input type="radio" name="influencer-platform" value="douyin" checked> 抖音</label>
+                                        <label><input type="radio" name="influencer-platform" value="xiaohongshu"> 小红书</label>
+                                        <label><input type="radio" name="influencer-platform" value="wechat"> 公众号</label>
+                                        <label><input type="radio" name="influencer-platform" value="bilibili"> Bilibili</label>
+                                        <label><input type="radio" name="influencer-platform" value="video号"> 视频号</label>
+                                    </div>
+                                </div>
+
+                                <!-- 达人链接方式输入 -->
                             <div id="link-method-panel">
                                 <div class="input-section">
                                     <label for="influencer-link">达人主页链接地址 <span class="required">*</span></label>
@@ -730,16 +740,6 @@
                                     </select>
                                 </div>
                                 
-                                <div class="input-section">
-                                    <label for="influencer-platform">支持平台</label>
-                                    <div class="platform-options">
-                                        <label><input type="checkbox" value="douyin" checked> 抖音</label>
-                                        <label><input type="checkbox" value="xiaohongshu" checked> 小红书</label>
-                                        <label><input type="checkbox" value="wechat" checked> 公众号</label>
-                                        <label><input type="checkbox" value="bilibili" checked> Bilibili</label>
-                                        <label><input type="checkbox" value="video号" checked> 视频号</label>
-                                    </div>
-                                </div>
                                 
                                 <div class="input-section">
                                     <label for="influencer-count">导出数量 <span class="required">*</span></label>
@@ -748,8 +748,8 @@
                             </div>
                             
                             <div class="action-buttons">
-                                <button id="clear-influencer-btn" class="secondary-btn">清空</button>
                                 <button id="extract-influencer-btn" class="action-button">开始提取</button>
+                                <button id="clear-influencer-btn" class="secondary-btn">清空</button>
                             </div>
                         </div>
                         
@@ -768,6 +768,17 @@
                                 </div>
                             </div>
                             <div id="keyword-search-panel">
+
+                            <div class="input-section">
+                                <label for="video-platform">支持平台</label>
+                                <div class="platform-options">
+                                    <label><input type="radio" name="video-platform" value="douyin" checked> 抖音</label>
+                                    <label><input type="radio" name="video-platform" value="xiaohongshu"> 小红书</label>
+                                    <label><input type="radio" name="video-platform" value="wechat"> 公众号</label>
+                                    <label><input type="radio" name="video-platform" value="bilibili"> Bilibili</label>
+                                    <label><input type="radio" name="video-platform" value="video号"> 视频号</label>
+                                </div>
+                            </div>
                                 <div class="input-section">
                                     <label for="video-keyword">关键词 <span class="required">*</span></label>
                                     <input type="text" id="video-keyword" placeholder="请输入搜索关键词">
@@ -803,22 +814,24 @@
                             </div>
                             
                             <div id="account-search-panel" style="display: none;">
+
+                                <div class="input-section">
+                                    <label for="influencer-platform">支持平台</label>
+                                    <div class="platform-options">
+                                        <label><input type="radio" name="influencer-platform" value="douyin" checked> 抖音</label>
+                                        <label><input type="radio" name="influencer-platform" value="xiaohongshu"> 小红书</label>
+                                        <label><input type="radio" name="influencer-platform" value="wechat"> 公众号</label>
+                                        <label><input type="radio" name="influencer-platform" value="bilibili"> Bilibili</label>
+                                        <label><input type="radio" name="influencer-platform" value="video号"> 视频号</label>
+                                    </div>
+                                </div>
+                                
                                 <div class="input-section">
                                     <label for="account-link">达人对标账号链接 <span class="required">*</span></label>
                                     <input type="text" id="account-link" placeholder="请输入账号链接">
                                 </div>
                             </div>
                             
-                            <div class="input-section">
-                                <label for="video-platform">支持平台</label>
-                                <div class="platform-options">
-                                    <label><input type="checkbox" value="douyin" checked> 抖音</label>
-                                    <label><input type="checkbox" value="xiaohongshu" checked> 小红书</label>
-                                    <label><input type="checkbox" value="wechat" checked> 公众号</label>
-                                    <label><input type="checkbox" value="bilibili" checked> Bilibili</label>
-                                    <label><input type="checkbox" value="video号" checked> 视频号</label>
-                                </div>
-                            </div>
                             
                             <div class="input-section">
                                 <label for="video-count">导出数量 <span class="required">*</span></label>
@@ -826,14 +839,14 @@
                             </div>
                             
                             <div class="action-buttons">
-                                <button id="clear-video-btn" class="secondary-btn">清空</button>
                                 <button id="extract-video-btn" class="action-button">开始提取</button>
+                                <button id="clear-video-btn" class="secondary-btn">清空</button>
                             </div>
                         </div>
                         
                         <!-- 评论数据面板 -->
                         <div class="tab-content" id="comment-data" style="display: none;">
-                            <h3 class="result-header">评论数据提取</h3>
+                            <h3 class="result-header">评论数据提取（抖音链接）</h3>
                             
                             <div class="input-section">
                                 <label for="video-url">视频链接 <span class="required">*</span></label>
@@ -846,8 +859,8 @@
                             </div>
                             
                             <div class="action-buttons">
-                                <button id="clear-comment-btn" class="secondary-btn">清空</button>
                                 <button id="extract-comment-btn" class="action-button">开始提取</button>
+                                <button id="clear-comment-btn" class="secondary-btn">清空</button>
                             </div>
                         </div>
                     </div>
@@ -855,7 +868,7 @@
                     <!-- 右侧结果面板 -->
                     <div class="comparison-panel output-panel">
                         <div class="result-header">
-                            <h3>提取结果</h3>
+                            <h3>提取信息数据结果</h3>
 
                         </div>
                         <div id="extraction-result" class="result-content" style="position: relative;">
@@ -927,8 +940,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="secondary-btn" id="cancel-save">取消</button>
                 <button class="action-button" id="confirm-save">确认保存</button>
+                <button class="secondary-btn" id="cancel-save">取消</button>
             </div>
         </div>
     </div>
@@ -1331,9 +1344,9 @@
                 document.getElementById('influencer-fans').value = '';
                 document.getElementById('influencer-type').value = '';
                 document.getElementById('influencer-count').value = '';
-                document.querySelectorAll('#influencer-data .platform-options input[type="checkbox"]').forEach(checkbox => {
-                    checkbox.checked = true;
-                });
+                // 将所有单选按钮中第一个（抖音）设为选中状态
+                const firstRadio = document.querySelector('#influencer-data .platform-options input[type="radio"]');
+                if (firstRadio) firstRadio.checked = true;
                 showSuccessToast('已清空达人数据输入');
             });
             }
@@ -1343,9 +1356,9 @@
                 document.getElementById('video-keyword').value = '';
                 document.getElementById('account-link').value = '';
                 document.getElementById('video-count').value = '';
-                document.querySelectorAll('#video-data .platform-options input[type="checkbox"]').forEach(checkbox => {
-                    checkbox.checked = true;
-                });
+                // 将所有单选按钮中第一个（抖音）设为选中状态
+                const firstVideoRadio = document.querySelector('#video-data .platform-options input[type="radio"]');
+                if (firstVideoRadio) firstVideoRadio.checked = true;
                 showSuccessToast('已清空视频数据输入');
             });
             
@@ -1404,7 +1417,7 @@
             // 达人数据提取
             extractInfluencerBtn.addEventListener('click', function() {
                 const method = document.querySelector('input[name="collection-method"]:checked').value;
-                const selectedPlatforms = Array.from(document.querySelectorAll('#influencer-data .platform-options input[type="checkbox"]:checked'))
+                const selectedPlatforms = Array.from(document.querySelectorAll('#influencer-data .platform-options input[type="radio"]:checked'))
                     .map(checkbox => checkbox.value);
                 
                 let isValid = true;
@@ -1566,7 +1579,7 @@
             extractVideoBtn.addEventListener('click', function() {
                 const method = document.querySelector('input[name="video-method"]:checked').value;
                 const count = document.getElementById('video-count').value.trim();
-                const selectedPlatforms = Array.from(document.querySelectorAll('#video-data .platform-options input[type="checkbox"]:checked'))
+                const selectedPlatforms = Array.from(document.querySelectorAll('#video-data .platform-options input[type="radio"]:checked'))
                     .map(checkbox => checkbox.value);
                 
                 let isValid = true;

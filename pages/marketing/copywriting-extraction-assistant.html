@@ -39,7 +39,6 @@
             padding: 15px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             flex-direction: column;
-            height: 280px;
         }
         
         /* 左侧面板 */
@@ -63,13 +62,40 @@
             display: none;
         }
         
+        /* 平台选项样式 */
+        .platform-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .platform-options label {
+            display: flex !important;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background-color: #f3f4f6;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .platform-options label:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .platform-options input[type="radio"] {
+            cursor: pointer;
+        }
+        
         .input-section textarea {
             width: 100%;
             padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             resize: vertical;
-            min-height: 200px;
+            min-height: 100px;
             font-family: inherit;
             font-size: 14px;
             transition: var(--transition);
@@ -254,14 +280,13 @@
         
         /* 加载动画 */
         .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--border-color);
-            border-top: 2px solid var(--primary-color);
+            border: 3px solid #f3f3f3;
             border-radius: 50%;
+            border-top: 2px solid #3498db;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin-right: 8px;
+            margin: 0 auto;
         }
         
         @keyframes spin {
@@ -271,59 +296,240 @@
         
         /* 加载状态布局 */
         .loading-text {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
         }
         
         .result-content.loading {
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
         }
         
-        /* 加号图标样式 */
+        /* 加号图标 */
         .icon-plus {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            margin-right: 6px;
-            font-size: 18px;
-            line-height: 1;
-            vertical-align: middle;
+            margin-left: 5px;
+            cursor: pointer;
         }
         
         /* 进度条样式 */
         .progress-container {
-            margin-top: 15px;
-            display: none;
-        }
-        
-        .progress-bar {
             width: 100%;
-            height: 8px;
-            background-color: var(--border-color);
-            border-radius: 4px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            margin-top: 10px;
             overflow: hidden;
+        }
+        
+        /* 功能标签样式 */
+        .function-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 20px;
+        }
+        
+        .input-section label {
+            display: block;
             margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
         }
         
-        .progress-fill {
-            height: 100%;
-            background-color: var(--primary-color);
+        .input-section input[type="text"],
+        .input-section input[type="number"],
+        .input-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
             border-radius: 4px;
-            width: 0%;
-            transition: width 0.3s ease;
+            font-size: 14px;
+            transition: border-color 0.3s;
         }
         
-        .progress-status {
-            font-size: 12px;
-            color: var(--text-secondary);
-            text-align: center;
+        .input-section input:focus,
+        .input-section textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        /* 平台选择样式 */
+        .platform-options {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .platform-options label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .platform-options input[type="radio"] {
+            margin-right: 8px;
+        }
+        
+        /* 必填项标记 */
+        .required {
+            color: #e74c3c;
+        }
+        
+        /* 字段配置按钮样式 */
+        .fields-config-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .fields-config-btn:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* 操作按钮区域 */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #ecf0f1;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #bdc3c7;
+        }
+        
+        /* 结果区域样式 */
+        .result-content {
+            margin-top: 15px;
+        }
+        
+        #result-textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        /* 比较布局 */
+        .comparison-layout {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .comparison-panel {
+            flex: 1;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 操作按钮样式 */
+        .action-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .action-button.primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .action-button.primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .action-button.secondary {
+            background-color: #ecf0f1;
+            color: #333;
+        }
+        
+        .action-button.secondary:hover {
+            background-color: #bdc3c7;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .comparison-layout {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .platform-options {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
         
         /* 视频链接和文案内容样式 */
@@ -572,46 +778,83 @@
             </div>
             
             <div class="page-content">
+                <!-- 功能切换选项卡 -->
+                <div class="function-tabs">
+                    <button class="tab-btn active" onclick="switchToTab('video-link-tab')">短视频链接提取文案</button>
+                    <button class="tab-btn" onclick="switchToTab('influencer-tab')">达人主页提取文案</button>
+                </div>
+                
                 <div class="comparison-layout">
                     <!-- 左侧输入面板 -->
                     <div class="comparison-panel input-panel">
-                        <h3 class="result-header">短视频链接输入</h3>
-                        
-                        <!-- 链接输入区域 -->
-                        <div class="input-section">
-                            <label for="video-links-input"></label>
-                            <textarea id="video-links-input" placeholder="请输入短视频链接（多条请换行分隔）"></textarea>
-                        </div>
-                        
-                        <div class="action-buttons">
-                            <button id="extract-btn" class="action-button primary">提取文案</button>
-                            <button id="clear-btn" class="action-button secondary">清空</button>
-                        </div>
-                        
-                        <!-- 提取进度条 -->
-                        <div id="extraction-progress-container" class="progress-container">
-                            <div class="progress-bar">
-                                <div id="extraction-progress" class="progress-fill"></div>
+                        <!-- 短视频链接方式 -->
+                        <div class="tab-content" id="video-link-tab">
+                            <h3 class="result-header">输入短视频链接</h3>
+
+                            <!-- 平台选择 -->
+                            <div class="input-section">
+                                <label>平台选择 <span class="required">*</span></label>
+                                <div class="platform-options">
+                                    <label><input type="radio" name="platform" value="douyin" checked> 抖音</label>
+                                    <label><input type="radio" name="platform" value="xiaohongshu"> 小红书</label>
+                                </div>
                             </div>
-                            <div id="extraction-status" class="progress-status"></div>
+                            <!-- 链接输入区域 -->
+                            <div class="input-section">
+                                <label for="video-links-input">短视频链接 <span class="required">*</span></label>
+                                <textarea id="video-links-input" placeholder="请输入短视频链接（多条请换行分隔）" rows="6"></textarea>
+                            </div>
+                            
+                            
+                            <!-- 自定义导出字段 -->
+                            <div class="input-section">
+                                <label id="video-fields-label">自定义导出字段</label>
+                                <button id="video-fields-config-btn" class="fields-config-btn">
+                                    共12项，已选择12项 <span>⚙️</span>
+                                </button>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button id="video-extract-btn" class="action-button primary">开始提取</button>
+                                <button id="video-clear-btn" class="action-button secondary">清空</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 达人主页方式 -->
+                        <div class="tab-content" id="influencer-tab" style="display: none;">
+                            <h3 class="result-header">输入达人主页链接</h3>
+                            
+                            <!-- 达人链接输入 -->
+                            <div class="input-section">
+                                <label for="influencer-link">达人链接地址（抖音平台） <span class="required">*</span></label>
+                                <input type="text" id="influencer-link" placeholder="请输入达人主页链接地址">
+                            </div>
+                            
+                            <!-- 提取文案数量 -->
+                            <div class="input-section">
+                                <label for="extract-count">提取短视频数量 <span class="required">*</span></label>
+                                <input type="number" id="extract-count" min="1" max="100" placeholder="请输入提取数量">
+                            </div>
+                            
+                            
+                            <div class="action-buttons">
+                                <button id="influencer-extract-btn" class="action-button primary">开始提取</button>
+                                <button id="influencer-clear-btn" class="action-button secondary">清空</button>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- 右侧结果面板 -->
                     <div class="comparison-panel output-panel">
                         <div class="result-header">
-                            <h3>提取结果</h3>
+                            <h3>提取文案结果</h3>
                         </div>
-                        
-                        <!-- 结果内容区域 -->
-                        <div id="copywriting-result" class="result-content" style="position: relative;">
-                            <p class="placeholder-text">点击「开始提取」按钮，提取结果将显示在这里...</p>
-                            <button id="save-to-knowledge-btn" class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                        <div id="extraction-result" class="result-content" style="position: relative;">
+                            <p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
                                 <span style="font-size: 18px;">📝</span>
                             </button>
                         </div>
-                        
-
                     </div>
                 </div>
             </div>
@@ -645,363 +888,437 @@
         </main>
     </div>
     
-    <!-- 知识库保存弹窗 -->
-    <div id="knowledge-base-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>保存到个人知识库</h3>
-                <button id="close-modal-btn" class="close-btn">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="save-type-selection">
-                    <label><input type="radio" name="save-type" value="new-folder" checked> 新建目录</label>
-                    <label><input type="radio" name="save-type" value="existing-folder"> 已有目录</label>
-                </div>
+    <!-- 功能相关的JS -->
+        <script>
+            // 标签页切换功能
+            function switchToTab(tabId) {
+                // 隐藏所有标签内容
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
                 
-                <div id="new-folder-section" class="save-section">
-                    <label for="new-folder-name">目录名称</label>
-                    <input type="text" id="new-folder-name" placeholder="请输入新目录名称">
-                </div>
+                // 移除所有标签按钮的active类
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
                 
-                <div id="existing-folder-section" class="save-section" style="display: none;">
-                    <label for="category-select">选择一级类目</label>
-                    <select id="category-select">
-                        <option value="">请选择一级类目</option>
-                        <option value="1">视频营销素材</option>
-                        <option value="2">文案模板库</option>
-                        <option value="3">竞品分析</option>
-                        <option value="4">用户反馈</option>
-                    </select>
-                    
-                    <label for="subcategory-select" style="margin-top: 15px;">选择二级类目</label>
-                    <select id="subcategory-select" disabled>
-                        <option value="">请先选择一级类目</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="cancel-save-btn" class="action-button secondary">取消</button>
-                <button id="confirm-save-btn" class="action-button primary">确认保存</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 文案提取助手页面逻辑
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM元素
-            const videoLinksInput = document.getElementById('video-links-input');
-            const extractBtn = document.getElementById('extract-btn');
-            const clearBtn = document.getElementById('clear-btn');
-            const copywritingResult = document.getElementById('copywriting-result');
-            const saveToKnowledgeBtn = document.getElementById('save-to-knowledge-btn');
-            const progressContainer = document.getElementById('extraction-progress-container');
-            const extractionProgress = document.getElementById('extraction-progress');
-            const extractionStatus = document.getElementById('extraction-status');
-            
-            // 知识库保存弹窗相关元素
-            const knowledgeBaseModal = document.getElementById('knowledge-base-modal');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            const cancelSaveBtn = document.getElementById('cancel-save-btn');
-            const confirmSaveBtn = document.getElementById('confirm-save-btn');
-            const saveTypeRadios = document.querySelectorAll('input[name="save-type"]');
-            const newFolderSection = document.getElementById('new-folder-section');
-            const existingFolderSection = document.getElementById('existing-folder-section');
-            const categorySelect = document.getElementById('category-select');
-            const subcategorySelect = document.getElementById('subcategory-select');
-            
-            // 模拟的二级类目数据
-            const subcategories = {
-                '1': [
-                    { id: '1-1', name: '抖音短视频' },
-                    { id: '1-2', name: '快手短视频' },
-                    { id: '1-3', name: '视频号短视频' },
-                    { id: '1-4', name: '小红书短视频' }
-                ],
-                '2': [
-                    { id: '2-1', name: '产品介绍文案' },
-                    { id: '2-2', name: '营销活动文案' },
-                    { id: '2-3', name: '品牌故事文案' },
-                    { id: '2-4', name: '用户见证文案' }
-                ],
-                '3': [
-                    { id: '3-1', name: '竞品营销策略' },
-                    { id: '3-2', name: '竞品内容分析' },
-                    { id: '3-3', name: '竞品差异化' },
-                    { id: '3-4', name: '竞品优势借鉴' }
-                ],
-                '4': [
-                    { id: '4-1', name: '正面反馈' },
-                    { id: '4-2', name: '负面反馈' },
-                    { id: '4-3', name: '功能建议' },
-                    { id: '4-4', name: '用户期望' }
-                ]
-            };
-            
-            // 成功提示组件
-            function showSuccessToast(message) {
-                const toast = document.getElementById('success-toast');
-                toast.textContent = message || '操作成功';
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 3000);
-            }
-            
-            // 更新进度条
-            function updateProgress(percentage, status) {
-                extractionProgress.style.width = percentage + '%';
-                extractionStatus.textContent = status;
-            }
-            
-            // 模拟提取进度
-            function simulateExtractionProgress(links, callback) {
-                let processed = 0;
-                const total = links.length;
+                // 显示选中的标签内容
+                document.getElementById(tabId).style.display = 'block';
                 
-                progressContainer.style.display = 'block';
-                updateProgress(0, `开始处理 ${total} 个视频链接`);
-                
-                const processNext = () => {
-                    if (processed < total) {
-                        // 模拟处理一个链接需要的时间
-                        setTimeout(() => {
-                            processed++;
-                            const progress = Math.round((processed / total) * 100);
-                            updateProgress(progress, `正在提取第 ${processed} 个视频的文案...`);
-                            processNext();
-                        }, 500); // 每个链接处理500ms
-                    } else {
-                        // 全部处理完成
-                        setTimeout(() => {
-                            progressContainer.style.display = 'none';
-                            callback();
-                        }, 500);
+                // 为选中的标签按钮添加active类
+                const allButtons = document.querySelectorAll('.tab-btn');
+                for (let i = 0; i < allButtons.length; i++) {
+                    if (allButtons[i].getAttribute('onclick').includes(tabId)) {
+                        allButtons[i].classList.add('active');
+                        break;
                     }
+                }
+                
+                // 重置结果区域
+                document.getElementById('result-textarea').value = '';
+            }
+            
+            // 字段配置弹窗 - 实现自定义导出字段功能
+            function openFieldsConfigModal() {
+                console.log('打开字段配置弹窗');
+                
+                // 获取当前选中的平台
+                const selectedPlatform = document.querySelector('input[name="platform"]:checked');
+                const platformValue = selectedPlatform ? selectedPlatform.value : 'douyin';
+                console.log('弹窗中检测到的平台值:', platformValue);
+                
+                // 根据平台值正确设置名称
+                let platformName;
+                if (platformValue === 'douyin') {
+                    platformName = '抖音';
+                } else if (platformValue === 'xiaohongshu') {
+                    platformName = '小红书';
+                } else {
+                    platformName = '抖音'; // 默认值
+                }
+                console.log('弹窗将显示平台名称:', platformName);
+                
+                // 根据不同平台定义不同的可配置字段
+                let exportFields;
+                
+                if (platformValue === 'douyin') {
+                    // 抖音平台字段（12项）
+                    exportFields = [
+                        { value: 'douyin_title', label: '短视频标题' },
+                        { value: 'douyin_description', label: '描述' },
+                        { value: 'douyin_cover', label: '封面' },
+                        { value: 'douyin_copywriting', label: '文案' },
+                        { value: 'douyin_likes', label: '点赞量' },
+                        { value: 'douyin_comments', label: '评论量' },
+                        { value: 'douyin_shares', label: '分享量' },
+                        { value: 'douyin_collections', label: '收藏量' },
+                        { value: 'douyin_publishTime', label: '发布时间' },
+                        { value: 'douyin_influencerName', label: '达人昵称' },
+                        { value: 'douyin_influencerLink', label: '达人链接' },
+                        { value: 'douyin_videoLength', label: '视频时长' }
+                    ];
+                } else if (platformValue === 'xiaohongshu') {
+                    // 小红书平台字段（11项）
+                    exportFields = [
+                        { value: 'xhs_title', label: '小红书标题' },
+                        { value: 'xhs_description', label: '描述' },
+                        { value: 'xhs_images', label: '配图' },
+                        { value: 'xhs_copywriting', label: '文案' },
+                        { value: 'xhs_likes', label: '点赞量' },
+                        { value: 'xhs_comments', label: '评论量' },
+                        { value: 'xhs_shares', label: '分享量' },
+                        { value: 'xhs_collections', label: '收藏量' },
+                        { value: 'xhs_publishTime', label: '发布时间' },
+                        { value: 'xhs_influencerName', label: '达人昵称' },
+                        { value: 'xhs_influencerLink', label: '达人链接' }
+                    ];
+                } else {
+                    // 默认使用抖音平台字段
+                    exportFields = [
+                        { value: 'douyin_title', label: '短视频标题' },
+                        { value: 'douyin_description', label: '描述' },
+                        { value: 'douyin_cover', label: '封面' },
+                        { value: 'douyin_copywriting', label: '文案' },
+                        { value: 'douyin_likes', label: '点赞量' },
+                        { value: 'douyin_comments', label: '评论量' },
+                        { value: 'douyin_shares', label: '分享量' },
+                        { value: 'douyin_collections', label: '收藏量' },
+                        { value: 'douyin_publishTime', label: '发布时间' },
+                        { value: 'douyin_influencerName', label: '达人昵称' },
+                        { value: 'douyin_influencerLink', label: '达人链接' },
+                        { value: 'douyin_videoLength', label: '视频时长' }
+                    ];
+                }
+                
+                console.log(`为${platformName}平台加载${exportFields.length}个字段`);
+                
+                // 直接创建并显示弹窗HTML
+                const modalHTML = `
+                <div id="fields-config-modal" style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                    font-family: inherit;
+                ">
+                    <div style="
+                        background-color: white;
+                        padding: 24px;
+                        border-radius: 8px;
+                        width: 500px;
+                        max-width: 90vw;
+                        max-height: 80vh;
+                        overflow-y: auto;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                    ">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="margin: 0; font-size: 18px; color: #333;">${platformName}自定义导出字段</h3>
+                            <button id="modal-close-btn" style="
+                                background: none;
+                                border: none;
+                                font-size: 24px;
+                                cursor: pointer;
+                                color: #999;
+                                padding: 0;
+                                width: 30px;
+                                height: 30px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                border-radius: 4px;
+                                transition: all 0.3s;
+                            ">×</button>
+                        </div>
+                        
+                        <div id="fields-list">
+                            ${exportFields.map(field => `
+                            <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; padding: 6px 0;">
+                                <input type="checkbox" name="export-fields" value="${field.value}" checked style="margin-right: 12px; width: 16px; height: 16px; cursor: pointer;">
+                                <span style="font-size: 14px; color: #333;">${field.label}</span>
+                            </label>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid #eee;">
+                            <button id="select-all-btn" style="
+                                padding: 8px 16px;
+                                background-color: #f0f0f0;
+                                border: 1px solid #ddd;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                font-size: 14px;
+                                transition: all 0.3s;
+                            ">全选</button>
+                            <button id="clear-all-btn" style="
+                                padding: 8px 16px;
+                                background-color: #f0f0f0;
+                                border: 1px solid #ddd;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                font-size: 14px;
+                                transition: all 0.3s;
+                            ">取消全选</button>
+                            <button id="confirm-btn" style="
+                                padding: 8px 16px;
+                                background-color: var(--primary-color);
+                                color: white;
+                                border: none;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                font-size: 14px;
+                                transition: all 0.3s;
+                            ">确认</button>
+                        </div>
+                    </div>
+                </div>`;
+                
+                // 先移除旧的弹窗（如果存在）
+                const oldModal = document.getElementById('fields-config-modal');
+                if (oldModal) {
+                    oldModal.remove();
+                }
+                
+                // 添加新弹窗
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = modalHTML;
+                document.body.appendChild(tempDiv.firstElementChild);
+                
+                // 绑定事件
+                const modal = document.getElementById('fields-config-modal');
+                
+                // 关闭按钮
+                document.getElementById('modal-close-btn').onclick = function() {
+                    console.log('关闭配置弹窗');
+                    modal.remove();
                 };
                 
-                processNext();
-            }
-            
-            // 提取按钮点击事件
-            extractBtn.addEventListener('click', function() {
-                // 检查是否有输入内容
-                const inputLinks = videoLinksInput.value.trim();
-                
-                if (!inputLinks) {
-                    showSuccessToast('请输入短视频链接');
-                    return;
-                }
-                
-                // 分割链接并过滤空行
-                const links = inputLinks.split('\n')
-                    .map(link => link.trim())
-                    .filter(link => link);
-                
-                if (links.length === 0) {
-                    showSuccessToast('请输入有效的短视频链接');
-                    return;
-                }
-                
-                // 显示加载状态
-                extractBtn.disabled = true;
-                extractBtn.innerHTML = '<span class="loading-spinner"></span> 提取中...';
-                copywritingResult.innerHTML = '<div class="loading-text">正在分析视频内容并提取文案...</div>';
-                
-                // 禁用按钮
-                saveToKnowledgeBtn.disabled = true;
-                
-                // 模拟提取进度
-                simulateExtractionProgress(links, function() {
-                    // 生成模拟的提取结果
-                    const resultHTML = generateExtractionResult(links);
-                    copywritingResult.innerHTML = resultHTML;
-                    
-                    // 恢复按钮状态
-                    extractBtn.disabled = false;
-                    extractBtn.innerHTML = '提取文案';
-                    
-                    // 启用操作按钮
-                    setTimeout(() => {
-                        saveToKnowledgeBtn.disabled = false;
-                    }, 100);
-                    
-                    // 显示成功提示
-                    showSuccessToast(`成功提取 ${links.length} 个视频的文案`);
-                });
-            });
-            
-            // 清空按钮点击事件
-            clearBtn.addEventListener('click', function() {
-                videoLinksInput.value = '';
-                copywritingResult.innerHTML = '<p class="placeholder-text">提取结果将显示在这里...</p>';
-                progressContainer.style.display = 'none';
-                updateProgress(0, '');
-                saveToKnowledgeBtn.disabled = true;
-                showSuccessToast('已清空输入内容');
-            });
-            
-
-            
-            // 保存到知识库按钮点击事件
-            saveToKnowledgeBtn.addEventListener('click', function() {
-                knowledgeBaseModal.style.display = 'block';
-            });
-            
-            // 关闭弹窗事件
-            closeModalBtn.addEventListener('click', closeKnowledgeBaseModal);
-            cancelSaveBtn.addEventListener('click', closeKnowledgeBaseModal);
-            
-            // 点击弹窗外部关闭
-            window.addEventListener('click', function(event) {
-                if (event.target === knowledgeBaseModal) {
-                    closeKnowledgeBaseModal();
-                }
-            });
-            
-            // 保存类型切换事件
-            saveTypeRadios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    if (this.value === 'new-folder') {
-                        newFolderSection.style.display = 'block';
-                        existingFolderSection.style.display = 'none';
-                    } else {
-                        newFolderSection.style.display = 'none';
-                        existingFolderSection.style.display = 'block';
-                    }
-                });
-            });
-            
-            // 一级类目选择事件
-            categorySelect.addEventListener('change', function() {
-                const categoryId = this.value;
-                
-                if (categoryId && subcategories[categoryId]) {
-                    // 启用二级类目选择框
-                    subcategorySelect.disabled = false;
-                    subcategorySelect.innerHTML = '<option value="">请选择二级类目</option>';
-                    
-                    // 添加二级类目选项
-                    subcategories[categoryId].forEach(subcat => {
-                        const option = document.createElement('option');
-                        option.value = subcat.id;
-                        option.textContent = subcat.name;
-                        subcategorySelect.appendChild(option);
+                // 全选按钮
+                document.getElementById('select-all-btn').onclick = function() {
+                    console.log('全选所有字段');
+                    const checkboxes = modal.querySelectorAll('input[name="export-fields"]');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = true;
                     });
-                } else {
-                    // 禁用二级类目选择框
-                    subcategorySelect.disabled = true;
-                    subcategorySelect.innerHTML = '<option value="">请先选择一级类目</option>';
-                }
-            });
-            
-            // 确认保存事件
-            confirmSaveBtn.addEventListener('click', function() {
-                const selectedType = document.querySelector('input[name="save-type"]:checked').value;
-                let savePath = '';
-                let isValid = false;
+                };
                 
-                if (selectedType === 'new-folder') {
-                    const newFolderName = document.getElementById('new-folder-name').value.trim();
-                    if (newFolderName) {
-                        savePath = `新建目录/${newFolderName}`;
-                        isValid = true;
-                    } else {
-                        showSuccessToast('请输入目录名称');
-                    }
-                } else {
-                    const categoryId = categorySelect.value;
-                    const subcategoryId = subcategorySelect.value;
-                    
-                    if (categoryId && subcategoryId) {
-                        const categoryName = categorySelect.options[categorySelect.selectedIndex].text;
-                        const subcategoryName = subcategorySelect.options[subcategorySelect.selectedIndex].text;
-                        savePath = `${categoryName}/${subcategoryName}`;
-                        isValid = true;
-                    } else {
-                        showSuccessToast('请选择完整的目录路径');
-                    }
-                }
+                // 取消全选按钮
+                document.getElementById('clear-all-btn').onclick = function() {
+                    console.log('取消全选所有字段');
+                    const checkboxes = modal.querySelectorAll('input[name="export-fields"]');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                };
                 
-                if (isValid) {
-                    // 模拟保存操作
-                    confirmSaveBtn.disabled = true;
-                    confirmSaveBtn.innerHTML = '<span class="loading-spinner"></span> 保存中...';
+                // 确认按钮
+                document.getElementById('confirm-btn').onclick = function() {
+                    // 计算选中的字段数量
+                    const checkboxes = modal.querySelectorAll('input[name="export-fields"]:checked');
+                    const checkedCount = checkboxes.length;
+                    const totalCount = exportFields.length;
                     
-                    setTimeout(() => {
-                        showSuccessToast(`已成功保存至个人知识库：${savePath}`);
-                        closeKnowledgeBaseModal();
-                        
-                        // 恢复按钮状态
-                        confirmSaveBtn.disabled = false;
-                        confirmSaveBtn.innerHTML = '确认保存';
-                    }, 1000);
-                }
-            });
-            
-            // 关闭知识库保存弹窗
-            function closeKnowledgeBaseModal() {
-                knowledgeBaseModal.style.display = 'none';
-                // 重置表单
-                document.getElementById('new-folder-name').value = '';
-                categorySelect.value = '';
-                subcategorySelect.disabled = true;
-                subcategorySelect.innerHTML = '<option value="">请先选择一级类目</option>';
-                document.querySelector('input[name="save-type"][value="new-folder"]').checked = true;
-                newFolderSection.style.display = 'block';
-                existingFolderSection.style.display = 'none';
+                    console.log(`确认配置：共${totalCount}项，已选择${checkedCount}项`);
+                    
+                    // 更新所有字段配置按钮显示
+                    const configBtns = document.querySelectorAll('.fields-config-btn');
+                    configBtns.forEach(btn => {
+                        btn.innerHTML = `共${totalCount}项，已选择${checkedCount}项 <span>⚙️</span>`;
+                    });
+                    
+                    // 关闭弹窗
+                    modal.remove();
+                };
+                
+                // 为按钮添加悬停效果
+                document.getElementById('select-all-btn').onmouseover = function() {
+                    this.style.backgroundColor = '#e0e0e0';
+                };
+                document.getElementById('select-all-btn').onmouseout = function() {
+                    this.style.backgroundColor = '#f0f0f0';
+                };
+                
+                document.getElementById('clear-all-btn').onmouseover = function() {
+                    this.style.backgroundColor = '#e0e0e0';
+                };
+                document.getElementById('clear-all-btn').onmouseout = function() {
+                    this.style.backgroundColor = '#f0f0f0';
+                };
+                
+                document.getElementById('confirm-btn').onmouseover = function() {
+                    this.style.backgroundColor = '#0056b3';
+                };
+                document.getElementById('confirm-btn').onmouseout = function() {
+                    this.style.backgroundColor = 'var(--primary-color)';
+                };
+                
+                document.getElementById('modal-close-btn').onmouseover = function() {
+                    this.style.backgroundColor = '#f0f0f0';
+                    this.style.color = '#333';
+                };
+                document.getElementById('modal-close-btn').onmouseout = function() {
+                    this.style.backgroundColor = 'transparent';
+                    this.style.color = '#999';
+                };
+                
+                // 点击外部关闭
+                // 点击外部关闭弹窗
+                modal.onclick = function(e) {
+                    if (e.target === modal) {
+                        console.log('点击外部关闭弹窗');
+                        modal.remove();
+                    }
+                };
             }
             
-
+            // 清空表单
+            function clearVideoForm() {
+                document.getElementById('video-links-input').value = '';
+                document.querySelectorAll('input[name="platform"]')[0].checked = true;
+            }
             
-            // 生成模拟提取结果
-            function generateExtractionResult(links) {
-                let resultHTML = '';
+            function clearInfluencerForm() {
+                document.getElementById('influencer-link').value = '';
+                document.getElementById('extract-count').value = '';
+            }
+            
+            // 模拟提取功能 - 已移除模拟结果代码
+            // 下载结果功能 - 已移除模拟结果代码
+            
+            // 事件监听器设置
+            function updateFieldsLabel() {
+                const selectedPlatform = document.querySelector('input[name="platform"]:checked');
+                const platformValue = selectedPlatform ? selectedPlatform.value : 'douyin';
+                console.log('当前选中平台值:', platformValue);
                 
-                // 为每个链接生成对应的文案
-                links.forEach((link, index) => {
-                    // 生成模拟文案
-                    const videoTitle = `视频标题示例 ${index + 1}`;
-                    const copywriting = getRandomCopywriting(index);
-                    
-                    resultHTML += `
-                        <div class="result-item">
-                            <div class="video-link-info">
-                                <h5>视频 ${index + 1}</h5>
-                                <p class="video-url">${link}</p>
-                            </div>
-                            <div class="copywriting-content">
-                                <h6>${videoTitle}</h6>
-                                <p>${copywriting}</p>
-                            </div>
-                        </div>
-                        <hr class="result-divider">
-                    `;
+                // 根据平台值正确设置名称
+                let platformName;
+                let fieldCount;
+                
+                if (platformValue === 'douyin') {
+                    platformName = '抖音';
+                    fieldCount = 12; // 抖音平台有12个字段
+                } else if (platformValue === 'xiaohongshu') {
+                    platformName = '小红书';
+                    fieldCount = 11; // 小红书平台有11个字段
+                } else {
+                    platformName = '抖音'; // 默认值
+                    fieldCount = 12; // 默认12个字段
+                }
+                
+                console.log('将显示平台名称:', platformName);
+                
+                // 更新两个标签的文本
+                const videoLabel = document.getElementById('video-fields-label');
+                const influencerLabel = document.getElementById('influencer-fields-label');
+                if (videoLabel) videoLabel.textContent = `${platformName}自定义导出字段`;
+                if (influencerLabel) influencerLabel.textContent = `${platformName}自定义导出字段`;
+                
+                // 更新按钮文本，保持已选择字段数量不变
+                const configBtns = document.querySelectorAll('.fields-config-btn');
+                configBtns.forEach(btn => {
+                    // 尝试提取当前已选择的数量
+                    const match = btn.innerHTML.match(/已选择(\d+)项/);
+                    const selectedCount = match ? parseInt(match[1]) : fieldCount; // 如果无法提取，默认为全选
+                    btn.innerHTML = `共${fieldCount}项，已选择${Math.min(selectedCount, fieldCount)}项 <span>⚙️</span>`;
+                });
+            }
+
+            function setupEventListeners() {
+                console.log('开始设置事件监听器...');
+                
+                // 初始更新标签文本
+                updateFieldsLabel();
+                
+                // 为平台选择按钮添加事件监听器
+                document.querySelectorAll('input[name="platform"]').forEach(radio => {
+                    radio.addEventListener('change', updateFieldsLabel);
                 });
                 
-                // 添加统计信息
-                resultHTML += `
-                    <div class="result-summary">
-                        <p>共提取 ${links.length} 个视频的文案</p>
-                    </div>
-                `;
+                // 字段配置按钮 - 使用类选择器批量设置
+                const configBtns = document.querySelectorAll('.fields-config-btn');
+                console.log('找到字段配置按钮数量:', configBtns.length);
+                configBtns.forEach((btn, index) => {
+                    console.log(`设置按钮[${index}]的点击事件:`, btn.id);
+                    // 移除可能存在的旧事件监听器
+                    btn.onclick = null;
+                    // 添加新的点击事件
+                    btn.onclick = function() {
+                        console.log(`按钮${btn.id}被点击，准备打开弹窗`);
+                        openFieldsConfigModal();
+                    };
+                });
                 
-                return resultHTML;
+                // 清空按钮
+                const clearBtns = document.querySelectorAll('[id$="-clear-btn"]');
+                clearBtns.forEach(btn => {
+                    btn.onclick = function() {
+                        if (btn.id === 'video-clear-btn') {
+                            console.log('清空视频表单');
+                            document.getElementById('video-links-input').value = '';
+                            document.querySelectorAll('input[name="platform"]')[0].checked = true;
+                        } else if (btn.id === 'influencer-clear-btn') {
+                            console.log('清空达人表单');
+                            document.getElementById('influencer-link').value = '';
+                            document.getElementById('extract-count').value = '';
+                        }
+                    };
+                });
+                
+                // 提取按钮 - 保留按钮结构，移除模拟结果代码
+                const extractBtns = document.querySelectorAll('[id$="-extract-btn"]');
+                extractBtns.forEach(btn => {
+                    btn.onclick = function() {
+                        console.log(`提取按钮被点击: ${btn.id}`);
+                        // 移除模拟结果代码，按钮保持存在供后续实际功能开发
+                    };
+                });
+                
+                // 下载按钮 - 保留按钮结构，移除模拟结果代码
+                const downloadBtn = document.getElementById('download-result-btn');
+                if (downloadBtn) {
+                    downloadBtn.onclick = function() {
+                        console.log('下载按钮被点击');
+                        // 移除模拟结果代码，按钮保持存在供后续实际功能开发
+                    };
+                }
+                
+                console.log('事件监听器设置完成');
             }
             
-            // 获取随机文案
-            function getRandomCopywriting(index) {
-                const copywritingExamples = [
-                    "大家好！今天我要给大家分享一个超实用的生活小技巧，让你的生活更加便捷。首先，准备好你需要的材料，然后按照我的步骤一步步来操作，你会发现原来生活可以如此简单！如果你觉得这个视频对你有帮助，记得点赞收藏并分享给你的朋友们哦！",
-                    "欢迎来到我的频道！今天我们要探讨的话题是如何提高工作效率。在这个快节奏的时代，时间就是金钱，掌握高效的工作方法至关重要。接下来，我将分享三个我个人一直在使用的效率提升秘诀，希望能够帮助到正在努力奋斗的你！",
-                    "嘿，各位小伙伴！今天我要向大家介绍一款我最近发现的宝藏产品。它不仅价格实惠，而且质量超级好，已经成为了我日常生活中不可或缺的一部分。让我来给大家详细展示一下它的功能和使用方法，相信你看完之后也会爱上它的！",
-                    "大家好啊！周末愉快！今天我想和大家聊一聊关于健康生活的话题。在忙碌的工作之余，我们往往忽略了自己的身体健康。其实，只需要从日常生活中的小事做起，就能让我们的身体更加健康。接下来，我将分享几个简单易行的健康小贴士，让我们一起变得更加健康吧！",
-                    "Hello everyone！欢迎回到我的频道！今天我要给大家带来一个超酷的创意DIY教程，只需要用家里常见的材料，就能做出独一无二的手工艺品。这个教程非常适合初学者，跟着我的步骤一步一步来，你也能成为DIY达人！记得在评论区分享你的作品哦！"
-                ];
-                
-                return copywritingExamples[index % copywritingExamples.length];
+            // 在DOM加载完成后设置事件监听器
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setupEventListeners);
+            } else {
+                setupEventListeners();
             }
-        });
-    </script>
+            
+            // 双重保险：在window.load时再次设置
+            window.addEventListener('load', setupEventListeners);
+            
+            // 直接为两个按钮单独设置点击事件
+            const videoFieldsConfigBtn = document.getElementById('video-fields-config-btn');
+            const influencerFieldsConfigBtn = document.getElementById('influencer-fields-config-btn');
+            
+            if (videoFieldsConfigBtn) {
+                videoFieldsConfigBtn.onclick = function() {
+                    console.log('视频字段配置按钮被点击');
+                    openFieldsConfigModal();
+                };
+            }
+            
+            if (influencerFieldsConfigBtn) {
+                influencerFieldsConfigBtn.onclick = function() {
+                    console.log('达人字段配置按钮被点击');
+                    openFieldsConfigModal();
+                };
+            }
+        </script>
+
 </body>
 </html>

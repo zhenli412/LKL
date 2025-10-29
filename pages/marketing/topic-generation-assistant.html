@@ -6,268 +6,207 @@
     <title>选题生成助手 - 利客来</title>
     <link rel="stylesheet" href="../../css/style.css">
     <style>
-        .comparison-layout {
+        /* 关键样式 - 借鉴信息提取助手页面 */
+        :root {
+            --primary-color: #1890ff;
+            --primary-hover: #40a9ff;
+            --primary-active: #096dd9;
+            --secondary-color: #f0f2f5;
+            --border-color: #d9d9d9;
+            --text-color: #333;
+            --text-light: #666;
+            --white: #ffffff;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --border-radius: 6px;
+            --transition: all 0.3s ease;
+            --error-color: #f5222d;
+        }
+        
+        /* 对比布局容器 */
+        .comparison-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
-            margin-bottom: 0px;
+            margin-bottom: 24px;
         }
         
+        /* 面板样式 */
         .comparison-panel {
-            background: #ffffff;
+            background: var(--white);
             border-radius: 12px;
             padding: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            height: fit-content;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
         }
         
         .input-panel {
-            border: 1px solid #e8e8e8;
+            border: 1px solid var(--border-color);
         }
         
         .output-panel {
-            border: 1px solid #e8e8e8;
-            min-height: 500px;
+            border: 1px solid var(--border-color);
         }
         
+        /* 标题样式 */
+        h2, h4, h5 {
+            color: var(--text-color);
+            margin: 0;
+        }
+        
+        h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        h3 {
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        
+        h4 {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        /* 输入区域样式 */
         .input-section {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
         
         .input-section label {
             display: block;
-            font-weight: 500;
             margin-bottom: 8px;
-            color: #333;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 14px;
         }
         
-        .input-section textarea {
+        /* 输入框样式 */
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
             width: 100%;
             padding: 12px;
-            border: 1px solid #d9d9d9;
-            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             font-size: 14px;
-            resize: vertical;
-            min-height: 100px;
+            background-color: white;
+            transition: var(--transition);
+            box-sizing: border-box;
         }
         
-        .input-section textarea:focus {
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
             outline: none;
-            border-color: #1890ff;
+            border-color: var(--primary-color);
             box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
         }
         
-        .topic-settings,
-        .style-options {
-            margin-bottom: 24px;
+        textarea {
+            resize: vertical;
+            min-height: 50px;
+            font-family: inherit;
         }
         
-        .topic-settings h4,
-        .style-options h4 {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 12px;
-            color: #333;
+        /* 必填项标记 */
+        .required {
+            color: var(--error-color);
+            font-weight: normal;
+            margin-left: 4px;
         }
         
-        .setting-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-        
-        .setting-group label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .setting-group label span {
-            width: 90px;
-            flex-shrink: 0;
-        }
-        
-        .setting-group select {
-            padding: 6px 10px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            font-size: 14px;
-            background-color: white;
-            cursor: pointer;
-            flex: 1;
-        }
-        
-        .setting-group select:focus {
-            outline: none;
-            border-color: #1890ff;
-        }
-        
-        .setting-group input[type="number"] {
-            padding: 6px 10px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            font-size: 14px;
-            width: 80px;
-        }
-        
-        .setting-group input[type="number"]:focus {
-            outline: none;
-            border-color: #1890ff;
-        }
-        
-        .option-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        
-        .option-group label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .option-group input[type="checkbox"] {
+        /* Radio单选项样式 */
+        input[type="radio"] {
             width: 16px;
             height: 16px;
             cursor: pointer;
         }
         
+        /* 平台选项样式 */
+        .platform-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        
+        .platform-options label {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 0 !important;
+            font-weight: normal;
+        }
+        
+        .platform-options label:hover {
+            background-color: #e6f7ff;
+            border-color: var(--primary-color);
+        }
+        
+        .platform-options input[type="radio"] {
+            cursor: pointer;
+        }
+        
+        /* 按钮样式 */
         .action-buttons {
             display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-        
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .result-header h4 {
-            font-size: 18px;
-            font-weight: 500;
-            color: #333;
-            margin: 0;
-        }
-        
-        .result-content {
-            min-height: 300px;
-            font-size: 14px;
-            line-height: 1.6;
-            color: #666;
-        }
-        
-        .placeholder-text {
-            color: #999;
-            text-align: center;
-            padding: 40px 20px;
-            font-size: 14px;
-        }
-        
-        .loading-text {
-            color: #1890ff;
-            text-align: center;
-            padding: 40px 20px;
-            font-size: 14px;
-        }
-        
-        .result-item h5 {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 12px;
-            color: #333;
-        }
-        
-        .result-item ul {
-            padding-left: 20px;
-            margin: 0;
-        }
-        
-        .result-item li {
-            padding: 12px 0;
-            margin-bottom: 8px;
-            border-bottom: 1px solid #f0f0f0;
-            transition: all 0.2s ease;
-        }
-        
-        .result-item li:hover {
-            color: #1890ff;
-            transform: translateX(4px);
-        }
-        
-        .usage-guide {
-            background: #fafafa;
-            border-radius: 8px;
-            padding: 20px;
-            border: 1px solid #f0f0f0;
-        }
-        
-        .usage-guide h3 {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 12px;
-            color: #333;
-        }
-        
-        .usage-guide ul {
-            padding-left: 20px;
-            margin: 0;
-            color: #666;
-        }
-        
-        .usage-guide li {
-            margin-bottom: 8px;
-            line-height: 1.5;
+            gap: 16px;
+            margin-top: auto;
+            padding-top: 20px;
         }
         
         .action-button {
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 14px;
+            flex: 1;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .action-button.primary {
-            background-color: #1890ff;
+            background-color: var(--primary-color);
             color: white;
         }
         
         .action-button.primary:hover:not(:disabled) {
-            background-color: #40a9ff;
+            background-color: var(--primary-hover);
         }
         
         .action-button.primary:active:not(:disabled) {
-            background-color: #096dd9;
+            background-color: var(--primary-active);
         }
         
         .action-button.secondary {
             background-color: white;
-            color: #666;
-            border: 1px solid #d9d9d9;
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
         }
         
         .action-button.secondary:hover:not(:disabled) {
-            color: #40a9ff;
-            border-color: #40a9ff;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
         }
         
         .action-button.secondary:active:not(:disabled) {
-            color: #096dd9;
-            border-color: #096dd9;
+            color: var(--primary-active);
+            border-color: var(--primary-active);
         }
         
         .action-button:disabled {
@@ -275,31 +214,156 @@
             cursor: not-allowed;
         }
         
+        /* 标签切换样式 - 借鉴信息提取助手页面 */
+        .function-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            flex-wrap: wrap;
+            background-color: var(--white);
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-light);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .tab-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        /* 标签内容样式 */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 16px;
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: #f6ffed;
+        }
+        
+        .file-upload-area input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+        
+        .file-drop-text {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* 结果内容样式 */
+        .result-content {
+            flex: 1;
+            position: relative;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            min-height: 400px;
+        }
+        
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            margin: 60px 20px;
+            font-size: 14px;
+        }
+        
+        /* 知识库按钮样式 */
+        .knowledge-base-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        .knowledge-base-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .function-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+        }
+        
         @media (max-width: 768px) {
-            .comparison-layout {
-                grid-template-columns: 1fr;
-            }
-            
-            .option-group {
-                grid-template-columns: 1fr;
-            }
-            
-            .setting-group label {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .setting-group label span {
-                width: auto;
-                margin-bottom: 4px;
+            .comparison-panel {
+                padding: 16px;
             }
             
             .action-buttons {
                 flex-direction: column;
             }
             
-            .action-button {
-                width: 100%;
+            .platform-options {
+                gap: 8px;
+            }
+            
+            .platform-options label {
+                padding: 6px 12px;
+                font-size: 13px;
             }
         }
     </style>
@@ -326,218 +390,181 @@
             </div>
             
             <div class="page-content">
-                <!-- 左右对比布局 -->
-                <div class="comparison-layout">
+                <!-- 标签切换 - 移至对比容器上方 -->
+                <div class="function-tabs">
+                    <button class="tab-btn active" data-tab="web-link" onclick="document.getElementById('web-link').style.display='block';document.getElementById('document').style.display='none';document.getElementById('comments').style.display='none';document.getElementById('hot-news').style.display='none';document.getElementById('combination').style.display='none';this.classList.add('active');this.parentElement.querySelectorAll('.tab-btn').forEach(btn => {if(btn !== this) btn.classList.remove('active');})
+">网页链接选题</button>
+                    <button class="tab-btn" data-tab="document" onclick="document.getElementById('web-link').style.display='none';document.getElementById('document').style.display='block';document.getElementById('comments').style.display='none';document.getElementById('hot-news').style.display='none';document.getElementById('combination').style.display='none';this.classList.add('active');this.parentElement.querySelectorAll('.tab-btn').forEach(btn => {if(btn !== this) btn.classList.remove('active');})
+">文档选题</button>
+                    <button class="tab-btn" data-tab="comments" onclick="document.getElementById('web-link').style.display='none';document.getElementById('document').style.display='none';document.getElementById('comments').style.display='block';document.getElementById('hot-news').style.display='none';document.getElementById('combination').style.display='none';this.classList.add('active');this.parentElement.querySelectorAll('.tab-btn').forEach(btn => {if(btn !== this) btn.classList.remove('active');})
+">评论选题</button>
+                    <button class="tab-btn" data-tab="hot-news" onclick="document.getElementById('web-link').style.display='none';document.getElementById('document').style.display='none';document.getElementById('comments').style.display='none';document.getElementById('hot-news').style.display='block';document.getElementById('combination').style.display='none';this.classList.add('active');this.parentElement.querySelectorAll('.tab-btn').forEach(btn => {if(btn !== this) btn.classList.remove('active');})
+">热点新闻选题</button>
+                    <button class="tab-btn" data-tab="combination" onclick="document.getElementById('web-link').style.display='none';document.getElementById('document').style.display='none';document.getElementById('comments').style.display='none';document.getElementById('hot-news').style.display='none';document.getElementById('combination').style.display='block';this.classList.add('active');this.parentElement.querySelectorAll('.tab-btn').forEach(btn => {if(btn !== this) btn.classList.remove('active');})
+">组合（XY联线）选题</button>
+                </div>
+                
+                <div class="comparison-container">
                     <!-- 左侧输入面板 -->
                     <div class="comparison-panel input-panel">
-                        <h3>关键词与设置</h3>
-                        
-                        <div class="input-section">
-                            <label for="keyword-input">输入关键词或主题</label>
-                            <textarea id="keyword-input" placeholder="请输入核心关键词或主题方向，多个关键词请用逗号分隔..." rows="4"></textarea>
+                        <!-- 1. 网页链接选题 -->
+                        <div id="web-link" class="tab-content active">
+                            <h3>网站链接、公众号链接→提取分析生成选题</h3>
+                            <div class="input-section">
+                                <label for="web-links">网站链接/公众号链接 <span class="required">*</span></label>
+                                <textarea id="web-links" placeholder="请输入网站链接或公众号链接，多个链接请换行输入"></textarea>
+                            </div>
                             
-                            <div class="topic-settings">
-                                <h4>选题设置</h4>
-                                <div class="setting-group">
-                                    <label>
-                                        <span>内容类型：</span>
-                                        <select id="content-type">
-                                            <option value="article">文章</option>
-                                            <option value="video">视频</option>
-                                            <option value="social">社交媒体</option>
-                                        </select>
-                                    </label>
-                                    <label>
-                                        <span>目标平台：</span>
-                                        <select id="target-platform">
-                                            <option value="all">全部平台</option>
-                                            <option value="weibo">微博</option>
-                                            <option value="wechat">微信</option>
-                                            <option value="douyin">抖音</option>
-                                            <option value="zhihu">知乎</option>
-                                        </select>
-                                    </label>
-                                    <label>
-                                        <span>生成数量：</span>
-                                        <input type="number" id="topic-count" min="1" max="20" value="5">
-                                    </label>
+                            <div class="input-section">
+                                <label for="web-topic-count">生成数量 <span class="required">*</span></label>
+                                <input type="number" id="web-topic-count" min="1" max="100" placeholder="请输入生成数量">
+                            </div>
+                        </div>
+                        
+                        <!-- 2. 文档选题 -->
+                        <div id="document" class="tab-content">
+                            <h3>企业品牌/产品等文档→提取、分析、生成选题</h3>
+                            <div class="input-section">
+                                <label for="document-upload">上传文档 <span class="required">*</span></label>
+                                <div class="file-upload-area">
+                                    <input type="file" id="document-upload" accept=".doc,.docx,.txt,.pdf">
+                                    <div class="file-drop-text">
+                                        <span style="font-size: 32px;">📄</span><br>
+                                        点击或拖拽文件到此处上传<br>
+                                        支持 Word、TXT、PDF 格式
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="style-options">
-                            <h4>选题风格</h4>
-                            <div class="option-group">
-                                <label><input type="checkbox" checked> 问题引导型</label>
-                                <label><input type="checkbox" checked> 揭秘型</label>
-                                <label><input type="checkbox"> 经验分享型</label>
-                                <label><input type="checkbox"> 数据解读型</label>
+                            
+                            <div class="input-section">
+                                <label for="doc-topic-count">生成数量 <span class="required">*</span></label>
+                                <input type="number" id="doc-topic-count" min="1" max="100" placeholder="请输入生成数量">
                             </div>
                         </div>
                         
+                        <!-- 3. 评论选题 -->
+                        <div id="comments" class="tab-content">
+                            <h3>热点评论→内容提取、分析生成选题</h3>
+                            <div class="input-section">
+                                <label for="comments-upload">上传评论文件 <span class="required">*</span></label>
+                                <div class="file-upload-area">
+                                    <input type="file" id="comments-upload" accept=".xlsx,.xls,.csv">
+                                    <div class="file-drop-text">
+                                        <span style="font-size: 32px;">📊</span><br>
+                                        点击或拖拽文件到此处上传<br>
+                                        建议使用 Excel 格式
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="input-section">
+                                <label for="comments-topic-count">生成数量 <span class="required">*</span></label>
+                                <input type="number" id="comments-topic-count" min="1" max="100" placeholder="请输入生成数量">
+                            </div>
+                        </div>
+                        
+                        <!-- 4. 热点新闻选题 -->
+                        <div id="hot-news" class="tab-content">
+                            <h3>热点关键词→检索新闻，提取、分析生成选题</h3>
+                            <div class="input-section">
+                                <label for="news-title">热点新闻标题 <span class="required">*</span></label>
+                                <textarea id="news-title" placeholder="请输入热点新闻标题"></textarea>
+                            </div>
+                            
+                            <div class="input-section">
+                                <label for="news-platform">相关平台</label>
+                                <div class="platform-options">
+                                    <label><input type="radio" name="news-platform" value="all" checked> 全部</label>
+                                    <label><input type="radio" name="news-platform" value="weibo"> 微博</label>
+                                    <label><input type="radio" name="news-platform" value="zhihu"> 知乎</label>
+                                    <label><input type="radio" name="news-platform" value="toutiao"> 头条</label>
+                                    <label><input type="radio" name="news-platform" value="baidu"> 百度</label>
+                                </div>
+                            </div>
+                            
+                            <div class="input-section">
+                                <label for="news-topic-count">生成数量 <span class="required">*</span></label>
+                                <input type="number" id="news-topic-count" min="1" max="100" placeholder="请输入生成数量">
+                            </div>
+                        </div>
+                        
+                        <!-- 5. 组合选题 -->
+                        <div id="combination" class="tab-content">
+                            <h3>根据用户特征、兴趣、产品卖点→生成选题</h3>
+                            <div class="input-section">
+                                <label for="product-features">产品卖点 <span class="required">*</span></label>
+                                <textarea id="product-features" placeholder="请输入产品的主要卖点，多个卖点请用逗号分隔"></textarea>
+                            </div>
+                            
+                            <div class="input-section">
+                                <label for="user-features">用户特征 <span class="required">*</span></label>
+                                <textarea id="user-features" placeholder="请输入目标用户的特征，多个特征请用逗号分隔"></textarea>
+                            </div>
+                            
+                            <div class="input-section">
+                                <label for="user-interests">用户兴趣 <span class="required">*</span></label>
+                                <textarea id="user-interests" placeholder="请输入目标用户的兴趣点，多个兴趣请用逗号分隔"></textarea>
+                            </div>
+                            
+                            <div class="input-section">
+                                <label for="combination-topic-count">生成数量 <span class="required">*</span></label>
+                                <input type="number" id="combination-topic-count" min="1" max="100" placeholder="请输入生成数量">
+                            </div>
+                        </div>
+                        
+                        <!-- 操作按钮 -->
                         <div class="action-buttons">
-                            <button id="generate-btn" class="action-button primary">生成选题</button>
-                            <button id="clear-btn" class="action-button secondary">清空</button>
+                            <button id="generate-btn" class="action-button primary" >生成选题</button>
+                            <button id="clear-btn" class="action-button secondary" >清空</button>
                         </div>
                     </div>
 
-                    <!-- 右侧结果面板 -->
+                    <!-- 右侧输出面板 -->
                     <div class="comparison-panel output-panel">
-                        <div class="result-header">
-                            <h4>选题结果</h4>
-                            <button id="copy-result-btn" class="action-button secondary" disabled>复制结果</button>
-                        </div>
-                        <div id="topic-result" class="result-content">
-                            <p class="placeholder-text">生成的选题将显示在这里...</p>
+                        <h3>生成结果</h3>
+                        <div id="result-content" class="result-content">
+                            <p class="placeholder-text">请在左侧选择选题生成方式并设置参数，点击「生成选题」按钮</p>
+                            <button class="knowledge-base-btn" title="+ 添加至个人知识库">
+                                <span>📝</span>
+                            </button>
                         </div>
                     </div>
                 </div>
-                
             </div>
             
-            <!-- 使用指南区域 - 移至功能操作区下方 -->
+            <!-- 使用指南区域 -->
             <div class="help-section">
                 <h3>使用指南</h3>
                 <div class="help-item">
-                    <strong>1. 输入关键词：</strong>输入核心关键词或主题方向，多个关键词请用逗号分隔
+                    <strong>1. 选择选题生成方式：</strong>在左侧面板上方选择合适的选题生成方式（网页链接、文档、评论、热点新闻或组合选题）
                 </div>
                 <div class="help-item">
-                    <strong>2. 设置选题参数：</strong>选择内容类型、目标平台和生成数量
+                    <strong>2. 填写相关信息：</strong>根据所选方式，填写链接、上传文件或输入相关内容
                 </div>
                 <div class="help-item">
-                    <strong>3. 选择风格：</strong>选择偏好的选题风格，如问题引导型、揭秘型等
+                    <strong>3. 设置生成数量：</strong>选择您需要生成的选题数量
                 </div>
                 <div class="help-item">
-                    <strong>4. 生成选题：</strong>点击「生成选题」按钮获取创意选题
+                    <strong>4. 生成选题：</strong>点击「生成选题」按钮获取结果
                 </div>
                 <div class="help-item">
-                    <strong>5. 复制结果：</strong>可复制生成的选题用于内容创作
+                    <strong>5. 保存结果：</strong>可以将生成的选题添加到个人知识库中
                 </div>
             </div>
         </main>
     </div>
     
+    <!-- 极简标签切换JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 获取所有元素
-            const keywordInput = document.getElementById('keyword-input');
-            const contentType = document.getElementById('content-type');
-            const targetPlatform = document.getElementById('target-platform');
-            const topicCount = document.getElementById('topic-count');
-            const topicResult = document.getElementById('topic-result');
-            const generateBtn = document.getElementById('generate-btn');
-            const clearBtn = document.getElementById('clear-btn');
-            const copyResultBtn = document.getElementById('copy-result-btn');
-            
-            // 成功提示函数
-            function showSuccessToast(message) {
-                // 检查是否已存在toast元素
-                let toast = document.getElementById('success-toast');
-                if (toast) {
-                    // 如果已存在，移除旧的
-                    toast.remove();
-                }
-                
-                // 创建新的toast元素
-                toast = document.createElement('div');
-                toast.id = 'success-toast';
-                toast.textContent = message;
-                toast.style.cssText = `
-                    position: fixed;
-                    top: 80px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background-color: #52c41a;
-                    color: white;
-                    padding: 12px 24px;
-                    border-radius: 6px;
-                    box-shadow: 0 4px 12px rgba(82, 196, 26, 0.35);
-                    z-index: 9999;
-                    transition: opacity 0.3s ease;
-                    font-size: 14px;
-                    pointer-events: none;
-                `;
-                
-                document.body.appendChild(toast);
-                
-                // 3秒后自动消失
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    setTimeout(() => {
-                        if (document.body.contains(toast)) {
-                            document.body.removeChild(toast);
-                        }
-                    }, 300);
-                }, 3000);
-            }
-            
-            // 生成选题按钮事件
-            generateBtn.addEventListener('click', function() {
-                if (keywordInput.value.trim()) {
-                    // 禁用生成按钮防止重复点击
-                    generateBtn.disabled = true;
-                    topicResult.innerHTML = '<p class="loading-text">正在生成选题，请稍候...</p>';
-                    
-                    // 模拟生成过程
-                    setTimeout(() => {
-                        const count = parseInt(topicCount.value);
-                        let topicsHtml = '<div class="result-item"><h5>生成的优质选题</h5><ul>';
-                        
-                        // 根据数量生成选题
-                        for (let i = 1; i <= count; i++) {
-                            let topic = '';
-                            if (i % 4 === 1) {
-                                topic = `为什么说${keywordInput.value}是2023年最值得关注的趋势？`;
-                            } else if (i % 4 === 2) {
-                                topic = `揭秘：行业专家从不外传的${keywordInput.value}秘诀`;
-                            } else if (i % 4 === 3) {
-                                topic = `${keywordInput.value}实战经验分享：从入门到精通`;
-                            } else {
-                                topic = `${keywordInput.value}数据分析：90%的人都不知道的关键发现`;
-                            }
-                            topicsHtml += `<li>${topic}</li>`;
-                        }
-                        
-                        topicsHtml += '</ul></div>';
-                        topicResult.innerHTML = topicsHtml;
-                        // 启用复制按钮
-                        copyResultBtn.disabled = false;
-                        // 重新启用生成按钮
-                        generateBtn.disabled = false;
-                    }, 1500);
-                } else {
-                    showSuccessToast('请输入关键词或主题');
-                }
-            });
-            
-            // 清空按钮事件
-            clearBtn.addEventListener('click', function() {
-                keywordInput.value = '';
-                contentType.value = 'article';
-                targetPlatform.value = 'all';
-                topicCount.value = '5';
-                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                    checkbox.checked = checkbox.id === 'style-1' || checkbox.id === 'style-2';
-                });
-                topicResult.innerHTML = '<p class="placeholder-text">生成的选题将显示在这里...</p>';
-                // 禁用复制按钮
-                copyResultBtn.disabled = true;
-            });
-            
-            // 复制结果按钮事件
-            copyResultBtn.addEventListener('click', function() {
-                const resultText = topicResult.innerText;
-                if (resultText !== '生成的选题将显示在这里...' && resultText !== '正在生成选题，请稍候...') {
-                    navigator.clipboard.writeText(resultText).then(() => {
-                        showSuccessToast('结果已复制到剪贴板');
-                    }).catch(() => {
-                        showSuccessToast('复制失败，请手动复制');
-                    });
-                } else {
-                    showSuccessToast('暂无结果可复制');
-                }
-            });
-        });
+        // 页面加载后立即执行
+        window.onload = function() {
+            // 显示第一个标签内容
+            document.getElementById('web-link').style.display = 'block';
+            document.getElementById('document').style.display = 'none';
+            document.getElementById('comments').style.display = 'none';
+            document.getElementById('hot-news').style.display = 'none';
+            document.getElementById('combination').style.display = 'none';
+        };
     </script>
 </body>
 </html>
