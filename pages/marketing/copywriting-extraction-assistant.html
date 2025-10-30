@@ -8,9 +8,9 @@
     <style>
         /* CSS变量定义 */
         :root {
-            --primary-color: #3B82F6;
-            --primary-hover: #2563EB;
-            --secondary-color: #F3F4F6;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
             --text-primary: #1F2937;
             --text-secondary: #6B7280;
             --border-color: #E5E7EB;
@@ -186,13 +186,15 @@
         .action-buttons {
             display: flex;
             gap: 12px;
-            margin-top: auto;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
         }
         
         .action-button {
             padding: 12px 24px;
             border-radius: var(--border-radius);
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -439,12 +441,12 @@
         }
         
         .btn-primary {
-            background-color: #3498db;
+            background-color: var(--primary-color);
             color: white;
         }
         
         .btn-primary:hover {
-            background-color: #2980b9;
+            background-color: var(--primary-hover);
         }
         
         .btn-secondary {
@@ -493,18 +495,18 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 500;
             transition: all 0.3s;
         }
         
         .action-button.primary {
-            background-color: #3498db;
+            background-color: var(--primary-color);
             color: white;
         }
         
         .action-button.primary:hover {
-            background-color: #2980b9;
+            background-color: var(--primary-hover);
         }
         
         .action-button.secondary {
@@ -733,7 +735,7 @@
         
         .result-actions .action-button {
             padding: 8px 16px;
-            font-size: 13px;
+            font-size: 16px;
             flex: none;
         }
         

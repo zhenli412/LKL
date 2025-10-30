@@ -42,7 +42,7 @@
             box-shadow: var(--shadow-md);
             padding: var(--panel-padding);
             height: fit-content;
-            min-height: 500px;
+            min-height: 360px;
         }
 
         /* 输入面板样式 */
@@ -95,22 +95,12 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        /* 平台选择样式 */
-        .platform-selection {
-            margin-bottom: 24px;
-        }
-
-        .platform-selection h4 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            font-weight: 500;
-            color: var(--text-color);
-        }
-
+        /* 平台选择样式 - 参照信息提取助手 */
         .platform-options {
             display: flex;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 12px;
+            margin-top: 8px;
         }
 
         .platform-options label {
@@ -118,10 +108,15 @@
             align-items: center;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 500;
+            color: var(--text-color);
         }
 
-        .platform-options input[type="checkbox"] {
+        .platform-options input[type="radio"] {
             margin-right: 6px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
         }
 
         /* 分析选项样式 */
@@ -160,7 +155,6 @@
             margin-top: auto;
             margin-bottom: 0;
             padding-top: 20px;
-            border-top: 1px solid var(--border-color);
         }
 
         .action-button {
@@ -231,7 +225,7 @@
 
         .result-content {
             flex: 1;
-            min-height: 400px;
+            min-height: 200px;
             padding: 16px;
             background-color: var(--secondary-color);
             border-radius: var(--border-radius);
@@ -396,34 +390,27 @@
                 <div class="comparison-layout">
                     <!-- 左侧输入面板 -->
                     <div class="comparison-panel input-panel">
-                        <h3>达人分析设置</h3>
+                        <div class="result-header">
+                            <h3>达人全方位分析拆解</h3>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="influencer-platform">选择达人平台：</label>
+                            <div class="platform-options">
+                                <label><input type="radio" name="influencer-platform" value="douyin" checked> 抖音</label>
+                                <label><input type="radio" name="influencer-platform" value="xiaohongshu"> 小红书</label>
+                                <label><input type="radio" name="influencer-platform" value="wechat"> 公众号</label>
+                                <label><input type="radio" name="influencer-platform" value="bilibili"> Bilibili</label>
+                                <label><input type="radio" name="influencer-platform" value="video号"> 视频号</label>
+                            </div>
+                        </div>
                         
                         <div class="input-section">
-                            <label for="influencer-input">达人名称/ID</label>
-                            <input type="text" id="influencer-input" placeholder="请输入要分析的达人名称或平台ID...">
+                            <label for="influencer-input">输入达人主页链接：</label>
+                            <input type="text" id="influencer-input" placeholder="请输入要分析的达人主页链接...">
                         </div>
                         
-                        <div class="platform-selection">
-                            <h4>选择平台</h4>
-                            <div class="platform-options">
-                                <label><input type="checkbox" checked name="platform" value="douyin"> 抖音</label>
-                                <label><input type="checkbox" checked name="platform" value="xiaohongshu"> 小红书</label>
-                                <label><input type="checkbox" name="platform" value="wechat"> 视频号</label>
-                                <label><input type="checkbox" name="platform" value="bilibili"> B站</label>
-                                <label><input type="checkbox" name="platform" value="weibo"> 微博</label>
-                            </div>
-                        </div>
-                        
-                        <div class="analysis-options">
-                            <h4>分析维度</h4>
-                            <div class="option-group">
-                                <label><input type="checkbox" checked name="analysis-option" value="audience"> 粉丝画像分析</label>
-                                <label><input type="checkbox" checked name="analysis-option" value="content"> 内容风格分析</label>
-                                <label><input type="checkbox" name="analysis-option" value="engagement"> 互动数据评估</label>
-                                <label><input type="checkbox" name="analysis-option" value="business"> 商业价值评估</label>
-                            </div>
-                        </div>
-                        
+                       
                         <!-- 操作按钮 -->
                         <div class="action-buttons">
                             <button id="analyze-btn" class="action-button">
@@ -442,9 +429,12 @@
                             <h3>分析结果</h3>
                         </div>
                         
-                        <div id="influencer-result" class="result-content">
-                            <p class="placeholder-text">分析结果将显示在这里...</p>
-                        </div>
+                          <div id="extraction-result" class="result-content" style="position: relative;">
+                            <p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
+                           </div>
                     </div>
                 </div>
             </div>

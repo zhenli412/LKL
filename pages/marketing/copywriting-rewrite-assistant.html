@@ -8,8 +8,8 @@
     <style>
         /* CSS变量定义 */
         :root {
-            --primary-color: #3B82F6;
-            --primary-hover: #2563EB;
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
             --secondary-color: #f7f7f7;
             --text-primary: #1F2937;
             --text-secondary: #6B7280;
@@ -120,8 +120,7 @@
         .action-button {
             padding: 12px 24px;
             border-radius: var(--border-radius);
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 16px;
             cursor: pointer;
             transition: var(--transition);
             border: none;
@@ -495,7 +494,10 @@
                                 <div class="result-header">
                                     <h3>输入需要创作的完整文案</h3>
                                 </div>
-                                <textarea id="original-text" placeholder="请输入完整文案文本..." rows="10"></textarea>
+                                <textarea id="original-text" placeholder="请输入完整文案文本，或者点击[+文案附件]上传文案文件..." rows="10"></textarea>
+                                <div style="margin-top: 15px;">
+                                    <button class="action-button secondary"> +文案附件</button>
+                                </div>
                             </div>
                             <div class="action-buttons">
                                 <button class="action-button primary">生成二创文案</button>
@@ -604,16 +606,14 @@
                     <div class="result-header">
                         <h3>创作结果</h3>
                     </div>
-                    <div class="result-content">
-                        <p class="placeholder-text">生成的创作内容将显示在这里</p>
-                    </div>
-                        <div>
-                            <button class="btn btn-primary" onclick="showSuccessToast()" style="right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
-                                <span style="text-align: right;font-size: 18px;">📝</span>
+                    <div id="extraction-result" class="result-content" style="position: relative;">
+                            <p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
                             </button>
-                        </div>
-                       </div>
                     </div>
+                </div>
+                </div>
                 </div>
             </div>
         
