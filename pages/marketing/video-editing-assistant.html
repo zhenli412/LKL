@@ -5,6 +5,534 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>视频剪辑助手 - 利客来</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: #fafafa;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-upload-area:hover,
+        .file-upload-area.active {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.04);
+        }
+
+        .file-upload-area input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .file-upload-area:hover .upload-icon {
+            opacity: 0.8;
+        }
+
+        .upload-text {
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .upload-text div:first-child {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .upload-text div:last-child {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* 文件信息样式 */
+        .file-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .file-name {
+            color: var(--text-color);
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            margin-right: 12px;
+        }
+
+        .remove-file {
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .remove-file:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        /* 提炼选项样式 */
+        .extraction-options {
+            margin-bottom: 24px;
+        }
+
+        .extraction-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .option-item label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-right: 12px;
+            min-width: 100px;
+        }
+
+        .option-item select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option-item select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button:disabled {
+        }
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .action-button.small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
+            margin: 0;
+        }
+
+        .result-header h4 {
+            margin: 0;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .result-content {
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 文本结果样式 */
+        .text-result {
+            color: var(--text-color);
+        }
+
+        .text-result h4 {
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .text-result p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+
 </head>
 <body>
     <!-- 导航组件将通过JavaScript动态加载 -->
@@ -23,7 +551,7 @@
         <!-- 主内容区域 -->
         <main class="content">
             <div class="page-header">
-                <h2>视频剪辑助手</h2>
+                <h2>视频剪辑助手（敬请期待）</h2>
                 <p>智能辅助视频剪辑，快速完成剪辑、特效添加和字幕生成</p>
             </div>
             
@@ -32,56 +560,14 @@
                 <div class="comparison-layout">
                     <!-- 左侧输入面板 -->
                     <div class="comparison-panel input-panel">
-                        <h3>视频上传与设置</h3>
-                        
-                        <div class="input-section">
-                            <label for="video-upload">上传视频文件</label>
-                            <div class="file-upload-area" id="video-upload-area">
-                                <input type="file" id="video-upload" accept="video/*">
-                                <div class="upload-icon">📁</div>
-                                <div class="upload-text">
-                                    <div>点击或拖拽文件到此处上传</div>
-                                    <div>支持 MP4、MOV、AVI 格式，最大 100MB</div>
-                                </div>
-                            </div>
-                            <div id="file-info" class="file-info" style="display: none;">
-                                <span class="file-name" id="file-name"></span>
-                                <span class="remove-file" id="remove-file">移除</span>
-                            </div>
+                        <div class="result-header">
+                        <h3>剪辑素材与配置</h3>
                         </div>
-                        
-                        <div class="editing-options">
-                            <h4>剪辑选项</h4>
-                            <div class="option-group">
-                                <div class="option-item">
-                                    <label>视频比例：</label>
-                                    <select id="aspect-ratio">
-                                        <option value="16:9">16:9 (宽屏)</option>
-                                        <option value="9:16">9:16 (竖屏)</option>
-                                        <option value="1:1">1:1 (方形)</option>
-                                        <option value="4:3">4:3 (标准)</option>
-                                    </select>
-                                </div>
-                                <div class="option-item">
-                                    <label>输出格式：</label>
-                                    <select id="output-format">
-                                        <option value="mp4">MP4</option>
-                                        <option value="mov">MOV</option>
-                                        <option value="avi">AVI</option>
-                                    </select>
-                                </div>
-                            </div>
                             
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" checked> 自动裁剪</label>
-                                <label><input type="checkbox" checked> 优化画质</label>
-                                <label><input type="checkbox"> 添加水印</label>
-                                <label><input type="checkbox"> 背景音乐</label>
-                            </div>
-                        </div>
+                        
                         
                         <div class="action-buttons">
-                            <button id="edit-btn" class="action-button primary" disabled>开始剪辑</button>
+                            <button id="extract-btn" class="action-button" disabled>开始剪辑</button>
                             <button id="reset-btn" class="action-button secondary" disabled>重置</button>
                         </div>
                     </div>
@@ -90,277 +576,24 @@
                     <div class="comparison-panel output-panel">
                         <div class="result-header">
                             <h4>剪辑结果</h4>
-                            <button id="download-btn" class="action-button secondary" disabled>下载视频</button>
                         </div>
-                        <div id="editing-result" class="result-content">
-                            <p class="placeholder-text">剪辑后的视频将在这里显示...</p>
-                        </div>
+
+
+                        
                     </div>
                 </div>
                 
-                <div class="usage-guide">
-                    <h3>使用指南</h3>
-                    <ul>
-                        <li>上传需要剪辑的视频文件</li>
-                        <li>选择所需的剪辑功能选项</li>
-                        <li>点击「开始剪辑」按钮</li>
-                        <li>等待剪辑完成后预览效果</li>
-                        <li>满意后点击「下载视频」获取成品</li>
-                    </ul>
+            </div>
+            <!-- 使用指南区域 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>功能1：</strong>说明
                 </div>
             </div>
+
         </main>
     </div>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 获取所有元素
-            const videoUpload = document.getElementById('video-upload');
-            const videoUploadArea = document.getElementById('video-upload-area');
-            const fileInfo = document.getElementById('file-info');
-            const fileName = document.getElementById('file-name');
-            const removeFile = document.getElementById('remove-file');
-            const editBtn = document.getElementById('edit-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const editingResult = document.getElementById('editing-result');
-            const downloadBtn = document.getElementById('download-btn');
-            
-            // 成功提示函数
-            function showSuccessToast(message) {
-                // 检查是否已存在toast元素
-                let toast = document.getElementById('success-toast');
-                if (toast) {
-                    // 如果已存在，移除旧的
-                    toast.remove();
-                }
-                
-                // 创建新的toast元素
-                toast = document.createElement('div');
-                toast.id = 'success-toast';
-                toast.textContent = message;
-                toast.style.cssText = `
-                    position: fixed;
-                    top: 80px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background-color: #52c41a;
-                    color: white;
-                    padding: 12px 24px;
-                    border-radius: 6px;
-                    box-shadow: 0 4px 12px rgba(82, 196, 26, 0.35);
-                    z-index: 9999;
-                    transition: opacity 0.3s ease;
-                    font-size: 14px;
-                    pointer-events: none;
-                `;
-                
-                document.body.appendChild(toast);
-                
-                // 3秒后自动消失
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    setTimeout(() => {
-                        if (document.body.contains(toast)) {
-                            document.body.removeChild(toast);
-                        }
-                    }, 300);
-                }, 3000);
-            }
-            
-            // 错误提示函数
-            function showErrorToast(message) {
-                // 检查是否已存在toast元素
-                let toast = document.getElementById('error-toast');
-                if (toast) {
-                    // 如果已存在，移除旧的
-                    toast.remove();
-                }
-                
-                // 创建新的toast元素
-                toast = document.createElement('div');
-                toast.id = 'error-toast';
-                toast.textContent = message;
-                toast.style.cssText = `
-                    position: fixed;
-                    top: 80px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background-color: #ff4d4f;
-                    color: white;
-                    padding: 12px 24px;
-                    border-radius: 6px;
-                    box-shadow: 0 4px 12px rgba(255, 77, 79, 0.35);
-                    z-index: 9999;
-                    transition: opacity 0.3s ease;
-                    font-size: 14px;
-                    pointer-events: none;
-                `;
-                
-                document.body.appendChild(toast);
-                
-                // 3秒后自动消失
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    setTimeout(() => {
-                        if (document.body.contains(toast)) {
-                            document.body.removeChild(toast);
-                        }
-                    }, 300);
-                }, 3000);
-            }
-            
-            // 处理文件上传
-            videoUpload.addEventListener('change', handleFileUpload);
-            
-            // 拖拽上传功能
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                videoUploadArea.addEventListener(eventName, preventDefaults, false);
-            });
-            
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            
-            ['dragenter', 'dragover'].forEach(eventName => {
-                videoUploadArea.addEventListener(eventName, highlight, false);
-            });
-            
-            ['dragleave', 'drop'].forEach(eventName => {
-                videoUploadArea.addEventListener(eventName, unhighlight, false);
-            });
-            
-            function highlight() {
-                videoUploadArea.classList.add('active');
-            }
-            
-            function unhighlight() {
-                videoUploadArea.classList.remove('active');
-            }
-            
-            videoUploadArea.addEventListener('drop', handleDrop, false);
-            
-            function handleDrop(e) {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                
-                if (files.length) {
-                    handleFile(files[0]);
-                }
-            }
-            
-            function handleFileUpload() {
-                if (videoUpload.files.length) {
-                    handleFile(videoUpload.files[0]);
-                }
-            }
-            
-            function handleFile(file) {
-                // 检查文件类型
-                const validTypes = ['video/mp4', 'video/quicktime', 'video/avi'];
-                if (!validTypes.includes(file.type)) {
-                    showErrorToast('请上传 MP4、MOV 或 AVI 格式的视频文件');
-                    return;
-                }
-                
-                // 检查文件大小
-                if (file.size > 100 * 1024 * 1024) { // 100MB
-                    showErrorToast('文件大小不能超过 100MB');
-                    return;
-                }
-                
-                // 显示文件信息
-                fileName.textContent = file.name;
-                fileInfo.style.display = 'flex';
-                
-                // 启用按钮
-                editBtn.disabled = false;
-                resetBtn.disabled = false;
-            }
-            
-            // 移除文件
-            removeFile.addEventListener('click', function() {
-                videoUpload.value = '';
-                fileInfo.style.display = 'none';
-                editBtn.disabled = true;
-                resetBtn.disabled = true;
-                downloadBtn.disabled = true;
-                editingResult.innerHTML = '<p class="placeholder-text">剪辑后的视频将在这里显示...</p>';
-            });
-            
-            // 重置按钮
-            resetBtn.addEventListener('click', function() {
-                videoUpload.value = '';
-                fileInfo.style.display = 'none';
-                editBtn.disabled = true;
-                resetBtn.disabled = true;
-                downloadBtn.disabled = true;
-                editingResult.innerHTML = '<p class="placeholder-text">剪辑后的视频将在这里显示...</p>';
-                
-                // 重置选项
-                document.getElementById('aspect-ratio').value = '16:9';
-                document.getElementById('output-format').value = 'mp4';
-                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                    if (checkbox.nextSibling.textContent.trim() === '自动裁剪' || 
-                        checkbox.nextSibling.textContent.trim() === '优化画质') {
-                        checkbox.checked = true;
-                    } else {
-                        checkbox.checked = false;
-                    }
-                });
-                
-                showSuccessToast('已重置所有设置');
-            });
-            
-            // 开始剪辑
-            editBtn.addEventListener('click', function() {
-                // 禁用按钮防止重复点击
-                editBtn.disabled = true;
-                editingResult.innerHTML = '<p class="loading-text">正在剪辑视频，请稍候...</p>';
-                
-                // 模拟剪辑过程
-                setTimeout(() => {
-                    const aspectRatio = document.getElementById('aspect-ratio').value;
-                    const outputFormat = document.getElementById('output-format').value;
-                    
-                    // 构建结果HTML
-                    const resultHtml = `
-                        <div class="video-result">
-                            <div class="video-preview">
-                                <video controls>
-                                    <source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" type="video/mp4">
-                                    您的浏览器不支持视频播放
-                                </video>
-                            </div>
-                            <div class="video-info">
-                                <div class="video-info-item">
-                                    <span class="video-info-label">文件格式：</span>
-                                    <span class="video-info-value">${outputFormat.toUpperCase()}</span>
-                                </div>
-                                <div class="video-info-item">
-                                    <span class="video-info-label">视频比例：</span>
-                                    <span class="video-info-value">${aspectRatio}</span>
-                                </div>
-                                <div class="video-info-item">
-                                    <span class="video-info-label">视频时长：</span>
-                                    <span class="video-info-value">5.0秒</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    editingResult.innerHTML = resultHtml;
-                    downloadBtn.disabled = false;
-                    showSuccessToast('视频剪辑完成');
-                }, 2000);
-            });
-            
-            // 下载视频
-            downloadBtn.addEventListener('click', function() {
-                // 模拟下载
-                showSuccessToast('视频正在下载中...');
-            });
-        });
-    </script>
 </body>
 </html>

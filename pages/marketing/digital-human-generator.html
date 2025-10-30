@@ -6,329 +6,852 @@
     <title>数字人生成助手 - 利客来</title>
     <link rel="stylesheet" href="../../css/style.css">
     <style>
-        /* 定义CSS变量，便于统一管理样式 */
+        /* CSS变量定义 */
         :root {
-            --primary-color: #1890ff;
-            --primary-hover: #40a9ff;
-            --border-color: #e8e8e8;
-            --text-primary: #262626;
-            --text-secondary: #595959;
-            --text-tertiary: #8c8c8c;
-            --bg-primary: #ffffff;
-            --bg-secondary: #fafafa;
-            --bg-hover: #f5f5f5;
-            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.06);
-            --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --border-radius: 8px;
             --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
         }
-        
+
         /* 左右对比布局 */
         .comparison-layout {
-            display: flex;
-            gap: 24px;
-            max-width: 1400px;
-            margin: 0 auto;
-            background-color: var(--bg-secondary);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            box-shadow: var(--shadow-light);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
         }
-        
-        @media (max-width: 768px) {
-            .comparison-layout {
-                flex-direction: column;
-                padding: 16px;
-            }
-        }
-        
+
+        /* 面板样式 */
         .comparison-panel {
-            flex: 1;
-            background-color: var(--bg-primary);
+            background-color: var(--white);
             border-radius: var(--border-radius);
-            box-shadow: var(--shadow-light);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            border: 1px solid #e8e8e8;
         }
-        
-        .panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border-color);
+
+        /* 输出面板样式 */
+        .output-panel {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-primary);
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
-        
-        .panel-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0;
-        }
-        
-        .panel-content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            min-height: 300px;
-        }
-        
-        .panel-footer {
-            padding: 16px 20px;
-            border-top: 1px solid var(--border-color);
-            background-color: var(--bg-primary);
-        }
-        
-        /* 参数设置样式 */
-        .parameter-group {
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
             margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
         }
-        
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        /* 文本输入框样式 - 参考结构分析助手页面 */
+        .input-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+            box-sizing: border-box;
+            min-height: 120px;
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 声音选项样式 - 一行显示2个 */
+        .voice-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .voice-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .voice-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .voice-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .voice-option span {
+            flex: 1;
+        }
+
+        .play-voice-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+        }
+
+        /* 文件上传标签样式 */
+        .file-upload-label {
+            display: block;
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            background-color: #fafafa;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-label:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.04);
+        }
+
+        .file-upload-label input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label span {
+            font-size: 24px;
+        }
+
+        .file-upload-label div:first-of-type {
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .file-upload-label div:last-of-type {
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* 场景选项样式 */
+        .scene-options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .scene-option {
+            cursor: pointer;
+            border: 2px solid transparent;
+            padding: 5px;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+
+        .scene-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .scene-option input[type="radio"] {
+            display: none;
+        }
+
+        .scene-option-content {
+            text-align: center;
+        }
+
+        .scene-option-image {
+            background-color: #f0f0f0;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+
+        .scene-option-text {
+            display: block;
+            font-size: 14px;
+        }
+
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
         .parameter-group label {
             display: block;
             margin-bottom: 8px;
-            font-size: 14px;
             font-weight: 500;
-            color: var(--text-primary);
+            color: var(--text-color);
         }
-        
-        .parameter-group select,
-        .parameter-group input[type="text"],
-        .parameter-group input[type="number"] {
+
+        .parameter-group select {
             width: 100%;
-            padding: 8px 12px;
-            font-size: 14px;
+            padding: 10px 16px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
             transition: var(--transition);
-            background-color: var(--bg-primary);
         }
-        
-        .parameter-group select:focus,
-        .parameter-group input[type="text"]:focus,
-        .parameter-group input[type="number"]:focus {
+
+        .parameter-group select:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
-        
-        /* 文件上传样式 */
-        .file-upload-section {
-            position: relative;
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
         }
-        
-        .file-upload-section input[type="file"] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 2;
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
         }
-        
-        .file-upload-section button {
-            width: 100%;
-        }
-        
-        /* 选项组样式 */
+
         .option-group {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-        
+
         .option-group label {
             display: flex;
             align-items: center;
-            font-size: 14px;
-            color: var(--text-secondary);
             cursor: pointer;
-            user-select: none;
+            font-size: 14px;
         }
-        
+
         .option-group input[type="checkbox"] {
             margin-right: 8px;
-            cursor: pointer;
         }
-        
-        /* 按钮样式 */
-        .action-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 20px;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid transparent;
-            min-height: 36px;
-        }
-        
-        .action-button.primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .action-button.primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-medium);
-        }
-        
-        .action-button.primary:active {
-            transform: translateY(0);
-        }
-        
-        .action-button.secondary {
-            background-color: var(--bg-primary);
-            color: var(--text-secondary);
-            border-color: var(--border-color);
-        }
-        
-        .action-button.secondary:hover {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-            background-color: var(--bg-primary);
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        /* 结果显示样式 */
-        .result-content {
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background-color: var(--bg-secondary);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            transition: var(--transition);
-        }
-        
-        .result-content.loading {
-            background-color: rgba(24, 144, 255, 0.05);
-        }
-        
-        .character-preview {
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-        
-        .preview-placeholder {
-            width: 100%;
-            height: 200px;
-            background-color: var(--bg-secondary);
+
+        /* 文件上传区域样式 */
+        .file-upload-area {
             border: 2px dashed var(--border-color);
             border-radius: var(--border-radius);
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: #fafafa;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-upload-area:hover,
+        .file-upload-area.active {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.04);
+        }
+
+        .file-upload-area input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .file-upload-area:hover .upload-icon {
+            opacity: 0.8;
+        }
+
+        .upload-text {
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .upload-text div:first-child {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .upload-text div:last-child {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* 文件信息样式 */
+        .file-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .file-name {
+            color: var(--text-color);
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            margin-right: 12px;
+        }
+
+        .remove-file {
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .remove-file:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        /* 提炼选项样式 */
+        .extraction-options {
+            margin-bottom: 24px;
+        }
+
+        .extraction-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .option-item label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-right: 12px;
+            min-width: 100px;
+        }
+
+        .option-item select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option-item select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 16px 0;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button:disabled {
+        }
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .action-button.small {
+            padding: 8px 16px;
             font-size: 14px;
-            color: var(--text-tertiary);
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
             transition: var(--transition);
         }
-        
-        .character-preview:hover .preview-placeholder {
-            border-color: var(--primary-color);
-            color: var(--text-secondary);
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
         }
-        
-        .placeholder-text {
-            color: var(--text-tertiary);
-            font-size: 14px;
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
             margin: 0;
         }
-        
-        /* 使用指南样式 */
-        .usage-guide {
-            max-width: 1400px;
-            margin: 24px auto 40px;
-            padding: 20px 24px;
-            background-color: var(--bg-primary);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-light);
-        }
-        
-        .usage-guide h3 {
-            font-size: 16px;
+
+        .result-header h4 {
+            margin: 0;
+            color: var(--text-color);
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--text-primary);
-            margin: 0 0 16px 0;
         }
-        
-        .usage-guide ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+
+        .result-actions {
+            display: flex;
+            gap: 12px;
         }
-        
-        .usage-guide li {
-            position: relative;
-            padding-left: 24px;
+
+        .result-content {
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .script-content p {
             margin-bottom: 12px;
-            font-size: 14px;
-            color: var(--text-secondary);
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 文本结果样式 */
+        .text-result {
+            color: var(--text-color);
+        }
+
+        .text-result h4 {
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .text-result p {
+            margin-bottom: 12px;
             line-height: 1.6;
         }
-        
-        .usage-guide li::before {
-            content: "•";
-            position: absolute;
-            left: 8px;
-            color: var(--primary-color);
-            font-size: 16px;
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
         }
-        
-        /* 加载动画 */
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .loading-spinner {
-            width: 30px;
-            height: 30px;
-            border: 3px solid rgba(24, 144, 255, 0.2);
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
         }
-        
-        /* 响应式调整 */
-        @media (max-width: 768px) {
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
             .comparison-layout {
-                margin: 0 16px;
+                grid-template-columns: 1fr;
             }
-            
-            .button-group {
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
                 flex-direction: column;
-            }
-            
-            .action-button {
-                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 导航组件将通过JavaScript动态加载 -->
-    <script src="../../js/menu.js"></script>
-    <script src="../../js/nav-component.js"></script>
+      <!-- 导航组件将通过JavaScript动态加载 -->
+      <script src="../../js/menu.js"></script>
+      <script src="../../js/nav-component.js"></script>
+      
+      <!-- 个人知识库模态框 -->
+    <div id="personal-knowledge-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background-color: white; padding: 20px; border-radius: 8px; width: 80%; max-width: 600px; max-height: 80vh; overflow-y: auto;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3>选择个人知识库</h3>
+                <button class="modal-close" onclick="closeModal('personal-knowledge-modal')" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 知识库分类和文章列表 -->
+                <div class="knowledge-category">
+                    <h4>文案库</h4>
+                    <div class="knowledge-articles">
+                        <label class="knowledge-article-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 8px;">
+                            <span>产品介绍文案模板</span>
+                        </label>
+                        <label class="knowledge-article-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 8px;">
+                            <span>营销话术精选</span>
+                        </label>
+                        <label class="knowledge-article-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 8px;">
+                            <span>行业专业术语库</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="knowledge-category" style="margin-top: 20px;">
+                    <h4>脚本库</h4>
+                    <div class="knowledge-articles">
+                        <label class="knowledge-article-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 8px;">
+                            <span>产品演示脚本</span>
+                        </label>
+                        <label class="knowledge-article-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 8px;">
+                            <span>培训讲解脚本</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="action-button secondary" onclick="closeModal('personal-knowledge-modal')">取消</button>
+                <button class="action-button primary">确认选择</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 加载统一导航组件，设置基础路径为上上级目录，激活marketing角色
         loadNavigation('../../', 'marketing');
+        
+        // 等待DOM加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            // 打开弹窗
+            window.openModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                }
+            }
+            
+            // 关闭弹窗
+            window.closeModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            // 场景选择交互
+            const sceneOptions = document.querySelectorAll('.scene-option');
+            sceneOptions.forEach(option => {
+                const radio = option.querySelector('input[type="radio"]');
+                
+                // 点击选项时选中对应的单选按钮并添加边框样式
+                option.addEventListener('click', function() {
+                    radio.checked = true;
+                    
+                    // 移除其他选项的选中样式
+                    sceneOptions.forEach(opt => {
+                        opt.style.borderColor = 'transparent';
+                    });
+                    
+                    // 添加当前选项的选中样式
+                    this.style.borderColor = 'var(--primary-color)';
+                });
+                
+                // 初始时检查是否有选中的选项
+                if (radio.checked) {
+                    option.style.borderColor = 'var(--primary-color)';
+                }
+            });
+
+            // 声音试听按钮交互
+            const playButtons = document.querySelectorAll('.play-voice-btn');
+            playButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 防止触发父元素的点击事件
+                    
+                    // 这里可以添加实际的音频播放逻辑
+                    console.log('播放声音');
+                    
+                    // 播放按钮状态变化效果
+                    this.textContent = '⏸️';
+                    setTimeout(() => {
+                        this.textContent = '▶️';
+                    }, 2000);
+                });
+            });
+
+            // 重置按钮功能
+            const resetBtn = document.getElementById('reset-btn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    // 清空文本输入
+                    const scriptTextarea = document.getElementById('digital-human-script');
+                    if (scriptTextarea) {
+                        scriptTextarea.value = '';
+                    }
+                    
+                    // 取消选中的知识库选项
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                    
+                    // 重置场景选择（默认选中第一个）
+                    const radioButtons = document.querySelectorAll('input[name="digital-human-scene"]');
+                    if (radioButtons.length > 0) {
+                        radioButtons[0].checked = true;
+                        sceneOptions.forEach(opt => {
+                            opt.style.borderColor = 'transparent';
+                        });
+                        sceneOptions[0].style.borderColor = 'var(--primary-color)';
+                    }
+                    
+                    // 重置声音选择（默认选中本人声音）
+                    const voiceRadioButtons = document.querySelectorAll('input[name="voice-selection"]');
+                    voiceRadioButtons.forEach(radio => {
+                        radio.checked = radio.value === 'my-voice';
+                    });
+                });
+            }
+
+            // 生成按钮功能
+            const generateBtn = document.getElementById('generate-btn');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', function() {
+                    const videoPreview = document.getElementById('video-preview');
+                    if (videoPreview) {
+                        // 显示加载状态
+                        videoPreview.innerHTML = '<div class="loading-text"><div class="loading-spinner"></div>正在生成数字人视频...</div>';
+                        
+                        // 模拟生成过程
+                        setTimeout(() => {
+                            videoPreview.innerHTML = `
+                                <video controls style="width: 100%; height: 100%; object-fit: contain;">
+                                    <source src="#" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            `;
+                        }, 3000);
+                    }
+                });
+            }
+
+            // 下载按钮功能
+            const downloadBtn = document.getElementById('download-btn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function() {
+                    // 这里可以添加实际的下载逻辑
+                    alert('开始下载视频');
+                });
+            }
+        });
     </script>
 
     <!-- 主容器 -->
@@ -346,272 +869,168 @@
             <div class="page-content">
                 <!-- 左右对比布局 -->
                 <div class="comparison-layout">
-                    <!-- 左侧面板 - 参数设置 -->
-                    <div class="comparison-panel">
-                        <div class="panel-header">
-                            <h3 class="panel-title">数字人参数设置</h3>
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <div class="result-header">
+                            <h3>数字人信息配置</h3>
                         </div>
-                        <div class="panel-content">
-                            <div class="parameter-group">
-                                <label>选择形象类型</label>
-                                <select id="character-type">
-                                    <option value="male-professional">男性专业形象</option>
-                                    <option value="female-professional">女性专业形象</option>
-                                    <option value="casual-male">休闲男性</option>
-                                    <option value="casual-female">休闲女性</option>
-                                    <option value="custom">自定义</option>
-                                </select>
+
+                        <!-- 文案素材输入区 -->
+                        <div class="input-section">
+                            <h4>一、文案素材</h4>
+                            <div class="input-section">
+                                <label>讲述文案输入</label>
+                                <textarea id="digital-human-script" placeholder="请输入数字人讲述文案/脚本内容"></textarea>
                             </div>
-                            
-                            <div class="parameter-group">
-                                <label>选择服装风格</label>
-                                <select id="clothing-style">
-                                    <option value="business">商务正装</option>
-                                    <option value="casual">休闲装</option>
-                                    <option value="creative">创意装</option>
-                                    <option value="sports">运动装</option>
-                                </select>
+                            <div>
+                                <label>个人知识库导入</label>
+                                <button class="action-button secondary" onclick="openModal('personal-knowledge-modal')" style="width: 100%;"> + 选择个人知识库</button>
                             </div>
-                            
-                            <div class="parameter-group">
-                                <label>上传参考图片（可选）</label>
-                                <div class="file-upload-section">
-                                    <input type="file" id="reference-upload" accept=".jpg,.png">
-                                    <button id="upload-btn" class="action-button secondary">上传图片</button>
+                        </div>
+
+                        <!-- 数字人场景配置 -->
+                        <div class="input-section">
+                            <h4>二、数字人场景配置</h4>
+                            <div>
+                                <label>选择场景照片</label>
+                                <div class="scene-options-grid">
+                                    <label class="scene-option">
+                                        <input type="radio" name="digital-human-scene" value="office">
+                                        <div class="scene-option-content">
+                                            <div class="scene-option-image">
+                                                <span>🏢 办公室</span>
+                                            </div>
+                                            <span class="scene-option-text">办公室场景</span>
+                                        </div>
+                                    </label>
+                                    <label class="scene-option">
+                                        <input type="radio" name="digital-human-scene" value="outdoor">
+                                        <div class="scene-option-content">
+                                            <div class="scene-option-image">
+                                                <span>🌳 室外</span>
+                                            </div>
+                                            <span class="scene-option-text">室外场景</span>
+                                        </div>
+                                    </label>
+                                    <label class="scene-option">
+                                        <input type="radio" name="digital-human-scene" value="community">
+                                        <div class="scene-option-content">
+                                            <div class="scene-option-image">
+                                                <span>🏘️ 社区</span>
+                                            </div>
+                                            <span class="scene-option-text">社区场景</span>
+                                        </div>
+                                    </label>
+                                    <label class="scene-option">
+                                        <input type="radio" name="digital-human-scene" value="showroom">
+                                        <div class="scene-option-content">
+                                            <div class="scene-option-image">
+                                                <span>🏠 样板间</span>
+                                            </div>
+                                            <span class="scene-option-text">样板间场景</span>
+                                        </div>
+                                    </label>
                                 </div>
                             </div>
-                            
-                            <h4 style="margin-top: 24px; margin-bottom: 16px; font-size: 16px; font-weight: 600; color: var(--text-primary);">高级设置</h4>
-                            <div class="option-group">
-                                <label><input type="checkbox" checked> 高清渲染</label>
-                                <label><input type="checkbox"> 动画表情</label>
-                                <label><input type="checkbox"> 语音同步</label>
+                            <div>
+                                <label>新增数字人场景</label>
+                                <label class="file-upload-label">
+                                    <input type="file" accept="image/*">
+                                    <span>📁</span>
+                                    <div>点击上传照片</div>
+                                    <div>支持 JPG、PNG 格式</div>
+                                </label>
                             </div>
                         </div>
-                        <div class="panel-footer">
-                            <div class="button-group">
-                                <button id="generate-btn" class="action-button primary">生成数字人</button>
-                                <button id="reset-btn" class="action-button secondary">重置设置</button>
+
+                        <!-- 声音选择 -->
+                        <div class="input-section">
+                            <h4>三、声音选择</h4>
+                            <div>
+                                <label>选择声音</label>
+                                <div class="voice-options">
+                                    <label class="voice-option">
+                                        <input type="radio" name="voice-selection" value="my-voice" checked>
+                                        <span>本人声音</span>
+                                        <button type="button" class="play-voice-btn">▶️</button>
+                                    </label>
+                                    <label class="voice-option">
+                                        <input type="radio" name="voice-selection" value="professional-male">
+                                        <span>专业男声</span>
+                                        <button type="button" class="play-voice-btn">▶️</button>
+                                    </label>
+                                    <label class="voice-option">
+                                        <input type="radio" name="voice-selection" value="professional-female">
+                                        <span>专业女声</span>
+                                        <button type="button" class="play-voice-btn">▶️</button>
+                                    </label>
+                                    <label class="voice-option">
+                                        <input type="radio" name="voice-selection" value="warm-male">
+                                        <span>温暖男声</span>
+                                        <button type="button" class="play-voice-btn">▶️</button>
+                                    </label>
+                                </div>
                             </div>
+                            <div>
+                                <label>配置本人声音</label>
+                                <label class="file-upload-label">
+                                    <input type="file" accept="audio/*">
+                                    <span>🎤</span>
+                                    <div>点击上传个人声音文件</div>
+                                    <div>支持 MP3、WAV 格式，建议录音时长 3-5 分钟</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="generate-btn" class="action-button primary">生成数字人视频</button>
+                            <button id="reset-btn" class="action-button secondary">重置</button>
                         </div>
                     </div>
-                    
-                    <!-- 右侧面板 - 生成结果 -->
-                    <div class="comparison-panel">
-                        <div class="panel-header">
-                            <h3 class="panel-title">生成结果</h3>
-                            <button id="download-btn" class="action-button secondary" disabled>下载数字人</button>
+
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>数字人视频生成</h3>
                         </div>
-                        <div class="panel-content">
-                            <div id="character-result" class="result-content">
-                                <p class="placeholder-text">生成的数字人将显示在这里...</p>
+                        <div class="result-content">
+                            <!-- 预览区 -->
+                            <div id="video-preview" style="background-color: #000; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; position: relative; overflow: hidden;">
+                                <p class="placeholder-text" style="color: #fff;">数字人视频预览</p>
+                            </div>
+                            <!-- 操作按钮 -->
+                            <div class="action-buttons" style="justify-content: flex-end;">
+                                <button id="download-btn" class="action-button primary">下载视频</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="usage-guide">
-                    <h3>使用指南</h3>
-                    <ul>
-                        <li>选择数字人的基本形象类型</li>
-                        <li>设置服装风格和其他参数</li>
-                        <li>可选：上传参考图片以获得更符合期望的结果</li>
-                        <li>点击「生成数字人」按钮开始创建</li>
-                        <li>生成完成后可预览并下载数字人资源</li>
-                    </ul>
+            </div>
+
+
+            <!-- 使用指南区域 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 配置文案素材：</strong>可以通过文本输入或从个人知识库导入数字人讲述的文案内容
+                </div>
+                <div class="help-item">
+                    <strong>2. 选择数字人场景：</strong>从预设的办公室、室外、社区、样板间等场景中选择，或上传新的场景照片
+                </div>
+                <div class="help-item">
+                    <strong>3. 选择声音：</strong>选择数字人的声音类型，包括本人声音和多种预设声音，可点击试听
+                </div>
+                <div class="help-item">
+                    <strong>4. 生成视频：</strong>点击「生成数字人视频」按钮开始生成
+                </div>
+                <div class="help-item">
+                    <strong>5. 预览与下载：</strong>在右侧预览区查看生成的数字人视频效果，点击下载按钮保存视频文件
                 </div>
             </div>
+        
         </main>
     </div>
-    
-    <script>
-        // 数字人生成助手交互逻辑
-        document.addEventListener('DOMContentLoaded', function() {
-            // 获取DOM元素
-            const generateBtn = document.getElementById('generate-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const uploadBtn = document.getElementById('upload-btn');
-            const downloadBtn = document.getElementById('download-btn');
-            const characterType = document.getElementById('character-type');
-            const clothingStyle = document.getElementById('clothing-style');
-            const referenceUpload = document.getElementById('reference-upload');
-            const characterResult = document.getElementById('character-result');
-            
-            // 上传图片功能
-            uploadBtn.addEventListener('click', function() {
-                referenceUpload.click();
-            });
-            
-            referenceUpload.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    // 显示上传成功的视觉反馈
-                    uploadBtn.textContent = '已上传: ' + file.name;
-                    uploadBtn.classList.add('primary');
-                    uploadBtn.classList.remove('secondary');
-                }
-            });
-            
-            // 生成数字人功能
-            generateBtn.addEventListener('click', function() {
-                // 显示加载状态
-                characterResult.innerHTML = '';
-                characterResult.classList.add('loading');
-                
-                const spinner = document.createElement('div');
-                spinner.className = 'loading-spinner';
-                
-                const loadingText = document.createElement('p');
-                loadingText.className = 'placeholder-text';
-                loadingText.textContent = '正在生成数字人，请稍候...';
-                
-                characterResult.appendChild(spinner);
-                characterResult.appendChild(loadingText);
-                
-                // 禁用生成按钮防止重复点击
-                generateBtn.disabled = true;
-                generateBtn.style.opacity = '0.6';
-                
-                // 模拟生成过程（实际项目中会替换为真实的API调用）
-                setTimeout(function() {
-                    // 移除加载状态
-                    characterResult.classList.remove('loading');
-                    
-                    // 生成预览内容
-                    const previewDiv = document.createElement('div');
-                    previewDiv.className = 'character-preview';
-                    
-                    // 创建预览图片（使用占位图）
-                    const previewImg = document.createElement('img');
-                    previewImg.src = 'https://via.placeholder.com/300x300?text=数字人预览';
-                    previewImg.alt = '生成的数字人预览';
-                    previewImg.style.width = '100%';
-                    previewImg.style.borderRadius = 'var(--border-radius)';
-                    previewImg.style.boxShadow = 'var(--shadow-light)';
-                    
-                    // 创建数字人信息
-                    const infoDiv = document.createElement('div');
-                    infoDiv.style.marginTop = '16px';
-                    
-                    const typeText = document.createElement('p');
-                    typeText.style.fontSize = '14px';
-                    typeText.style.color = 'var(--text-secondary)';
-                    typeText.style.margin = '8px 0';
-                    typeText.textContent = '形象类型: ' + characterType.options[characterType.selectedIndex].text;
-                    
-                    const styleText = document.createElement('p');
-                    styleText.style.fontSize = '14px';
-                    styleText.style.color = 'var(--text-secondary)';
-                    styleText.style.margin = '8px 0';
-                    styleText.textContent = '服装风格: ' + clothingStyle.options[clothingStyle.selectedIndex].text;
-                    
-                    // 添加信息到预览区域
-                    infoDiv.appendChild(typeText);
-                    infoDiv.appendChild(styleText);
-                    previewDiv.appendChild(previewImg);
-                    previewDiv.appendChild(infoDiv);
-                    
-                    // 清空并添加预览内容
-                    characterResult.innerHTML = '';
-                    characterResult.appendChild(previewDiv);
-                    
-                    // 启用下载按钮
-                    downloadBtn.disabled = false;
-                    
-                    // 重新启用生成按钮
-                    generateBtn.disabled = false;
-                    generateBtn.style.opacity = '1';
-                    
-                }, 2000); // 模拟2秒生成时间
-            });
-            
-            // 重置功能
-            resetBtn.addEventListener('click', function() {
-                // 重置选择器
-                characterType.selectedIndex = 0;
-                clothingStyle.selectedIndex = 0;
-                
-                // 重置复选框
-                const checkboxes = document.querySelectorAll('.option-group input[type="checkbox"]');
-                checkboxes.forEach((checkbox, index) => {
-                    checkbox.checked = index === 0; // 只有第一个默认勾选
-                });
-                
-                // 重置文件上传
-                referenceUpload.value = '';
-                uploadBtn.textContent = '上传图片';
-                uploadBtn.classList.remove('primary');
-                uploadBtn.classList.add('secondary');
-                
-                // 重置结果区域
-                characterResult.innerHTML = '<p class="placeholder-text">生成的数字人将显示在这里...</p>';
-                downloadBtn.disabled = true;
-            });
-            
-            // 下载功能
-            downloadBtn.addEventListener('click', function() {
-                if (!downloadBtn.disabled) {
-                    // 显示下载提示（实际项目中会替换为真实的下载逻辑）
-                    alert('数字人资源下载已开始，请稍候...');
-                    
-                    // 模拟下载过程中的视觉反馈
-                    const originalText = downloadBtn.textContent;
-                    downloadBtn.textContent = '下载中...';
-                    downloadBtn.disabled = true;
-                    
-                    setTimeout(() => {
-                        downloadBtn.textContent = originalText;
-                        downloadBtn.disabled = false;
-                    }, 1500);
-                }
-            });
-        });
-    </script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 文件上传功能
-            const referenceUpload = document.getElementById('reference-upload');
-            const uploadBtn = document.getElementById('upload-btn');
-            
-            uploadBtn.addEventListener('click', function() {
-                referenceUpload.click();
-            });
-            
-            referenceUpload.addEventListener('change', function() {
-                if (this.files.length > 0) {
-                    const fileName = this.files[0].name;
-                    alert(`参考图片 ${fileName} 已选择`);
-                }
-            });
-            
-            // 重置按钮功能
-            const resetBtn = document.getElementById('reset-btn');
-            
-            resetBtn.addEventListener('click', function() {
-                document.getElementById('character-type').value = 'male-professional';
-                document.getElementById('clothing-style').value = 'business';
-                document.getElementById('character-result').innerHTML = '<p class="placeholder-text">生成的数字人将显示在这里...</p>';
-                referenceUpload.value = '';
-            });
-            
-            // 生成按钮功能
-            const generateBtn = document.getElementById('generate-btn');
-            const characterResult = document.getElementById('character-result');
-            
-            generateBtn.addEventListener('click', function() {
-                characterResult.innerHTML = '<p>正在生成数字人，请稍候...</p>';
-                // 模拟生成过程
-                setTimeout(function() {
-                    characterResult.innerHTML = '<div class="character-preview">\n' +
-                        '<p>数字人生成成功！</p>\n' +
-                        '<div class="preview-placeholder">[数字人预览图]</div>\n' +
-                        '<p>形象类型：' + document.getElementById('character-type').options[document.getElementById('character-type').selectedIndex].text + '</p>\n' +
-                        '<p>服装风格：' + document.getElementById('clothing-style').options[document.getElementById('clothing-style').selectedIndex].text + '</p>\n' +
-                        '</div>';
-                }, 1500);
-            });
-        });
-    </script>
+
 </body>
 </html>

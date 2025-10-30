@@ -32,7 +32,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: var(--panel-gap);
-            margin-bottom: 30px;
         }
 
         /* 面板样式 */
@@ -41,7 +40,6 @@
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-md);
             padding: var(--panel-padding);
-            height: fit-content;
             min-height: 500px;
         }
 
@@ -49,12 +47,14 @@
         .input-panel {
             display: flex;
             flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
         /* 输出面板样式 */
         .output-panel {
             display: flex;
             flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
         /* 面板标题样式 */
@@ -158,7 +158,7 @@
         .action-buttons {
             display: flex;
             gap: 12px;
-            margin-top: auto;
+            margin-top: 20px;
             margin-bottom: 0;
             padding-top: 20px;
             border-top: 1px solid var(--border-color);
@@ -179,6 +179,8 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            border: 1px solid var(--border-color);
+            
         }
 
         .action-button:hover {
@@ -221,7 +223,7 @@
 
         .result-content {
             flex: 1;
-            min-height: 400px;
+            min-height: 200px;
             padding: 16px;
             background-color: var(--secondary-color);
             border-radius: var(--border-radius);
@@ -377,8 +379,9 @@
                 <div class="comparison-layout">
                     <!-- 左侧输入面板 -->
                     <div class="comparison-panel input-panel">
+                        <div class="result-header">
                         <h3>直播话术设置</h3>
-                        
+                        </div>
                         <div class="input-section">
                             <label for="product-info">产品信息</label>
                             <textarea id="product-info" placeholder="请详细描述您的产品，包括功能、优势、使用场景等" rows="5"></textarea>
@@ -405,15 +408,6 @@
                             </select>
                         </div>
 
-                        <div class="script-options">
-                            <h4>话术选项</h4>
-                            <div class="option-group">
-                                <label><input type="checkbox" checked> 突出卖点</label>
-                                <label><input type="checkbox" checked> 引导互动</label>
-                                <label><input type="checkbox"> 制造紧迫感</label>
-                                <label><input type="checkbox"> 加入口语化表达</label>
-                            </div>
-                        </div>
 
                         <div class="action-buttons">
                             <button id="generate-btn" class="action-button">生成话术</button>
@@ -425,131 +419,44 @@
                     <div class="comparison-panel output-panel">
                         <div class="result-header">
                             <h3>生成结果</h3>
-                            <div class="result-actions">
-                            <button id="copy-btn" class="action-button secondary">复制话术</button>
-                            <button id="export-btn" class="action-button secondary">导出话术</button>
-                        </div>
                         </div>
 
-                        <div id="script-result" class="result-content">
+                        <div id="extraction-result" class="result-content" style="position: relative;">
                             <p class="placeholder-text">请点击左侧"生成话术"按钮生成直播话术</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
                         </div>
+
+
                     </div>
                 </div>
                 
-                <!-- 使用指南 -->
-                <div class="usage-guide">
-                    <h3>使用指南</h3>
-                    <ul>
-                        <li>在左侧填写产品详细信息，包括功能、优势和使用场景</li>
-                        <li>选择话术类型和直播风格，以匹配您的直播需求</li>
-                        <li>可自定义选择需要的话术模块，如开场白、产品特点等</li>
-                        <li>点击"生成话术"按钮获取专业的直播话术内容</li>
-                        <li>生成的话术可复制或导出为文本文件使用</li>
-                    </ul>
+            </div>
+            <!-- 使用指南区域 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 填写产品信息：</strong>在左侧文本框中详细描述您的产品，包括功能特点、核心优势、使用场景等信息
+                </div>
+                <div class="help-item">
+                    <strong>2. 选择话术类型：</strong>根据直播需求，选择直播开场白、产品介绍、促销话术、问答话术或结束语等类型
+                </div>
+                <div class="help-item">
+                    <strong>3. 设置直播风格：</strong>选择专业严谨、轻松随意、热情洋溢或幽默风趣等直播风格，系统将根据风格生成相应话术
+                </div>
+                <div class="help-item">
+                    <strong>4. 生成话术：</strong>点击「生成话术」按钮，系统将智能生成符合要求的直播话术内容
+                </div>
+                <div class="help-item">
+                    <strong>5. 使用结果：</strong>在右侧面板查看生成的话术内容，可直接使用或点击右下角按钮将结果添加至个人知识库
+                </div>
+                <div class="help-item">
+                    <strong>6. 清空重设：</strong>如需重新开始，点击「清空」按钮重置所有输入内容
                 </div>
             </div>
         </main>
     </div>
     
-    <!-- 成功提示组件 -->
-    <div id="success-toast" class="success-toast">
-        <span id="success-message">操作成功</span>
-    </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 获取元素
-            const generateButton = document.getElementById('generate-btn');
-            const clearButton = document.getElementById('clear-btn');
-            const copyButton = document.getElementById('copy-btn');
-            const exportButton = document.getElementById('export-btn');
-            const productInput = document.getElementById('product-info');
-            const scriptResult = document.getElementById('script-result');
-            const successToast = document.getElementById('success-toast');
-            const successMessage = document.getElementById('success-message');
-            
-            // 显示成功提示
-            function showSuccess(message) {
-                successMessage.textContent = message;
-                successToast.classList.add('show');
-                
-                setTimeout(() => {
-                    successToast.classList.remove('show');
-                }, 3000);
-            }
-            
-            // 清空按钮功能
-            clearButton.addEventListener('click', function() {
-                productInput.value = '';
-                scriptResult.innerHTML = '<p class="placeholder-text">请点击左侧"生成话术"按钮生成直播话术</p>';
-                showSuccess('表单已清空');
-            });
-            
-            // 生成按钮功能
-            generateButton.addEventListener('click', function() {
-                if (!productInput.value.trim()) {
-                    showSuccess('请输入产品信息');
-                    return;
-                }
-                
-                // 禁用按钮，显示加载状态
-                generateButton.disabled = true;
-                scriptResult.innerHTML = '<div class="loading-text"><div class="loading-spinner"></div>正在生成话术...</div>';
-                
-                // 模拟生成过程
-                setTimeout(function() {
-                    const scriptType = document.getElementById('script-type').options[document.getElementById('script-type').selectedIndex].text;
-                    const liveStyle = document.getElementById('live-style').options[document.getElementById('live-style').selectedIndex].text;
-                    
-                    scriptResult.innerHTML = `<div class="script-content">\n` +
-                        `<h5>${scriptType} (${liveStyle}风格)</h5>\n` +
-                        `<p>亲爱的观众朋友们，大家好！欢迎来到我们的直播间！</p>\n` +
-                        `<p>今天给大家带来的是我们的优质产品，根据您提供的信息，这款产品...</p>\n` +
-                        `<p>它的最大卖点是...</p>\n` +
-                        `<p>现在下单还有特别优惠...</p>\n` +
-                        `<p>大家有什么问题可以在评论区留言，我会为大家一一解答！</p>\n` +
-                        `</div>`;
-                        
-                    // 启用按钮，显示成功提示
-                    generateButton.disabled = false;
-                    showSuccess('话术生成成功');
-                }, 1500);
-            });
-            
-            // 复制按钮功能
-            copyButton.addEventListener('click', function() {
-                const resultText = scriptResult.innerText;
-                if (resultText && resultText !== '请点击左侧"生成话术"按钮生成直播话术' && !resultText.includes('正在生成话术')) {
-                    navigator.clipboard.writeText(resultText).then(function() {
-                        showSuccess('话术已复制到剪贴板');
-                    }).catch(function() {
-                        showSuccess('复制失败，请手动复制');
-                    });
-                } else {
-                    showSuccess('暂无内容可复制');
-                }
-            });
-            
-            // 导出按钮功能
-            exportButton.addEventListener('click', function() {
-                const resultText = scriptResult.innerText;
-                if (resultText && resultText !== '请点击左侧"生成话术"按钮生成直播话术' && !resultText.includes('正在生成话术')) {
-                    const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = '直播话术_' + new Date().toISOString().slice(0, 10) + '.txt';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    showSuccess('结果已导出');
-                } else {
-                    showSuccess('暂无内容可导出');
-                }
-            });
-        });
-    </script>
-</body>
+ </body>
 </html>

@@ -6,57 +6,144 @@
     <title>语音文本提炼助手 - 利客来</title>
     <link rel="stylesheet" href="../../css/style.css">
     <style>
-        /* 自定义页面样式 */
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
         .comparison-layout {
-            display: flex;
-            gap: var(--spacing-xl);
-            margin-bottom: var(--spacing-xxl);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
         }
-        
-        @media (max-width: 768px) {
-            .comparison-layout {
-                flex-direction: column;
-            }
-        }
-        
+
+        /* 面板样式 */
         .comparison-panel {
-            flex: 1;
-            background-color: var(--bg-secondary);
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
             display: flex;
             flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
-        
-        .panel-header {
-            padding: var(--spacing-lg) var(--spacing-xl);
-            border-bottom: 1px solid var(--border-color);
-            background-color: var(--bg-secondary);
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
-        
-        .panel-header h3 {
-            margin: 0;
-            font-size: 18px;
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--text-primary);
         }
-        
-        .panel-content {
-            padding: var(--spacing-xl);
-            flex: 1;
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
             display: flex;
             flex-direction: column;
+            gap: 12px;
         }
-        
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 文件上传区域样式 */
         .file-upload-area {
             border: 2px dashed var(--border-color);
-            border-radius: 6px;
-            padding: var(--spacing-xxl);
+            border-radius: var(--border-radius);
+            padding: 32px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: var(--spacing-lg);
+            transition: var(--transition);
             background-color: #fafafa;
             min-height: 180px;
             display: flex;
@@ -64,13 +151,13 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .file-upload-area:hover,
         .file-upload-area.active {
-            border-color: var(--accent-color);
-            background-color: rgba(0, 120, 212, 0.04);
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.04);
         }
-        
+
         .file-upload-area input[type="file"] {
             position: absolute;
             width: 1px;
@@ -81,214 +168,368 @@
             clip: rect(0, 0, 0, 0);
             border: 0;
         }
-        
+
         .upload-icon {
             font-size: 48px;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 16px;
             opacity: 0.6;
             transition: opacity 0.3s ease;
         }
-        
+
         .file-upload-area:hover .upload-icon {
             opacity: 0.8;
         }
-        
+
         .upload-text {
-            color: var(--text-secondary);
+            color: var(--text-light);
             line-height: 1.5;
         }
-        
+
         .upload-text div:first-child {
             font-weight: 500;
-            margin-bottom: var(--spacing-xs);
-            color: var(--text-primary);
+            margin-bottom: 8px;
+            color: var(--text-color);
         }
-        
+
         .upload-text div:last-child {
             font-size: 13px;
-            color: var(--text-tertiary);
+            color: var(--text-light);
         }
-        
+
+        /* 文件信息样式 */
         .file-info {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: var(--spacing-md);
+            padding: 12px;
             background-color: #f8f9fa;
             border-radius: 4px;
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 20px;
             font-size: 14px;
         }
-        
+
         .file-name {
-            color: var(--text-primary);
+            color: var(--text-color);
             font-weight: 500;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             flex: 1;
-            margin-right: var(--spacing-md);
+            margin-right: 12px;
         }
-        
+
         .remove-file {
-            color: var(--accent-color);
+            color: var(--primary-color);
             cursor: pointer;
-            padding: var(--spacing-xs) var(--spacing-md);
+            padding: 4px 12px;
             border-radius: 4px;
             transition: background-color 0.2s ease;
         }
-        
+
         .remove-file:hover {
-            background-color: rgba(0, 120, 212, 0.1);
+            background-color: rgba(37, 99, 235, 0.1);
         }
-        
+
+        /* 提炼选项样式 */
         .extraction-options {
-            margin-bottom: var(--spacing-xl);
+            margin-bottom: 24px;
         }
-        
+
         .extraction-options h4 {
-            margin: 0 0 var(--spacing-lg) 0;
-            font-size: 16px;
+            margin-top: 0;
+            margin-bottom: 12px;
             font-weight: 500;
-            color: var(--text-primary);
+            color: var(--text-color);
         }
-        
+
         .option-group {
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 20px;
         }
-        
+
         .option-item {
             display: flex;
             align-items: center;
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 16px;
         }
-        
+
         .option-item label {
             font-weight: 500;
-            color: var(--text-primary);
-            margin-right: var(--spacing-md);
+            color: var(--text-color);
+            margin-right: 12px;
             min-width: 100px;
         }
-        
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: var(--spacing-md);
+
+        .option-item select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
         }
-        
+
+        .option-item select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
         .checkbox-group label {
             display: flex;
             align-items: center;
             cursor: pointer;
-            padding: var(--spacing-xs);
-            border-radius: 4px;
-            transition: background-color 0.2s ease;
+            font-size: 14px;
         }
-        
-        .checkbox-group label:hover {
-            background-color: var(--bg-hover);
-        }
-        
+
         .checkbox-group input[type="checkbox"] {
-            margin-right: var(--spacing-md);
-            width: 18px;
-            height: 18px;
-            accent-color: var(--accent-color);
+            margin-right: 8px;
         }
-        
+
+        /* 按钮样式 */
         .action-buttons {
             display: flex;
-            gap: var(--spacing-md);
-            margin-top: auto;
+            gap: 12px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
         }
-        
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button:disabled {
+        }
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .action-button.small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 结果面板样式 */
         .result-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--spacing-lg) var(--spacing-xl);
+            margin-bottom: 20px;
+            padding-bottom: 16px;
             border-bottom: 1px solid var(--border-color);
         }
-        
+
+        .result-header h3 {
+            margin: 0;
+        }
+
         .result-header h4 {
             margin: 0;
-            font-size: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--text-primary);
         }
-        
+
         .result-actions {
             display: flex;
-            gap: var(--spacing-sm);
+            gap: 12px;
         }
-        
+
         .result-content {
             flex: 1;
-            padding: var(--spacing-xl);
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
             overflow-y: auto;
-            line-height: 1.7;
         }
-        
+
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 文本结果样式 */
         .text-result {
-            color: var(--text-primary);
+            color: var(--text-color);
         }
-        
+
         .text-result h4 {
-            margin: var(--spacing-lg) 0 var(--spacing-md) 0;
-            padding-bottom: var(--spacing-xs);
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
             border-bottom: 1px solid var(--border-color);
             font-size: 16px;
             font-weight: 500;
         }
-        
+
         .text-result p {
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 12px;
+            line-height: 1.6;
         }
-        
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
         .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 150px;
-            color: var(--text-tertiary);
-            font-style: italic;
+            gap: 12px;
         }
-        
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
         .usage-guide {
-            background-color: var(--bg-secondary);
-            border-radius: 8px;
-            padding: var(--spacing-xl);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--card-shadow);
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
         }
-        
+
         .usage-guide h3 {
-            margin: 0 0 var(--spacing-lg) 0;
-            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--text-primary);
         }
-        
+
         .usage-guide ul {
             margin: 0;
-            padding-left: var(--spacing-xl);
+            padding-left: 20px;
         }
-        
+
         .usage-guide li {
-            margin-bottom: var(--spacing-md);
-            line-height: 1.6;
-            color: var(--text-secondary);
+            margin-bottom: 8px;
+            color: var(--text-color);
         }
-        
-        /* 禁用状态样式增强 */
-        .action-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        
-        .action-button:disabled:hover {
-            transform: none;
-            background-color: inherit;
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -317,51 +558,40 @@
                 <div class="comparison-layout">
                     <!-- 左侧输入面板 -->
                     <div class="comparison-panel input-panel">
-                        <div class="panel-header">
-                            <h3>语音文件上传与设置</h3>
+                        <div class="result-header">
+                        <h3>语音文件上传与设置</h3>
                         </div>
-                        <div class="panel-content">
                             
-                            <div class="input-section">
-                                <div class="file-upload-area" id="voice-upload-area">
-                                    <input type="file" id="voice-upload" accept=".mp3,.wav,.m4a">
-                                    <div class="upload-icon">🎤</div>
-                                    <div class="upload-text">
-                                        <div>点击或拖拽文件到此处上传</div>
-                                        <div>支持 MP3、WAV、M4A 格式，最大 20MB</div>
-                                    </div>
-                                </div>
-                                <div id="file-info" class="file-info" style="display: none;">
-                                    <span class="file-name" id="file-name"></span>
-                                    <span class="remove-file" id="remove-file">移除</span>
+                        <div class="input-section">
+                            <div class="file-upload-area" id="voice-upload-area">
+                                <input type="file" id="voice-upload" accept=".mp3,.wav,.m4a">
+                                <div class="upload-icon">🎤</div>
+                                <div class="upload-text">
+                                    <div>点击或拖拽文件到此处上传</div>
+                                    <div>支持 MP3、WAV、M4A 格式，最大 20MB</div>
                                 </div>
                             </div>
-                            
-                            <div class="extraction-options">
-                                <h4>提炼选项</h4>
-                                <div class="option-group">
-                                    <div class="option-item">
-                                        <label for="language-type">语言类型：</label>
-                                        <select id="language-type" class="settings-select">
-                                            <option value="zh">中文</option>
-                                            <option value="en">英文</option>
-                                            <option value="mix">中英混合</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="checkbox-group">
-                                    <label><input type="checkbox" id="auto-segment" checked> 自动分段</label>
-                                    <label><input type="checkbox" id="keywords" checked> 关键词提取</label>
-                                    <label><input type="checkbox" id="emotion-analysis"> 情感分析</label>
-                                    <label><input type="checkbox" id="summary"> 摘要生成</label>
-                                </div>
+                            <div id="file-info" class="file-info" style="display: none;">
+                                <span class="file-name" id="file-name"></span>
+                                <span class="remove-file" id="remove-file">移除</span>
+                            </div>
+                        </div>
+                        
+                        <div class="extraction-options">
+                            <div class="parameter-group">
+                                <label for="language-type">语言类型</label>
+                                <select id="language-type">
+                                    <option value="zh">中文</option>
+                                    <option value="en">英文</option>
+                                    <option value="mix">中英混合</option>
+                                </select>
                             </div>
                             
-                            <div class="action-buttons">
-                                <button id="extract-btn" class="action-button primary" disabled>开始提炼</button>
-                                <button id="reset-btn" class="action-button secondary" disabled>重置</button>
-                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button id="extract-btn" class="action-button" disabled>开始提炼</button>
+                            <button id="reset-btn" class="action-button secondary" disabled>重置</button>
                         </div>
                     </div>
 
@@ -369,390 +599,41 @@
                     <div class="comparison-panel output-panel">
                         <div class="result-header">
                             <h4>提炼结果</h4>
-                            <div class="result-actions">
-                                <button id="copy-btn" class="action-button secondary small" disabled>复制文本</button>
-                                <button id="download-btn" class="action-button secondary small" disabled>下载文本</button>
-                            </div>
                         </div>
-                        <div id="extraction-result" class="result-content">
-                            <p class="placeholder-text">提炼的文本结果将在这里显示...</p>
+
+
+                        <div id="extraction-result" class="result-content" style="position: relative;">
+                            <p class="placeholder-text">提炼的文本结果将在这里显示..</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
                         </div>
+                        
                     </div>
                 </div>
                 
-                <div class="usage-guide">
-                    <h3>使用指南</h3>
-                    <ul>
-                        <li>上传需要转换的语音文件（MP3、WAV、M4A格式，最大20MB）</li>
-                        <li>选择语言类型和所需的提炼选项</li>
-                        <li>点击「开始提炼」按钮处理语音内容</li>
-                        <li>等待处理完成后查看转换和分析结果</li>
-                        <li>可复制文本或下载完整结果文件</li>
-                    </ul>
+            </div>
+            <!-- 使用指南区域 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 语音文件上传：</strong>点击或拖拽支持的MP3、WAV、M4A格式语音文件（最大20MB）到上传区域
+                </div>
+                <div class="help-item">
+                    <strong>2. 语言类型选择：</strong>根据您上传的语音内容，准确选择对应的语言类型（中文、英文或中英混合）
+                </div>
+                <div class="help-item">
+                    <strong>3. 功能选项设置：</strong>按需勾选所需的智能处理功能，包括自动分段、关键词提取、情感分析、摘要生成等
+                </div>
+                <div class="help-item">
+                    <strong>4. 启动文本提炼：</strong>确认设置无误后，点击「开始提炼」按钮，系统将自动进行语音识别和文本分析
+                </div>
+                <div class="help-item">
+                    <strong>5. 查看处理结果：</strong>处理完成后，在右侧结果面板查看语音转写文本及各项分析结果
                 </div>
             </div>
         </main>
     </div>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 获取所有元素
-            const voiceUpload = document.getElementById('voice-upload');
-            const voiceUploadArea = document.getElementById('voice-upload-area');
-            const fileInfo = document.getElementById('file-info');
-            const fileName = document.getElementById('file-name');
-            const removeFile = document.getElementById('remove-file');
-            const extractBtn = document.getElementById('extract-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const extractionResult = document.getElementById('extraction-result');
-            const copyBtn = document.getElementById('copy-btn');
-            const downloadBtn = document.getElementById('download-btn');
-            const languageType = document.getElementById('language-type');
-            const autoSegment = document.getElementById('auto-segment');
-            const keywords = document.getElementById('keywords');
-            const emotionAnalysis = document.getElementById('emotion-analysis');
-            const summary = document.getElementById('summary');
-            
-            // 成功提示函数
-            function showSuccessToast(message) {
-                // 检查是否已存在toast元素
-                let toast = document.getElementById('success-toast');
-                if (toast) {
-                    // 如果已存在，移除旧的
-                    toast.remove();
-                }
-                
-                // 创建新的toast元素
-                toast = document.createElement('div');
-                toast.id = 'success-toast';
-                toast.textContent = message;
-                toast.style.cssText = `
-                    position: fixed;
-                    top: 80px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background-color: #52c41a;
-                    color: white;
-                    padding: 12px 24px;
-                    border-radius: 6px;
-                    box-shadow: 0 4px 12px rgba(82, 196, 26, 0.35);
-                    z-index: 9999;
-                    transition: opacity 0.3s ease, transform 0.3s ease;
-                    font-size: 14px;
-                    pointer-events: none;
-                    transform: translate(-50%, -10px);
-                    opacity: 0;
-                `;
-                
-                document.body.appendChild(toast);
-                
-                // 显示动画
-                setTimeout(() => {
-                    toast.style.opacity = '1';
-                    toast.style.transform = 'translate(-50%, 0)';
-                }, 10);
-                
-                // 3秒后自动消失
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    toast.style.transform = 'translate(-50%, -10px)';
-                    setTimeout(() => {
-                        if (document.body.contains(toast)) {
-                            document.body.removeChild(toast);
-                        }
-                    }, 300);
-                }, 3000);
-            }
-            
-            // 错误提示函数
-            function showErrorToast(message) {
-                // 检查是否已存在toast元素
-                let toast = document.getElementById('error-toast');
-                if (toast) {
-                    // 如果已存在，移除旧的
-                    toast.remove();
-                }
-                
-                // 创建新的toast元素
-                toast = document.createElement('div');
-                toast.id = 'error-toast';
-                toast.textContent = message;
-                toast.style.cssText = `
-                    position: fixed;
-                    top: 80px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background-color: #ff4d4f;
-                    color: white;
-                    padding: 12px 24px;
-                    border-radius: 6px;
-                    box-shadow: 0 4px 12px rgba(255, 77, 79, 0.35);
-                    z-index: 9999;
-                    transition: opacity 0.3s ease, transform 0.3s ease;
-                    font-size: 14px;
-                    pointer-events: none;
-                    transform: translate(-50%, -10px);
-                    opacity: 0;
-                `;
-                
-                document.body.appendChild(toast);
-                
-                // 显示动画
-                setTimeout(() => {
-                    toast.style.opacity = '1';
-                    toast.style.transform = 'translate(-50%, 0)';
-                }, 10);
-                
-                // 3秒后自动消失
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    toast.style.transform = 'translate(-50%, -10px)';
-                    setTimeout(() => {
-                        if (document.body.contains(toast)) {
-                            document.body.removeChild(toast);
-                        }
-                    }, 300);
-                }, 3000);
-            }
-            
-            // 为上传区域添加点击事件
-            voiceUploadArea.addEventListener('click', function() {
-                voiceUpload.click();
-            });
-            
-            // 处理文件上传
-            voiceUpload.addEventListener('change', handleFileUpload);
-            
-            // 拖拽上传功能
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                voiceUploadArea.addEventListener(eventName, preventDefaults, false);
-            });
-            
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            
-            ['dragenter', 'dragover'].forEach(eventName => {
-                voiceUploadArea.addEventListener(eventName, highlight, false);
-            });
-            
-            ['dragleave', 'drop'].forEach(eventName => {
-                voiceUploadArea.addEventListener(eventName, unhighlight, false);
-            });
-            
-            function highlight() {
-                voiceUploadArea.classList.add('active');
-            }
-            
-            function unhighlight() {
-                voiceUploadArea.classList.remove('active');
-            }
-            
-            voiceUploadArea.addEventListener('drop', handleDrop, false);
-            
-            function handleDrop(e) {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                
-                if (files.length) {
-                    handleFile(files[0]);
-                }
-            }
-            
-            function handleFileUpload() {
-                if (voiceUpload.files.length) {
-                    handleFile(voiceUpload.files[0]);
-                }
-            }
-            
-            function handleFile(file) {
-                // 检查文件类型
-                const validTypes = ['.mp3', '.wav', '.m4a'];
-                const fileExt = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
-                if (!validTypes.includes(fileExt)) {
-                    showErrorToast('请上传 MP3、WAV 或 M4A 格式的语音文件');
-                    return;
-                }
-                
-                // 检查文件大小
-                if (file.size > 20 * 1024 * 1024) { // 20MB
-                    showErrorToast('文件大小不能超过 20MB');
-                    return;
-                }
-                
-                // 显示文件信息
-                fileName.textContent = file.name;
-                fileInfo.style.display = 'flex';
-                
-                // 启用按钮
-                extractBtn.disabled = false;
-                resetBtn.disabled = false;
-                
-                // 视觉反馈
-                voiceUploadArea.classList.add('active');
-                setTimeout(() => {
-                    voiceUploadArea.classList.remove('active');
-                }, 300);
-            }
-            
-            // 移除文件
-            removeFile.addEventListener('click', function() {
-                voiceUpload.value = '';
-                fileInfo.style.display = 'none';
-                extractBtn.disabled = true;
-                resetBtn.disabled = true;
-                copyBtn.disabled = true;
-                downloadBtn.disabled = true;
-                extractionResult.innerHTML = '<p class="placeholder-text">提炼的文本结果将在这里显示...</p>';
-            });
-            
-            // 重置按钮
-            resetBtn.addEventListener('click', function() {
-                voiceUpload.value = '';
-                fileInfo.style.display = 'none';
-                extractBtn.disabled = true;
-                resetBtn.disabled = true;
-                copyBtn.disabled = true;
-                downloadBtn.disabled = true;
-                extractionResult.innerHTML = '<p class="placeholder-text">提炼的文本结果将在这里显示...</p>';
-                
-                // 重置选项
-                languageType.value = 'zh';
-                autoSegment.checked = true;
-                keywords.checked = true;
-                emotionAnalysis.checked = false;
-                summary.checked = false;
-                
-                showSuccessToast('已重置所有设置');
-            });
-            
-            // 开始提炼
-            extractBtn.addEventListener('click', function() {
-                // 禁用按钮防止重复点击
-                extractBtn.disabled = true;
-                
-                // 显示加载状态，添加动画效果
-                extractionResult.innerHTML = `
-                    <div class="loading-text">
-                        <svg class="loading-spinner" width="20" height="20" viewBox="0 0 24 24" style="margin-right: 10px; animation: spin 1s linear infinite;">
-                            <circle cx="12" cy="12" r="10" stroke="var(--accent-color)" stroke-width="3" fill="none" stroke-dasharray="60" stroke-dashoffset="0"></circle>
-                        </svg>
-                        正在提炼文本，请稍候...
-                    </div>
-                `;
-                
-                // 添加旋转动画样式
-                const style = document.createElement('style');
-                style.textContent = `
-                    @keyframes spin {
-                        from { transform: rotate(0deg); }
-                        to { transform: rotate(360deg); }
-                    }
-                `;
-                document.head.appendChild(style);
-                
-                // 模拟提炼过程
-                setTimeout(() => {
-                    // 获取选中的选项
-                    const isEmotionAnalysis = emotionAnalysis.checked;
-                    const isSummaryGeneration = summary.checked;
-                    
-                    // 构建结果HTML
-                    let resultHtml = `
-                        <div class="text-result">
-                            <h4>语音转文字结果</h4>
-                            <p>各位尊敬的客户，欢迎收听本期的产品介绍会。今天我要为大家介绍的是我们公司最新推出的智能办公解决方案，它集成了文档处理、数据分析和团队协作等多种功能。</p>
-                            <p>首先，这款解决方案最大的优势在于它的智能化程度非常高。通过AI技术，系统能够自动识别文档中的关键信息，生成数据分析报告，大大提高了工作效率。</p>
-                            <p>其次，在安全性方面，我们采用了业界领先的加密技术，确保您的数据安全不受威胁。同时，多端同步功能让您可以在任何设备上无缝办公。</p>
-                            
-                            <h4>关键词提取</h4>
-                            <p class="keywords-list">• 智能办公解决方案 • AI技术 • 数据安全 • 多端同步 • 工作效率</p>
-                    `;
-                    
-                    // 添加情感分析结果
-                    if (isEmotionAnalysis) {
-                        resultHtml += `
-                            <h4>情感分析</h4>
-                            <p>整体情感倾向：积极正面</p>
-                            <p>主要情感标签：专业、热情、自信</p>
-                        `;
-                    }
-                    
-                    // 添加摘要生成结果
-                    if (isSummaryGeneration) {
-                        resultHtml += `
-                            <h4>内容摘要</h4>
-                            <p>本次产品介绍会主要推荐了一款集成了文档处理、数据分析和团队协作功能的智能办公解决方案。该方案通过AI技术提高工作效率，采用高级加密技术确保数据安全，并支持多端同步办公。</p>
-                        `;
-                    }
-                    
-                    resultHtml += '</div>';
-                    extractionResult.innerHTML = resultHtml;
-                    copyBtn.disabled = false;
-                    downloadBtn.disabled = false;
-                    showSuccessToast('文本提炼完成');
-                    
-                    // 清理动画样式
-                    document.head.removeChild(style);
-                }, 2500);
-            });
-            
-            // 复制文本
-            copyBtn.addEventListener('click', function() {
-                // 获取文本内容
-                const textContent = extractionResult.innerText;
-                
-                // 使用现代的复制API
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(textContent).then(() => {
-                        showSuccessToast('文本已复制到剪贴板');
-                    }).catch(() => {
-                        showErrorToast('复制失败，请手动复制');
-                    });
-                } else {
-                    // 回退方案
-                    const tempTextArea = document.createElement('textarea');
-                    tempTextArea.value = textContent;
-                    document.body.appendChild(tempTextArea);
-                    tempTextArea.select();
-                    
-                    try {
-                        document.execCommand('copy');
-                        showSuccessToast('文本已复制到剪贴板');
-                    } catch (err) {
-                        showErrorToast('复制失败，请手动复制');
-                    }
-                    
-                    document.body.removeChild(tempTextArea);
-                }
-            });
-            
-            // 下载文本
-            downloadBtn.addEventListener('click', function() {
-                // 获取文本内容
-                const textContent = extractionResult.innerText;
-                
-                // 创建Blob对象
-                const blob = new Blob([textContent], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                
-                // 创建下载链接
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = '语音提炼结果.txt';
-                document.body.appendChild(a);
-                a.click();
-                
-                // 清理
-                setTimeout(() => {
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                }, 0);
-                
-                showSuccessToast('文本已开始下载');
-            });
-        });
-    </script>
 </body>
 </html>

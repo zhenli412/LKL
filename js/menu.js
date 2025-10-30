@@ -82,6 +82,14 @@ function initMenuToggle() {
                 }
             });
             
+            // 收起当前一级菜单下的其他二级菜单
+            const siblingLevel2 = parentLevel1.querySelectorAll('.nav-item.level-2');
+            siblingLevel2.forEach(level2 => {
+                if (level2 !== currentLevel2) {
+                    level2.classList.remove('expanded');
+                }
+            });
+            
             // 确保当前父级一级菜单是展开的
             parentLevel1.classList.add('expanded');
             
