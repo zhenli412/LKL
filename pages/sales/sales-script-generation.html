@@ -350,6 +350,177 @@
                 flex-direction: column;
             }
         }
+
+        /* 聊天对话窗口样式 */
+        .chat-container {
+            margin-top: 24px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+
+        .chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 16px 16px 0px 3px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 16px;
+            min-height: 150px;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+        }
+
+        .chat-message.assistant {
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin: 0 8px;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .assistant-avatar {
+            background-color: #f0f7ff;
+            border: 1px solid var(--primary-color);
+        }
+
+        .user-avatar {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .chat-message-content {
+            max-width: calc(80% - 44px);
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
+            word-wrap: break-word;
+        }
+
+        .chat-message.user .chat-message-content {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.assistant .chat-message-content {
+            background-color: white;
+            color: var(--text-color);
+            border-bottom-left-radius: 4px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* 调整后的聊天输入容器样式 */
+        .chat-input-container {
+            display: flex;
+            position: relative;
+            width: 100%;
+        }
+
+        .chat-input {
+            flex: 1;
+            min-height: 60px;
+            max-height: 120px;
+            padding: 12px 80px 12px 16px; /* 右侧留出按钮空间 */
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            resize: vertical;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 调整后的发送按钮样式（位于输入框内） */
+        .chat-send-btn {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            width: 64px;
+            height: 36px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-send-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .chat-send-btn:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        /* 扩展按钮 - 位于输入框内左侧 */
+        .chat-extend-btn {
+            position: absolute;
+            left: 8px;
+            bottom: 8px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .extend-btn {
+            width: 36px;
+            height: 36px;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 16px;
+        }
+
+        .extend-btn:hover {
+            background-color: var(--secondary-color);
+        }
         
         /* 单行输入框样式 */
         .input-section input[type="text"],
@@ -437,6 +608,28 @@
                             <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
                                 <span style="font-size: 18px;">📝</span>
                             </button>
+                        </div>
+                        
+                        <!-- 聊天对话窗口 -->
+                        <div class="chat-container">
+                            <div class="chat-header">
+                                <h3>对话交流</h3>
+                            </div>
+                            <div class="chat-messages" id="chat-messages">
+                <div class="chat-message assistant">
+                    <div class="chat-avatar assistant-avatar">Ali</div>
+                    <div class="chat-message-content">
+                        您好！我是销售话术助手。请告诉我您对生成的话术有什么具体需求或修改建议，我可以为您进一步优化。
+                    </div>
+                </div>
+            </div>
+                            <div class="chat-input-container">
+                                <!-- 扩展按钮组 -->
+                                <!-- 输入框 -->
+                                <textarea class="chat-input" id="chat-input" placeholder="请输入您的需求或问题..."></textarea>
+                                <!-- 发送按钮（位于输入框内） -->
+                                <button class="chat-send-btn" id="chat-send-btn">发送</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -593,29 +786,113 @@
             URL.revokeObjectURL(url);
         }
         
+        // 聊天功能相关函数
+        function addMessage(role, content) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', role);
+            
+            // 添加头像
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = `chat-avatar ${role}-avatar`;
+            avatarDiv.textContent = role === 'user' ? 'U' : 'A';
+            
+            const contentElement = document.createElement('div');
+            contentElement.classList.add('chat-message-content');
+            contentElement.textContent = content;
+            
+            messageElement.appendChild(avatarDiv);
+            messageElement.appendChild(contentElement);
+            chatMessages.appendChild(messageElement);
+            
+            // 自动滚动到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function handleChatSubmit() {
+            const chatInput = document.getElementById('chat-input');
+            const userMessage = chatInput.value.trim();
+            
+            if (userMessage === '') return;
+            
+            // 添加用户消息
+            addMessage('user', userMessage);
+            chatInput.value = '';
+            
+            // 禁用发送按钮
+            const chatSendBtn = document.getElementById('chat-send-btn');
+            chatSendBtn.disabled = true;
+            
+            // 模拟助手回复
+            setTimeout(() => {
+                let assistantReply = '';
+                
+                // 根据用户输入内容生成不同的回复
+                if (userMessage.includes('修改') || userMessage.includes('优化')) {
+                    assistantReply = '我已经根据您的建议优化了话术内容。新的话术更加突出产品优势，并针对目标客户群体进行了调整。您可以继续提供反馈。';
+                } else if (userMessage.includes('示例') || userMessage.includes('案例')) {
+                    assistantReply = '以下是一个示例：\n"您好，我是[公司名称]的[您的姓名]。我们专为[目标群体]提供[产品/服务]，已经帮助[类似客户]提升了[具体成效]。您在这方面有什么需求或挑战吗？"';
+                } else if (userMessage.includes('价格') || userMessage.includes('成本')) {
+                    assistantReply = '关于价格相关的话术，建议您可以强调产品的投资回报率、长期价值以及与竞争对手相比的优势。例如："虽然我们的产品初期投入可能略高，但考虑到它能为您节省的运营成本和提升的效率，投资回收期通常在[X]个月内。"';
+                } else {
+                    assistantReply = '感谢您的反馈！根据您的需求，我已经为您调整了话术内容。您可以尝试使用这些话术与客户沟通，如有其他需求请随时告诉我。';
+                }
+                
+                addMessage('assistant', assistantReply);
+                chatSendBtn.disabled = false;
+            }, 1000);
+        }
+        
         // 初始化事件监听和导航组件
         document.addEventListener('DOMContentLoaded', function() {
             // 使用统一的导航加载函数
             loadNavigation('../../', 'sales', 'sales/sales-script-generation.html');
             
             // 生成按钮点击事件
-            document.getElementById('generate-btn').addEventListener('click', function() {
-                generateScript();
+            document.querySelector('.action-button.primary').addEventListener('click', function() {
+                // 这里可以实现实际的话术生成逻辑
+                const resultContent = document.querySelector('.result-content');
+                resultContent.innerHTML = `
+                    <div class="script-content">
+                        <h5>生成的销售话术</h5>
+                        <p>您好！我是[您的姓名]，来自[公司名称]。我们是专注于为[目标群体]提供[产品/服务]的专业团队。</p>
+                        <p>我们的[产品/服务]具有[核心卖点]，能够帮助像您这样的客户有效解决[问题]，提升[效果]。</p>
+                        <p>相比市场上的其他解决方案，我们的优势在于[差异化优势]。不知道您目前在这方面有什么需求或挑战吗？</p>
+                    </div>
+                    <!-- 添加个人知识库按钮 -->
+                    <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                        <span style="font-size: 18px;">📝</span>
+                    </button>
+                `;
             });
             
             // 重置按钮点击事件
-            document.getElementById('reset-btn').addEventListener('click', function() {
-                resetForm();
+            document.querySelector('.action-button.secondary').addEventListener('click', function() {
+                document.getElementById('product-name').value = '';
+                document.getElementById('selling-point').value = '';
+                document.getElementById('target-group').value = '';
+                document.getElementById('competitors').value = '';
+                document.getElementById('script-type').selectedIndex = 0;
+                
+                const resultContent = document.querySelector('.result-content');
+                resultContent.innerHTML = `
+                    <p class="placeholder-text">话术生成结果将显示在这里...</p>
+                    <!-- 添加个人知识库按钮 -->
+                    <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                        <span style="font-size: 18px;">📝</span>
+                    </button>
+                `;
             });
             
-            // 复制按钮点击事件
-            document.getElementById('copy-btn').addEventListener('click', function() {
-                copyToClipboard();
-            });
+            // 聊天发送按钮点击事件
+            document.getElementById('chat-send-btn').addEventListener('click', handleChatSubmit);
             
-            // 下载按钮点击事件
-            document.getElementById('download-btn').addEventListener('click', function() {
-                downloadScript();
+            // 聊天输入框回车发送（按住Shift+Enter换行）
+            document.getElementById('chat-input').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleChatSubmit();
+                }
             });
         });    
     </script>
