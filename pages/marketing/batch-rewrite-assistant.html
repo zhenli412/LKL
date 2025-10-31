@@ -6,394 +6,717 @@
     <title>批量二创助手 - 利客来</title>
     <link rel="stylesheet" href="../../css/style.css">
     <style>
-        /* 定义CSS变量，便于统一管理样式 */
+        /* CSS变量定义 */
         :root {
-            --primary-color: #1890ff;
-            --primary-hover: #40a9ff;
-            --border-color: #e8e8e8;
-            --text-primary: #262626;
-            --text-secondary: #595959;
-            --text-tertiary: #8c8c8c;
-            --bg-primary: #ffffff;
-            --bg-secondary: #fafafa;
-            --bg-hover: #f5f5f5;
-            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.06);
-            --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --border-radius: 8px;
             --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
         }
-        
+
         /* 左右对比布局 */
         .comparison-layout {
-            display: flex;
-            gap: 24px;
-            max-width: 1400px;
-            margin: 0 auto;
-            background-color: var(--bg-secondary);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            box-shadow: var(--shadow-light);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
         }
-        
-        @media (max-width: 768px) {
-            .comparison-layout {
-                flex-direction: column;
-                padding: 16px;
-                margin: 0 16px;
-            }
-        }
-        
+
+        /* 面板样式 */
         .comparison-panel {
-            flex: 1;
-            background-color: var(--bg-primary);
+            background-color: var(--white);
             border-radius: var(--border-radius);
-            box-shadow: var(--shadow-light);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            border: 1px solid #e8e8e8;
         }
-        
-        .panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-primary);
+
+        /* 输出面板样式 */
+        .output-panel {
+            
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
-        
-        .panel-title {
-            font-size: 16px;
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--text-primary);
-            margin: 0;
         }
-        
-        .panel-content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            min-height: 300px;
-        }
-        
-        .panel-footer {
-            padding: 16px 20px;
-            border-top: 1px solid var(--border-color);
-            background-color: var(--bg-primary);
-        }
-        
+
         /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
         .input-section label {
             display: block;
             margin-bottom: 8px;
-            font-size: 14px;
             font-weight: 500;
-            color: var(--text-primary);
+            color: var(--text-color);
         }
-        
+
+        /* 文本输入框样式 - 参考结构分析助手页面 */
         .input-section textarea {
             width: 100%;
-            min-height: 120px;
             padding: 12px;
-            font-size: 14px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
+            font-size: 14px;
+            font-family: inherit;
             resize: vertical;
             transition: var(--transition);
-            background-color: var(--bg-primary);
-            font-family: inherit;
+            box-sizing: border-box;
+            min-height: 120px;
         }
-        
+
         .input-section textarea:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
         }
-        
-        /* 文件上传样式 */
-        .file-upload-section {
-            position: relative;
-            margin: 16px 0;
+        .required {
+        color: var(--error-color);
+        font-weight: normal;
         }
-        
-        .file-upload-section input[type="file"] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
+
+        /* 声音选项样式 - 一行显示2个 */
+        .voice-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .voice-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             cursor: pointer;
-            z-index: 2;
+            transition: border-color 0.3s ease;
         }
-        
-        .file-upload-section button {
-            width: 100%;
+
+        .voice-option:hover {
+            border-color: var(--primary-color);
         }
-        
-        .hint-text {
+
+        .voice-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .voice-option span {
+            flex: 1;
+        }
+
+        .play-voice-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+        }
+
+        /* 文件上传标签样式 */
+        .file-upload-label {
+            display: block;
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            background-color: #fafafa;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-label:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.04);
+        }
+
+        .file-upload-label input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label span {
+            font-size: 24px;
+        }
+
+        .file-upload-label div:first-of-type {
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .file-upload-label div:last-of-type {
+            margin-top: 4px;
             font-size: 12px;
-            color: var(--text-tertiary);
-            margin: 8px 0 0;
+            color: var(--text-light);
+        }
+
+        /* 场景选项样式 */
+        .scene-options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .scene-option {
+            cursor: pointer;
+            border: 2px solid transparent;
+            padding: 5px;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+
+        .scene-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .scene-option input[type="radio"] {
+            display: none;
+        }
+
+        .scene-option-content {
+            text-align: center;
+            position: relative;
         }
         
-        /* 选项组样式 */
+        /* 场景选中标记样式 */
+        .scene-check-mark {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background-color: var(--success-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
+        }
+        
+        .scene-check-mark::after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .scene-option input[type="radio"]:checked + .scene-option-content .scene-check-mark {
+            opacity: 1;
+        }
+        
+        /* 选中状态边框和背景 */
+        .scene-option input[type="radio"]:checked + .scene-option-content {
+            border-color: var(--success-color);
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+        
+
+        .scene-option-image {
+            background-color: #f0f0f0;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+
+        .scene-option-text {
+            display: block;
+            font-size: 14px;
+        }
+
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
         .option-group {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-bottom: 16px;
         }
-        
+
         .option-group label {
             display: flex;
             align-items: center;
-            font-size: 14px;
-            color: var(--text-secondary);
             cursor: pointer;
-            user-select: none;
+            font-size: 14px;
         }
-        
+
         .option-group input[type="checkbox"] {
             margin-right: 8px;
-            cursor: pointer;
         }
-        
-        /* 参数设置样式 */
-        .parameter-group {
-            margin-bottom: 16px;
-        }
-        
-        .parameter-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-        
-        .parameter-group select {
-            width: 100%;
-            padding: 8px 12px;
-            font-size: 14px;
-            border: 1px solid var(--border-color);
+
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
             border-radius: var(--border-radius);
-            transition: var(--transition);
-            background-color: var(--bg-primary);
-        }
-        
-        .parameter-group select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-        }
-        
-        /* 按钮样式 */
-        .action-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 20px;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: var(--border-radius);
+            padding: 32px;
+            text-align: center;
             cursor: pointer;
             transition: var(--transition);
-            border: 1px solid transparent;
-            min-height: 36px;
-        }
-        
-        .action-button.primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .action-button.primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-medium);
-        }
-        
-        .action-button.primary:active {
-            transform: translateY(0);
-        }
-        
-        .action-button.secondary {
-            background-color: var(--bg-primary);
-            color: var(--text-secondary);
-            border-color: var(--border-color);
-        }
-        
-        .action-button.secondary:hover {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-            background-color: var(--bg-primary);
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        @media (max-width: 768px) {
-            .button-group {
-                flex-direction: column;
-            }
-            
-            .action-button {
-                width: 100%;
-            }
-        }
-        
-        /* 结果显示样式 */
-        .result-content {
-            min-height: 300px;
-            background-color: var(--bg-secondary);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            transition: var(--transition);
-            overflow-y: auto;
-        }
-        
-        .result-content.loading {
+            background-color: #fafafa;
+            min-height: 180px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-color: rgba(24, 144, 255, 0.05);
+        }
+
+        .file-upload-area:hover,
+        .file-upload-area.active {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.04);
+        }
+
+        .file-upload-area input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .file-upload-area:hover .upload-icon {
+            opacity: 0.8;
+        }
+
+        .upload-text {
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .upload-text div:first-child {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .upload-text div:last-child {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* 文件信息样式 */
+        .file-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .file-name {
+            color: var(--text-color);
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            margin-right: 12px;
+        }
+
+        .remove-file {
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .remove-file:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        /* 提炼选项样式 */
+        .extraction-options {
+            margin-bottom: 24px;
+        }
+
+        .extraction-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .option-item label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-right: 12px;
+            min-width: 100px;
+        }
+
+        .option-item select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option-item select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .action-button.small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
+            margin: 0;
+        }
+
+        .result-header h4 {
+            margin: 0;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .result-content {
+            flex: 1;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 文本结果样式 */
+        .text-result {
+            color: var(--text-color);
+        }
+
+        .text-result h4 {
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .text-result p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .input-section input[type="text"],
+        .input-section input[type="number"],
+        .input-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
         }
         
+
+
+        /* 占位符文本样式 */
         .placeholder-text {
-            color: var(--text-tertiary);
-            font-size: 14px;
             text-align: center;
+            color: var(--text-light);
+            font-style: italic;
             margin: 0;
             padding: 40px 0;
         }
-        
-        /* 二创结果样式 */
-        .rewrite-summary {
-            background-color: var(--bg-primary);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            border: 1px solid var(--border-color);
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
-        
-        .rewrite-summary h5 {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0 0 12px;
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-        
-        .rewritten-content {
-            background-color: var(--bg-secondary);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
-        
-        .rewritten-content p {
-            margin: 8px 0;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-        
-        .original-compare {
-            border-top: 1px solid var(--border-color);
-            padding-top: 16px;
-        }
-        
-        /* 加载动画 */
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .loading-spinner {
-            width: 30px;
-            height: 30px;
-            border: 3px solid rgba(24, 144, 255, 0.2);
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
-        
+
         /* 使用指南样式 */
         .usage-guide {
-            max-width: 1400px;
-            margin: 24px auto 40px;
-            padding: 20px 24px;
-            background-color: var(--bg-primary);
+            background-color: var(--white);
             border-radius: var(--border-radius);
-            box-shadow: var(--shadow-light);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
         }
-        
+
         .usage-guide h3 {
-            font-size: 16px;
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--text-primary);
-            margin: 0 0 16px 0;
         }
-        
+
         .usage-guide ul {
-            list-style: none;
-            padding: 0;
             margin: 0;
+            padding-left: 20px;
         }
-        
+
         .usage-guide li {
-            position: relative;
-            padding-left: 24px;
-            margin-bottom: 12px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
+            margin-bottom: 8px;
+            color: var(--text-color);
         }
-        
-        .usage-guide li::before {
-            content: "•";
-            position: absolute;
-            left: 8px;
-            color: var(--primary-color);
-            font-size: 16px;
-        }
-        
-        /* 右侧操作按钮组 */
-        .result-actions {
-            display: flex;
-            gap: 8px;
-        }
-        
-        @media (max-width: 768px) {
-            .result-actions {
-                flex-direction: column;
-                width: 100%;
-                margin-top: 12px;
-            }
-        }
-        
-        /* 成功提示 */
+
+        /* 成功提示组件 */
         .success-toast {
             position: fixed;
-            bottom: 20px;
+            top: 20px;
             right: 20px;
-            background-color: #52c41a;
-            color: white;
-            padding: 12px 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
             border-radius: var(--border-radius);
-            box-shadow: var(--shadow-medium);
-            font-size: 14px;
+            box-shadow: var(--shadow-lg);
             z-index: 1000;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        
+
         .success-toast.show {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -417,240 +740,58 @@
                 <h2>批量二创助手</h2>
                 <p>智能批量处理内容二次创作，提升内容产出效率和原创度</p>
             </div>
-            
             <div class="page-content">
-                <!-- 左右对比布局 -->
                 <div class="comparison-layout">
-                    <!-- 左侧面板 - 参数设置 -->
-                    <div class="comparison-panel">
-                        <div class="panel-header">
-                            <h3 class="panel-title">内容输入与设置</h3>
+                    <div class="comparison-panel input-panel">
+                        <h3>要裂变二创文案</h3>
+                        <div class="input-section">
+                            <label for="original-text">输入原始文案 <span class="required">*</span></label>
+                            <textarea id="original-text" placeholder="请输入需要裂变二创的原始文案..." rows="10"></textarea>
                         </div>
-                        <div class="panel-content">
-                            <div class="input-section">
-                                <label for="content-input">输入内容或上传文件</label>
-                                <textarea id="content-input" placeholder="请在此粘贴需要二次创作的内容，或通过文件上传批量处理..."></textarea>
-                                 
-                                <div class="file-upload-section">
-                                    <input type="file" id="file-upload" accept=".txt,.csv,.xlsx">
-                                    <button id="upload-btn" class="action-button secondary">上传文件</button>
-                                </div>
-                                <p class="hint-text">支持TXT、CSV、XLSX格式，可批量处理多条内容</p>
-                            </div>
-                            
-                            <h4 style="margin-top: 24px; margin-bottom: 16px; font-size: 16px; font-weight: 600; color: var(--text-primary);">二创选项</h4>
-                            <div class="option-group">
-                                <label><input type="checkbox" checked> 保持原意</label>
-                                <label><input type="checkbox" checked> 提升原创度</label>
-                                <label><input type="checkbox"> 调整风格</label>
-                                <label><input type="checkbox"> 扩展内容</label>
-                            </div>
-                            
-                            <div class="parameter-group">
-                                <label>内容风格</label>
-                                <select id="content-style">
-                                    <option value="professional">专业严谨</option>
-                                    <option value="casual">轻松随意</option>
-                                    <option value="persuasive">说服力强</option>
-                                    <option value="creative">创意丰富</option>
-                                </select>
-                            </div>
+                        <div class="input-section">
+                            <label for="batch-count">输入生成数量 <span class="required">*</span></label>
+                            <input type="number" id="batch-count" min="1" max="100" placeholder="请输入生成数量">
                         </div>
-                        <div class="panel-footer">
-                            <div class="button-group">
-                                <button id="rewrite-btn" class="action-button primary">开始二创</button>
-                                <button id="clear-btn" class="action-button secondary">清空</button>
-                            </div>
+                        <div class="action-buttons">
+                            <button class="action-button primary">批量生成二创文案</button>
+                            <button class="action-button secondary">清空</button>
                         </div>
                     </div>
-                    
-                    <!-- 右侧面板 - 生成结果 -->
-                    <div class="comparison-panel">
-                        <div class="panel-header">
-                            <h3 class="panel-title">二创结果</h3>
-                            <div class="result-actions">
-                                <button id="copy-btn" class="action-button secondary" disabled>复制文本</button>
-                                <button id="download-btn" class="action-button secondary" disabled>下载结果</button>
-                            </div>
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>批量二创结果</h3>
                         </div>
-                        <div class="panel-content">
-                            <div id="rewrite-result" class="result-content">
-                                <p class="placeholder-text">二创结果将显示在这里...</p>
-                            </div>
+                        <div class="result-content" style="position: relative;">
+                            <p class="placeholder-text">二创结果将显示在这里...</p>
+                            <button class="btn btn-primary" onclick="showSuccessToast()" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
                         </div>
                     </div>
                 </div>
-                
             </div>
-            
-            <!-- 使用指南区域 - 移至功能操作区下方 -->
+
+            <!-- 使用指南区域 -->
             <div class="help-section">
                 <h3>使用指南</h3>
                 <div class="help-item">
-                    <strong>1. 输入内容：</strong>粘贴需要二次创作的内容或上传包含多条内容的文件
+                    <strong>1. 输入原始文案：</strong>在左侧输入框中填写需要裂变二创的原始文案内容
                 </div>
                 <div class="help-item">
-                    <strong>2. 设置参数：</strong>选择二创选项和内容风格
+                    <strong>2. 设置生成数量：</strong>输入您需要生成的二创文案数量（1-100之间）
                 </div>
                 <div class="help-item">
-                    <strong>3. 开始二创：</strong>点击「开始二创」按钮进行处理
+                    <strong>3. 生成批量二创：</strong>点击「生成批量二创」按钮获取多个二创结果
                 </div>
                 <div class="help-item">
-                    <strong>4. 查看结果：</strong>等待处理完成后查看二创结果
+                    <strong>4. 查看结果：</strong>右侧面板将显示生成的所有二创文案结果
                 </div>
                 <div class="help-item">
-                    <strong>5. 导出结果：</strong>可复制单条结果或下载完整结果文件
+                    <strong>5. 保存结果：</strong>可以将二创结果添加到个人知识库中
                 </div>
             </div>
         </main>
     </div>
     
-    <!-- 成功提示组件 -->
-    <div id="success-toast" class="success-toast">操作成功</div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 获取DOM元素
-            const fileUpload = document.getElementById('file-upload');
-            const uploadBtn = document.getElementById('upload-btn');
-            const clearBtn = document.getElementById('clear-btn');
-            const contentInput = document.getElementById('content-input');
-            const rewriteResult = document.getElementById('rewrite-result');
-            const rewriteBtn = document.getElementById('rewrite-btn');
-            const copyBtn = document.getElementById('copy-btn');
-            const downloadBtn = document.getElementById('download-btn');
-            const successToast = document.getElementById('success-toast');
-            
-            // 显示成功提示
-            function showToast(message) {
-                successToast.textContent = message;
-                successToast.classList.add('show');
-                setTimeout(() => {
-                    successToast.classList.remove('show');
-                }, 3000);
-            }
-            
-            // 文件上传功能
-            uploadBtn.addEventListener('click', function() {
-                fileUpload.click();
-            });
-            
-            fileUpload.addEventListener('change', function() {
-                if (this.files.length > 0) {
-                    const fileName = this.files[0].name;
-                    uploadBtn.textContent = fileName;
-                    uploadBtn.classList.add('primary');
-                    uploadBtn.classList.remove('secondary');
-                    showToast(`文件 ${fileName} 已上传`);
-                }
-            });
-            
-            // 清空按钮功能
-            clearBtn.addEventListener('click', function() {
-                contentInput.value = '';
-                rewriteResult.innerHTML = '<p class="placeholder-text">二创结果将显示在这里...</p>';
-                fileUpload.value = '';
-                uploadBtn.textContent = '上传文件';
-                uploadBtn.classList.remove('primary');
-                uploadBtn.classList.add('secondary');
-                copyBtn.disabled = true;
-                downloadBtn.disabled = true;
-            });
-            
-            // 二创按钮功能
-            rewriteBtn.addEventListener('click', function() {
-                if (!contentInput.value.trim() && fileUpload.files.length === 0) {
-                    showToast('请输入内容或上传文件');
-                    return;
-                }
-                
-                // 显示加载状态
-                rewriteResult.innerHTML = '';
-                rewriteResult.classList.add('loading');
-                
-                const spinner = document.createElement('div');
-                spinner.className = 'loading-spinner';
-                
-                const loadingText = document.createElement('p');
-                loadingText.className = 'placeholder-text';
-                loadingText.textContent = '正在进行内容二次创作，请稍候...';
-                
-                rewriteResult.appendChild(spinner);
-                rewriteResult.appendChild(loadingText);
-                
-                // 禁用生成按钮防止重复点击
-                rewriteBtn.disabled = true;
-                rewriteBtn.style.opacity = '0.6';
-                
-                // 模拟处理过程
-                setTimeout(function() {
-                    // 移除加载状态
-                    rewriteResult.classList.remove('loading');
-                    
-                    const contentStyle = document.getElementById('content-style').options[document.getElementById('content-style').selectedIndex].text;
-                    
-                    rewriteResult.innerHTML = `<div class="rewrite-summary">
-` +
-                        `<h5>二创结果 (${contentStyle}风格)</h5>
-` +
-                        `<div class="rewritten-content">
-` +
-                        `<p>这是一段经过二次创作后的内容示例。原文经过智能处理，在保持核心信息不变的前提下，</p>
-` +
-                        `<p>调整了表达方式和语言结构，提升了内容的原创度和吸引力。</p>
-` +
-                        `<p>新的表述更加符合${contentStyle}的风格特点，适合在不同的平台上发布使用。</p>
-` +
-                        `</div>
-` +
-                        `<div class="original-compare">
-` +
-                        `<h5>原文对比</h5>
-` +
-                        `<p>这是原始内容的简要展示，可以与二创结果进行对比参考。</p>
-` +
-                        `</div>
-` +
-                        `</div>`;
-                    
-                    // 启用操作按钮
-                    copyBtn.disabled = false;
-                    downloadBtn.disabled = false;
-                    
-                    // 重新启用生成按钮
-                    rewriteBtn.disabled = false;
-                    rewriteBtn.style.opacity = '1';
-                    
-                    showToast('内容二创完成');
-                }, 2000);
-            });
-            
-            // 复制按钮功能
-            copyBtn.addEventListener('click', function() {
-                if (!copyBtn.disabled) {
-                    const resultText = rewriteResult.innerText;
-                    if (resultText && !resultText.includes('二创结果将显示在这里') && !resultText.includes('正在进行内容二次创作')) {
-                        navigator.clipboard.writeText(resultText).then(function() {
-                            showToast('文本已复制到剪贴板');
-                        }).catch(function() {
-                            showToast('复制失败，请手动复制');
-                        });
-                    }
-                }
-            });
-            
-            // 下载按钮功能
-            downloadBtn.addEventListener('click', function() {
-                if (!downloadBtn.disabled) {
-                    showToast('正在准备下载，请稍候...');
-                    
-                    // 模拟下载过程
-                    setTimeout(() => {
-                        showToast('下载开始');
-                    }, 1000);
-                }
-            });
-        });
-    </script>
 </body>
 </html>

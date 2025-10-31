@@ -33,7 +33,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: var(--panel-gap);
-            margin-bottom: 30px;
         }
 
         /* 面板样式 */
@@ -42,7 +41,6 @@
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-md);
             padding: var(--panel-padding);
-            height: fit-content;
             min-height: 500px;
         }
 
@@ -50,12 +48,14 @@
         .input-panel {
             display: flex;
             flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
         /* 输出面板样式 */
         .output-panel {
             display: flex;
             flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
         /* 面板标题样式 */
@@ -97,8 +97,263 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .input-section select,
-        .input-section input[type="text"] {
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
+            margin: 0;
+        }
+
+        .result-content {
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* 单行输入框样式 */
+        .input-section input[type="text"],
+        .input-section select {
             width: 100%;
             padding: 10px 16px;
             border: 1px solid var(--border-color);
@@ -108,151 +363,11 @@
             transition: var(--transition);
         }
 
-        .input-section select:focus,
-        .input-section input[type="text"]:focus {
+        .input-section input[type="text"]:focus,
+        .input-section select:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        /* 选项组样式 */
-        .options-group {
-            margin-bottom: 24px;
-        }
-
-        .options-group h4 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: var(--text-color);
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        .option-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .option-item input[type="checkbox"] {
-            margin-right: 10px;
-            width: 18px;
-            height: 18px;
-        }
-
-        /* 按钮样式 */
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: auto;
-            padding-top: 20px;
-        }
-
-        .action-button {
-            padding: 12px 24px;
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .action-button.primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .action-button.primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .action-button.secondary {
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-        }
-
-        .action-button.secondary:hover {
-            background-color: #e5e7eb;
-        }
-
-        .action-button.small {
-            padding: 8px 16px;
-            font-size: 14px;
-        }
-
-        /* 结果区域样式 */
-        .result-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .result-controls {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .result-output {
-            flex: 1;
-            padding: 16px;
-            background-color: var(--secondary-color);
-            border-radius: var(--border-radius);
-            min-height: 300px;
-            overflow-y: auto;
-        }
-
-        .result-section {
-            margin-bottom: 20px;
-        }
-
-        .result-section h4 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        /* 帮助区域样式 */
-        .help-section {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-md);
-            padding: var(--panel-padding);
-            margin-bottom: 30px;
-        }
-
-        .help-section h3 {
-            margin-top: 0;
-            margin-bottom: 16px;
-            color: var(--text-color);
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .help-item {
-            margin-bottom: 12px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .help-item:before {
-            content: "•";
-            color: var(--primary-color);
-            font-weight: bold;
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .comparison-layout {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -268,105 +383,85 @@
         <!-- 主内容区域 -->
         <main class="content">
             <div class="page-header">
-                <h1>销冠话术生成助手</h1>
+                <h2>销冠话术生成助手</h2>
                 <p>基于行业经验和销售数据，快速生成高效的销售话术，提升转化率</p>
             </div>
             
             <div class="page-content">
-                
+                <!-- 左右对比布局 -->
                 <div class="comparison-layout">
                     <!-- 左侧输入面板 -->
                     <div class="comparison-panel input-panel">
-                        <h3>话术设置</h3>
-                        
+                        <div class="result-header">
+                        <h3>销冠信息配置</h3>
+                        </div>
                         <div class="input-section">
-                            <label for="product-name">产品/服务名称</label>
+                            <label for="product-name">产品或服务名称</label>
                             <input type="text" id="product-name" placeholder="请输入产品或服务名称">
                         </div>
-
                         <div class="input-section">
-                            <label for="industry">所属行业</label>
-                            <select id="industry">
-                                <option value="">请选择行业</option>
-                                <option value="tech">科技</option>
-                                <option value="finance">金融</option>
-                                <option value="education">教育</option>
-                                <option value="health">医疗健康</option>
-                                <option value="retail">零售</option>
-                                <option value="other">其他</option>
+                            <label for="selling-point">核心卖点</label>
+                            <input type="text" id="selling-point" placeholder="请输入产品或服务的核心卖点">
+                        </div>
+                        <div class="input-section">
+                            <label for="target-group">目标群体</label>
+                            <input type="text" id="target-group" placeholder="请输入目标客户群体">
+                        </div>
+                        <div class="input-section">
+                            <label for="competitors">竞争对手</label>
+                            <input type="text" id="competitors" placeholder="请输入主要竞争对手">
+                        </div>
+                        <div class="input-section">
+                            <label for="script-type">话术类型</label>
+                            <select id="script-type">
+                                <option value="opening">开场白</option>
+                                <option value="product-intro">产品介绍</option>
+                                <option value="objection-handling">异议处理</option>
+                                <option value="closing">促单转化</option>
                             </select>
                         </div>
-
-                        <div class="input-section">
-                            <label for="target-audience">目标客户群体</label>
-                            <input type="text" id="target-audience" placeholder="例如：中小企业主、年轻白领等">
-                        </div>
-
-                        <div class="input-section">
-                            <label for="product-features">核心功能/卖点</label>
-                            <textarea id="product-features" placeholder="请列出产品的核心功能或卖点，每行一个" rows="4"></textarea>
-                        </div>
-
-                        <div class="input-section">
-                            <label for="competitors">主要竞争对手</label>
-                            <input type="text" id="competitors" placeholder="可选：请输入主要竞争对手的名称">
-                        </div>
-
-                        <!-- 选项组 -->
-                        <div class="options-group">
-                            <h4>话术类型（可多选）</h4>
-                            <div class="option-item">
-                                <input type="checkbox" id="option-cold-call" checked>
-                                <label for="option-cold-call">电话开场白</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="option-proposal" checked>
-                                <label for="option-proposal">产品介绍</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="option-objection" checked>
-                                <label for="option-objection">异议处理</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="option-closing" checked>
-                                <label for="option-closing">促成交易</label>
-                            </div>
-                        </div>
-
-                        <!-- 操作按钮 -->
                         <div class="action-buttons">
-                            <button id="reset-btn" class="action-button secondary">重置</button>
-                            <button id="generate-btn" class="action-button primary">生成话术</button>
+                            <button class="action-button primary">生成话术</button>
+                            <button class="action-button secondary">重置</button>
                         </div>
                     </div>
 
-                    <!-- 右侧结果面板 -->
+                    <!-- 右侧输出面板 -->
                     <div class="comparison-panel output-panel">
-                        <h3>生成结果</h3>
-                        <div class="result-controls">
-                            <button id="copy-btn" class="action-button secondary small">复制结果</button>
-                            <button id="download-btn" class="action-button secondary small">导出话术</button>
+                        <div class="result-header">
+                            <h3>话术生成结果</h3>
                         </div>
-                        
-                        <div id="result-output" class="result-output">
-                            <div class="placeholder-text">
-                                <p>请在左侧填写产品信息并点击「生成话术」按钮</p>
-                                <p>生成的销售话术将显示在这里</p>
-                            </div>
+                        <div class="result-content" style="position: relative;">
+                            <p class="placeholder-text">话术生成结果将显示在这里...</p>
+                            <!-- 添加个人知识库按钮 -->
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
                         </div>
                     </div>
-                </div>
-                
-                <!-- 帮助说明区 -->
-                <div class="help-section">
-                    <h3>使用指南</h3>
-                    <div class="help-item">填写产品名称、行业、目标客户群体等基础信息，越详细生成的话术越精准</div>
-                    <div class="help-item">核心功能/卖点是生成话术的关键，请尽可能全面地列出产品的优势</div>
-                    <div class="help-item">选择需要的话术类型，可多选</div>
-                    <div class="help-item">点击「生成话术」按钮获取结果，可复制或导出使用</div>
-                    <div class="help-item">生成的话术可根据实际情况进行调整和优化</div>
                 </div>
             </div>
+
+            <!-- 帮助说明区 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入产品信息：</strong>填写产品或服务名称、核心卖点、目标群体和竞争对手信息
+                </div>
+                <div class="help-item">
+                    <strong>2. 选择话术类型：</strong>从下拉菜单中选择需要生成的话术类型（开场白、产品介绍、异议处理、促单转化）
+                </div>
+                <div class="help-item">
+                    <strong>3. 生成话术：</strong>点击「生成话术」按钮，系统将基于输入信息生成专业的销售话术
+                </div>
+                <div class="help-item">
+                    <strong>4. 查看结果：</strong>在右侧结果面板查看生成的话术内容
+                </div>
+                <div class="help-item">
+                    <strong>5. 重置修改：</strong>如需重新输入，可点击「重置」按钮清空所有输入内容
+                </div>
+            </div>
+
         </main>
     </div>
     

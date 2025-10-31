@@ -6,454 +6,365 @@
     <title>矩阵发布助手 - 利客来</title>
     <link rel="stylesheet" href="../../css/style.css">
     <style>
-        /* CSS变量定义 */
+        /* 关键样式 - 借鉴信息提取助手页面 */
         :root {
             --primary-color: #2563eb;
             --primary-hover: #1d4ed8;
-            --secondary-color: #f3f4f6;
-            --text-color: #374151;
-            --text-light: #6b7280;
-            --border-color: #e5e7eb;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --error-color: #ef4444;
-            --white: #ffffff;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --border-radius: 8px;
-            --transition: all 0.3s ease;
-            --panel-padding: 20px;
-            --panel-gap: 24px;
-        }
 
-        /* 左右对比布局 */
-        .comparison-layout {
+            --primary-active: #1d4ed8;
+            --secondary-color: #f0f2f5;
+            --border-color: #d9d9d9;
+            --text-color: #333;
+            --text-light: #666;
+            --white: #ffffff;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --border-radius: 6px;
+            --transition: all 0.3s ease;
+            --error-color: #f5222d;
+        }
+        
+        /* 对比布局容器 */
+        .comparison-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--panel-gap);
-            margin-bottom: 30px;
+            gap: 24px;
         }
-
+        
         /* 面板样式 */
         .comparison-panel {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-md);
-            padding: var(--panel-padding);
-            height: fit-content;
-            min-height: 500px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
         }
-
-        /* 输入面板样式 */
+        
         .input-panel {
-            display: flex;
-            flex-direction: column;
+            border: 1px solid var(--border-color);
         }
-
-        /* 输出面板样式 */
+        
         .output-panel {
-            display: flex;
-            flex-direction: column;
+            border: 1px solid var(--border-color);
         }
-
-        /* 面板标题样式 */
-        .comparison-panel h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
+        
+        /* 标题样式 */
+        h2, h4, h5 {
             color: var(--text-color);
-            font-size: 1.25rem;
-            font-weight: 600;
+            margin: 0;
+        }
+        
+        h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        h3 {
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
         }
 
+        
+        h4 {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
         /* 输入区域样式 */
         .input-section {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
-
+        
         .input-section label {
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
             color: var(--text-color);
-        }
-
-        .input-section input[type="text"] {
-            width: 100%;
-            padding: 12px 16px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            font-size: 16px;
-            transition: var(--transition);
-        }
-
-        .input-section input[type="text"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .input-section textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            font-size: 16px;
-            font-family: inherit;
-            resize: vertical;
-            transition: var(--transition);
-        }
-
-        .input-section textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        /* 文件上传区域样式 */
-        .file-upload-section {
-            position: relative;
-            margin: 16px 0;
-        }
-
-        .file-upload-section input[type="file"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 1;
-        }
-
-        .file-upload-section button {
-            width: 100%;
-            padding: 10px 16px;
-            background-color: var(--secondary-color);
-            border: 1px dashed var(--border-color);
-            border-radius: var(--border-radius);
-            color: var(--text-color);
             font-size: 14px;
-            cursor: pointer;
+        }
+        
+        /* 输入框样式 */
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            background-color: white;
             transition: var(--transition);
-            text-align: center;
+            box-sizing: border-box;
         }
-
-        .file-upload-section button:hover {
-            background-color: #e5e7eb;
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
         }
-
-        .hint-text {
-            margin-top: 8px;
-            font-size: 12px;
-            color: var(--text-light);
-            font-style: italic;
+        
+        textarea {
+            resize: vertical;
+            min-height: 50px;
+            font-family: inherit;
         }
-
+        
+        /* 必填项标记 */
+        .required {
+            color: var(--error-color);
+            font-weight: normal;
+            margin-left: 4px;
+        }
+        
+        /* Radio单选项样式 */
+        input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        
         /* 平台选项样式 */
         .platform-options {
-            margin-bottom: 24px;
-        }
-
-        .platform-options h4 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            font-weight: 500;
-            color: var(--text-color);
-        }
-
-        /* 计划选项样式 */
-        .schedule-options {
-            margin-bottom: 24px;
-        }
-
-        .schedule-options h4 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            font-weight: 500;
-            color: var(--text-color);
-        }
-
-        /* 选项组样式 */
-        .option-group {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 16px;
+            margin-top: 8px;
         }
-
-        .option-group label {
-            display: flex;
+        
+        .platform-options label {
+            display: flex !important;
             align-items: center;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .option-group input[type="checkbox"] {
-            margin-right: 8px;
-        }
-
-        .option-group input[type="datetime-local"] {
-            margin-left: 8px;
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: var(--secondary-color);
             border-radius: var(--border-radius);
-            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 0 !important;
+            font-weight: normal;
         }
-
+        
+        .platform-options label:hover {
+            background-color: #e6f7ff;
+            border-color: var(--primary-color);
+        }
+        
+        .platform-options input[type="radio"] {
+            cursor: pointer;
+        }
+        
         /* 按钮样式 */
         .action-buttons {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             margin-top: auto;
-            margin-bottom: 0;
             padding-top: 20px;
             border-top: 1px solid var(--border-color);
         }
-
+        
         .action-button {
             flex: 1;
             padding: 12px 24px;
-            background-color: var(--primary-color);
-            color: var(--white);
-            border: none;
             border-radius: var(--border-radius);
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
+            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
         }
-
-        .action-button:hover {
+        
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .action-button.primary:hover:not(:disabled) {
             background-color: var(--primary-hover);
         }
-
+        
+        .action-button.primary:active:not(:disabled) {
+            background-color: var(--primary-active);
+        }
+        
+        .action-button.secondary {
+            background-color: white;
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+        }
+        
+        .action-button.secondary:hover:not(:disabled) {
+            color: var(--secondary-color);
+            border-color: var(var(--secondary-color));
+        }
+        
+        .action-button.secondary:active:not(:disabled) {
+            color: var(--secondary-active);
+            border-color: var(--secondary-active);
+        }
+        
         .action-button:disabled {
-            background-color: var(--text-light);
+            opacity: 0.6;
             cursor: not-allowed;
         }
-
-        .secondary-btn {
-            padding: 12px 20px;
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            font-size: 14px;
+        
+        /* 标签切换样式 - 借鉴信息提取助手页面 */
+        .function-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            flex-wrap: wrap;
+            background-color: var(--white);
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-light);
+            font-size: 16px;
             cursor: pointer;
             transition: var(--transition);
         }
-
-        .secondary-btn:hover {
-            background-color: #e5e7eb;
+        
+        .tab-btn:hover {
+            color: var(--primary-color);
         }
-
-        /* 结果面板样式 */
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border-color);
+        
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            font-weight: bold;
         }
-
-        .result-header h3 {
-            margin: 0;
+        
+        /* 标签内容样式 */
+        .tab-content {
+            display: none;
         }
-
-        .result-content {
-            flex: 1;
-            min-height: 400px;
-            padding: 16px;
-            background-color: var(--secondary-color);
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
             border-radius: var(--border-radius);
-            overflow-y: auto;
-        }
-
-        /* 发布摘要样式 */
-        .publish-summary {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .publish-summary h5 {
-            margin-top: 0;
-            margin-bottom: 16px;
-            color: var(--success-color);
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .platform-status {
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
             margin-bottom: 16px;
         }
-
-        .platform-status p {
-            margin-bottom: 8px;
-            color: var(--text-color);
+        
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: #f6ffed;
         }
-
-        .publish-info {
-            border-top: 1px solid var(--border-color);
-            padding-top: 16px;
+        
+        .file-upload-area input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
         }
-
-        .publish-info p {
-            margin-bottom: 8px;
+        
+        .file-drop-text {
             color: var(--text-light);
             font-size: 14px;
+            line-height: 1.6;
         }
-
-        /* 占位符文本样式 */
+        
+        /* 结果内容样式 */
+        .result-content {
+            flex: 1;
+            position: relative;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            min-height: 200px;
+        }
+        
         .placeholder-text {
             text-align: center;
             color: var(--text-light);
-            font-style: italic;
-            margin: 0;
-            padding: 40px 0;
+            margin: 60px 20px;
+            font-size: 14px;
         }
-
-        /* 加载状态样式 */
-        .loading-text {
-            text-align: center;
-            color: var(--primary-color);
-            margin: 0;
-            padding: 40px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .loading-spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid var(--border-color);
-            border-top: 2px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* 使用指南样式 */
-        .usage-guide {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-md);
-            padding: 24px;
-            margin-bottom: 30px;
-        }
-
-        .usage-guide h3 {
-            margin-top: 0;
-            margin-bottom: 16px;
-            color: var(--text-color);
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .usage-guide ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-
-        .usage-guide li {
-            margin-bottom: 8px;
-            color: var(--text-color);
-        }
-
-        /* 成功提示组件 */
-        .success-toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: var(--success-color);
-            color: var(--white);
-            padding: 12px 24px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .success-toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 媒体预览区域 */
-        .media-preview {
-            margin-top: 16px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 12px;
-        }
-
-        .media-item {
-            position: relative;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            aspect-ratio: 1;
-        }
-
-        .media-item img,
-        .media-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .media-item .remove-media {
+        
+        /* 知识库按钮样式 */
+        .knowledge-base-btn {
             position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 20px;
-            height: 20px;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            border-radius: 50%;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary-color);
+            color: white;
             cursor: pointer;
-            font-size: 10px;
+            font-size: 18px;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
         }
-
+        
+        .knowledge-base-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+        
         /* 响应式设计 */
         @media (max-width: 1024px) {
-            .comparison-layout {
+            .comparison-container {
                 grid-template-columns: 1fr;
             }
+            
+            .function-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
         }
-
+        
         @media (max-width: 768px) {
             .comparison-panel {
                 padding: 16px;
             }
-
+            
             .action-buttons {
                 flex-direction: column;
             }
             
-            .option-group {
-                flex-direction: column;
+            .platform-options {
+                gap: 8px;
+            }
+            
+            .platform-options label {
+                padding: 6px 12px;
+                font-size: 13px;
             }
         }
     </style>
@@ -483,285 +394,35 @@
                 <!-- 左右对比布局 -->
                 <div class="comparison-layout">
                     <!-- 左侧输入面板 -->
-                    <div class="comparison-panel input-panel">
-                        <h3>发布设置</h3>
-                        
-                        <div class="input-section">
-                            <label for="post-title">发布内容设置</label>
-                            <input type="text" id="post-title" placeholder="请输入内容标题" class="title-input">
-                            <textarea id="post-content" placeholder="请输入发布内容..." rows="6"></textarea>
-                        </div>
-                        
-                        <div class="file-upload-section">
-                            <input type="file" id="media-upload" accept=".jpg,.png,.mp4,.gif" multiple>
-                            <button id="upload-media-btn">上传媒体</button>
-                        </div>
-                        <p class="hint-text">支持图片、视频等多媒体文件，最多上传10个文件</p>
-                        
-                        <!-- 媒体预览区域 -->
-                        <div id="media-preview" class="media-preview"></div>
-                        
-                        <div class="platform-options">
-                            <h4>选择发布平台</h4>
-                            <div class="option-group">
-                                <label><input type="checkbox" checked> 微信公众号</label>
-                                <label><input type="checkbox" checked> 抖音</label>
-                                <label><input type="checkbox"> 小红书</label>
-                                <label><input type="checkbox"> 微博</label>
-                                <label><input type="checkbox"> B站</label>
-                            </div>
-                        </div>
-                        
-                        <div class="schedule-options">
-                            <h4>发布设置</h4>
-                            <div class="option-group">
-                                <label>发布时间：</label>
-                                <input type="datetime-local" id="publish-time">
-                            </div>
-                            <div class="option-group">
-                                <label><input type="checkbox"> 定时发布</label>
-                                <label><input type="checkbox" checked> 自动适配各平台格式</label>
-                            </div>
-                        </div>
-                        
-                        <div class="action-buttons">
-                            <button id="publish-btn" class="action-button">立即发布</button>
-                            <button id="save-draft-btn" class="secondary-btn">保存草稿</button>
-                            <button id="clear-btn" class="secondary-btn">清空</button>
-                        </div>
-                    </div>
                     
                     <!-- 右侧结果面板 -->
-                    <div class="comparison-panel output-panel">
-                        <div class="result-header">
-                            <h3>发布状态</h3>
-                            <button id="view-stats-btn" class="secondary-btn">查看数据</button>
-                        </div>
-                        <div id="publish-result" class="result-content">
-                            <p class="placeholder-text">发布状态和结果将显示在这里...</p>
-                        </div>
-                        <div class="action-buttons" style="margin-top: 16px; padding-top: 16px;">
-                            <button id="export-result-btn" class="secondary-btn" disabled>导出结果</button>
-                        </div>
-                    </div>
+
                 </div>
                 
-                <div class="usage-guide">
-                    <h3>使用指南</h3>
-                    <ul>
-                        <li>填写发布内容的标题和正文</li>
-                        <li>上传需要的媒体文件（图片、视频等）</li>
-                        <li>选择需要发布的平台</li>
-                        <li>设置发布时间和其他选项</li>
-                        <li>点击「立即发布」或「保存草稿」</li>
-                        <li>可在发布后查看各平台的数据表现</li>
-                    </ul>
+            </div>
+
+            <!-- 使用指南区域 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入原始文案：</strong>在左侧输入框中填写需要裂变二创的原始文案内容
+                </div>
+                <div class="help-item">
+                    <strong>2. 设置生成数量：</strong>输入您需要生成的二创文案数量（1-100之间）
+                </div>
+                <div class="help-item">
+                    <strong>3. 生成批量二创：</strong>点击「生成批量二创」按钮获取多个二创结果
+                </div>
+                <div class="help-item">
+                    <strong>4. 查看结果：</strong>右侧面板将显示生成的所有二创文案结果
+                </div>
+                <div class="help-item">
+                    <strong>5. 保存结果：</strong>可以将二创结果添加到个人知识库中
                 </div>
             </div>
         </main>
     </div>
     
     <!-- 成功提示组件 -->
-    <div id="success-toast" class="success-toast">操作成功</div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 获取DOM元素
-            const mediaUpload = document.getElementById('media-upload');
-            const uploadMediaBtn = document.getElementById('upload-media-btn');
-            const mediaPreview = document.getElementById('media-preview');
-            const clearBtn = document.getElementById('clear-btn');
-            const postTitle = document.getElementById('post-title');
-            const postContent = document.getElementById('post-content');
-            const publishResult = document.getElementById('publish-result');
-            const publishBtn = document.getElementById('publish-btn');
-            const saveDraftBtn = document.getElementById('save-draft-btn');
-            const viewStatsBtn = document.getElementById('view-stats-btn');
-            const exportResultBtn = document.getElementById('export-result-btn');
-            const successToast = document.getElementById('success-toast');
-            
-            // 媒体上传功能 - 支持预览
-            uploadMediaBtn.addEventListener('click', function() {
-                mediaUpload.click();
-            });
-            
-            // 拖拽上传样式变化
-            const fileUploadSection = document.querySelector('.file-upload-section');
-            fileUploadSection.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.querySelector('button').style.backgroundColor = 'rgba(37, 99, 235, 0.1)';
-            });
-            
-            fileUploadSection.addEventListener('dragleave', function() {
-                this.querySelector('button').style.backgroundColor = '';
-            });
-            
-            fileUploadSection.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.querySelector('button').style.backgroundColor = '';
-                
-                if (e.dataTransfer.files.length > 0) {
-                    mediaUpload.files = e.dataTransfer.files;
-                    handleFiles(e.dataTransfer.files);
-                }
-            });
-            
-            // 处理文件上传和预览
-            mediaUpload.addEventListener('change', function() {
-                if (this.files.length > 0) {
-                    handleFiles(this.files);
-                }
-            });
-            
-            function handleFiles(files) {
-                if (files.length > 10) {
-                    showSuccessToast('最多只能上传10个文件');
-                    return;
-                }
-                
-                // 清空预览区域
-                mediaPreview.innerHTML = '';
-                
-                // 为每个文件创建预览
-                Array.from(files).forEach((file, index) => {
-                    const fileType = file.type.split('/')[0];
-                    const mediaItem = document.createElement('div');
-                    mediaItem.className = 'media-item';
-                    mediaItem.setAttribute('data-index', index);
-                    
-                    // 创建预览元素
-                    if (fileType === 'image') {
-                        const img = document.createElement('img');
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            img.src = e.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                        mediaItem.appendChild(img);
-                    } else if (fileType === 'video') {
-                        const video = document.createElement('video');
-                        video.controls = false;
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            video.src = e.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                        mediaItem.appendChild(video);
-                    }
-                    
-                    // 添加删除按钮
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'remove-media';
-                    removeBtn.innerHTML = '×';
-                    removeBtn.addEventListener('click', function() {
-                        mediaItem.remove();
-                        // 如果没有文件了，重置input
-                        if (mediaPreview.children.length === 0) {
-                            mediaUpload.value = '';
-                        }
-                    });
-                    mediaItem.appendChild(removeBtn);
-                    
-                    mediaPreview.appendChild(mediaItem);
-                });
-            }
-            
-            // 清空按钮功能
-            clearBtn.addEventListener('click', function() {
-                postTitle.value = '';
-                postContent.value = '';
-                mediaUpload.value = '';
-                mediaPreview.innerHTML = '';
-                publishResult.innerHTML = '<p class="placeholder-text">发布状态和结果将显示在这里...</p>';
-                exportResultBtn.disabled = true;
-            });
-            
-            // 显示成功提示
-            function showSuccessToast(message) {
-                successToast.textContent = message || '操作成功';
-                successToast.classList.add('show');
-                setTimeout(function() {
-                    successToast.classList.remove('show');
-                }, 3000);
-            }
-            
-            // 发布按钮功能
-            publishBtn.addEventListener('click', function() {
-                if (!postTitle.value.trim() || !postContent.value.trim()) {
-                    showSuccessToast('请填写标题和内容');
-                    return;
-                }
-                
-                // 显示加载状态
-                publishResult.innerHTML = '<p class="loading-text"><span class="loading-spinner"></span> 正在发布内容，请稍候...</p>';
-                publishBtn.disabled = true;
-                
-                // 模拟发布过程
-                setTimeout(function() {
-                    publishBtn.disabled = false;
-                    
-                    // 获取选中的平台
-                    const checkboxes = document.querySelectorAll('.platform-options input[type="checkbox"]:checked');
-                    const selectedPlatforms = Array.from(checkboxes).map(cb => cb.nextSibling.textContent.trim());
-                    
-                    let platformStatusHTML = '';
-                    document.querySelectorAll('.platform-options input[type="checkbox"]').forEach(cb => {
-                        const platform = cb.nextSibling.textContent.trim();
-                        const status = cb.checked ? '发布成功' : '暂未选择';
-                        platformStatusHTML += `<p>✅ ${platform}：${status}</p>\n`;
-                    });
-                    
-                    publishResult.innerHTML = `<div class="publish-summary">\n` +
-                        `<h5>发布成功</h5>\n` +
-                        `<div class="platform-status">\n` +
-                        platformStatusHTML +
-                        `</div>\n` +
-                        `<div class="publish-info">\n` +
-                        `<p>发布时间：${new Date().toLocaleString()}</p>\n` +
-                        `<p>内容标题：${postTitle.value}</p>\n` +
-                        `<p>上传媒体数：${mediaPreview.children.length}</p>\n` +
-                        `</div>\n` +
-                        `</div>`;
-                    
-                    // 启用导出按钮
-                    exportResultBtn.disabled = false;
-                    
-                    // 显示成功提示
-                    showSuccessToast('内容发布成功');
-                }, 2000);
-            });
-            
-            // 保存草稿按钮功能
-            saveDraftBtn.addEventListener('click', function() {
-                if (!postTitle.value.trim() && !postContent.value.trim()) {
-                    showSuccessToast('请填写内容后保存');
-                    return;
-                }
-                
-                showSuccessToast('草稿保存成功');
-            });
-            
-            // 查看数据按钮功能
-            viewStatsBtn.addEventListener('click', function() {
-                if (publishResult.querySelector('.placeholder-text')) {
-                    showSuccessToast('请先发布内容');
-                    return;
-                }
-                
-                showSuccessToast('数据查看功能开发中');
-            });
-            
-            // 导出结果按钮功能
-            exportResultBtn.addEventListener('click', function() {
-                if (publishResult.querySelector('.placeholder-text')) {
-                    showSuccessToast('请先发布内容');
-                    return;
-                }
-                
-                // 模拟导出功能
-                showSuccessToast('结果导出成功');
-            });
-        });
-    </script>
 </body>
 </html>

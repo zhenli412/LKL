@@ -33,7 +33,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: var(--panel-gap);
-            margin-bottom: 30px;
         }
 
         /* 面板样式 */
@@ -42,7 +41,6 @@
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-md);
             padding: var(--panel-padding);
-            height: fit-content;
             min-height: 500px;
         }
 
@@ -50,12 +48,14 @@
         .input-panel {
             display: flex;
             flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
         /* 输出面板样式 */
         .output-panel {
             display: flex;
             flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
         /* 面板标题样式 */
@@ -97,9 +97,264 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .input-section select,
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
+            margin: 0;
+        }
+
+        .result-content {
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* 单行输入框样式 */
         .input-section input[type="text"],
-        .input-section input[type="number"] {
+        .input-section select {
             width: 100%;
             padding: 10px 16px;
             border: 1px solid var(--border-color);
@@ -109,208 +364,66 @@
             transition: var(--transition);
         }
 
-        .input-section select:focus,
         .input-section input[type="text"]:focus,
-        .input-section input[type="number"]:focus {
+        .input-section select:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
-
-        /* 选项组样式 */
-        .options-group {
-            margin-bottom: 24px;
-        }
-
-        .options-group h4 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: var(--text-color);
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        .option-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .option-item input[type="checkbox"] {
-            margin-right: 10px;
-            width: 18px;
-            height: 18px;
-        }
-
-        /* 按钮样式 */
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: auto;
-            padding-top: 20px;
-        }
-
-        .action-button {
-            padding: 12px 24px;
-            border: none;
+        
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
             border-radius: var(--border-radius);
-            font-size: 16px;
-            font-weight: 500;
+            padding: 40px 20px;
+            text-align: center;
             cursor: pointer;
             transition: var(--transition);
-        }
-
-        .action-button.primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .action-button.primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .action-button.secondary {
             background-color: var(--secondary-color);
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .file-upload-area input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload-text {
             color: var(--text-color);
+            font-size: 16px;
+            margin-bottom: 8px;
         }
-
-        .action-button.secondary:hover {
-            background-color: #e5e7eb;
-        }
-
-        .action-button.small {
-            padding: 8px 16px;
+        
+        .file-upload-subtext {
+            color: var(--text-light);
             font-size: 14px;
         }
-
-        /* 结果区域样式 */
-        .result-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .result-controls {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .result-output {
-            flex: 1;
-            padding: 16px;
-            background-color: var(--secondary-color);
-            border-radius: var(--border-radius);
-            min-height: 300px;
-            overflow-y: auto;
-        }
-
-        .result-section {
-            margin-bottom: 20px;
-        }
-
-        .result-section h4 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .metric-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .metric-card {
-            background-color: white;
-            padding: 16px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 4px;
-        }
-
-        .metric-label {
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        .metric-change {
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .metric-change.positive {
-            color: var(--success-color);
-        }
-
-        .metric-change.negative {
-            color: var(--error-color);
-        }
-
-        /* 图表占位区域 */
-        .chart-placeholder {
-            height: 200px;
-            background-color: white;
-            border-radius: var(--border-radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-light);
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* 帮助区域样式 */
-        .help-section {
+        
+        .file-info {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
             background-color: var(--white);
             border-radius: var(--border-radius);
-            box-shadow: var(--shadow-md);
-            padding: var(--panel-padding);
-            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
         }
-
-        .help-section h3 {
-            margin-top: 0;
-            margin-bottom: 16px;
+        
+        .file-info.show {
+            display: block;
+        }
+        
+        .file-name {
+            font-weight: 500;
             color: var(--text-color);
-            font-size: 1.25rem;
-            font-weight: 600;
+            margin-bottom: 4px;
         }
-
-        .help-item {
-            margin-bottom: 12px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .help-item:before {
-            content: "•";
-            color: var(--primary-color);
-            font-weight: bold;
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .comparison-layout {
-                grid-template-columns: 1fr;
-            }
-            
-            .metric-cards {
-                grid-template-columns: 1fr;
-            }
+        
+        .file-size {
+            color: var(--text-light);
+            font-size: 14px;
         }
     </style>
 </head>
@@ -324,84 +437,48 @@
         <main class="content">
             <!-- 页面标题 -->
             <div class="page-header">
-                <h1>业绩分析助手</h1>
+                <h2>业绩分析助手</h2>
                 <p>全面分析销售数据，发现业绩瓶颈，提供优化建议，提升团队销售能力</p>
             </div>
             
             <div class="page-content">
-
-            <!-- 功能区：左右对比布局 -->
-            <div class="comparison-layout">
-                <!-- 左侧输入面板 -->
-                <div class="comparison-panel input-panel">
-                    <h3>分析设置</h3>
-                    
-                    <div class="input-section">
-                        <label for="analysis-period">分析周期</label>
-                        <select id="analysis-period">
-                            <option value="month">近一个月</option>
-                            <option value="quarter" selected>近一季度</option>
-                            <option value="half-year">近半年</option>
-                            <option value="year">近一年</option>
-                            <option value="custom">自定义</option>
-                        </select>
-                    </div>
-
-                    <div class="input-section">
-                        <label for="sales-data">销售数据（可选）</label>
-                        <textarea id="sales-data" placeholder="请粘贴销售数据，格式：日期,销售额,客户数,转化率\n例如：\n2024-01-01,50000,20,15%\n2024-01-02,55000,22,18%"></textarea>
-                    </div>
-
-                    <div class="input-section">
-                        <label for="target-revenue">目标销售额</label>
-                        <input type="number" id="target-revenue" placeholder="请输入目标销售额" value="1000000">
-                    </div>
-
-                    <div class="options-group">
-                        <h4>分析维度</h4>
-                        <div class="option-item">
-                            <input type="checkbox" id="option-overall" checked>
-                            <label for="option-overall">整体业绩概览</label>
+                <!-- 左右对比布局 -->
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <div class="result-header">
+                            <h3>业绩表格上传</h3>
                         </div>
-                        <div class="option-item">
-                            <input type="checkbox" id="option-trend" checked>
-                            <label for="option-trend">趋势分析</label>
-                        </div>
-                        <div class="option-item">
-                            <input type="checkbox" id="option-customer" checked>
-                            <label for="option-customer">客户分析</label>
-                        </div>
-                        <div class="option-item">
-                            <input type="checkbox" id="option-product" checked>
-                            <label for="option-product">产品分析</label>
-                        </div>
-                        <div class="option-item">
-                            <input type="checkbox" id="option-recommendation" checked>
-                            <label for="option-recommendation">优化建议</label>
-                        </div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button id="reset-btn" class="action-button secondary">重置</button>
-                        <button id="analyze-btn" class="action-button primary">开始分析</button>
-                    </div>
-                </div>
-
-                <!-- 右侧输出面板 -->
-                <div class="comparison-panel output-panel">
-                    <h3>分析结果</h3>
-                    
-                    <div class="result-container">
-                        <div class="result-controls">
-                            <button id="copy-btn" class="action-button secondary small">复制结果</button>
-                            <button id="download-btn" class="action-button secondary small">导出报告</button>
-                        </div>
-                        
-                        <div id="result-output" class="result-output">
-                            <div class="placeholder-text">
-                                <p>请在左侧设置分析参数并点击「开始分析」按钮</p>
-                                <p>业绩分析报告将显示在这里</p>
+                        <div class="input-section">
+                            <div class="file-upload-area" onclick="document.getElementById('performance-file').click()">
+                                <input type="file" id="performance-file" accept=".xlsx,.xls,.csv">
+                                <div class="file-upload-text">📂 点击或拖拽《业绩表格》文件到此处上传</div>
+                                <div class="file-upload-subtext">支持 .xlsx, .xls, .csv 格式<br>请上传标准企业业绩管理表格</div>
                             </div>
+                            <label for="performance-file"><a href="https://www.baidu.com/s?ie=utf-8&wd=标准企业业绩管理表格" target="_blank">《标准表格下载》</a></label>
+                            <div id="file-info" class="file-info">
+                                <div id="file-name" class="file-name"></div>
+                                <div id="file-size" class="file-size"></div>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-button primary">开始分析</button>
+                            <button class="action-button secondary">重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧输出面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>业绩分析结果</h3>
+                        </div>
+                        <div class="result-content" style="position: relative;">
+                            <p class="placeholder-text">分析结果将显示在这里...</p>
+                            <!-- 添加个人知识库按钮 -->
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -409,13 +486,23 @@
             <!-- 帮助说明区 -->
             <div class="help-section">
                 <h3>使用指南</h3>
-                <div class="help-item">选择合适的分析周期，系统将自动分析该时间段内的销售数据</div>
-                <div class="help-item">可选择性输入销售数据，支持CSV格式粘贴，或使用系统默认示例数据</div>
-                <div class="help-item">设置目标销售额，系统将评估完成情况并提供针对性建议</div>
-                <div class="help-item">选择需要的分析维度，可多选</div>
-                <div class="help-item">点击「开始分析」按钮获取报告，包含关键指标、趋势图表和优化建议</div>
+                <div class="help-item">
+                    <strong>1. 准备业绩表格：</strong>确保您的业绩表格为标准企业业绩管理格式，包含必要的销售数据字段
+                </div>
+                <div class="help-item">
+                    <strong>2. 上传文件：</strong>点击或拖拽业绩表格文件（支持.xlsx、.xls、.csv格式）到上传区域
+                </div>
+                <div class="help-item">
+                    <strong>3. 确认文件：</strong>上传后系统将显示文件名称和大小，确认无误后继续
+                </div>
+                <div class="help-item">
+                    <strong>4. 开始分析：</strong>点击「开始分析」按钮，系统将自动处理业绩数据并生成分析报告
+                </div>
+                <div class="help-item">
+                    <strong>5. 查看结果：</strong>在右侧面板查看详细的业绩分析结果，包括关键指标和趋势分析
+                </div>
             </div>
-            </div>
+
         </main>
     </div>
 
@@ -425,217 +512,122 @@
     <script>
         // 初始化导航组件
         document.addEventListener('DOMContentLoaded', function() {
-            // 使用统一的导航加载函数
-            loadNavigation('../../', 'sales', 'sales/performance-analysis.html');
-            
-            // 分析按钮点击事件
-            document.getElementById('analyze-btn').addEventListener('click', function() {
-                analyzePerformance();
+            // 初始化左侧导航菜单
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
             });
+
+            // 文件上传功能
+            const fileInput = document.getElementById('performance-file');
+            const fileInfo = document.getElementById('file-info');
+            const fileName = document.getElementById('file-name');
+            const fileSize = document.getElementById('file-size');
             
-            // 重置按钮点击事件
-            document.getElementById('reset-btn').addEventListener('click', function() {
-                resetForm();
-            });
-            
-            // 复制按钮点击事件
-            document.getElementById('copy-btn').addEventListener('click', function() {
-                copyToClipboard();
-            });
-            
-            // 下载按钮点击事件
-            document.getElementById('download-btn').addEventListener('click', function() {
-                downloadReport();
-            });
-        });
-        
-        // 业绩分析函数
-        function analyzePerformance() {
-            // 获取表单数据
-            const period = document.getElementById('analysis-period').value;
-            const targetRevenue = document.getElementById('target-revenue').value || 1000000;
-            
-            // 获取选中的分析维度
-            const selectedDimensions = [];
-            if (document.getElementById('option-overall').checked) selectedDimensions.push('overall');
-            if (document.getElementById('option-trend').checked) selectedDimensions.push('trend');
-            if (document.getElementById('option-customer').checked) selectedDimensions.push('customer');
-            if (document.getElementById('option-product').checked) selectedDimensions.push('product');
-            if (document.getElementById('option-recommendation').checked) selectedDimensions.push('recommendation');
-            
-            // 模拟生成分析结果
-            let resultHtml = '';
-            
-            // 根据周期设置数据
-            const periodText = period === 'month' ? '近一个月' : 
-                              period === 'quarter' ? '近一季度' : 
-                              period === 'half-year' ? '近半年' : 
-                              period === 'year' ? '近一年' : '自定义周期';
-            
-            if (selectedDimensions.includes('overall')) {
-                resultHtml += `
-                    <div class="result-section">
-                        <h4>📊 整体业绩概览（${periodText}）</h4>
-                        <div class="metric-cards">
-                            <div class="metric-card">
-                                <div class="metric-value">¥852,600</div>
-                                <div class="metric-label">实际销售额</div>
-                                <div class="metric-change positive">↑12.8% 环比增长</div>
-                            </div>
-                            <div class="metric-card">
-                                <div class="metric-value">85.3%</div>
-                                <div class="metric-label">目标达成率</div>
-                                <div class="metric-change negative">↓14.7% 未达标</div>
-                            </div>
-                            <div class="metric-card">
-                                <div class="metric-value">328</div>
-                                <div class="metric-label">成交客户数</div>
-                                <div class="metric-change positive">↑8.5% 环比增长</div>
-                            </div>
-                            <div class="metric-card">
-                                <div class="metric-value">22.6%</div>
-                                <div class="metric-label">销售转化率</div>
-                                <div class="metric-change positive">↑3.2% 环比增长</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        const file = e.target.files[0];
+                        fileName.textContent = file.name;
+                        fileSize.textContent = formatFileSize(file.size);
+                        fileInfo.classList.add('show');
+                    }
+                });
+            }
+
+            // 重置按钮功能
+            const resetBtn = document.querySelector('.action-button.secondary');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    fileInput.value = '';
+                    fileInfo.classList.remove('show');
+                    document.querySelector('.result-content').innerHTML = '<p class="placeholder-text">分析结果将显示在这里...</p>';
+                });
+            }
+
+            // 开始分析按钮点击事件
+            const analyzeBtn = document.querySelector('.action-button.primary');
+            if (analyzeBtn) {
+                analyzeBtn.addEventListener('click', function() {
+                    if (!fileInput.files.length) {
+                        showToast('请先上传业绩表格文件');
+                        return;
+                    }
+                    
+                    const resultContent = document.querySelector('.result-content');
+                    resultContent.innerHTML = '<div class="loading-text"><div class="loading-spinner"></div>正在分析数据，请稍候...</div>';
+                    
+                    // 模拟分析过程
+                    setTimeout(function() {
+                        displayAnalysisResult();
+                    }, 2000);
+                });
+            }
+
+            // 显示提示信息
+            function showToast(message) {
+                // 创建toast元素
+                const toast = document.createElement('div');
+                toast.className = 'success-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                
+                // 显示toast
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                // 3秒后隐藏toast
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 3000);
+            }
+
+            // 格式化文件大小
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // 显示分析结果
+            function displayAnalysisResult() {
+                const resultContent = document.querySelector('.result-content');
+                
+                let resultHTML = '<div class="script-content">';
+                resultHTML += '<h5>业绩分析报告</h5>';
+                resultHTML += '<p><strong>整体业绩概况：</strong></p>';
+                resultHTML += '<p>- 总销售额：¥3,258,760</p>';
+                resultHTML += '<p>- 目标完成率：85.2%</p>';
+                resultHTML += '<p>- 同比增长：15.8%</p>';
+                resultHTML += '<p>- 环比增长：8.3%</p>';
+                resultHTML += '<p><strong>重点产品表现：</strong></p>';
+                resultHTML += '<p>- 产品A：¥1,256,000 (38.5%)</p>';
+                resultHTML += '<p>- 产品B：¥987,500 (30.3%)</p>';
+                resultHTML += '<p>- 产品C：¥723,260 (22.2%)</p>';
+                resultHTML += '<p>- 其他产品：¥292,000 (9.0%)</p>';
+                resultHTML += '<p><strong>客户分析：</strong></p>';
+                resultHTML += '<p>- 新客户：45户，贡献销售额 ¥1,250,000</p>';
+                resultHTML += '<p>- 老客户：78户，贡献销售额 ¥2,008,760</p>';
+                resultHTML += '<p><strong>改进建议：</strong></p>';
+                resultHTML += '<p>1. 重点关注产品C的增长潜力，可适当增加市场推广投入</p>';
+                resultHTML += '<p>2. 加强新客户获取，目标客户群体拓展至行业上下游</p>';
+                resultHTML += '<p>3. 优化产品A的供应链管理，提升交付效率</p>';
+                resultHTML += '</div>';
+                
+                resultContent.innerHTML = resultHTML;
+                showToast('分析完成！');
             }
             
-            if (selectedDimensions.includes('trend')) {
-                resultHtml += `
-                    <div class="result-section">
-                        <h4>📈 趋势分析</h4>
-                        <div class="chart-placeholder">
-                            [销售额趋势图表]
-                        </div>
-                        <p><strong>关键发现：</strong></p>
-                        <ul>
-                            <li>月度销售额呈现波动上升趋势，平均增长率8.3%</li>
-                            <li>第二周通常为销售低谷期，需要加强营销活动</li>
-                            <li>周末销售额明显高于工作日，建议增加周末销售资源配置</li>
-                        </ul>
-                    </div>
-                `;
-            }
-            
-            if (selectedDimensions.includes('customer')) {
-                resultHtml += `
-                    <div class="result-section">
-                        <h4>👥 客户分析</h4>
-                        <div class="chart-placeholder">
-                            [客户类型分布图表]
-                        </div>
-                        <p><strong>客户构成：</strong></p>
-                        <ul>
-                            <li>中小企业客户占比68%，贡献52%的销售额</li>
-                            <li>大型企业客户占比15%，贡献35%的销售额</li>
-                            <li>个人客户占比17%，贡献13%的销售额</li>
-                        </ul>
-                        <p><strong>客户地域分布：</strong>华东地区占比42%，华北地区占比28%，华南地区占比18%，其他地区占比12%</p>
-                    </div>
-                `;
-            }
-            
-            if (selectedDimensions.includes('product')) {
-                resultHtml += `
-                    <div class="result-section">
-                        <h4>🛍️ 产品分析</h4>
-                        <div class="chart-placeholder">
-                            [产品销售占比图表]
-                        </div>
-                        <p><strong>产品表现：</strong></p>
-                        <ul>
-                            <li>核心产品A销售额占比45%，利润率32%</li>
-                            <li>新产品B销售额占比28%，增长迅速但利润率较低</li>
-                            <li>服务类产品C销售额占比27%，利润率最高(45%)</li>
-                        </ul>
-                        <p><strong>热销组合：</strong>A+B组合销售转化率提升40%，建议加强捆绑销售策略</p>
-                    </div>
-                `;
-            }
-            
-            if (selectedDimensions.includes('recommendation')) {
-                resultHtml += `
-                    <div class="result-section">
-                        <h4>💡 优化建议</h4>
-                        <p><strong>短期改进（1-2个月）：</strong></p>
-                        <ul>
-                            <li>加强第二周营销活动，针对销售低谷期制定专项推广计划</li>
-                            <li>优化大型企业客户跟进流程，提高成交率</li>
-                            <li>增加周末销售资源配置，把握高转化时段</li>
-                        </ul>
-                        <p><strong>中长期策略（3-6个月）：</strong></p>
-                        <ul>
-                            <li>提升新产品B的利润率，优化成本结构</li>
-                            <li>加强A+B产品组合销售，制定阶梯式价格策略</li>
-                            <li>拓展华南市场，复制华东地区成功经验</li>
-                            <li>开发针对大型企业客户的定制化解决方案</li>
-                        </ul>
-                    </div>
-                `;
-            }
-            
-            // 显示结果
-            document.getElementById('result-output').innerHTML = resultHtml;
-        }
-        
-        // 重置表单函数
-        function resetForm() {
-            document.getElementById('analysis-period').value = 'quarter';
-            document.getElementById('sales-data').value = '';
-            document.getElementById('target-revenue').value = '1000000';
-            
-            document.getElementById('result-output').innerHTML = `
-                <div class="placeholder-text">
-                    <p>请在左侧设置分析参数并点击「开始分析」按钮</p>
-                    <p>业绩分析报告将显示在这里</p>
-                </div>
-            `;
-        }
-        
-        // 复制到剪贴板函数
-        function copyToClipboard() {
-            const resultText = document.getElementById('result-output').innerText;
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(resultText)
-                    .then(() => {
-                        alert('已复制到剪贴板');
-                    })
-                    .catch(err => {
-                        console.error('复制失败:', err);
-                        alert('复制失败，请手动复制');
-                    });
-            } else {
-                // 兼容性处理
-                const textArea = document.createElement('textarea');
-                textArea.value = resultText;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('已复制到剪贴板');
-            }
-        }
-        
-        // 下载报告函数
-        function downloadReport() {
-            const resultText = document.getElementById('result-output').innerText;
-            
-            const blob = new Blob([resultText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `业绩分析报告_${new Date().toISOString().split('T')[0]}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-        
-        // 加载导航组件
-        document.addEventListener('DOMContentLoaded', function() {
+            // 加载导航组件
             loadNavigation('../../', 'sales', 'sales/performance-analysis.html');
         });
     </script>
