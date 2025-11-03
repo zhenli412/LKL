@@ -451,9 +451,11 @@
                         </div>
                         <div class="input-section">
                             <div class="file-upload-area" onclick="document.getElementById('performance-file').click()">
-                                <input type="file" id="performance-file" accept=".xlsx,.xls,.csv">
-                                <div class="file-upload-text">📂 点击或拖拽《业绩表格》文件到此处上传</div>
-                                <div class="file-upload-subtext">支持 .xlsx, .xls, .csv 格式<br>请上传标准企业业绩管理表格</div>
+                                <input type="file" id="performance-file" accept=".pdf,.xlsx,.xls,.csv">
+                                <div class="file-upload-text">
+                                    <span style="font-size: 32px;">📑</span> 
+                                    <br>点击或拖拽《业绩表格》PDF文件到此处上传</div>
+                                    <br>支持pdf格式，excel格式请先导出pdf再上传<br>
                             </div>
                             <label for="performance-file"><a href="https://www.baidu.com/s?ie=utf-8&wd=标准企业业绩管理表格" target="_blank">《标准表格下载》</a></label>
                             <div id="file-info" class="file-info">

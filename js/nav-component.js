@@ -507,7 +507,9 @@ function initNavigationInteractions() {
     }
 }
 
-// 导出函数供其他页面使用
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { loadNavigation, loadTopNavigation, loadSideNavigation, updateUserInfo, initNavigationInteractions };
-}
+// 将函数注册到window对象，方便页面调用
+window.loadNavigation = loadNavigation;
+window.loadTopNavigation = loadTopNavigation;
+window.loadSideNavigation = loadSideNavigation;
+window.updateUserInfo = updateUserInfo;
+window.initNavigationInteractions = initNavigationInteractions;

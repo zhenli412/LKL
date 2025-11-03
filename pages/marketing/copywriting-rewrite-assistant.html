@@ -192,7 +192,12 @@
         
         /* 结果区域样式 */
         .result-header h4 {
+            margin: 0 0 10px 0;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 600;
         }
+        
         
         .result-content {
             flex: 1;
@@ -397,6 +402,150 @@
         .rewrite-type-options input[type="radio"] {
             cursor: pointer;
         }
+           /* 聊天对话窗口样式 */
+        .chat-container {
+            margin-top: 24px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            border-bottom: none;
+            padding-bottom: 0px;
+        }
+
+        .chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 16px 16px 0px 3px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 16px;
+            min-height: 150px;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+        }
+
+        .chat-message.assistant {
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin: 0 8px;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .chat-message-content {
+            max-width: calc(100% - 8px);
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
+            word-wrap: break-word;
+        }
+
+        .chat-message.user .chat-message-content {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.assistant .chat-message-content {
+            background-color: white;
+            color: var(--text-color);
+            border-bottom-left-radius: 4px;
+            box-shadow: var(--shadow);
+        }
+
+        /* 聊天输入容器样式 */
+        .chat-input-container {
+            display: flex;
+            position: relative;
+            width: 100%;
+        }
+
+        .chat-input {
+            flex: 1;
+            min-height: 60px;
+            max-height: 120px;
+            padding: 12px 80px 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            resize: vertical;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        /* 发送按钮样式 */
+        .chat-send-btn {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            width: 64px;
+            height: 36px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-send-btn:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+        }
+
+        .chat-send-btn:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        /* 扩展按钮样式 */
+        .chat-extend-btn {
+            position: absolute;
+            left: 8px;
+            bottom: 8px;
+            display: flex;
+            gap: 4px;
+        }
         
         /* 下拉选择框样式 */
         .input-section select {
@@ -466,23 +615,11 @@
                     <h3>选择二创类型：</h3>
                         <label>
                             <input type="radio" name="rewrite-type" value="rewrite" checked>
-                            <span>二创改写</span>
+                            <span>短视频脚本类</span>
                         </label>
                         <label>
                             <input type="radio" name="rewrite-type" value="expand">
-                            <span>文案扩展</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rewrite-type" value="summary">
-                            <span>提炼总结</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rewrite-type" value="translate">
-                            <span>翻译</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rewrite-type" value="custom">
-                            <span>企业自定义</span>
+                            <span>小红书emoji文案类</span>
                         </label>
                     </div>
                 </div>
@@ -496,9 +633,9 @@
                                 <div class="result-header">
                                     <h3>输入需要创作的完整文案</h3>
                                 </div>
-                                <textarea id="original-text" placeholder="请输入完整文案文本，或者点击[+文案附件]上传文案文件..." rows="10"></textarea>
+                                <textarea id="original-text" placeholder="请输入完整文案文本，或者点击+选择「个人知识库」内容导入上传文案文件..." rows="10"></textarea>
                                 <div style="margin-top: 15px;">
-                                    <button class="action-button secondary"> +文案附件</button>
+                                    <button class="action-button secondary">+「个人知识库」导入</button>
                                 </div>
                             </div>
                             <div class="action-buttons">
@@ -512,14 +649,33 @@
                     <div class="result-header">
                         <h3>文案优化结果</h3>
                     </div>
-                    <div class="result-content">
+                    <div class="result-content" style="position: relative;">
                         <p class="placeholder-text">生成的文案将显示在这里</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
                     </div>
-                    <div>
-                        <button class="btn btn-primary" onclick="showSuccessToast()" style="right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
-                            <span style="text-align: right;font-size: 18px;">📝</span>
-                        </button>
-                    </div>
+                        <!-- 聊天对话窗口 -->
+                        <div class="chat-container">
+                            <div class="chat-header">
+                                <h3>对话交流</h3>
+                            </div>
+                            <div class="chat-messages" id="chat-messages">
+                                <div class="chat-message assistant">
+                                    <div class="chat-avatar assistant-avatar">Ali</div>
+                                    <div class="chat-message-content">
+                                        您好！我是销售话术助手。请告诉我您对生成的话术有什么具体需求或修改建议，我可以为您进一步优化。
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-container">
+                                <!-- 扩展按钮组 -->
+                                <!-- 输入框 -->
+                                <textarea class="chat-input" id="chat-input" placeholder="请输入您的需求或问题..."></textarea>
+                                <!-- 发送按钮（位于输入框内） -->
+                                <button class="chat-send-btn" id="chat-send-btn">发送</button>
+                            </div>
+                        </div>                    
                 </div>
                     </div>
                 </div>
@@ -534,6 +690,9 @@
                                     <h3>输入视频链接</h3>
                                 </div>
                                 <textarea id="video-links" placeholder="请输入需要二创的视频链接，多个链接请换行输入..." rows="10"></textarea>
+                                <div style="margin-top: 15px;">
+                                    <button class="action-button secondary">+「个人知识库」导入</button>
+                                </div>
                             </div>
                             <div class="input-section">
                                 <label>平台选择 <span class="required">*</span></label>
@@ -553,14 +712,34 @@
                     <div class="result-header">
                         <h3>文案优化结果</h3>
                     </div>
-                    <div class="result-content">
+                    <div class="result-content" style="position: relative;">
                         <p class="placeholder-text">生成的文案将显示在这里</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
                     </div>
-                    <div>
-                        <button class="btn btn-primary" onclick="showSuccessToast()" style="right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
-                            <span style="text-align: right;font-size: 18px;">📝</span>
-                        </button>
-                    </div>
+                        <!-- 聊天对话窗口 -->
+                        <div class="chat-container">
+                            <div class="chat-header">
+                                <h3>对话交流</h3>
+                            </div>
+                            <div class="chat-messages" id="chat-messages">
+                                <div class="chat-message assistant">
+                                    <div class="chat-avatar assistant-avatar">Ali</div>
+                                    <div class="chat-message-content">
+                                        您好！我是销售话术助手。请告诉我您对生成的话术有什么具体需求或修改建议，我可以为您进一步优化。
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-container">
+                                <!-- 扩展按钮组 -->
+                                <!-- 输入框 -->
+                                <textarea class="chat-input" id="chat-input" placeholder="请输入您的需求或问题..."></textarea>
+                                <!-- 发送按钮（位于输入框内） -->
+                                <button class="chat-send-btn" id="chat-send-btn">发送</button>
+                            </div>
+                        </div>
+
                 </div>
                     </div>
                 </div>
@@ -591,8 +770,8 @@
                                     </label>
                                 </div>
                                 <div class="action-buttons" style="margin-top: 10px;">
-                                    <button class="action-button secondary"  onclick="openModal('enterprise-knowledge-modal')"> + 选择企业知识库</button>
-                                    <button class="action-button secondary"  onclick="openModal('personal-knowledge-modal')"> + 选择个人知识库</button>
+                                    <button class="action-button secondary"  onclick="openModal('enterprise-knowledge-modal')">+「企业知识库」导入</button>
+                                    <button class="action-button secondary"  onclick="openModal('personal-knowledge-modal')">+「个人知识库」导入</button>
                                 </div>
                                 
                             </div>
@@ -614,6 +793,29 @@
                                 <span style="font-size: 18px;">📝</span>
                             </button>
                     </div>
+
+                        <!-- 聊天对话窗口 -->
+                        <div class="chat-container">
+                            <div class="chat-header">
+                                <h3>对话交流</h3>
+                            </div>
+                            <div class="chat-messages" id="chat-messages">
+                                <div class="chat-message assistant">
+                                    <div class="chat-avatar assistant-avatar">Ali</div>
+                                    <div class="chat-message-content">
+                                        您好！我是销售话术助手。请告诉我您对生成的话术有什么具体需求或修改建议，我可以为您进一步优化。
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input-container">
+                                <!-- 扩展按钮组 -->
+                                <!-- 输入框 -->
+                                <textarea class="chat-input" id="chat-input" placeholder="请输入您的需求或问题..."></textarea>
+                                <!-- 发送按钮（位于输入框内） -->
+                                <button class="chat-send-btn" id="chat-send-btn">发送</button>
+                            </div>
+                        </div>
+                    
                 </div>
                 </div>
                 </div>

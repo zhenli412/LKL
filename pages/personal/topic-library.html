@@ -7,7 +7,16 @@
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/nav-component.js"></script>
     <script src="../../js/menu.js"></script>
+    <link rel="stylesheet" href="../../css/knowledge-create.css">
+    <script src="../../js/knowledge-create.js"></script>
     <style>
+        /* 排序和新建按钮同行显示样式 */
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
         .knowledge-base-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -47,7 +56,7 @@
             font-size: 14px;
         }
         .category-item.active {
-            background: #1890ff;
+            background: #dfe0e1;
             color: white;
         }
         .category-edit-btn, .category-delete-btn {
@@ -167,6 +176,7 @@
             text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
         }
         .knowledge-actions {
@@ -322,6 +332,141 @@
             border-color: #1890ff;
             color: #1890ff;
         }
+        
+        /* 新建按钮和下拉菜单样式 */
+        .new-btn-container {
+            position: relative;
+        }
+        
+        .new-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            background: #1890ff;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .new-btn:hover {
+            background: #40a9ff;
+        }
+        
+        .new-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 4px;
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 160px;
+            display: none;
+            z-index: 100;
+        }
+        
+        .new-dropdown-menu.show {
+            display: block;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #333;
+        }
+        
+        .menu-item:hover {
+            background: #f5f7fa;
+        }
+        
+        .menu-divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 4px 0;
+        }
+        
+        /* 图标样式 */
+        .new-icon::before,
+        .file-icon::before,
+        .link-icon::before,
+        .note-icon::before,
+        .category-icon::before {
+            font-style: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .new-icon::before { content: '+'; font-weight: bold; }
+        .file-icon::before { content: '📄'; }
+        .link-icon::before { content: '🔗'; }
+        .note-icon::before { content: '📝'; }
+        .category-icon::before { content: '📁'; }
+        
+        /* 文件上传样式 */
+        .file-upload-container {
+            border: 2px dashed #d9d9d9;
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+        
+        .file-upload-container:hover {
+            border-color: #1890ff;
+            background: #f6ffed;
+        }
+        
+        .file-upload-container.drag-over {
+            border-color: #52c41a;
+            background: #f6ffed;
+        }
+        
+        .file-upload-text {
+            font-size: 14px;
+            color: #8c8c8c;
+            margin-top: 8px;
+        }
+        
+        .upload-tip {
+            font-size: 12px;
+            color: #bfbfbf;
+            margin-top: 8px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #1890ff;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -339,17 +484,17 @@
                 <div class="category-management">
                     <div class="category-list">
                         <div class="category-item active" data-id="1">
-                            <span class="category-name">选题库</span>
+                            <a href="topic-library.html" class="category-name">选题库</a>
                             <span class="category-edit-btn" onclick="editCategory(1, '选题库')">✏️</span>
                             <span class="category-delete-btn" onclick="deleteCategory(1)" style="display: none;">🗑️</span>
                         </div>
                         <div class="category-item" data-id="2">
-                            <span class="category-name">文案库</span>
+                            <a href="copy-library.html" class="category-name">文案库</a>
                             <span class="category-edit-btn" onclick="editCategory(2, '文案库')">✏️</span>
                             <span class="category-delete-btn" onclick="deleteCategory(2)">🗑️</span>
                         </div>
                         <div class="category-item" data-id="3">
-                            <span class="category-name">素材库</span>
+                            <a href="material-library.html" class="category-name">素材库</a>
                             <span class="category-edit-btn" onclick="editCategory(3, '素材库')">✏️</span>
                             <span class="category-delete-btn" onclick="deleteCategory(3)">🗑️</span>
                         </div>
@@ -366,9 +511,30 @@
                     <div class="sort-options">
                         <label for="sort-select">排序：</label>
                         <select id="sort-select" class="sort-select" onchange="sortKnowledge()">
-                            <option value="newest">最新优先</option>
-                            <option value="oldest">最早优先</option>
+                            <option value="newest">上传时间</option>
+                            <option value="textname">名称</option>
                         </select>
+                    </div>
+                    <!-- 新建按钮 -->
+                    <div class="new-btn-container">
+                        <button id="new-btn" class="new-btn" onclick="toggleNewMenu()">
+                            <i class="new-icon"></i> 新建
+                        </button>
+                        <div id="new-menu" class="new-dropdown-menu">
+                            <div class="menu-item" onclick="showLocalFileModal()">
+                                <i class="file-icon"></i> 本地文件
+                            </div>
+                            <div class="menu-item" onclick="showWebLinkModal()">
+                                <i class="link-icon"></i> 网页链接
+                            </div>
+                            <div class="menu-item" onclick="showNoteModal()">
+                                <i class="note-icon"></i> 知识笔记
+                            </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-item" onclick="showAddCategoryModal()">
+                                <i class="category-icon"></i> 新建类目
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -665,6 +831,105 @@
                         <button class="page-btn" onclick="changePage(2)">&gt;&gt;</button>
                     </div>
                 </div>
+                
+                <!-- 本地文件上传模态框 -->
+                <div id="local-file-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>上传本地文件</h3>
+                            <span class="close" onclick="closeLocalFileModal()">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="file-category">存储类目：</label>
+                                <select id="file-category" class="form-control">
+                                    <option value="1">选题库</option>
+                                    <option value="2">文案库</option>
+                                    <option value="3" selected>素材库</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>上传文件：</label>
+                                <input type="file" id="file-upload" style="display: none;" multiple accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                <div id="drop-area" class="file-upload-container" onclick="document.getElementById('file-upload').click()">
+                                    <div class="file-upload-text">点击或拖拽文件到此处上传</div>
+                                    <div class="upload-tip">支持 PDF、Word、文本、声音wav等文件格式</div>
+                                </div>
+                                <div id="progress-container" class="progress-container" style="display: none;">
+                                    <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="cancel-btn" onclick="closeLocalFileModal()">取消</button>
+                            <button id="upload-btn" class="confirm-btn" disabled>上传</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 网页链接模态框 -->
+                <div id="web-link-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>添加网页链接</h3>
+                            <span class="close" onclick="closeWebLinkModal()">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="link-category">存储类目：</label>
+                                <select id="link-category" class="form-control">
+                                    <option value="1">选题库</option>
+                                    <option value="2">文案库</option>
+                                    <option value="3" selected>素材库</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="link-name">文件名称：</label>
+                                <input type="text" id="link-name" class="form-control" placeholder="请输入文件名称">
+                            </div>
+                            <div class="form-group">
+                                <label for="link-url">链接地址：</label>
+                                <input type="url" id="link-url" class="form-control" placeholder="请输入网页链接">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="cancel-btn" onclick="closeWebLinkModal()">取消</button>
+                            <button class="confirm-btn" onclick="saveWebLink()">保存</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 知识笔记模态框 -->
+                <div id="note-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>添加知识笔记</h3>
+                            <span class="close" onclick="closeNoteModal()">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="note-category">存储类目：</label>
+                                <select id="note-category" class="form-control">
+                                    <option value="1">选题库</option>
+                                    <option value="2">文案库</option>
+                                    <option value="3" selected>素材库</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="note-title">文件名称：</label>
+                                <input type="text" id="note-title" class="form-control" placeholder="请输入笔记标题">
+                            </div>
+                            <div class="form-group">
+                                <label for="note-content">正文内容：</label>
+                                <textarea id="note-content" class="form-control" rows="6" placeholder="请输入笔记内容"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="cancel-btn" onclick="closeNoteModal()">取消</button>
+                            <button class="confirm-btn" onclick="saveNote()">保存</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -873,7 +1138,7 @@
         
         function sortKnowledge() {
             const sortType = document.getElementById('sort-select').value;
-            alert(`排序方式：${sortType === 'newest' ? '最新优先' : '最早优先'}`);
+            alert(`排序方式：${sortType === 'newest' ? '最新优先' : '名称优先'}`);
             // 实际项目中这里应该调用API进行排序
         }
         
@@ -907,7 +1172,234 @@
         // 加载导航组件
         document.addEventListener('DOMContentLoaded', function() {
             loadNavigation('../../', 'personal');
+            // 初始化新建功能（使用公共组件）
+            if (typeof initKnowledgeCreate === 'function') {
+                initKnowledgeCreate();
+            }
         });
+            // 点击文档其他地方关闭下拉菜单
+            document.addEventListener('click', function(event) {
+                const newBtn = document.getElementById('new-btn');
+                const newMenu = document.getElementById('new-menu');
+                if (newBtn && newMenu && !newBtn.contains(event.target) && !newMenu.contains(event.target)) {
+                    newMenu.classList.remove('show');
+                }
+            });
+            
+            // 文件上传相关事件
+            const fileUpload = document.getElementById('file-upload');
+            const dropArea = document.getElementById('drop-area');
+            const uploadBtn = document.getElementById('upload-btn');
+            
+            if (fileUpload) {
+                fileUpload.addEventListener('change', function() {
+                    if (uploadBtn) uploadBtn.disabled = this.files.length === 0;
+                });
+            }
+            
+            if (dropArea) {
+                // 拖拽事件
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropArea.addEventListener(eventName, preventDefaults, false);
+                });
+                
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    dropArea.addEventListener(eventName, highlight, false);
+                });
+                
+                ['dragleave', 'drop'].forEach(eventName => {
+                    dropArea.addEventListener(eventName, unhighlight, false);
+                });
+                
+                function highlight() {
+                    dropArea.classList.add('drag-over');
+                }
+                
+                function unhighlight() {
+                    dropArea.classList.remove('drag-over');
+                }
+                
+                dropArea.addEventListener('drop', handleDrop, false);
+                
+                function handleDrop(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    
+                    if (fileUpload) {
+                        fileUpload.files = files;
+                        if (uploadBtn) uploadBtn.disabled = files.length === 0;
+                    }
+                }
+            }
+            
+            // 模拟文件上传
+            if (uploadBtn) {
+                uploadBtn.addEventListener('click', function() {
+                    const files = document.getElementById('file-upload')?.files;
+                    if (!files || files.length === 0) return;
+                    
+                    const progressContainer = document.getElementById('progress-container');
+                    const progressBar = document.getElementById('progress-bar');
+                    
+                    if (progressContainer && progressBar) {
+                        progressContainer.style.display = 'block';
+                        uploadBtn.disabled = true;
+                        
+                        // 模拟上传进度
+                        let progress = 0;
+                        const interval = setInterval(function() {
+                            progress += 5;
+                            progressBar.style.width = progress + '%';
+                            
+                            if (progress >= 100) {
+                                clearInterval(interval);
+                                setTimeout(function() {
+                                    alert('文件上传成功');
+                                    closeLocalFileModal();
+                                    
+                                    // 刷新知识列表
+                                    initKnowledgeList();
+                                }, 500);
+                            }
+                        }, 200);
+                    }
+                });
+            }
+        
+        
+        // 切换新建下拉菜单
+        function toggleNewMenu() {
+            const newMenu = document.getElementById('new-menu');
+            if (newMenu) newMenu.classList.toggle('show');
+        }
+        
+        // 显示本地文件上传模态框
+        function showLocalFileModal() {
+            const newMenu = document.getElementById('new-menu');
+            const modal = document.getElementById('local-file-modal');
+            const fileUpload = document.getElementById('file-upload');
+            const uploadBtn = document.getElementById('upload-btn');
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            
+            if (newMenu) newMenu.classList.remove('show');
+            if (modal) modal.style.display = 'block';
+            
+            // 重置上传状态
+            if (fileUpload) fileUpload.value = '';
+            if (uploadBtn) uploadBtn.disabled = true;
+            if (progressContainer) progressContainer.style.display = 'none';
+            if (progressBar) progressBar.style.width = '0%';
+        }
+        
+        // 关闭本地文件上传模态框
+        function closeLocalFileModal() {
+            const modal = document.getElementById('local-file-modal');
+            if (modal) modal.style.display = 'none';
+        }
+        
+        // 显示网页链接模态框
+        function showWebLinkModal() {
+            const newMenu = document.getElementById('new-menu');
+            const modal = document.getElementById('web-link-modal');
+            const linkName = document.getElementById('link-name');
+            const linkUrl = document.getElementById('link-url');
+            
+            if (newMenu) newMenu.classList.remove('show');
+            if (modal) modal.style.display = 'block';
+            
+            // 重置表单
+            if (linkName) linkName.value = '';
+            if (linkUrl) linkUrl.value = '';
+        }
+        
+        // 关闭网页链接模态框
+        function closeWebLinkModal() {
+            const modal = document.getElementById('web-link-modal');
+            if (modal) modal.style.display = 'none';
+        }
+        
+        // 显示知识笔记模态框
+        function showNoteModal() {
+            const newMenu = document.getElementById('new-menu');
+            const modal = document.getElementById('note-modal');
+            const noteTitle = document.getElementById('note-title');
+            const noteContent = document.getElementById('note-content');
+            
+            if (newMenu) newMenu.classList.remove('show');
+            if (modal) modal.style.display = 'block';
+            
+            // 重置表单
+            if (noteTitle) noteTitle.value = '';
+            if (noteContent) noteContent.value = '';
+        }
+        
+        // 关闭知识笔记模态框
+        function closeNoteModal() {
+            const modal = document.getElementById('note-modal');
+            if (modal) modal.style.display = 'none';
+        }
+        
+        // 保存网页链接
+        function saveWebLink() {
+            const linkCategory = document.getElementById('link-category');
+            const linkName = document.getElementById('link-name');
+            const linkUrl = document.getElementById('link-url');
+            
+            if (!linkCategory || !linkName || !linkUrl) return;
+            
+            const category = linkCategory.value;
+            const name = linkName.value.trim();
+            const url = linkUrl.value.trim();
+            
+            if (!name || !url) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            // 模拟保存操作
+            console.log('保存网页链接:', { category, name, url });
+            
+            // 显示成功提示并关闭模态框
+            alert('网页链接保存成功');
+            closeWebLinkModal();
+            
+            // 刷新知识列表
+            initKnowledgeList();
+        }
+        
+        // 保存知识笔记
+        function saveNote() {
+            const noteCategory = document.getElementById('note-category');
+            const noteTitle = document.getElementById('note-title');
+            const noteContent = document.getElementById('note-content');
+            
+            if (!noteCategory || !noteTitle || !noteContent) return;
+            
+            const category = noteCategory.value;
+            const title = noteTitle.value.trim();
+            const content = noteContent.value.trim();
+            
+            if (!title || !content) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            // 模拟保存操作
+            console.log('保存知识笔记:', { category, title, content });
+            
+            // 显示成功提示并关闭模态框
+            alert('知识笔记保存成功');
+            closeNoteModal();
+            
+            // 刷新知识列表
+            initKnowledgeList();
+        }
     </script>
 </body>
 </html>

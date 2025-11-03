@@ -7,7 +7,16 @@
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/nav-component.js"></script>
     <script src="../../js/menu.js"></script>
+    <link rel="stylesheet" href="../../css/knowledge-create.css">
+    <script src="../../js/knowledge-create.js"></script>
     <style>
+        /* 排序和新建按钮同行显示样式 */
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
         .knowledge-base-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -47,7 +56,7 @@
             font-size: 14px;
         }
         .category-item.active {
-            background: #1890ff;
+            background: #dfe0e1;
             color: white;
         }
         .category-edit-btn, .category-delete-btn {
@@ -167,6 +176,7 @@
             text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-line-clamp: 3;
+            line-clamp: 3;
             -webkit-box-orient: vertical;
         }
         .material-preview {
@@ -345,7 +355,30 @@
             border-color: #1890ff;
             color: #1890ff;
         }
-    </style>
+                .new-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 4px;
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 160px;
+            display: none;
+            z-index: 100;
+        }
+        
+        .new-dropdown-menu.show {
+            display: block;
+        }
+        .menu-divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 4px 0;
+        }
+
+</style>
 </head>
 <body>
     <div id="top-nav"></div>
@@ -361,17 +394,17 @@
                 <div class="category-management">
                     <div class="category-list">
                         <div class="category-item" data-id="1">
-                            <span class="category-name">选题库</span>
+                            <a href="topic-library.html" class="category-name">选题库</a>
                             <span class="category-edit-btn" onclick="editCategory(1, '选题库')">✏️</span>
                             <span class="category-delete-btn" onclick="deleteCategory(1)" style="display: none;">🗑️</span>
                         </div>
                         <div class="category-item" data-id="2">
-                            <span class="category-name">文案库</span>
+                            <a href="copy-library.html" class="category-name">文案库</a>
                             <span class="category-edit-btn" onclick="editCategory(2, '文案库')">✏️</span>
                             <span class="category-delete-btn" onclick="deleteCategory(2)">🗑️</span>
                         </div>
                         <div class="category-item active" data-id="3">
-                            <span class="category-name">素材库</span>
+                            <a href="material-library.html" class="category-name">素材库</a>
                             <span class="category-edit-btn" onclick="editCategory(3, '素材库')">✏️</span>
                             <span class="category-delete-btn" onclick="deleteCategory(3)">🗑️</span>
                         </div>
@@ -391,6 +424,29 @@
                             <option value="newest">最新优先</option>
                             <option value="oldest">最早优先</option>
                         </select>
+                        <!-- 新建按钮 -->
+                    <div class="new-btn-container">
+                        <button id="new-btn" class="new-btn" onclick="toggleNewMenu()">
+                            <i class="new-icon"></i> 新建
+                        </button>
+                        <div id="new-menu" class="new-dropdown-menu">
+                            <div class="menu-item" onclick="showLocalFileModal()">
+                                <i class="file-icon"></i> 本地文件
+                            </div>
+                            <div class="menu-item" onclick="showWebLinkModal()">
+                                <i class="link-icon"></i> 网页链接
+                            </div>
+                            <div class="menu-item" onclick="showNoteModal()">
+                                <i class="note-icon"></i> 知识笔记
+                            </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-item" onclick="showAddCategoryModal()">
+                                <i class="category-icon"></i> 新建类目
+                            </div>
+                        </div>
+                    </div>
+
+
                     </div>
                 </div>
                 
@@ -924,10 +980,6 @@
                 <input type="text" id="edit-knowledge-title" placeholder="请输入标题">
             </div>
             <div class="form-group">
-                <label for="edit-knowledge-tags">标签</label>
-                <input type="text" id="edit-knowledge-tags" placeholder="请输入标签，用逗号分隔">
-            </div>
-            <div class="form-group">
                 <label for="edit-knowledge-content">描述</label>
                 <textarea id="edit-knowledge-content" placeholder="请输入素材描述"></textarea>
             </div>
@@ -1030,7 +1082,6 @@
                 
                 document.getElementById('edit-knowledge-id').value = id;
                 document.getElementById('edit-knowledge-title').value = title;
-                document.getElementById('edit-knowledge-tags').value = tags;
                 document.getElementById('edit-knowledge-content').value = content;
                 document.getElementById('edit-knowledge-modal').style.display = 'flex';
             }
@@ -1055,7 +1106,6 @@
         function confirmEditKnowledge() {
             const id = document.getElementById('edit-knowledge-id').value;
             const title = document.getElementById('edit-knowledge-title').value.trim();
-            const tags = document.getElementById('edit-knowledge-tags').value.trim();
             const content = document.getElementById('edit-knowledge-content').value.trim();
             
             if (!title || !content) {
@@ -1135,7 +1185,110 @@
         // 加载导航组件
         document.addEventListener('DOMContentLoaded', function() {
             loadNavigation('../../', 'personal');
+            // 初始化新建功能
+            if (typeof initKnowledgeCreate === 'function') {
+                initKnowledgeCreate();
+            }
         });
     </script>
+    
+    <!-- 本地文件上传模态框 -->
+    <div id="local-file-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>上传本地文件</h3>
+                <span class="close" onclick="closeLocalFileModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="file-category">存储类目：</label>
+                    <select id="file-category" class="form-control">
+                        <option value="1">选题库</option>
+                        <option value="2">文案库</option>
+                        <option value="3" selected>素材库</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>上传文件：</label>
+                    <input type="file" id="file-upload" style="display: none;" multiple accept=".pdf,.doc,.docx,.txt">
+                    <div id="drop-area" class="file-upload-container" onclick="document.getElementById('file-upload').click()">
+                        <div class="file-upload-text">点击或拖拽文件到此处上传</div>
+                        <div class="upload-tip">支持 PDF、Word、文本、声音wav等文件格式</div>
+                    </div>
+                    <div id="progress-container" class="progress-container" style="display: none;">
+                        <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeLocalFileModal()">取消</button>
+                <button id="upload-btn" class="confirm-btn" disabled>上传</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 网页链接模态框 -->
+    <div id="web-link-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>添加网页链接</h3>
+                <span class="close" onclick="closeWebLinkModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="link-category">存储类目：</label>
+                    <select id="link-category" class="form-control">
+                        <option value="1">选题库</option>
+                        <option value="2">文案库</option>
+                        <option value="3" selected>素材库</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="link-name">文件名称：</label>
+                    <input type="text" id="link-name" class="form-control" placeholder="请输入文件名称">
+                </div>
+                <div class="form-group">
+                    <label for="link-url">链接地址：</label>
+                    <input type="url" id="link-url" class="form-control" placeholder="请输入网页链接">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeWebLinkModal()">取消</button>
+                <button class="confirm-btn" onclick="saveWebLink()">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 知识笔记模态框 -->
+    <div id="note-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>添加知识笔记</h3>
+                <span class="close" onclick="closeNoteModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="note-category">存储类目：</label>
+                    <select id="note-category" class="form-control">
+                        <option value="1">选题库</option>
+                        <option value="2">文案库</option>
+                        <option value="3" selected>素材库</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="note-title">文件名称：</label>
+                    <input type="text" id="note-title" class="form-control" placeholder="请输入笔记标题">
+                </div>
+                <div class="form-group">
+                    <label for="note-content">正文内容：</label>
+                    <textarea id="note-content" class="form-control" rows="6" placeholder="请输入笔记内容"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeNoteModal()">取消</button>
+                <button class="confirm-btn" onclick="saveNote()">保存</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

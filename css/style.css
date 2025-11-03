@@ -59,26 +59,26 @@ html, body {
 }
 
 .logo-image {
-    width: 180px;
-    height: 46px;
+    width: 220px;
+    height: 50px;
     padding-top: 5px;
     object-fit: contain;
 }
 .slogan-l {
     width: 250px;
-    font-size: 18px;
+    font-size: 16px;
     font-family: SF Pro SC,SF Pro Display,SF Pro Icons,PingFang SC,'微软雅黑',Helvetica Neue,Helvetica,Arial,sans-serif;
-    color: #f09541; /* 淡灰色 */
+    color: #1831a1; /* 淡灰色 */
 }
 .slogan {
     width: 250px;
-    font-size: 18px;
+    font-size: 16px;
     font-family: SF Pro SC,SF Pro Display,SF Pro Icons,PingFang SC,'微软雅黑',Helvetica Neue,Helvetica,Arial,sans-serif;
-    color: #60ade0; /* 淡灰色 */
+    color: #dc2626; /* 淡灰色 */
 }
 .slogan-t {
     width: 250px;
-    font-size: 18px;
+    font-size: 16px;
     font-family: SF Pro SC,SF Pro Display,SF Pro Icons,PingFang SC,'微软雅黑',Helvetica Neue,Helvetica,Arial,sans-serif;
     color: #454544; /* 淡灰色 */
 }
@@ -199,11 +199,14 @@ html, body {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size:16px;
     transition: background-color 0.3s ease;
 }
 
 .nav-item.level-1 > .nav-header:hover {
     background-color: #ebeef5;
+    font-size:16px;
+
 }
 
 .nav-item.level-2 > .nav-header {
@@ -260,12 +263,16 @@ html, body {
     text-decoration: none;
     color: #333;
     transition: all 0.3s ease;
+    font-weight: 500;
+
 }
 
 /* 角色切换菜单显示控制 */
 /* 默认状态：显示普通菜单 */
 .nav-item.level-1 {
     display: block;
+    font-weight: bold;
+    color: #555;
 }
 
 /* 默认隐藏企业和管理员菜单 */
@@ -306,7 +313,7 @@ body.admin-role .nav-item.level-1.personal-menu {
 }
 
 .nav-item.level-3.active {
-    background-color: #4A90E2;
+    background-color: #05448C;
     color: #fff;
 }
 
@@ -393,6 +400,8 @@ body.admin-role .nav-item.level-1.personal-menu {
 /* 确保所有二级菜单项的视觉效果统一 */
 .nav-item.level-2 > .nav-header .nav-title {
     flex-grow: 1;
+    color:#333;
+    font-weight: 500;
 }
 
 /* 统一所有二级菜单的展开/折叠交互效果 */
@@ -1019,4 +1028,10 @@ body {
     margin-bottom: 20px;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--border-color);
+}
+.category-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none; 
 }

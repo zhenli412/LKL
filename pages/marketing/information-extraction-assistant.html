@@ -852,9 +852,18 @@
                         <!-- 评论数据面板 -->
                         <div class="tab-content" id="comment-data" style="display: none;">
                             <div class="result-header">
-                                <h3>评论数据提取（抖音链接）</h3>
+                                <h3>评论数据提取</h3>
                             </div>
-                            
+
+                        <!-- 支持平台 -->
+                            <div class="input-section">
+                                    <label for="influencer-platform">支持平台</label>
+                                    <div class="platform-options">
+                                        <label><input type="radio" name="influencer-platform" value="douyin" checked> 抖音</label>
+                                        <label><input type="radio" name="influencer-platform" value="xiaohongshu"> 小红书</label>
+                                    </div>
+                            </div>
+
                             <div class="input-section">
                                 <label for="video-url">视频链接 <span class="required">*</span></label>
                                 <input type="text" id="video-url" placeholder="请输入视频链接">
