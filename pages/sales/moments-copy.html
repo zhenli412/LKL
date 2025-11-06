@@ -33,7 +33,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: var(--panel-gap);
-            margin-bottom: 30px;
         }
 
         /* 面板样式 */
@@ -42,7 +41,6 @@
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-md);
             padding: var(--panel-padding);
-            height: fit-content;
             min-height: 500px;
         }
 
@@ -50,12 +48,14 @@
         .input-panel {
             display: flex;
             flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
         /* 输出面板样式 */
         .output-panel {
             display: flex;
             flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
         /* 面板标题样式 */
@@ -81,7 +81,7 @@
 
         .input-section textarea {
             width: 100%;
-            min-height: 100px;
+            min-height: 120px;
             padding: 12px 16px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
@@ -97,186 +97,333 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .input-section select {
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .parameter-group select {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px 16px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             font-size: 16px;
             background-color: var(--white);
+            cursor: pointer;
             transition: var(--transition);
         }
 
-        .input-section select:focus {
+        .parameter-group select:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .input-section input[type="text"] {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            font-size: 16px;
-            background-color: var(--white);
-            transition: var(--transition);
-        }
-
-        .input-section input[type="text"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        /* 选项组样式 */
-        .options-group {
+        /* 话术选项样式 */
+        .script-options {
             margin-bottom: 24px;
         }
 
-        .options-group h4 {
+        .script-options h4 {
             margin-top: 0;
-            margin-bottom: 16px;
-            color: var(--text-color);
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .option-item {
             margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
             display: flex;
-            align-items: center;
-        }
-
-        .option-item input[type="checkbox"] {
-            margin-right: 8px;
-        }
-
-        .option-item input[type="radio"] {
-            margin-right: 8px;
-        }
-
-        /* 操作按钮样式 */
-        .action-buttons {
-            margin-top: auto;
-            display: flex;
+            flex-direction: column;
             gap: 12px;
         }
 
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
         .action-button {
+            flex: 1;
             padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
             border: none;
             border-radius: var(--border-radius);
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
         }
 
-        .action-button.primary {
-            background-color: var(--primary-color);
-            color: var(--white);
-        }
-
-        .action-button.primary:hover {
+        .action-button:hover {
             background-color: var(--primary-hover);
         }
 
-        .action-button.secondary {
-            background-color: var(--secondary-color);
-            color: var(--text-color);
+        .action-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
         }
 
-        .action-button.secondary:hover {
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
             background-color: #e5e7eb;
         }
 
-        .action-button.small {
-            padding: 8px 16px;
-            font-size: 14px;
-        }
-
-        /* 结果区域样式 */
-        .result-output {
-            flex-grow: 1;
-            min-height: 400px;
-            padding: 16px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            background-color: var(--secondary-color);
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: inherit;
-            font-size: 16px;
-        }
-
-        .result-controls {
+        /* 结果面板样式 */
+        .result-header {
             display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        /* 文案示例卡片样式 */
-        .copy-example {
-            margin-bottom: 16px;
+        .result-header h3 {
+            margin: 0;
+        }
+
+        .result-content {
+            flex: 1;
+            min-height: 200px;
             padding: 16px;
-            border-radius: var(--border-radius);
             background-color: var(--secondary-color);
-            position: relative;
+            border-radius: var(--border-radius);
+            overflow-y: auto;
         }
 
-        .copy-example::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background-color: var(--primary-color);
-            border-radius: var(--border-radius) 0 0 var(--border-radius);
-        }
-
-        .copy-example-content {
-            margin-bottom: 12px;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .copy-example-hashtags {
-            color: var(--primary-color);
-            font-size: 14px;
-        }
-
-        /* 帮助说明区域样式 */
-        .help-section {
-            margin-top: 30px;
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
             padding: 20px;
-            background-color: var(--secondary-color);
-            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
         }
 
-        .help-section h3 {
+        .script-content h5 {
             margin-top: 0;
             margin-bottom: 16px;
-            color: var(--text-color);
+            color: var(--primary-color);
             font-size: 1.1rem;
             font-weight: 600;
         }
 
-        .help-item {
+        .script-content p {
             margin-bottom: 12px;
-            color: var(--text-light);
-        }
-
-        .help-item strong {
+            line-height: 1.6;
             color: var(--text-color);
         }
 
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* 响应式设计 */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .comparison-layout {
                 grid-template-columns: 1fr;
             }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* 单行输入框样式 */
+        .input-section input[type="text"],
+        .input-section select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .input-section input[type="text"]:focus,
+        .input-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--secondary-color);
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .file-upload-area input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload-text {
+            color: var(--text-color);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .file-upload-subtext {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .file-info {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+        
+        .file-info.show {
+            display: block;
+        }
+        
+        .file-name {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        
+        .file-size {
+            color: var(--text-light);
+            font-size: 14px;
         }
     </style>
 </head>
@@ -293,503 +440,85 @@
         <main class="content">
             <!-- 页面标题 -->
             <div class="page-header">
-                <h1>朋友圈文案助手</h1>
-                <p>生成吸引人、转化率高的朋友圈文案，提升个人IP影响力和业务转化</p>
+                <h2>朋友圈文案助手</h2>
+                <p>创建专业且有吸引力的个人品牌形象，提升个人影响力和业务转化能力</p>
             </div>
             
             <div class="page-content">
                 <div class="comparison-layout">
                     <!-- 左侧输入面板 -->
                     <div class="comparison-panel input-panel">
-                        <h3>文案设置</h3>
+                        <div class="result-header">
+                            <h3>内容配置输入</h3>
+                        </div>
+                        <div class="input-section">
+                                <textarea id="topic-content" placeholder="内容输入..." rows="3"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                                <labelh>选择参考资料</label>
+                                <!-- 知识标题复选框 -->
+                                <div style="margin: 15px 0;">
+                                    <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+                                        <input type="checkbox" checked style="margin-right: 8px;">
+                                        <span>🗂️[企业知识库] </span><span>产品营销策略与市场定位分析</span>
+                                    </label>
+                                    <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+                                        <input type="checkbox" checked style="margin-right: 8px;">
+                                        <span>📚[个人知识库] </span><span>客户需求洞察与痛点解决方案</span>
+                                    </label>
+                                </div>
+                                <div class="action-buttons" style="margin-top: 10px;">
+                                    <button class="action-button secondary"  onclick="openModal('enterprise-knowledge-modal')">+「企业知识库」导入</button>
+                                    <button class="action-button secondary"  onclick="openModal('personal-knowledge-modal')">+「个人知识库」导入</button>
+                                </div>
+                                
+                        </div>
                         
-                        <div class="input-section">
-                            <label for="content-theme">文案主题/内容</label>
-                            <textarea id="content-theme" placeholder="请描述您想要发布的内容主题或产品信息"></textarea>
-                        </div>
-
-                        <div class="input-section">
-                            <label for="industry">所属行业</label>
-                            <select id="industry">
-                                <option value="">请选择行业</option>
-                                <option value="tech">科技</option>
-                                <option value="finance">金融</option>
-                                <option value="education">教育</option>
-                                <option value="health">医疗健康</option>
-                                <option value="retail">零售</option>
-                                <option value="real-estate">房地产</option>
-                                <option value="insurance">保险</option>
-                                <option value="beauty">美妆</option>
-                                <option value="food">餐饮</option>
-                                <option value="other">其他</option>
-                            </select>
-                        </div>
-
-                        <div class="input-section">
-                            <label for="target-audience">目标受众</label>
-                            <input type="text" id="target-audience" placeholder="例如：潜在客户、现有客户、同行伙伴等">
-                        </div>
-
-                        <div class="input-section">
-                            <label for="key-selling-point">核心卖点/价值</label>
-                            <textarea id="key-selling-point" placeholder="请列出产品或服务的1-3个核心卖点或价值"></textarea>
-                        </div>
-
-                        <div class="options-group">
-                            <h4>文案类型</h4>
-                            <div class="option-item">
-                                <input type="radio" name="copy-type" id="type-product" value="product" checked>
-                                <label for="type-product">产品推广</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-type" id="type-knowledge" value="knowledge">
-                                <label for="type-knowledge">知识分享</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-type" id="type-experience" value="experience">
-                                <label for="type-experience">经验分享</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-type" id="type-case" value="case">
-                                <label for="type-case">案例展示</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-type" id="type-interaction" value="interaction">
-                                <label for="type-interaction">互动问答</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-type" id="type-personal" value="personal">
-                                <label for="type-personal">个人感悟</label>
-                            </div>
-                        </div>
-
-                        <div class="options-group">
-                            <h4>文案风格</h4>
-                            <div class="option-item">
-                                <input type="radio" name="copy-style" id="style-professional" value="professional" checked>
-                                <label for="style-professional">专业严谨</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-style" id="style-friendly" value="friendly">
-                                <label for="style-friendly">亲切自然</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-style" id="style-humorous" value="humorous">
-                                <label for="style-humorous">幽默风趣</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-style" id="style-emotional" value="emotional">
-                                <label for="style-emotional">情感共鸣</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-style" id="style-inspiring" value="inspiring">
-                                <label for="style-inspiring">激励人心</label>
-                            </div>
-                        </div>
-
-                        <div class="options-group">
-                            <h4>文案长度</h4>
-                            <div class="option-item">
-                                <input type="radio" name="copy-length" id="length-short" value="short" checked>
-                                <label for="length-short">简短型 (50字以内)</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-length" id="length-medium" value="medium">
-                                <label for="length-medium">中等型 (50-150字)</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="radio" name="copy-length" id="length-long" value="long">
-                                <label for="length-long">详细型 (150字以上)</label>
-                            </div>
-                        </div>
-
-                        <div class="options-group">
-                            <h4>是否添加</h4>
-                            <div class="option-item">
-                                <input type="checkbox" id="add-emoji" value="emoji" checked>
-                                <label for="add-emoji">表情符号</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="add-hashtag" value="hashtag" checked>
-                                <label for="add-hashtag">话题标签</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="add-call-action" value="call-action" checked>
-                                <label for="add-call-action">行动召唤</label>
-                            </div>
-                        </div>
-
                         <div class="action-buttons">
-                            <button id="generate-btn" class="action-button primary">生成文案</button>
-                            <button id="reset-btn" class="action-button secondary">重置</button>
+                            <button class="action-button primary">生成创作内容</button>
+                            <button class="action-button secondary">清空</button>
                         </div>
+                        
                     </div>
 
-                    <!-- 右侧输出面板 -->
+                    <!-- 右侧结果面板 -->
                     <div class="comparison-panel output-panel">
-                        <h3>生成结果</h3>
-                        
-                        <div class="result-controls">
-                            <button id="copy-btn" class="action-button secondary small">复制所有文案</button>
-                            <button id="generate-more-btn" class="action-button primary small">生成更多</button>
+                        <div class="result-header">
+                            <h3>创作结果</h3>
                         </div>
-
-                        <div id="result-output" class="result-output">
-                            朋友圈文案将显示在这里。请在左侧填写相关信息并点击"生成文案"按钮。
+                        <div id="extraction-result" class="result-content" style="position: relative;">
+                            <p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- 帮助说明 -->
-                <div class="help-section">
-                    <h3>使用帮助</h3>
-                    <div class="help-item">
-                        <strong>朋友圈文案注意事项：</strong> 朋友圈内容应保持真实性，避免过度营销，建议90%分享价值，10%展示产品。
-                    </div>
-                    <div class="help-item">
-                        <strong>发布频率建议：</strong> 每天1-3条，保持规律性，避免刷屏打扰好友。
-                    </div>
-                    <div class="help-item">
-                        <strong>最佳发布时间：</strong> 早上7-9点、中午12-14点、晚上18-22点是用户活跃度较高的时段。
-                    </div>
-                    <div class="help-item">
-                        <strong>配图建议：</strong> 优质的图片能显著提升文案的吸引力，建议配合使用高质量、有美感的图片。
-                    </div>
+            </div>
+
+            <!-- 使用指南区域 - 移至功能操作区下方 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入主题内容：</strong>填写文案主题、产品特点或想要表达的核心信息
+                </div>
+                <div class="help-item">
+                    <strong>2. 选择文案风格：</strong>根据目标受众和品牌调性选择合适的文案风格
+                </div>
+                <div class="help-item">
+                    <strong>3. 生成文案：</strong>点击「生成朋友圈文案」按钮获取创意文案内容
+                </div>
+                <div class="help-item">
+                    <strong>4. 复制使用：</strong>将生成的文案复制到朋友圈，可根据需要进行微调
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        // 页面加载完成后执行
-        document.addEventListener('DOMContentLoaded', function() {
-            // 加载导航组件
-            loadNavigation('../../', 'sales', 'sales/moments-copy.html');
-            
-            // 生成文案按钮事件
-            document.getElementById('generate-btn').addEventListener('click', function() {
-                generateCopy();
-            });
-            
-            // 重置按钮事件
-            document.getElementById('reset-btn').addEventListener('click', function() {
-                resetForm();
-            });
-            
-            // 复制所有文案按钮事件
-            document.getElementById('copy-btn').addEventListener('click', function() {
-                copyAllToClipboard();
-            });
-            
-            // 生成更多按钮事件
-            document.getElementById('generate-more-btn').addEventListener('click', function() {
-                generateMore();
-            });
-        });
-        
-        // 生成朋友圈文案函数
-        function generateCopy() {
-            // 获取表单数据
-            const contentTheme = document.getElementById('content-theme').value.trim() || '[内容主题]';
-            const industry = document.getElementById('industry').value;
-            const targetAudience = document.getElementById('target-audience').value.trim() || '[目标受众]';
-            const keySellingPoint = document.getElementById('key-selling-point').value.trim() || '[核心卖点]';
-            
-            // 获取选择的文案类型
-            const copyType = document.querySelector('input[name="copy-type"]:checked').value;
-            
-            // 获取选择的文案风格
-            const copyStyle = document.querySelector('input[name="copy-style"]:checked').value;
-            
-            // 获取选择的文案长度
-            const copyLength = document.querySelector('input[name="copy-length"]:checked').value;
-            
-            // 获取其他选项
-            const addEmoji = document.getElementById('add-emoji').checked;
-            const addHashtag = document.getElementById('add-hashtag').checked;
-            const addCallAction = document.getElementById('add-call-action').checked;
-            
-            // 显示加载状态
-            document.getElementById('result-output').innerHTML = '正在生成朋友圈文案...';
-            
-            // 模拟API延迟
-            setTimeout(() => {
-                let copyOutput = '';
-                
-                // 根据选择生成不同类型的文案
-                for (let i = 0; i < 3; i++) {
-                    let copyContent = '';
-                    let hashtags = '';
-                    
-                    // 根据文案类型和风格生成内容
-                    switch(copyType) {
-                        case 'product':
-                            copyContent = generateProductCopy(contentTheme, keySellingPoint, copyStyle, copyLength, addEmoji);
-                            hashtags = '#产品推荐 #好物分享 #生活好物';
-                            break;
-                        case 'knowledge':
-                            copyContent = generateKnowledgeCopy(contentTheme, copyStyle, copyLength, addEmoji);
-                            hashtags = '#知识分享 #干货 #职场技巧';
-                            break;
-                        case 'experience':
-                            copyContent = generateExperienceCopy(contentTheme, copyStyle, copyLength, addEmoji);
-                            hashtags = '#经验分享 #心得体会 #成长';
-                            break;
-                        case 'case':
-                            copyContent = generateCaseCopy(contentTheme, keySellingPoint, copyStyle, copyLength, addEmoji);
-                            hashtags = '#成功案例 #客户见证 #效果展示';
-                            break;
-                        case 'interaction':
-                            copyContent = generateInteractionCopy(contentTheme, copyStyle, copyLength, addEmoji);
-                            hashtags = '#互动话题 #讨论 #观点分享';
-                            break;
-                        case 'personal':
-                            copyContent = generatePersonalCopy(contentTheme, copyStyle, copyLength, addEmoji);
-                            hashtags = '#个人感悟 #生活随笔 #思考';
-                            break;
-                    }
-                    
-                    // 添加行业相关标签
-                    if (industry) {
-                        hashtags += ` #${getIndustryName(industry)}`;
-                    }
-                    
-                    // 构建文案卡片
-                    copyOutput += `<div class="copy-example">
-                        <div class="copy-example-content">${copyContent}</div>`;
-                    
-                    if (addHashtag) {
-                        copyOutput += `<div class="copy-example-hashtags">${hashtags}</div>`;
-                    }
-                    
-                    copyOutput += `</div>`;
-                }
-                
-                // 显示结果
-                document.getElementById('result-output').innerHTML = copyOutput;
-            }, 1500);
-        }
-        
-        // 生成更多文案
-        function generateMore() {
-            const currentOutput = document.getElementById('result-output').innerHTML;
-            
-            // 检查是否已经生成过文案
-            if (currentOutput.includes('请在左侧填写相关信息')) {
-                alert('请先生成基础文案');
-                return;
-            }
-            
-            // 模拟API延迟
-            setTimeout(() => {
-                // 生成2个新的文案
-                let newCopyOutput = '';
-                for (let i = 0; i < 2; i++) {
-                    // 复用generateCopy中的逻辑，但直接追加到现有内容
-                    // 这里简化处理，实际应用中可以复用上面的函数
-                    newCopyOutput += `<div class="copy-example">
-                        <div class="copy-example-content">${getRandomContent()}</div>
-                        <div class="copy-example-hashtags">#新文案 #内容创作</div>
-                    </div>`;
-                }
-                
-                // 追加到现有内容
-                document.getElementById('result-output').innerHTML += newCopyOutput;
-            }, 1000);
-        }
-        
-        // 产品推广文案生成
-        function generateProductCopy(theme, sellingPoint, style, length, addEmoji) {
-            const emojis = addEmoji ? ['✨', '🔥', '💯', '👍', '⭐'] : [''];
-            const randomEmoji = () => emojis[Math.floor(Math.random() * emojis.length)];
-            
-            if (length === 'short') {
-                return `${randomEmoji()} 强烈推荐！${theme}，${sellingPoint}，值得拥有！${randomEmoji()}`;
-            } else if (length === 'medium') {
-                if (style === 'professional') {
-                    return `【产品推荐】${theme}\n\n经过严格筛选和测试，该产品在${sellingPoint}方面表现出色，适合专业人士使用。品质保证，值得信赖。`;
-                } else if (style === 'friendly') {
-                    return `${randomEmoji()} 朋友们，今天要给大家安利这款超好用的${theme}！\n\n它最让我喜欢的就是${sellingPoint}，用了一段时间真的离不开了！推荐给有需要的朋友～${randomEmoji()}`;
-                } else {
-                    return `分享一款好东西：${theme}\n\n核心优势：${sellingPoint}\n\n亲测有效，推荐给大家！`;
-                }
-            } else {
-                return `${randomEmoji()} 深度评测：${theme}${randomEmoji()}\n\n为什么推荐它？\n1️⃣ ${sellingPoint}\n2️⃣ 品质可靠，性价比高\n3️⃣ 售后服务完善\n\n作为一名长期使用者，真心觉得这款产品能解决实际问题，提升生活品质。\n\n如果你正好有这方面的需求，不妨试试看！`;
-            }
-        }
-        
-        // 知识分享文案生成
-        function generateKnowledgeCopy(theme, style, length, addEmoji) {
-            const emojis = addEmoji ? ['📚', '💡', '🎓', '🤔', '✅'] : [''];
-            const randomEmoji = () => emojis[Math.floor(Math.random() * emojis.length)];
-            
-            if (length === 'short') {
-                return `${randomEmoji()} 知识点分享：${theme}的关键在于理解底层逻辑。${randomEmoji()}`;
-            } else if (length === 'medium') {
-                if (style === 'professional') {
-                    return `【专业知识】${theme}\n\n该领域的核心原理是：理论结合实践，系统化学习比碎片化阅读更有效。分享给需要的朋友。`;
-                } else if (style === 'humorous') {
-                    return `${randomEmoji()} 今天聊点干货：${theme}\n\n其实没那么复杂，记住这几点就够了：大道至简，知行合一，刻意练习！${randomEmoji()}`;
-                } else {
-                    return `${randomEmoji()} 学习心得分享：${theme}\n\n最近在深入研究这个话题，发现了一些很有价值的观点和方法，分享给大家，希望对你们有所帮助～`;
-                }
-            } else {
-                return `${randomEmoji()} 深度解析：${theme}${randomEmoji()}\n\n为什么这个话题重要？\n因为它关系到我们工作和生活的方方面面。\n\n核心要点：\n1️⃣ 基础理论是关键\n2️⃣ 实践应用要灵活\n3️⃣ 持续学习是根本\n\n欢迎在评论区交流你的看法和经验！`;
-            }
-        }
-        
-        // 经验分享文案生成
-        function generateExperienceCopy(theme, style, length, addEmoji) {
-            const emojis = addEmoji ? ['💪', '🌟', '👏', '💯', '🎯'] : [''];
-            const randomEmoji = () => emojis[Math.floor(Math.random() * emojis.length)];
-            
-            if (length === 'short') {
-                return `${randomEmoji()} 经验分享：${theme}最重要的是坚持和专注。${randomEmoji()}`;
-            } else if (length === 'medium') {
-                if (style === 'emotional') {
-                    return `【心得体会】关于${theme}\n\n这段经历让我深刻体会到：过程比结果更重要，成长比成功更珍贵。感恩所有的遇见和经历。`;
-                } else if (style === 'inspiring') {
-                    return `${randomEmoji()} 想和大家分享：${theme}\n\n没有捷径，只有脚踏实地；没有偶然，只有必然。只要方向正确，坚持下去就会有收获！${randomEmoji()}`;
-                } else {
-                    return `分享我的一些经验：${theme}\n\n踩过的坑，走过的路，都是宝贵的财富。希望我的经历能给你一些启发和帮助。`;
-                }
-            } else {
-                return `${randomEmoji()} 我的${theme}经验总结${randomEmoji()}\n\n从开始到现在，经历了很多挑战和困难，但也收获了成长和进步。\n\n几点重要感悟：\n1️⃣ 设定明确的目标\n2️⃣ 制定可行的计划\n3️⃣ 保持积极的心态\n4️⃣ 不断反思和调整\n\n相信每一段经历都是最好的安排！`;
-            }
-        }
-        
-        // 案例展示文案生成
-        function generateCaseCopy(theme, result, style, length, addEmoji) {
-            const emojis = addEmoji ? ['🎉', '🔥', '💼', '📊', '✅'] : [''];
-            const randomEmoji = () => emojis[Math.floor(Math.random() * emojis.length)];
-            
-            if (length === 'short') {
-                return `${randomEmoji()} 成功案例：${theme}，${result}！${randomEmoji()}`;
-            } else if (length === 'medium') {
-                if (style === 'professional') {
-                    return `【案例分享】${theme}\n\n通过系统化的方法和专业的执行，最终实现了${result}的成果。完整解决方案可供参考。`;
-                } else {
-                    return `${randomEmoji()} 分享一个成功案例：${theme}\n\n经过团队的共同努力，我们成功达成了${result}，这是对我们工作的最好肯定！${randomEmoji()}`;
-                }
-            } else {
-                return `${randomEmoji()} 详细案例解析：${theme}${randomEmoji()}\n\n项目背景：客户面临的主要挑战和需求\n解决过程：我们采取的方法和策略\n最终成果：成功实现了${result}\n客户反馈：满意度大幅提升\n\n每一个成功案例的背后，都是专业、用心和坚持！`;
-            }
-        }
-        
-        // 互动问答文案生成
-        function generateInteractionCopy(theme, style, length, addEmoji) {
-            const emojis = addEmoji ? ['❓', '💬', '🤔', '👂', '💡'] : [''];
-            const randomEmoji = () => emojis[Math.floor(Math.random() * emojis.length)];
-            
-            if (length === 'short') {
-                return `${randomEmoji()} 想问问大家：关于${theme}，你们有什么看法？${randomEmoji()}`;
-            } else if (length === 'medium') {
-                if (style === 'humorous') {
-                    return `${randomEmoji()} 灵魂拷问：${theme}\n\n最近一直在思考这个问题，想听听大家的想法～评论区见！😄`;
-                } else {
-                    return `【互动讨论】${theme}\n\n这是一个很有意思的话题，不同的人可能有不同的见解。欢迎在评论区分享你的观点！`;
-                }
-            } else {
-                return `${randomEmoji()} 深度探讨：${theme}${randomEmoji()}\n\n这个话题涉及到很多方面，想听听大家的看法：\n1. 你遇到过哪些相关的情况？\n2. 你是如何解决的？\n3. 你有什么好的建议？\n\n期待大家的精彩分享和讨论！`;
-            }
-        }
-        
-        // 个人感悟文案生成
-        function generatePersonalCopy(theme, style, length, addEmoji) {
-            const emojis = addEmoji ? ['❤️', '🌟', '📝', '💭', '🌈'] : [''];
-            const randomEmoji = () => emojis[Math.floor(Math.random() * emojis.length)];
-            
-            if (length === 'short') {
-                return `${randomEmoji()} 今日感悟：${theme}，简单才是幸福。${randomEmoji()}`;
-            } else if (length === 'medium') {
-                if (style === 'emotional') {
-                    return `【心情随笔】关于${theme}\n\n生活中有很多美好的瞬间，只要我们用心去感受。感谢所有的遇见和经历，让我成为更好的自己。`;
-                } else {
-                    return `${randomEmoji()} 最近一直在思考：${theme}\n\n有些事情，经历过才会明白；有些人，遇到过才会懂得。人生就是不断成长的过程。${randomEmoji()}`;
-                }
-            } else {
-                return `${randomEmoji()} 心灵随笔：${theme}${randomEmoji()}\n\n随着年龄的增长，对很多事情有了新的感悟。\n\n生活教会了我：\n1️⃣ 珍惜当下，活在当下\n2️⃣ 感恩所有，包容一切\n3️⃣ 简单生活，内心富足\n\n愿我们都能在平凡的日子里，活出不平凡的自己。`;
-            }
-        }
-        
-        // 获取行业中文名
-        function getIndustryName(industry) {
-            const industryMap = {
-                'tech': '科技',
-                'finance': '金融',
-                'education': '教育',
-                'health': '医疗健康',
-                'retail': '零售',
-                'real-estate': '房地产',
-                'insurance': '保险',
-                'beauty': '美妆',
-                'food': '餐饮',
-                'other': '其他'
-            };
-            return industryMap[industry] || '';
-        }
-        
-        // 获取随机内容（用于生成更多）
-        function getRandomContent() {
-            const contents = [
-                '分享一个小技巧：成功的关键在于坚持，而坚持的关键在于找到乐趣。',
-                '今天学到了一个新的概念，让我对工作有了全新的认识，分享给大家。',
-                '生活中不缺少美，缺少的是发现美的眼睛。保持好奇心，世界会更精彩。',
-                '每一次挑战都是成长的机会，勇敢面对，你会发现自己比想象中更强大。',
-                '简单的事情重复做，重复的事情认真做，认真的事情创新做。'
-            ];
-            return contents[Math.floor(Math.random() * contents.length)];
-        }
-        
-        // 重置表单函数
-        function resetForm() {
-            document.getElementById('content-theme').value = '';
-            document.getElementById('industry').value = '';
-            document.getElementById('target-audience').value = '';
-            document.getElementById('key-selling-point').value = '';
-            
-            // 重置单选框
-            document.getElementById('type-product').checked = true;
-            document.getElementById('style-professional').checked = true;
-            document.getElementById('length-short').checked = true;
-            
-            // 重置复选框
-            document.getElementById('add-emoji').checked = true;
-            document.getElementById('add-hashtag').checked = true;
-            document.getElementById('add-call-action').checked = true;
-            
-            // 重置结果输出
-            document.getElementById('result-output').innerHTML = '朋友圈文案将显示在这里。请在左侧填写相关信息并点击"生成文案"按钮。';
-        }
-        
-        // 复制所有文案到剪贴板
-        function copyAllToClipboard() {
-            const copyExamples = document.querySelectorAll('.copy-example');
-            
-            if (copyExamples.length === 0) {
-                alert('请先生成文案');
-                return;
-            }
-            
-            let allCopyText = '';
-            copyExamples.forEach((example, index) => {
-                const content = example.querySelector('.copy-example-content').textContent;
-                let hashtags = '';
-                const hashtagElement = example.querySelector('.copy-example-hashtags');
-                if (hashtagElement) {
-                    hashtags = '\n' + hashtagElement.textContent;
-                }
-                allCopyText += `文案 ${index + 1}：\n${content}${hashtags}\n\n`;
-            });
-            
-            navigator.clipboard.writeText(allCopyText).then(() => {
-                alert('所有文案已复制到剪贴板');
-            }).catch(err => {
-                console.error('复制失败:', err);
-                alert('复制失败，请手动复制');
-            });
-        }
-        
+
         // 页面加载完成后初始化导航组件
         document.addEventListener('DOMContentLoaded', function() {
             // 确保loadNavigation函数存在后再调用

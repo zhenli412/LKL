@@ -125,17 +125,17 @@ function loadNavigation() {
                     </div>
                 </div>
                 
-                <!-- 品牌故事 -->
+                <!-- 品牌助手 -->
                 <div class="nav-item level-1 active">
                     <div class="nav-header">
                         <span class="nav-icon">🏢</span>
-                        <span class="nav-title">品牌故事</span>
+                        <span class="nav-title">品牌助手</span>
                         <span class="expand-icon">▼</span>
                     </div>
                     <div class="nav-children">
                         <a href="../brand/brand-story.html" class="nav-item level-2 active">
                             <span class="nav-icon">📖</span>
-                            <span class="nav-title">品牌故事</span>
+                            <span class="nav-title">品牌助手</span>
                         </a>
                     </div>
                 </div>

@@ -109,6 +109,90 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
+        /* 帮助中心按钮样式 */
+        .help-center-btn {
+            position: fixed;
+            top: 70px;
+            right: 30px;
+            background-color: #f0f0f0;
+            color: #666;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 14px;
+            font-weight: normal;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 999; /* 低于顶部导航栏但高于其他内容 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .help-center-btn:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.05);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .help-center-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* 帮助提示浮层样式 - 鼠标悬停显示 */
+        .help-tooltip {
+            position: fixed;
+            top: 130px; /* 按钮下方 */
+            right: 30px;
+            background-color: #fff;
+            color: #333;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 300px;
+            border: 1px solid #e0e0e0; /* 淡灰色边框 */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        /* 鼠标悬停时显示浮层 */
+        .help-center-btn:hover + .help-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* 浮层箭头 */
+        .help-tooltip::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            right: 20px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent transparent #e0e0e0 transparent;
+        }
+        
+        /* 浮层内容箭头 */
+        .help-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            right: 20px;
+            border-width: 7px;
+            border-style: solid;
+            border-color: transparent transparent #fff transparent;
+            margin-bottom: -1px;
+        }
+        
+
+        
         /* 确保主内容区域有足够的顶部间距，避免被固定导航栏遮挡 */
         body {
             padding-top: 60px;
@@ -140,9 +224,21 @@
                 <span id="current-user">登录用户名</span>
                 <button id="logout-btn" class="logout-btn">登出</button>
                 <div class="avatar">
-                    <span class="avatar-placeholder">LK</span>
+                    <span>LK</span>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- 帮助中心按钮 -->
+    <button class="help-center-btn">
+        <span>帮助</span>
+    </button>
+    
+    <!-- 帮助提示浮层 -->
+    <div class="help-tooltip">
+        在我们每个功能页面的下方，都有《使用指南》。根据指南提示进行操作，内容生成的结果质量会更高喔~
+    </div>
+    
+
 </header>

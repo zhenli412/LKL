@@ -200,8 +200,9 @@
         }
         
         .action-button.secondary:hover:not(:disabled) {
-            color: var(--secondary-color);
-            border-color: var(var(--secondary-color));
+            color: #333;
+            background-color: var(--secondary-color);
+            border-color:  #ddd;
         }
         
         .action-button.secondary:active:not(:disabled) {
@@ -603,6 +604,9 @@
                                 <label for="web-links">网站链接/公众号链接 <span class="required">*</span></label>
                                 <textarea id="web-links" placeholder="请输入网站链接或公众号链接，多个链接请换行输入"></textarea>
                             </div>
+                                <div style="margin:0px 0px 20px 0px;">
+                                    <button class="action-button secondary">+「个人知识库」导入</button>
+                                </div>
                             
                         </div>
                         
@@ -619,6 +623,12 @@
                                         支持 Word、TXT、PDF 格式
                                     </div>
                                 </div>
+
+
+                                <div>
+                                    <button class="action-button secondary">+「个人知识库」导入</button>
+                                </div>
+
                             </div>
                             
                         </div>
@@ -636,6 +646,10 @@
                                         建议使用 PDF格式（Excel 格式可能不支持，建议导出PDF格式）
                                     </div>
                                 </div>
+
+                                <div style="margin-top: 15px;">
+                                    <button class="action-button secondary">+「个人知识库」导入</button>
+                                </div>
                             </div>
                             
                         </div>
@@ -646,8 +660,9 @@
                             <div class="input-section">
                                 <label for="news-title">热点新闻关键词 <span class="required">*</span></label>
                                 <textarea id="news-title" placeholder="请输入热点新闻的关键词"></textarea>
+                                
                             </div>
-                                                        
+
                         </div>
                         
                         <!-- 5. 组合选题 -->
@@ -693,13 +708,13 @@
                                 <h3>对话交流</h3>
                             </div>
                             <div class="chat-messages" id="chat-messages">
-                <div class="chat-message assistant">
-                    <div class="chat-avatar assistant-avatar">Ali</div>
-                    <div class="chat-message-content">
-                        您好！我是销售话术助手。请告诉我您对生成的话术有什么具体需求或修改建议，我可以为您进一步优化。
-                    </div>
-                </div>
-            </div>
+                            <div class="chat-message assistant">
+                                <div class="chat-avatar assistant-avatar">Ali</div>
+                                <div class="chat-message-content">
+                                    您好！我是选题助手。请告诉我您对生成的选题有什么具体需求或修改建议，我可以为您进一步优化。
+                                </div>
+                            </div>
+                            </div>
                             <div class="chat-input-container">
                                 <!-- 扩展按钮组 -->
                                 <!-- 输入框 -->

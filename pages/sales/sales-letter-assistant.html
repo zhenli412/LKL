@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人IP打造助手 - 利客来</title>
+    <title>销售信助手 - 利客来</title>
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/nav-component.js"></script>
     <style>
@@ -439,7 +439,7 @@
         <main class="content">
             <!-- 页面标题 -->
             <div class="page-header">
-                <h2>个人IP打造助手</h2>
+                <h2>销售信助手</h2>
                 <p>创建专业且有吸引力的个人品牌形象，提升个人影响力和业务转化能力</p>
             </div>
             
@@ -501,28 +501,31 @@
             <div class="help-section">
                 <h3>使用指南</h3>
                 <div class="help-item">
-                    <strong>1. 输入个人信息：</strong>填写您的专业领域、核心优势和目标受众等基本信息
+                    <strong>1. 输入销售背景：</strong>填写产品信息、目标受众和销售场景等背景资料
                 </div>
                 <div class="help-item">
-                    <strong>2. 选择IP方向：</strong>根据您的需求选择适合的个人IP定位和风格
+                    <strong>2. 选择风格参数：</strong>设置销售信风格、长度和重点强调内容
                 </div>
                 <div class="help-item">
-                    <strong>3. 生成方案：</strong>点击「生成IP方案」按钮获取个性化的IP打造策略
+                    <strong>3. 生成销售信：</strong>点击「生成销售信」按钮获取专业的销售信函
                 </div>
                 <div class="help-item">
-                    <strong>4. 应用优化：</strong>根据生成结果实施IP打造计划，并根据反馈持续优化
+                    <strong>4. 复制应用：</strong>将生成的销售信复制使用，可根据需要进行个性化修改
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-       
+        
         // 页面加载完成后初始化导航组件
         document.addEventListener('DOMContentLoaded', function() {
             // 确保loadNavigation函数存在后再调用
             if (window.loadNavigation) {
-                loadNavigation('../../', 'sales', 'sales/personal-ip-creation.html');
+                loadNavigation('../../', 'sales', 'sales/sales-letter-assistant.html');
+                // 设置当前页面信息，确保导航高亮正确
+                window.currentPage = 'sales-letter-assistant.html';
+                window.currentSection = 'sales';
             } else {
                 console.error('loadNavigation函数未定义');
             }

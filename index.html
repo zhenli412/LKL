@@ -12,7 +12,26 @@
     <script src="js/nav-component.js"></script>
     <script>
         // 加载统一导航组件
-        loadNavigation('', 'front');
+        // loadNavigation内部已经按顺序加载顶部导航和左侧导航
+        const navigationPromise = new Promise((resolve) => {
+            // 重写loadNavigation的then回调，在导航加载完成后显示主内容
+            const originalLoadNavigation = window.loadNavigation;
+            window.loadNavigation = function(basePath, activeRole) {
+                originalLoadNavigation(basePath, activeRole);
+                // 由于loadNavigation内部是异步加载，我们使用setTimeout确保导航加载完成
+                setTimeout(() => {
+                    resolve();
+                }, 100);
+            };
+            
+            // 调用修改后的loadNavigation
+            window.loadNavigation('../../', 'front');
+        });
+        
+        // 导航加载完成后显示主内容
+        navigationPromise.then(() => {
+            document.getElementById('main-content-container').style.display = 'block';
+        });
     </script>
 
     <!-- 主容器 -->
@@ -21,7 +40,7 @@
         <aside class="sidebar"></aside>
 
         <!-- 主内容区域 -->
-        <main class="content">
+        <main class="content" id="main-content-container" style="display: none;">
             <div class="page-header">
                 <h2 class="logo-text" style="color: #1831a1;">欢迎使用利客来智能营销获客平台</h2>
                     <span class="slogan-t">  利客来帮助企业策划统筹、智能获客，整体运营提效300+% ↑ </span>
@@ -30,16 +49,17 @@
                 <div class="dashboard-section">
                     <div class="dashboard-cards">
                         <div class="dashboard-card">
-                              <a href="pages/marketing/information-extraction-assistant.html">
+                              <a href="pages/marketing/Mindex.html">
                                   <img src="images/ai-marketing.jpg" alt="AI智能营销获客" style="width:100%;height:auto;border-radius:8px;">
                               </a>
                           </div>
                         <div class="dashboard-card">
-                              <a href="pages/sales/sales-script-generation.html">
+                              <a href="pages/sales/Sindex.html">
                                   <img src="images/ai-sales.jpg" alt="AI智能销售转化" style="width:100%;height:auto;border-radius:8px;">
                               </a>
                           </div>
                         <div class="dashboard-card">
+                            <a href="pages/brand/BZindex-BZ.html">
                             <img src="images/ai-brand.jpg" alt="AI智慧品牌建设" style="width:100%;height:auto;border-radius:8px;">
                         </div>
                         <div class="dashboard-card">

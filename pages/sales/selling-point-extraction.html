@@ -7,236 +7,423 @@
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/nav-component.js"></script>
     <style>
-        /* 定义CSS变量 */
+        /* CSS变量定义 */
         :root {
-            --primary-color: #1E88E5;
-            --primary-light: #64B5F6;
-            --primary-dark: #0D47A1;
-            --secondary-color: #FF6F00;
-            --text-primary: #212121;
-            --text-secondary: #757575;
-            --background-color: #F5F5F5;
-            --card-background: #FFFFFF;
-            --border-color: #E0E0E0;
-            --success-color: #4CAF50;
-            --warning-color: #FFC107;
-            --error-color: #F44336;
-            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --border-radius: 8px;
-            --spacing-xs: 4px;
-            --spacing-sm: 8px;
-            --spacing-md: 16px;
-            --spacing-lg: 24px;
-            --spacing-xl: 32px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
         }
 
-        /* 卖点提炼助手特定样式 */
+        /* 左右对比布局 */
         .comparison-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-lg);
+            gap: var(--panel-gap);
         }
 
+        /* 面板样式 */
         .comparison-panel {
-            background: var(--card-background);
+            background-color: var(--white);
             border-radius: var(--border-radius);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            min-height: 500px;
         }
 
+        /* 输入面板样式 */
         .input-panel {
-            grid-column: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
+        /* 输出面板样式 */
         .output-panel {
-            grid-column: 2;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
-        .panel-title {
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
             font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: var(--spacing-lg);
-            color: var(--text-primary);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: var(--spacing-sm);
         }
 
-        .input-group {
-            margin-bottom: var(--spacing-lg);
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
         }
 
-        .input-group label {
+        .input-section label {
             display: block;
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: 8px;
             font-weight: 500;
-            color: var(--text-primary);
+            color: var(--text-color);
         }
 
-        .input-group input[type="text"],
-        .input-group textarea,
-        .input-group select {
+        .input-section textarea {
             width: 100%;
-            padding: var(--spacing-sm);
+            min-height: 120px;
+            padding: 12px 16px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
         }
 
-        .input-group input[type="text"]:focus,
-        .input-group textarea:focus,
-        .input-group select:focus {
+        .input-section textarea:focus {
             outline: none;
             border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .input-group textarea {
-            min-height: 100px;
-            resize: vertical;
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
         }
 
-        .options-group {
-            margin-bottom: var(--spacing-lg);
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
         }
 
-        .options-group h4 {
-            margin-bottom: var(--spacing-md);
-            color: var(--text-primary);
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .option-item {
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
             display: flex;
             align-items: center;
-            margin-bottom: var(--spacing-sm);
+            cursor: pointer;
+            font-size: 14px;
         }
 
-        .option-item input[type="checkbox"] {
-            margin-right: var(--spacing-sm);
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
         }
 
-        .option-item label {
-            font-weight: normal;
-            margin-bottom: 0;
-        }
-
+        /* 按钮样式 */
         .action-buttons {
             display: flex;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-lg);
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
         }
 
-        .btn {
-            padding: var(--spacing-sm) var(--spacing-lg);
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
             border: none;
             border-radius: var(--border-radius);
-            font-size: 1rem;
+            font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background-color: var(--text-secondary);
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: #616161;
-        }
-
-        .btn-small {
-            padding: var(--spacing-xs) var(--spacing-sm);
-            font-size: 0.875rem;
-        }
-
-        .result-output {
-            min-height: 400px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            padding: var(--spacing-md);
-            background-color: #FAFAFA;
-        }
-
-        .result-controls {
+            transition: var(--transition);
             display: flex;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-md);
-            justify-content: flex-end;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
         }
 
-        .selling-point {
-            background-color: var(--card-background);
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
-            padding: var(--spacing-md);
-            margin-bottom: var(--spacing-md);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .selling-point h4 {
-            margin-top: 0;
-            color: var(--primary-dark);
-            font-size: 1.1rem;
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
         }
 
-        .selling-point p {
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-secondary);
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .selling-point .tag {
-            display: inline-block;
-            background-color: var(--primary-light);
-            color: var(--primary-dark);
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            margin-right: var(--spacing-xs);
-            margin-bottom: var(--spacing-xs);
+        .result-header h3 {
+            margin: 0;
         }
 
-        /* 帮助说明区域 */
-        .help-section {
-            background-color: #E3F2FD;
+        .result-content {
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
             border-radius: var(--border-radius);
-            padding: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-            border-left: 4px solid var(--primary-color);
+            overflow-y: auto;
         }
 
-        .help-section h4 {
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
             margin-top: 0;
-            color: var(--primary-dark);
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
-        .help-section ul {
-            margin-bottom: 0;
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* 响应式设计 */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .comparison-layout {
                 grid-template-columns: 1fr;
             }
+        }
 
+        @media (max-width: 768px) {
             .comparison-panel {
-                grid-column: 1;
+                padding: 16px;
             }
 
             .action-buttons {
                 flex-direction: column;
             }
+        }
+        
+        /* 单行输入框样式 */
+        .input-section input[type="text"],
+        .input-section select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .input-section input[type="text"]:focus,
+        .input-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--secondary-color);
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .file-upload-area input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload-text {
+            color: var(--text-color);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .file-upload-subtext {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .file-info {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+        
+        .file-info.show {
+            display: block;
+        }
+        
+        .file-name {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        
+        .file-size {
+            color: var(--text-light);
+            font-size: 14px;
         }
     </style>
 </head>
@@ -252,116 +439,78 @@
         <main class="content">
             <!-- 页面标题 -->
             <div class="page-header">
-                <h1>卖点提炼助手</h1>
+                <h2>卖点提炼助手</h2>
                 <p>深入分析产品特点，提炼最具吸引力的核心卖点</p>
             </div>
             
             <div class="page-content">
-                <!-- 帮助说明 -->
-                <div class="help-section">
-                    <h4>📝 使用指南</h4>
-                    <ul>
-                        <li>填写产品/服务的基本信息和详细描述</li>
-                        <li>描述目标客户群体和他们的需求</li>
-                        <li>选择需要提炼的卖点类型</li>
-                        <li>点击提炼按钮获取分析结果</li>
-                    </ul>
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <div class="result-header">
+                            <h3>内容配置输入</h3>
+                        </div>
+                        <div class="input-section">
+                                <textarea id="topic-content" placeholder="内容输入..." rows="3"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                                <labelh>选择参考资料</label>
+                                <!-- 知识标题复选框 -->
+                                <div style="margin: 15px 0;">
+                                    <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+                                        <input type="checkbox" checked style="margin-right: 8px;">
+                                        <span>🗂️[企业知识库] </span><span>产品营销策略与市场定位分析</span>
+                                    </label>
+                                    <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+                                        <input type="checkbox" checked style="margin-right: 8px;">
+                                        <span>📚[个人知识库] </span><span>客户需求洞察与痛点解决方案</span>
+                                    </label>
+                                </div>
+                                <div class="action-buttons" style="margin-top: 10px;">
+                                    <button class="action-button secondary"  onclick="openModal('enterprise-knowledge-modal')">+「企业知识库」导入</button>
+                                    <button class="action-button secondary"  onclick="openModal('personal-knowledge-modal')">+「个人知识库」导入</button>
+                                </div>
+                                
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="action-button primary">生成创作内容</button>
+                            <button class="action-button secondary">清空</button>
+                        </div>
+                        
+                    </div>
+
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>创作结果</h3>
+                        </div>
+                        <div id="extraction-result" class="result-content" style="position: relative;">
+                            <p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="comparison-layout">
-                    <!-- 输入面板 -->
-                    <div class="comparison-panel input-panel">
-                        <h2 class="panel-title">产品信息</h2>
-                        
-                        <div class="input-group">
-                            <label for="product-name">产品/服务名称</label>
-                            <input type="text" id="product-name" placeholder="输入您的产品或服务名称">
-                        </div>
+            </div>
 
-                        <div class="input-group">
-                            <label for="product-category">产品/服务类别</label>
-                            <select id="product-category">
-                                <option value="software">软件/应用</option>
-                                <option value="hardware">硬件/设备</option>
-                                <option value="service">服务</option>
-                                <option value="digital">数字产品</option>
-                                <option value="physical">实体产品</option>
-                                <option value="other">其他</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="product-description">产品/服务详细描述</label>
-                            <textarea id="product-description" placeholder="详细描述产品的功能、特性、材质、规格等信息"></textarea>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="target-audience">目标客户群体</label>
-                            <textarea id="target-audience" placeholder="描述您的目标客户群体，包括人口统计特征、痛点和需求"></textarea>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="competitors">主要竞争对手（可选）</label>
-                            <textarea id="competitors" placeholder="列出2-3个主要竞争对手，每个竞争对手占一行"></textarea>
-                        </div>
-
-                        <div class="options-group">
-                            <h4>卖点类型</h4>
-                            <div class="option-item">
-                                <input type="checkbox" id="type-functional" checked>
-                                <label for="type-functional">功能卖点</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="type-emotional" checked>
-                                <label for="type-emotional">情感卖点</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="type-economic" checked>
-                                <label for="type-economic">经济卖点</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="type-differential" checked>
-                                <label for="type-differential">差异化卖点</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="type-social" checked>
-                                <label for="type-social">社交认同卖点</label>
-                            </div>
-                        </div>
-
-                        <div class="options-group">
-                            <h4>输出格式</h4>
-                            <div class="option-item">
-                                <input type="checkbox" id="format-brief" checked>
-                                <label for="format-brief">简洁版卖点</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="format-detailed" checked>
-                                <label for="format-detailed">详细版卖点</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="format-marketing">
-                                <label for="format-marketing">营销话术建议</label>
-                            </div>
-                        </div>
-
-                        <div class="action-buttons">
-                            <button id="extract-points" class="btn btn-primary">提炼卖点</button>
-                            <button id="reset-form" class="btn btn-secondary">重置</button>
-                        </div>
-                    </div>
-
-                    <!-- 输出面板 -->
-                    <div class="comparison-panel output-panel">
-                        <h2 class="panel-title">提炼结果</h2>
-                        <div id="selling-points-output" class="result-output">
-                            提炼的卖点将在这里显示...
-                        </div>
-                        <div class="result-controls">
-                            <button id="copy-result" class="btn btn-secondary btn-small">复制</button>
-                            <button id="refine-points" class="btn btn-secondary btn-small">优化提炼</button>
-                        </div>
-                    </div>
+            <!-- 使用指南区域 - 移至功能操作区下方 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入产品信息：</strong>填写产品名称、功能特点和目标用户等详细信息
+                </div>
+                <div class="help-item">
+                    <strong>2. 设置提炼参数：</strong>选择卖点数量、提炼重点和表达方式等
+                </div>
+                <div class="help-item">
+                    <strong>3. 提取卖点：</strong>点击「提取卖点」按钮获取产品核心卖点
+                </div>
+                <div class="help-item">
+                    <strong>4. 应用优化：</strong>将提炼的卖点应用到营销材料中，提升产品吸引力
                 </div>
             </div>
         </main>
@@ -370,233 +519,6 @@
     <script src="../../js/nav-component.js"></script>
     <script>
 
-        // 提炼卖点函数
-        function extractSellingPoints() {
-            // 获取表单数据
-            var productName = document.getElementById('product-name').value || '您的产品';
-            var productCategory = document.getElementById('product-category').value;
-            var productDescription = document.getElementById('product-description').value || '这是一款优质的产品，具有多种功能和优势。';
-            var targetAudience = document.getElementById('target-audience').value || '有相关需求的客户';
-            var competitors = document.getElementById('competitors').value || '竞争对手A\n竞争对手B';
-            
-            // 获取选中的卖点类型
-            var typeFunctional = document.getElementById('type-functional').checked;
-            var typeEmotional = document.getElementById('type-emotional').checked;
-            var typeEconomic = document.getElementById('type-economic').checked;
-            var typeDifferential = document.getElementById('type-differential').checked;
-            var typeSocial = document.getElementById('type-social').checked;
-            
-            // 获取选中的输出格式
-            var formatBrief = document.getElementById('format-brief').checked;
-            var formatDetailed = document.getElementById('format-detailed').checked;
-            var formatMarketing = document.getElementById('format-marketing').checked;
-
-            // 模拟提炼卖点
-            var output = '';
-            
-            // 根据产品类别生成不同的卖点模板
-            const functionalPoints = [
-                '强大的核心功能，满足用户日常需求',
-                '智能化设计，操作简单便捷',
-                '高度可定制，适应不同场景',
-                '多平台兼容，随时随地使用',
-                '专业级性能，快速响应'
-            ];
-            
-            const emotionalPoints = [
-                '提升生活品质，享受优质体验',
-                '增强自信心，展现个人魅力',
-                '创造舒适感，营造温馨氛围',
-                '释放压力，焕发活力',
-                '满足个性化需求，彰显独特品味'
-            ];
-            
-            const economicPoints = [
-                '高性价比，投资回报显著',
-                '节省时间成本，提高效率',
-                '降低运营成本，增加收益',
-                '持久耐用，减少更换频率',
-                '完善的售后服务，无后顾之忧'
-            ];
-            
-            const differentialPoints = [
-                '独家专利技术，市场领先',
-                '创新设计理念，引领行业潮流',
-                '专属定制服务，独一无二',
-                '突破传统限制，解决行业痛点',
-                '跨界融合，带来全新体验'
-            ];
-            
-            const socialPoints = [
-                '深受用户喜爱，口碑传播广泛',
-                '行业权威推荐，品质有保障',
-                '众多成功案例，值得信赖',
-                '活跃的用户社区，交流分享',
-                '社会责任担当，传递正能量'
-            ];
-            
-            // 生成卖点内容
-            if (formatBrief) {
-                output += '<h3>📌 核心卖点（简洁版）</h3>';
-                output += '<div class="selling-points-list">';
-                
-                let pointsAdded = 0;
-                
-                if (typeFunctional && pointsAdded < 3) {
-                    output += `<div class="selling-point">
-                        <h4>${functionalPoints[0]}</h4>
-                        <span class="tag">功能型</span>
-                    </div>`;
-                    pointsAdded++;
-                }
-                
-                if (typeDifferential && pointsAdded < 3) {
-                    output += `<div class="selling-point">
-                        <h4>${differentialPoints[0]}</h4>
-                        <span class="tag">差异化</span>
-                    </div>`;
-                    pointsAdded++;
-                }
-                
-                if (typeEconomic && pointsAdded < 3) {
-                    output += `<div class="selling-point">
-                        <h4>${economicPoints[0]}</h4>
-                        <span class="tag">经济型</span>
-                    </div>`;
-                    pointsAdded++;
-                }
-                
-                output += '</div>';
-                output += '<hr>';
-            }
-            
-            if (formatDetailed) {
-                output += '<h3>📊 详细卖点分析</h3>';
-                
-                if (typeFunctional) {
-                    output += `<div class="selling-point">
-                        <h4>🔧 功能卖点</h4>
-                        <p>基于${productName}的设计理念，我们提炼出以下功能优势：</p>
-                        <ul>
-                            <li>${functionalPoints[0]}</li>
-                            <li>${functionalPoints[1]}</li>
-                            <li>${functionalPoints[2]}</li>
-                        </ul>
-                        <span class="tag">核心优势</span>
-                    </div>`;
-                }
-                
-                if (typeEmotional) {
-                    output += `<div class="selling-point">
-                        <h4>❤️ 情感卖点</h4>
-                        <p>对于${targetAudience}，${productName}能够带来以下情感价值：</p>
-                        <ul>
-                            <li>${emotionalPoints[0]}</li>
-                            <li>${emotionalPoints[2]}</li>
-                        </ul>
-                        <span class="tag">情感连接</span>
-                    </div>`;
-                }
-                
-                if (typeEconomic) {
-                    output += `<div class="selling-point">
-                        <h4>💰 经济卖点</h4>
-                        <p>${productName}为用户带来的经济效益：</p>
-                        <ul>
-                            <li>${economicPoints[0]}</li>
-                            <li>${economicPoints[1]}</li>
-                            <li>${economicPoints[3]}</li>
-                        </ul>
-                        <span class="tag">价值回报</span>
-                    </div>`;
-                }
-                
-                if (typeDifferential) {
-                    output += `<div class="selling-point">
-                        <h4>✨ 差异化卖点</h4>
-                        <p>相比${competitors.split('\n')[0]}和${competitors.split('\n')[1]}，${productName}的独特之处：</p>
-                        <ul>
-                            <li>${differentialPoints[0]}</li>
-                            <li>${differentialPoints[2]}</li>
-                        </ul>
-                        <span class="tag">竞争优势</span>
-                    </div>`;
-                }
-                
-                if (typeSocial) {
-                    output += `<div class="selling-point">
-                        <h4>👥 社交认同卖点</h4>
-                        <p>${productName}在市场和用户群体中的认可度：</p>
-                        <ul>
-                            <li>${socialPoints[0]}</li>
-                            <li>${socialPoints[2]}</li>
-                        </ul>
-                        <span class="tag">社会认可</span>
-                    </div>`;
-                }
-                
-                output += '<hr>';
-            }
-            
-            if (formatMarketing) {
-                output += '<h3>💡 营销话术建议</h3>';
-                output += `<div class="selling-point">
-                    <h4>核心宣传语</h4>
-                    <p>"${productName}，${functionalPoints[0]}，${economicPoints[0]}！"</p>
-                </div>`;
-                
-                output += `<div class="selling-point">
-                    <h4>产品描述建议</h4>
-                    <p>无论您是${targetAudience}中的哪一类，${productName}都能为您提供${functionalPoints[1]}的体验。我们的${differentialPoints[0]}，确保您获得最优质的产品和服务。选择${productName}，就是选择${emotionalPoints[0]}！</p>
-                </div>`;
-            }
-            
-            // 如果没有选择任何卖点类型，显示提示
-            if (!typeFunctional && !typeEmotional && !typeEconomic && !typeDifferential && !typeSocial) {
-                output = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">请至少选择一种卖点类型</div>';
-            }
-            
-            // 显示结果
-            document.getElementById('selling-points-output').innerHTML = output || '请选择卖点类型和输出格式';
-        }
-
-        // 重置表单函数
-        function resetSellingPointsForm() {
-            document.getElementById('product-name').value = '';
-            document.getElementById('product-category').value = 'software';
-            document.getElementById('product-description').value = '';
-            document.getElementById('target-audience').value = '';
-            document.getElementById('competitors').value = '';
-            document.getElementById('type-functional').checked = true;
-            document.getElementById('type-emotional').checked = true;
-            document.getElementById('type-economic').checked = true;
-            document.getElementById('type-differential').checked = true;
-            document.getElementById('type-social').checked = true;
-            document.getElementById('format-brief').checked = true;
-            document.getElementById('format-detailed').checked = true;
-            document.getElementById('format-marketing').checked = false;
-            document.getElementById('selling-points-output').innerHTML = '提炼的卖点将在这里显示...';
-        }
-
-        // 复制结果函数
-        function copySellingPoints() {
-            var output = document.getElementById('selling-points-output');
-            var text = output.innerText;
-            navigator.clipboard.writeText(text)
-                .then(function() {
-                    alert('复制成功！');
-                })
-                .catch(function(err) {
-                    console.error('复制失败:', err);
-                });
-        }
-
-        // 优化提炼函数
-        function refineSellingPoints() {
-            // 重新提炼，这里可以添加一些随机变化
-            document.getElementById('extract-points').click();
-            alert('已重新优化提炼结果！');
-        }
 
         // 绑定事件监听器
         document.addEventListener('DOMContentLoaded', function() {

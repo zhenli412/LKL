@@ -6,266 +6,423 @@
     <title>竞品调研助手 - LKL智能助手</title>
     <link rel="stylesheet" href="../../css/style.css">
     <style>
-        /* 定义CSS变量 */
+        /* CSS变量定义 */
         :root {
-            --primary-color: #1E88E5;
-            --primary-light: #64B5F6;
-            --primary-dark: #0D47A1;
-            --secondary-color: #FF6F00;
-            --text-primary: #212121;
-            --text-secondary: #757575;
-            --background-color: #F5F5F5;
-            --card-background: #FFFFFF;
-            --border-color: #E0E0E0;
-            --success-color: #4CAF50;
-            --warning-color: #FFC107;
-            --error-color: #F44336;
-            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --border-radius: 8px;
-            --spacing-xs: 4px;
-            --spacing-sm: 8px;
-            --spacing-md: 16px;
-            --spacing-lg: 24px;
-            --spacing-xl: 32px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
         }
 
-        /* 竞品调研助手特定样式 */
+        /* 左右对比布局 */
         .comparison-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-lg);
+            gap: var(--panel-gap);
         }
 
+        /* 面板样式 */
         .comparison-panel {
-            background: var(--card-background);
+            background-color: var(--white);
             border-radius: var(--border-radius);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            min-height: 500px;
         }
 
+        /* 输入面板样式 */
         .input-panel {
-            grid-column: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
+        /* 输出面板样式 */
         .output-panel {
-            grid-column: 2;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
-        .panel-title {
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
             font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: var(--spacing-lg);
-            color: var(--text-primary);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: var(--spacing-sm);
         }
 
-        .input-group {
-            margin-bottom: var(--spacing-lg);
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
         }
 
-        .input-group label {
+        .input-section label {
             display: block;
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: 8px;
             font-weight: 500;
-            color: var(--text-primary);
+            color: var(--text-color);
         }
 
-        .input-group input[type="text"],
-        .input-group textarea,
-        .input-group select {
+        .input-section textarea {
             width: 100%;
-            padding: var(--spacing-sm);
+            min-height: 120px;
+            padding: 12px 16px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
         }
 
-        .input-group input[type="text"]:focus,
-        .input-group textarea:focus,
-        .input-group select:focus {
+        .input-section textarea:focus {
             outline: none;
             border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .input-group textarea {
-            min-height: 100px;
-            resize: vertical;
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
         }
 
-        .options-group {
-            margin-bottom: var(--spacing-lg);
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
         }
 
-        .options-group h4 {
-            margin-bottom: var(--spacing-md);
-            color: var(--text-primary);
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .option-item {
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
             display: flex;
             align-items: center;
-            margin-bottom: var(--spacing-sm);
+            cursor: pointer;
+            font-size: 14px;
         }
 
-        .option-item input[type="checkbox"] {
-            margin-right: var(--spacing-sm);
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
         }
 
-        .option-item label {
-            font-weight: normal;
-            margin-bottom: 0;
-        }
-
+        /* 按钮样式 */
         .action-buttons {
             display: flex;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-lg);
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
         }
 
-        .btn {
-            padding: var(--spacing-sm) var(--spacing-lg);
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
             border: none;
             border-radius: var(--border-radius);
-            font-size: 1rem;
+            font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
         }
 
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
+        .action-button:hover {
+            background-color: var(--primary-hover);
         }
 
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-1px);
+        .action-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
         }
 
-        .btn-secondary {
-            background-color: var(--text-secondary);
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: #616161;
-        }
-
-        .btn-small {
-            padding: var(--spacing-xs) var(--spacing-sm);
-            font-size: 0.875rem;
-        }
-
-        .result-output {
-            min-height: 400px;
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
-            padding: var(--spacing-md);
-            background-color: #FAFAFA;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .result-controls {
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 结果面板样式 */
+        .result-header {
             display: flex;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-md);
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .research-section {
-            margin-bottom: var(--spacing-lg);
+        .result-header h3 {
+            margin: 0;
         }
 
-        .research-section h4 {
-            color: var(--primary-dark);
-            border-bottom: 1px solid var(--primary-light);
-            padding-bottom: var(--spacing-xs);
-            margin-bottom: var(--spacing-md);
+        .result-content {
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
         }
 
-        .research-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: var(--spacing-md);
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
         }
 
-        .research-table th,
-        .research-table td {
-            padding: var(--spacing-sm);
-            border: 1px solid var(--border-color);
-            text-align: left;
-        }
-
-        .research-table th {
-            background-color: var(--primary-light);
-            color: var(--primary-dark);
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
             font-weight: 600;
         }
 
-        .research-table tr:nth-child(even) {
-            background-color: #F9F9F9;
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
         }
 
-        .highlight {
-            background-color: #FFF8E1;
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: 4px;
-            font-weight: 500;
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
         }
 
-        .strength {
-            color: var(--success-color);
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
 
-        .weakness {
-            color: var(--error-color);
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .opportunity {
-            color: var(--warning-color);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .threat {
-            color: var(--error-color);
-        }
-
-        /* 帮助说明区域 */
-        .help-section {
-            background-color: #E3F2FD;
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
             border-radius: var(--border-radius);
-            padding: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-            border-left: 4px solid var(--primary-color);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
         }
 
-        .help-section h4 {
+        .usage-guide h3 {
             margin-top: 0;
-            color: var(--primary-dark);
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
         }
 
-        .help-section ul {
-            margin-bottom: 0;
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* 响应式设计 */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .comparison-layout {
                 grid-template-columns: 1fr;
             }
+        }
 
+        @media (max-width: 768px) {
             .comparison-panel {
-                grid-column: 1;
+                padding: 16px;
             }
 
             .action-buttons {
                 flex-direction: column;
             }
+        }
+        
+        /* 单行输入框样式 */
+        .input-section input[type="text"],
+        .input-section select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
 
-            .research-table {
-                font-size: 0.875rem;
-            }
+        .input-section input[type="text"]:focus,
+        .input-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--secondary-color);
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .file-upload-area input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload-text {
+            color: var(--text-color);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .file-upload-subtext {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .file-info {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+        
+        .file-info.show {
+            display: block;
+        }
+        
+        .file-name {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        
+        .file-size {
+            color: var(--text-light);
+            font-size: 14px;
         }
     </style>
 </head>
@@ -281,104 +438,78 @@
         <main class="content">
             <!-- 页面标题 -->
             <div class="page-header">
-                <h1>竞品调研助手</h1>
+                <h2>竞品调研助手</h2>
                 <p>全面分析竞争对手，制定差异化竞争策略</p>
             </div>
             
             <div class="page-content">
-                <!-- 帮助说明 -->
-                <div class="help-section">
-                    <h4>📝 使用指南</h4>
-                    <ul>
-                        <li>填写您的产品/服务信息</li>
-                        <li>添加主要竞争对手信息</li>
-                        <li>选择需要调研的维度</li>
-                        <li>点击生成按钮获取竞品分析报告</li>
-                    </ul>
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <div class="result-header">
+                            <h3>内容配置输入</h3>
+                        </div>
+                        <div class="input-section">
+                                <textarea id="topic-content" placeholder="内容输入..." rows="3"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                                <labelh>选择参考资料</label>
+                                <!-- 知识标题复选框 -->
+                                <div style="margin: 15px 0;">
+                                    <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+                                        <input type="checkbox" checked style="margin-right: 8px;">
+                                        <span>🗂️[企业知识库] </span><span>产品营销策略与市场定位分析</span>
+                                    </label>
+                                    <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+                                        <input type="checkbox" checked style="margin-right: 8px;">
+                                        <span>📚[个人知识库] </span><span>客户需求洞察与痛点解决方案</span>
+                                    </label>
+                                </div>
+                                <div class="action-buttons" style="margin-top: 10px;">
+                                    <button class="action-button secondary"  onclick="openModal('enterprise-knowledge-modal')">+「企业知识库」导入</button>
+                                    <button class="action-button secondary"  onclick="openModal('personal-knowledge-modal')">+「个人知识库」导入</button>
+                                </div>
+                                
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="action-button primary">生成创作内容</button>
+                            <button class="action-button secondary">清空</button>
+                        </div>
+                        
+                    </div>
+
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>创作结果</h3>
+                        </div>
+                        <div id="extraction-result" class="result-content" style="position: relative;">
+                            <p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="comparison-layout">
-                    <!-- 输入面板 -->
-                    <div class="comparison-panel input-panel">
-                        <h2 class="panel-title">调研设置</h2>
-                        
-                        <div class="input-group">
-                            <label for="your-product">您的产品/服务名称</label>
-                            <input type="text" id="your-product" placeholder="输入您的产品或服务名称">
-                        </div>
+            </div>
 
-                        <div class="input-group">
-                            <label for="product-category">产品/服务类别</label>
-                            <select id="product-category">
-                                <option value="software">软件/应用</option>
-                                <option value="hardware">硬件/设备</option>
-                                <option value="service">服务</option>
-                                <option value="digital">数字产品</option>
-                                <option value="physical">实体产品</option>
-                                <option value="other">其他</option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="competitor-1">竞争对手 1</label>
-                            <input type="text" id="competitor-1" placeholder="输入第一个主要竞争对手名称">
-                        </div>
-
-                        <div class="input-group">
-                            <label for="competitor-2">竞争对手 2</label>
-                            <input type="text" id="competitor-2" placeholder="输入第二个主要竞争对手名称">
-                        </div>
-
-                        <div class="input-group">
-                            <label for="competitor-3">竞争对手 3</label>
-                            <input type="text" id="competitor-3" placeholder="输入第三个主要竞争对手名称（可选）">
-                        </div>
-
-                        <div class="options-group">
-                            <h4>调研维度</h4>
-                            <div class="option-item">
-                                <input type="checkbox" id="dimension-product" checked>
-                                <label for="dimension-product">产品特性/功能</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="dimension-price" checked>
-                                <label for="dimension-price">价格策略</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="dimension-marketing" checked>
-                                <label for="dimension-marketing">营销策略</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="dimension-target" checked>
-                                <label for="dimension-target">目标用户群体</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="dimension-strength" checked>
-                                <label for="dimension-strength">优劣势分析</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="dimension-swot" checked>
-                                <label for="dimension-swot">SWOT分析</label>
-                            </div>
-                        </div>
-
-                        <div class="action-buttons">
-                            <button id="generate-research" class="btn btn-primary">生成调研报告</button>
-                            <button id="reset-form" class="btn btn-secondary">重置</button>
-                        </div>
-                    </div>
-
-                    <!-- 输出面板 -->
-                    <div class="comparison-panel output-panel">
-                        <h2 class="panel-title">调研结果</h2>
-                        <div id="research-output" class="result-output">
-                            调研报告将在这里显示...
-                        </div>
-                        <div class="result-controls">
-                            <button id="copy-result" class="btn btn-secondary btn-small">复制</button>
-                            <button id="export-report" class="btn btn-secondary btn-small">导出报告</button>
-                        </div>
-                    </div>
+            <!-- 使用指南区域 - 移至功能操作区下方 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入竞品信息：</strong>填写竞品名称、所属行业和调研方向等基本信息
+                </div>
+                <div class="help-item">
+                    <strong>2. 设置调研参数：</strong>选择调研维度、深度和关注重点等
+                </div>
+                <div class="help-item">
+                    <strong>3. 开始调研：</strong>点击「开始调研」按钮获取竞品详细分析报告
+                </div>
+                <div class="help-item">
+                    <strong>4. 分析应用：</strong>根据调研结果进行竞争策略制定和产品优化
                 </div>
             </div>
         </main>
@@ -399,316 +530,6 @@
             document.getElementById('export-report').onclick = exportResearchReport;
         });
 
-        // 生成调研报告
-        function generateResearchReport() {
-            // 获取表单数据
-            var yourProduct = document.getElementById('your-product').value || '您的产品';
-            var productCategory = document.getElementById('product-category').value;
-            var competitor1 = document.getElementById('competitor-1').value || '竞品A';
-            var competitor2 = document.getElementById('competitor-2').value || '竞品B';
-            var competitor3 = document.getElementById('competitor-3').value || '';
-            
-            // 获取选中的调研维度
-            var dimensionProduct = document.getElementById('dimension-product').checked;
-            var dimensionPrice = document.getElementById('dimension-price').checked;
-            var dimensionMarketing = document.getElementById('dimension-marketing').checked;
-            var dimensionTarget = document.getElementById('dimension-target').checked;
-            var dimensionStrength = document.getElementById('dimension-strength').checked;
-            var dimensionSwot = document.getElementById('dimension-swot').checked;
-
-            // 模拟生成调研报告
-            var report = '<h3>📊 ' + yourProduct + ' 竞品调研报告</h3>';
-            report += '<p>调研时间：' + new Date().toLocaleDateString() + '</p>';
-            report += '<p>产品类别：' + getCategoryName(productCategory) + '</p>';
-            report += '<hr>';
-            
-            // 竞争格局概览
-            report += '<div class="research-section">';
-            report += '    <h4>🎯 竞争格局概览</h4>';
-            report += '    <p>本次调研主要分析了' + yourProduct + '与以下竞争对手的情况：</p>';
-            report += '    <ul>';
-            report += '        <li>' + competitor1 + '</li>';
-            report += '        <li>' + competitor2 + '</li>';
-            if (competitor3) {
-                report += '        <li>' + competitor3 + '</li>';
-            }
-            report += '    </ul>';
-            report += '</div>';
-            
-            // 产品特性对比
-            if (dimensionProduct) {
-                report += '<div class="research-section">';
-                report += '    <h4>🔍 产品特性/功能对比</h4>';
-                report += '    <table class="research-table">';
-                report += '        <thead>';
-                report += '            <tr>';
-                report += '                <th>特性维度</th>';
-                report += '                <th>' + yourProduct + '</th>';
-                report += '                <th>' + competitor1 + '</th>';
-                report += '                <th>' + competitor2 + '</th>';
-                if (competitor3) {
-                    report += '                <th>' + competitor3 + '</th>';
-                }
-                report += '            </tr>';
-                report += '        </thead>';
-                report += '        <tbody>';
-                report += '            <tr>';
-                report += '                <td>核心功能完整性</td>';
-                report += '                <td><span class="highlight strength">⭐⭐⭐⭐</span></td>';
-                report += '                <td>⭐⭐⭐</td>';
-                report += '                <td>⭐⭐⭐⭐</td>';
-                if (competitor3) {
-                    report += '                <td>⭐⭐</td>';
-                }
-                report += '            </tr>';
-                report += '            <tr>';
-                report += '                <td>创新特性</td>';
-                report += '                <td><span class="highlight strength">⭐⭐⭐⭐⭐</span></td>';
-                report += '                <td>⭐⭐⭐</td>';
-                report += '                <td>⭐⭐⭐⭐</td>';
-                if (competitor3) {
-                    report += '                <td>⭐⭐⭐</td>';
-                }
-                report += '            </tr>';
-                report += '            <tr>';
-                report += '                <td>用户界面友好度</td>';
-                report += '                <td>⭐⭐⭐⭐</td>';
-                report += '                <td><span class="highlight weakness">⭐⭐</span></td>';
-                report += '                <td>⭐⭐⭐</td>';
-                if (competitor3) {
-                    report += '                <td>⭐⭐⭐⭐</td>';
-                }
-                report += '            </tr>';
-                report += '            <tr>';
-                report += '                <td>技术先进性</td>';
-                report += '                <td><span class="highlight strength">⭐⭐⭐⭐</span></td>';
-                report += '                <td>⭐⭐⭐</td>';
-                report += '                <td>⭐⭐⭐⭐</td>';
-                if (competitor3) {
-                    report += '                <td>⭐⭐</td>';
-                }
-                report += '            </tr>';
-                report += '        </tbody>';
-                report += '    </table>';
-                report += '</div>';
-            }
-            
-            // 价格策略对比
-            if (dimensionPrice) {
-                report += '<div class="research-section">';
-                report += '    <h4>💰 价格策略对比</h4>';
-                report += '    <table class="research-table">';
-                report += '        <thead>';
-                report += '            <tr>';
-                report += '                <th>价格维度</th>';
-                report += '                <th>' + yourProduct + '</th>';
-                report += '                <th>' + competitor1 + '</th>';
-                report += '                <th>' + competitor2 + '</th>';
-                report += '            </tr>';
-                report += '        </thead>';
-                report += '        <tbody>';
-                report += '            <tr>';
-                report += '                <td>基础价格</td>';
-                report += '                <td><span class="highlight">中等</span></td>';
-                report += '                <td>低</td>';
-                report += '                <td>高</td>';
-                report += '            </tr>';
-                report += '            <tr>';
-                report += '                <td>定价策略</td>';
-                report += '                <td>价值定价</td>';
-                report += '                <td>竞争定价</td>';
-                report += '                <td>高端定价</td>';
-                report += '            </tr>';
-                report += '            <tr>';
-                report += '                <td>促销频率</td>';
-                report += '                <td>定期促销</td>';
-                report += '                <td><span class="highlight">频繁促销</span></td>';
-                report += '                <td>极少促销</td>';
-                report += '            </tr>';
-                report += '            <tr>';
-                report += '                <td>性价比</td>';
-                report += '                <td><span class="highlight strength">高</span></td>';
-                report += '                <td>中高</td>';
-                report += '                <td>中</td>';
-                report += '            </tr>';
-                report += '        </tbody>';
-                report += '    </table>';
-                report += '</div>';
-            }
-            
-            // 营销策略对比
-            if (dimensionMarketing) {
-                report += '<div class="research-section">';
-                report += '    <h4>📈 营销策略对比</h4>';
-                report += '    <p><strong>' + yourProduct + '：</strong>主要采用内容营销和口碑传播策略，注重用户体验和品牌建设。</p>';
-                report += '    <p><strong>' + competitor1 + '：</strong>大量投放广告，采用价格战策略抢占市场份额。</p>';
-                report += '    <p><strong>' + competitor2 + '：</strong>专注高端用户群体，通过专业形象和优质服务建立品牌壁垒。</p>';
-                if (competitor3) {
-                    report += '    <p><strong>' + competitor3 + '：</strong>采用差异化营销，针对特定细分市场提供定制化解决方案。</p>';
-                }
-                report += '</div>';
-            }
-            
-            // 目标用户群体对比
-            if (dimensionTarget) {
-                report += '<div class="research-section">';
-                report += '    <h4>👥 目标用户群体对比</h4>';
-                report += '    <p><strong>' + yourProduct + '：</strong>主要面向中小企业和专业人士，注重产品的实用性和性价比。</p>';
-                report += '    <p><strong>' + competitor1 + '：</strong>主要面向价格敏感型用户和入门级市场。</p>';
-                report += '    <p><strong>' + competitor2 + '：</strong>主要面向大型企业和高端用户，注重产品的专业性和稳定性。</p>';
-                report += '</div>';
-            }
-            
-            // 优劣势分析
-            if (dimensionStrength) {
-                report += '<div class="research-section">';
-                report += '    <h4>⚖️ 优劣势分析</h4>';
-                report += '    <p><strong>优势：</strong></p>';
-                report += '    <ul>';
-                report += '        <li><span class="highlight strength">技术创新能力强</span>：相比竞品拥有更多创新功能</li>';
-                report += '        <li><span class="highlight strength">用户体验优秀</span>：界面设计和交互流程更符合用户习惯</li>';
-                report += '        <li><span class="highlight strength">高性价比</span>：在同等价位下提供更多功能和更好服务</li>';
-                report += '    </ul>';
-                report += '    <p><strong>劣势：</strong></p>';
-                report += '    <ul>';
-                report += '        <li><span class="highlight weakness">品牌知名度较低</span>：相比' + competitor1 + '和' + competitor2 + '，市场覆盖度有限</li>';
-                report += '        <li><span class="highlight weakness">销售渠道不完善</span>：线上线下结合的销售网络尚未成熟</li>';
-                report += '        <li><span class="highlight weakness">客户服务团队规模小</span>：响应速度和服务深度有待提升</li>';
-                report += '    </ul>';
-                report += '</div>';
-            }
-            
-            // SWOT分析
-            if (dimensionSwot) {
-                report += '<div class="research-section">';
-                report += '    <h4>📋 SWOT分析</h4>';
-                report += '    <p><strong class="strength">优势 (Strengths)：</strong></p>';
-                report += '    <ul>';
-                report += '        <li>产品技术领先，功能创新</li>';
-                report += '        <li>用户体验优秀，口碑良好</li>';
-                report += '        <li>团队执行力强，迭代速度快</li>';
-                report += '    </ul>';
-                report += '    <p><strong class="weakness">劣势 (Weaknesses)：</strong></p>';
-                report += '    <ul>';
-                report += '        <li>品牌影响力有限</li>';
-                report += '        <li>资金实力相对较弱</li>';
-                report += '        <li>市场推广经验不足</li>';
-                report += '    </ul>';
-                report += '    <p><strong class="opportunity">机会 (Opportunities)：</strong></p>';
-                report += '    <ul>';
-                report += '        <li>市场需求持续增长</li>';
-                report += '        <li>行业标准尚未完全确立</li>';
-                report += '        <li>新兴技术应用空间大</li>';
-                report += '    </ul>';
-                report += '    <p><strong class="threat">威胁 (Threats)：</strong></p>';
-                report += '    <ul>';
-                report += '        <li>' + competitor1 + '价格战策略挤压利润空间</li>';
-                report += '        <li>' + competitor2 + '在高端市场占据优势地位</li>';
-                report += '        <li>潜在进入者带来新的竞争压力</li>';
-                report += '    </ul>';
-                report += '</div>';
-            }
-            
-            // 总结与建议
-            report += '<div class="research-section">';
-            report += '    <h4>💡 总结与建议</h4>';
-            report += '    <p><strong>市场定位建议：</strong></p>';
-            report += '    <p>基于竞品分析，建议' + yourProduct + '采取<strong>差异化竞争策略</strong>，重点突出技术创新和用户体验优势，避免与' + competitor1 + '直接进行价格竞争。</p>';
-            report += '    <p><strong>产品优化建议：</strong></p>';
-            report += '    <ul>';
-            report += '        <li>继续保持技术创新优势，加强核心功能研发</li>';
-            report += '        <li>优化用户界面，提升用户体验</li>';
-            report += '        <li>根据目标用户需求，开发更多个性化功能</li>';
-            report += '    </ul>';
-            report += '    <p><strong>营销策略建议：</strong></p>';
-            report += '    <ul>';
-            report += '        <li>加强品牌建设，提升品牌知名度</li>';
-            report += '        <li>通过内容营销和用户口碑扩大影响力</li>';
-            report += '        <li>精准定位目标用户群体，提供定制化营销方案</li>';
-            report += '    </ul>';
-            report += '</div>';
-            
-            // 显示结果
-            document.getElementById('research-output').innerHTML = report;
-        }
-
-        // 辅助函数：获取类别名称
-        function getCategoryName(category) {
-            var categoryMap = {
-                'software': '软件/应用',
-                'hardware': '硬件/设备',
-                'service': '服务',
-                'digital': '数字产品',
-                'physical': '实体产品',
-                'other': '其他'
-            };
-            return categoryMap[category] || '其他';
-        }
-
-        // 重置表单
-        function resetResearchForm() {
-            document.getElementById('your-product').value = '';
-            document.getElementById('product-category').value = 'software';
-            document.getElementById('competitor-1').value = '';
-            document.getElementById('competitor-2').value = '';
-            document.getElementById('competitor-3').value = '';
-            document.getElementById('dimension-product').checked = true;
-            document.getElementById('dimension-price').checked = true;
-            document.getElementById('dimension-marketing').checked = true;
-            document.getElementById('dimension-target').checked = true;
-            document.getElementById('dimension-strength').checked = true;
-            document.getElementById('dimension-swot').checked = true;
-            document.getElementById('research-output').innerHTML = '调研报告将在这里显示...';
-        }
-
-        // 复制结果
-        function copyResearchResult() {
-            var output = document.getElementById('research-output');
-            var text = output.innerText;
-            
-            // 降级方案处理剪贴板操作
-            try {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).then(function() {
-                        alert('复制成功！');
-                    }).catch(function(err) {
-                        console.error('复制失败:', err);
-                        fallbackCopyText(text);
-                    });
-                } else {
-                    fallbackCopyText(text);
-                }
-            } catch (e) {
-                fallbackCopyText(text);
-            }
-        }
-        
-        // 降级复制方案
-        function fallbackCopyText(text) {
-            var textArea = document.createElement('textarea');
-            textArea.value = text;
-            textArea.style.position = 'fixed';
-            textArea.style.left = '-999999px';
-            textArea.style.top = '-999999px';
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            try {
-                document.execCommand('copy');
-                alert('复制成功！');
-            } catch (err) {
-                console.error('降级复制也失败了:', err);
-                alert('复制失败，请手动复制内容');
-            }
-            
-            document.body.removeChild(textArea);
-        }
-
-        // 导出报告
-        function exportResearchReport() {
-            alert('报告导出功能已触发！在实际应用中，这里会生成PDF或Word格式的报告文件。');
-        }
     </script>
 </body>
 </html>
