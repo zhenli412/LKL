@@ -191,77 +191,7 @@
         </main>
     </div>
     
-    <script>
-        // 页面加载时设置当前用户名和处理登出功能
-        document.addEventListener('DOMContentLoaded', function() {
-            // 获取并显示当前用户名
-            const currentUsername = localStorage.getItem('currentUsername');
-            if (currentUsername) {
-                document.getElementById('current-user').textContent = currentUsername;
-            }
-            
-            // 登出功能实现
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', function() {
-                    // 显示确认对话框
-                    if (confirm('确定要退出登录吗？')) {
-                        // 清除登录状态
-                        localStorage.removeItem('userLoggedIn');
-                        localStorage.removeItem('currentUsername');
-                        
-                        // 重定向到登录页
-                        window.location.href = '../../login.html';
-                    }
-                });
-            }
-            
-            // 为岗位卡片添加点击事件（可根据需要扩展）
-            const positionCards = document.querySelectorAll('.position-card');
-            positionCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    // 这里可以添加跳转逻辑
-                    console.log('点击了岗位:', this.querySelector('.position-name').textContent);
-                });
-            });
-            
-            // 导航已通过loadNavigation统一加载
-            
-            // 确保导航停留在销售转化部位置且相关岗位不展开
-                setTimeout(function() {
-                    // 查找销售转化部相关的导航项（使用原生JavaScript）
-                    const sidebarLinks = document.querySelectorAll('.sidebar a');
-                    sidebarLinks.forEach(link => {
-                        if (link.getAttribute('href') && link.getAttribute('href').includes('sales') || 
-                            link.textContent && link.textContent.includes('销售转化部')) {
-                            link.classList.add('active');
-                        }
-                    });
-                    
-                    // 确保子岗位不展开
-                    const sidebarLinks2 = document.querySelectorAll('.sidebar a');
-                    sidebarLinks2.forEach(item => {
-                        // 查找包含销售岗相关文本的链接或href包含相关路径的链接
-                        if ((item.textContent && (item.textContent.includes('销售岗') || 
-                                                  item.textContent.includes('销售助理岗') || 
-                                                  item.textContent.includes('客服岗'))) || 
-                            (item.getAttribute('href') && (item.getAttribute('href').includes('Sales') || 
-                                                           item.getAttribute('href').includes('Assistant') || 
-                                                           item.getAttribute('href').includes('CS')))) {
-                            item.classList.remove('active');
-                            const parentLi = item.closest('li');
-                            if (parentLi) {
-                                parentLi.classList.remove('expanded', 'open');
-                                const subMenu = parentLi.querySelector('.sub-menu, ul');
-                                if (subMenu) {
-                                    subMenu.style.display = 'none';
-                                }
-                            }
-                        }
-                    });
-                }, 200);
-        });
-    </script>
+
 
 </body>
 </html>
