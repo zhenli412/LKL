@@ -28,7 +28,7 @@
         
         .login-left {
             width: 45%;
-            background: linear-gradient(135deg, #7C3AED 0%, #4A1D96 100%);
+            background: linear-gradient(135deg, #3a4ced 0%, #4A1D96 100%);
             padding: 60px 40px;
             color: #fff;
             display: flex;
@@ -50,9 +50,12 @@
         }
         
         .login-logo img {
-            width: 80px;
-            height: 80px;
+            width: 200px;
+            height: 50px;
             margin-bottom: 15px;
+            background-color: #fff;
+            border-radius: 10px;
+
         }
         
         .login-logo h2 {
@@ -62,7 +65,7 @@
         }
         
         .login-logo p {
-            font-size: 14px;
+            font-size: 16px;
             opacity: 0.9;
             margin: 5px 0 0 0;
         }
@@ -74,7 +77,7 @@
         .login-slogan h3 {
             font-size: 20px;
             margin-bottom: 15px;
-            font-weight: 500;
+            font-weight: 600;
         }
         
         .login-slogan ul {
@@ -342,7 +345,7 @@
             <!-- 左侧品牌区域 -->
             <div class="login-left">
                 <div class="login-logo">
-                    <img src="images/logo.svg" alt="利客来Logo">
+                    <img src="images/logo.png" alt="利客来">
                     <h2>利客来</h2>
                     <p>利润客户立刻来！</p>
                 </div>
@@ -393,7 +396,6 @@
                             <input type="checkbox" id="remember-me">
                             <label for="remember-me">记住我7天</label>
                         </div>
-                        <a href="#" class="forgot-password" onclick="showForgotPasswordModal(); return false;">忘记密码？</a>
                     </div>
                     
                     <button type="submit" id="login-button" class="login-button">
@@ -401,9 +403,6 @@
                         <span id="loading-spinner" class="loading-spinner" style="display: none;"></span>
                     </button>
                     
-                    <div class="register-link">
-                        还没有账号？<a href="register.html">立即注册</a>
-                    </div>
                 </form>
             </div>
         </div>
