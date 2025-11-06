@@ -14,11 +14,15 @@
             justify-content: center;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             padding: 20px;
+            background-image: url('images/bg.jpg');
+            background-size:cover;
+            background-repeat: no-repeat;
+
         }
         
         .login-wrapper {
             display: flex;
-            max-width: 900px;
+            max-width: 800px;
             width: 100%;
             background: #fff;
             border-radius: 12px;
@@ -28,7 +32,9 @@
         
         .login-left {
             width: 45%;
-            background: linear-gradient(135deg, #3a4ced 0%, #4A1D96 100%);
+            background: linear-gradient(135deg, #3a4ced 0%, #4A1D96 100%);            
+            background-size: cover;
+            background-position: center;
             padding: 60px 40px;
             color: #fff;
             display: flex;
@@ -353,11 +359,11 @@
                 <div class="login-slogan">
                     <h3>我们的优势</h3>
                     <ul>
-                        <li>智能客户管理系统</li>
-                        <li>高效的销售转化工具</li>
-                        <li>完善的数据分析报表</li>
-                        <li>安全可靠的数据保障</li>
-                        <li>专业的技术支持团队</li>
+                        <li>AI驱动的内容创作与营销工具</li>
+                        <li>多维度品牌塑造与管理解决方案</li>
+                        <li>高效销售辅助与客户服务支持</li>
+                        <li>智能数据分析与竞争情报收集</li>
+                        <li>一站式营销物料管理与知识沉淀</li>
                     </ul>
                 </div>
             </div>
@@ -619,26 +625,35 @@
                 // 这里应该是实际的登录API调用
                 // 模拟成功登录
                 if (username && password) {
-                    // 如果选择记住我，可以存储到localStorage
-                    if (rememberMe) {
-                        localStorage.setItem('rememberedUser', username);
-                    } else {
-                        localStorage.removeItem('rememberedUser');
+                    try {
+                        // 如果选择记住我，可以存储到localStorage
+                        if (rememberMe) {
+                            localStorage.setItem('rememberedUser', username);
+                        } else {
+                            localStorage.removeItem('rememberedUser');
+                        }
+                        
+                        // 记录用户名到localStorage，确保在跳转前完成记录
+                        localStorage.setItem('currentUsername', username);
+                        
+                        // 设置登录状态
+                        localStorage.setItem('userLoggedIn', 'true');
+                        
+                        // 显示登录成功提示
+                        const loginButton = document.getElementById('login-button');
+                        const buttonText = document.getElementById('button-text');
+                        buttonText.textContent = '登录成功';
+                        loginButton.style.backgroundColor = '#10b981';
+                        
+                        // 延迟后跳转到首页
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 800);
+                    } catch (error) {
+                        console.error('登录处理错误:', error);
+                        showError('password-error', '登录过程中出现错误，请重试');
+                        showLoading(false);
                     }
-                    
-                    // 设置登录状态
-                    localStorage.setItem('userLoggedIn', 'true');
-                    localStorage.setItem('currentUsername', username);
-                    
-                    // 显示登录成功提示
-                    const loginButton = document.getElementById('login-button');
-                    buttonText.textContent = '登录成功';
-                    loginButton.style.backgroundColor = '#10b981';
-                    
-                    // 延迟后跳转到首页
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 800);
                 } else {
                     showError('password-error', '用户名或密码错误');
                     showLoading(false);
