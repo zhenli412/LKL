@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>违禁词检查助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+            margin-bottom: 0px;
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            height: fit-content;
+            min-height: 360px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+        margin-bottom: 15px;
+        }
+
+        .input-section label {
+        display: none;
+        }
+        .input-section textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .input-section textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        resize: vertical;
+        min-height: 100px;
+        font-family: inherit;
+        font-size: 14px;
+        transition: var(--transition);
+        }
+
+
+        /* 平台选择样式 - 参照信息提取助手 */
+        .platform-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .platform-options label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .platform-options input[type="radio"] {
+            margin-right: 6px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        /* 分析选项样式 */
+        .analysis-options {
+            margin-bottom: 24px;
+        }
+
+        .analysis-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-button:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .action-button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .action-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .action-button.secondary {
+            background-color: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+            border-color: #d1d5db;
+        }
+        
+        .secondary-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
+            margin: 0;
+        }
+
+        .result-content {
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        .result-item {
+            margin-bottom: 24px;
+            padding: 16px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .result-item h5 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .result-item ul {
+            margin-top: 0;
+            padding-left: 20px;
+        }
+
+        .result-item li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .platform-options {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+        
+        /* 模态框基础样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 95vh; /* 进一步增加高度以完整显示取消和确定按钮 */
+            overflow: visible; /* 外框不显示滚动条 */
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow: hidden; /* 模态框主体不显示滚动条 */
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* 搜索和筛选区域样式 */
+        .search-filter-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .category-filter,
+        .type-filter {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--white);
+            font-size: 14px;
+            min-width: 120px;
+            cursor: pointer;
+        }
+
+        .search-button {
+            padding: 8px 16px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .search-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* 文章列表表格样式 */
+        .knowledge-article-list {
+            margin-bottom: 20px;
+        }
+
+        .article-list-header {
+            display: grid;
+            grid-template-columns: 40px 90px 130px 300px 100px;
+            gap: 10px;
+            padding: 12px;
+            background-color: var(--secondary-color);
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        /* 确保表头和内容列完全对齐 */
+        .header-checkbox, .article-checkbox {
+            width: 40px;
+            box-sizing: border-box;
+        }
+        
+        .header-category, .article-category {
+            width: 100px;
+            box-sizing: border-box;
+        }
+        
+        .header-type, .article-type {
+            width: 100px;
+            box-sizing: border-box;
+        }
+        
+        .header-title, .article-title {
+            width: 250px;
+            box-sizing: border-box;
+        }
+        
+        .header-content,
+        .article-content {
+            width: 400px;
+            box-sizing: border-box;
+        }
+        
+        /* 确保所有单元格内容不换行 */
+        .article-list-header > div,
+        .knowledge-article-item > div {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-sizing: border-box;
+        }
+
+        /* 统一的滚动容器 */
+        /* 在模态框中使用的列表滚动容器 */
+        .list-scroll-container {
+            overflow: hidden; /* 隐藏任何滚动条 */
+            width: 100%;
+            /* 让内容决定高度 */
+        }
+        
+        .article-list-container {
+            /* 显示10条内容，可视区域6条，其余通过滚动条查看 */
+            max-height: 320px; /* 调整为5.5条内容的高度，给按钮区域留出更多空间 */
+            overflow-y: auto; /* 只在内容容器上设置纵向滚动 */
+            overflow-x: hidden; /* 禁止横向滚动 */
+            width: 100%;
+        }
+        
+     
+
+        .knowledge-article-item {
+            display: grid;
+            grid-template-columns: 20px 50px 100px 250px 400px;
+            gap: 10px;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .knowledge-article-item:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .article-checkbox {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .article-category,
+        .article-type {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .article-title {
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .article-content {
+            font-size: 13px;
+            color: var(--text-light);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .article-preview {
+            font-size: 13px;
+            color: var(--text-light);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width:400px;
+        }
+
+        /* 分页控制样式 */
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--white);
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background-color: var(--secondary-color);
+            border-color: var(--border-color);
+        }
+
+        .page-btn:disabled {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        /* 模态框底部按钮样式 */
+        .action-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .action-button:not(.secondary) {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .action-button:not(.secondary):hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+        
+        /* 成功提示样式 */
+        .success-toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background-color: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 2000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .success-toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 加载统一导航组件，设置基础路径为上上级目录，激活marketing角色
+        loadNavigation('../../', 'marketing');
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>违禁词检查助手</h2>
+                <p>智能检测文本中的违规词汇，确保内容合规安全</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 左右对比布局 -->
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <div class="result-header">
+                            <h3>原始文案</h3>
+                        </div>
+
+                        
+                        <div class="input-section">
+                            <textarea id="txt-input" placeholder="系统会自动识别你提供文案的错别字、违禁词等内容，并进行标注、修正，请输入要检查的文案……" rows="6"></textarea>
+                        </div>
+                        
+
+                            <div class="input-section">
+                                    <button id="select-knowledge-btn" class="action-button secondary" onclick="openModal('personal-knowledge-modal')">+「个人知识库」导入</button>
+                            </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="action-buttons">
+                            <button id="analyze-btn" class="action-button">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                                开始检查
+                            </button>
+                            <button id="clear-btn" class="action-button secondary-btn">清空</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>检查修正结果</h3>
+                        </div>
+                        
+                          <div id="extraction-result" class="result-content" style="position: relative;">
+                            <p class="placeholder-text">请填写原始文案后，点击「开始检查」按钮</p>
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
+                           </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 使用指南区域 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入内容：</strong>在左侧文本框中粘贴需要检查的文案内容，支持各种类型的文本输入
+                </div>
+                <div class="help-item">
+                    <strong>2. 开始检查：</strong>点击「开始检查」按钮，系统将自动检测文本中的违禁词和敏感词汇
+                </div>
+                <div class="help-item">
+                    <strong>3. 查看结果：</strong>在右侧面板查看检查修正后的文案，系统会标记并修改发现的违规内容
+                </div>
+                <div class="help-item">
+                    <strong>4. 保存结果：</strong>检查完成后，可点击右下角按钮将结果添加至个人知识库
+                </div>
+            </div>
+
+            
+        </main>
+    </div>
+    
+    <!-- 个人知识库模态框 -->
+    <div id="personal-knowledge-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>选择个人知识库</h3>
+                <button class="modal-close" onclick="closeModal('personal-knowledge-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 搜索和筛选区域 -->
+                <div class="search-filter-section">
+                    <input type="text" id="knowledge-search" class="search-input" placeholder="搜索文章标题或内容...">
+                    <select id="category-filter" class="category-filter">
+                        <option value="all">全部分类</option>
+                        <option value="topic">选题库</option>
+                        <option value="copy">文案库</option>
+                        <option value="material">素材库</option>
+                    </select>
+                    <select id="type-filter" class="type-filter">
+                        <option value="all">全部类型</option>
+                        <option value="text">文本类型</option>
+                        <option value="link">链接类型</option>
+                        <option value="file">文件类型</option>
+                    </select>
+                    <button class="action-button search-button">搜索</button>
+                </div>
+                
+                <!-- 知识库文章列表 -->
+                <div class="knowledge-article-list">
+                    <!-- 统一的滚动容器 -->
+                    <div class="list-scroll-container">
+                        <!-- 列表表头 -->
+                        <div class="article-list-header">
+                            <div class="header-checkbox"><input type="checkbox" id="select-all-articles"></div>
+                            <div class="header-category">类目</div>
+                            <div class="header-type">类型</div>
+                            <div class="header-title">标题</div>
+                            <div class="header-content">正文</div>
+                        </div>
+                        
+                        <!-- 文章列表容器 -->
+                        <div id="article-list-container" class="article-list-container">
+                        <label class="knowledge-article-item" data-category="topic" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">选题库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">客户需求洞察与痛点解决方案</div>
+                            <div class="article-preview">深入分析不同客户群体的核心需求和痛点，提供针对性的解决方案框架...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="topic" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">选题库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">爆款内容创作方法论</div>
+                            <div class="article-preview">总结爆款内容的核心要素和创作技巧，包括标题设计、结构规划、情感共鸣...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="topic" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">选题库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">数据分析驱动的营销策略优化</div>
+                            <div class="article-preview">如何通过数据洞察优化营销策略，提升转化率和客户满意度...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="copy" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">文案库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">产品介绍文案模板</div>
+                            <div class="article-preview">专业的产品介绍文案模板，包含痛点描述、解决方案、核心优势...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="copy" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">文案库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">促销活动文案案例</div>
+                            <div class="article-preview">精选促销活动文案案例，适用于各类节日促销、限时特惠等场景...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="copy" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">文案库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">品牌故事撰写指南</div>
+                            <div class="article-preview">打造有感染力的品牌故事，传递品牌价值观和企业文化...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="copy" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">文案库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">社交媒体文案技巧</div>
+                            <div class="article-preview">不同社交平台的文案特点和写作技巧，提高内容互动率...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="copy" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">文案库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">客户见证与案例分享</div>
+                            <div class="article-preview">如何有效收集和呈现客户见证，增强产品可信度...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="material" data-type="link">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">素材库</div>
+                            <div class="article-type">链接类型</div>
+                            <div class="article-title">行业数据报告摘要</div>
+                            <div class="article-preview">最新行业发展趋势和关键数据，可用于内容创作和市场分析...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="material" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">素材库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">常用营销术语解释</div>
+                            <div class="article-preview">营销领域常用术语的专业解释和应用场景...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="material" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">素材库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">客户问题FAQ整理</div>
+                            <div class="article-preview">常见客户问题及标准回答，提升服务效率和一致性...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="material" data-type="file">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">素材库</div>
+                            <div class="article-type">文件类型</div>
+                            <div class="article-title">竞品分析报告</div>
+                            <div class="article-preview">主要竞争对手的产品特点、优势劣势和市场策略分析...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="material" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">素材库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">行业专家观点集锦</div>
+                            <div class="article-preview">收集整理行业专家对市场趋势和发展方向的重要观点...</div>
+                        </label>
+                        
+                        <label class="knowledge-article-item" data-category="material" data-type="text">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">素材库</div>
+                            <div class="article-type">文本类型</div>
+                            <div class="article-title">创意灵感收集</div>
+                            <div class="article-preview">各类创意营销案例和灵感素材，激发创作思路...</div>
+                        </label>
+                        <label class="knowledge-article-item" data-category="material" data-type="file">
+                            <div class="article-checkbox"><input type="checkbox"></div>
+                            <div class="article-category">素材库</div>
+                            <div class="article-type">文件类型</div>
+                            <div class="article-title">节日营销策划方案</div>
+                            <div class="article-preview">针对不同节日的营销活动策划框架和执行要点...</div>
+                        </label>
+                    </div>
+                    
+                    <!-- 分页控制 -->
+                    <div class="pagination-controls">
+                        <button id="prev-page" class="page-btn" disabled>上一页</button>
+                        <span id="page-info" class="page-info">第 1 页，共 <span id="total-pages">2</span> 页</span>
+                        <button id="next-page" class="page-btn">下一页</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-selection-btn" class="action-button secondary" onclick="closeModal('personal-knowledge-modal')">取消</button>
+                <button id="confirm-selection-btn" class="action-button">确认选择</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 简化的模态框控制函数
+        function openModal(modalId) {
+            var modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.opacity = '1';
+                modal.style.visibility = 'visible';
+            }
+        }
+        
+        function closeModal(modalId) {
+            var modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // 等待DOM加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM 已加载，初始化模态框功能');
+            
+            // 显示成功提示
+            window.showSuccessToast = function(message) {
+                // 移除可能存在的旧提示
+                const oldToast = document.querySelector('.success-toast');
+                if (oldToast) {
+                    oldToast.remove();
+                }
+                
+                // 创建提示元素
+                const toast = document.createElement('div');
+                toast.className = 'success-toast';
+                toast.textContent = message || '操作成功！';
+                document.body.appendChild(toast);
+                
+                // 显示提示
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                // 3秒后隐藏
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 3000);
+            };
+            
+            // 分页功能 - 简化实现，显示10条内容但分页控制
+            function setupPagination() {
+                // 获取所有文章项
+                var articleItems = document.querySelectorAll('.knowledge-article-item');
+                var articlesPerPage = 10; // 每页10条内容
+                var currentPage = 1;
+                var totalPages = Math.ceil(articleItems.length / articlesPerPage);
+                
+                // 获取分页控制元素
+                var prevBtn = document.getElementById('prev-page');
+                var nextBtn = document.getElementById('next-page');
+                var pageInfo = document.getElementById('page-info');
+                var totalPagesElem = document.getElementById('total-pages');
+                
+                // 更新分页显示
+                function updatePagination() {
+                    // 更新页码信息
+                    totalPagesElem.textContent = totalPages;
+                    pageInfo.innerHTML = '第 ' + currentPage + ' 页，共 ' + totalPages + ' 页';
+                    
+                    // 更新按钮状态
+                    if (currentPage === 1) {
+                        prevBtn.disabled = true;
+                    } else {
+                        prevBtn.disabled = false;
+                    }
+                    
+                    if (currentPage === totalPages) {
+                        nextBtn.disabled = true;
+                    } else {
+                        nextBtn.disabled = false;
+                    }
+                    
+                    // 显示当前页的文章
+                    var startIndex = (currentPage - 1) * articlesPerPage;
+                    var endIndex = startIndex + articlesPerPage;
+                    
+                    for (var i = 0; i < articleItems.length; i++) {
+                        var item = articleItems[i];
+                        // 只有当项目未被筛选隐藏时才应用分页逻辑
+                        if (item.style.display !== 'none' && !item.classList.contains('filtered-out')) {
+                            if (i >= startIndex && i < endIndex) {
+                                item.style.display = 'flex';
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        }
+                    }
+                }
+                
+                // 上一页按钮事件
+                if (prevBtn) {
+                    prevBtn.onclick = function() {
+                        if (currentPage > 1) {
+                            currentPage = currentPage - 1;
+                            updatePagination();
+                        }
+                    };
+                }
+                
+                // 下一页按钮事件
+                if (nextBtn) {
+                    nextBtn.onclick = function() {
+                        if (currentPage < totalPages) {
+                            currentPage = currentPage + 1;
+                            updatePagination();
+                        }
+                    };
+                }
+                
+                // 初始更新
+                updatePagination();
+                
+                // 返回更新函数供其他功能使用
+                return {
+                    updatePagination: updatePagination
+                };
+            }
+            
+            // 搜索和筛选功能 - 简化实现
+            function setupSearchAndFilter(pagination) {
+                var searchInput = document.getElementById('knowledge-search');
+                var categoryFilter = document.getElementById('category-filter');
+                var typeFilter = document.getElementById('type-filter');
+                var articleItems = document.querySelectorAll('.knowledge-article-item');
+                
+                // 过滤功能
+                function filterArticles() {
+                    var searchTerm = searchInput.value.toLowerCase();
+                    var selectedCategory = categoryFilter.value;
+                    var selectedType = typeFilter.value;
+                    
+                    var visibleCount = 0;
+                    
+                    for (var i = 0; i < articleItems.length; i++) {
+                        var item = articleItems[i];
+                        var title = item.querySelector('.article-title').textContent.toLowerCase();
+                        var preview = item.querySelector('.article-preview').textContent.toLowerCase();
+                        var itemCategory = item.dataset.category;
+                        var itemType = item.dataset.type;
+                        
+                        var matchesSearch = title.indexOf(searchTerm) !== -1 || preview.indexOf(searchTerm) !== -1;
+                        var matchesCategory = selectedCategory === 'all' || itemCategory === selectedCategory;
+                        var matchesType = selectedType === 'all' || itemType === selectedType;
+                        
+                        var shouldShow = matchesSearch && matchesCategory && matchesType;
+                        
+                        if (shouldShow) {
+                            item.style.display = 'flex';
+                            item.classList.remove('filtered-out');
+                            visibleCount++;
+                        } else {
+                            item.style.display = 'none';
+                            item.classList.add('filtered-out');
+                        }
+                    }
+                    
+                    console.log('筛选后可见文章数量: ' + visibleCount);
+                    
+                    // 重置分页
+                    if (pagination) {
+                        pagination.updatePagination();
+                    }
+                }
+                
+                // 搜索输入事件
+                if (searchInput) {
+                    searchInput.oninput = filterArticles;
+                }
+                
+                // 分类筛选事件
+                if (categoryFilter) {
+                    categoryFilter.onchange = filterArticles;
+                }
+                
+                // 类型筛选事件
+                if (typeFilter) {
+                    typeFilter.onchange = filterArticles;
+                }
+                
+                // 搜索按钮点击事件
+                var searchButton = document.querySelector('.search-button');
+                if (searchButton) {
+                    searchButton.onclick = filterArticles;
+                }
+            }
+            
+            // 为不同类型的内容添加特殊显示 - 简化实现
+            function setupContentDisplay() {
+                var articleItems = document.querySelectorAll('.knowledge-article-item');
+                
+                for (var i = 0; i < articleItems.length; i++) {
+                    var item = articleItems[i];
+                    var type = item.dataset.type;
+                    var previewElement = item.querySelector('.article-preview');
+                    var previewText = previewElement.textContent;
+                    
+                    // 链接类型：显示可点击的链接
+                    if (type === 'link') {
+                        // 检查是否已经是链接元素
+                        if (previewElement.tagName === 'DIV' && !previewElement.querySelector('a')) {
+                            var linkElement = document.createElement('a');
+                            linkElement.href = previewText.indexOf('http') !== -1 ? previewText : 'http://' + previewText;
+                            linkElement.textContent = previewText;
+                            linkElement.target = '_blank';
+                            linkElement.style.color = '#0066cc';
+                            linkElement.style.textDecoration = 'underline';
+                            previewElement.innerHTML = '';
+                            previewElement.appendChild(linkElement);
+                        }
+                    }
+                    // 文件类型：添加文件图标
+                    else if (type === 'file') {
+                        // 检查是否已经添加了文件图标
+                        if (previewElement.tagName === 'DIV' && !previewElement.querySelector('.file-icon')) {
+                            var fileIcon = document.createElement('span');
+                            fileIcon.className = 'file-icon';
+                            fileIcon.innerHTML = '📄 ';
+                            fileIcon.style.marginRight = '5px';
+                            previewElement.insertBefore(fileIcon, previewElement.firstChild);
+                        }
+                    }
+                }
+            }
+            
+            // 确认选择按钮功能 - 简化实现
+            function setupConfirmSelection() {
+                var confirmBtn = document.getElementById('confirm-selection-btn');
+                
+                if (confirmBtn) {
+                    confirmBtn.onclick = function() {
+                        var selectedItems = document.querySelectorAll('.knowledge-article-item input[type="checkbox"]:checked');
+                        var selectedTexts = [];
+                        
+                        for (var i = 0; i < selectedItems.length; i++) {
+                            var checkbox = selectedItems[i];
+                            var item = checkbox.closest('.knowledge-article-item');
+                            var title = item.querySelector('.article-title').textContent;
+                            var previewContent;
+                            
+                            // 根据类型获取预览内容
+                            if (item.dataset.type === 'link') {
+                                var linkElement = item.querySelector('.article-preview a');
+                                previewContent = linkElement ? linkElement.href : item.querySelector('.article-preview').textContent;
+                            } else {
+                                previewContent = item.querySelector('.article-preview').textContent;
+                            }
+                            
+                            selectedTexts.push(title + '\n' + previewContent + '\n');
+                        }
+                        
+                        if (selectedTexts.length > 0) {
+                            // 将选中的内容添加到输入框
+                            var inputTextarea = document.getElementById('txt-input');
+                            if (inputTextarea.value) {
+                                inputTextarea.value += '\n\n' + selectedTexts.join('\n\n');
+                            } else {
+                                inputTextarea.value = selectedTexts.join('\n\n');
+                            }
+                            
+                            // 关闭弹窗
+                            document.getElementById('personal-knowledge-modal').style.display = 'none';
+                            
+                            // 显示成功提示
+                            showSuccessToast('已成功添加 ' + selectedTexts.length + ' 条知识库内容');
+                        }
+                    };
+                }
+            }
+            
+            // 检查模态框初始状态
+            var modal = document.getElementById('personal-knowledge-modal');
+            if (modal) {
+                console.log('模态框元素存在，初始display:', modal.style.display);
+                // 确保初始状态为隐藏
+                modal.style.display = 'none';
+            } else {
+                console.error('个人知识库模态框未找到');
+            }
+            
+            // 初始化内容显示（添加链接和文件图标）
+            setupContentDisplay();
+            
+            // 初始化分页功能
+            var pagination = setupPagination();
+            
+            // 初始化搜索和筛选功能
+            setupSearchAndFilter(pagination);
+            
+            // 初始化确认选择功能
+            setupConfirmSelection();
+        });
+    </script>
+</body>
+</html>

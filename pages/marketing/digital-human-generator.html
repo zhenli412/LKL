@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字人生成助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        /* 文本输入框样式 - 参考结构分析助手页面 */
+        .input-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+            box-sizing: border-box;
+            min-height: 120px;
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 声音选项样式 - 一行显示2个 */
+        .voice-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .voice-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .voice-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .voice-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .voice-option span {
+            flex: 1;
+        }
+
+        .play-voice-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+        }
+
+        /* 文件上传标签样式 */
+        .file-upload-label {
+            display: block;
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            background-color: #fafafa;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-label:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.04);
+        }
+
+        .file-upload-label input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label span {
+            font-size: 24px;
+        }
+
+        .file-upload-label div:first-of-type {
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .file-upload-label div:last-of-type {
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* 场景选项样式 */
+        .scene-options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .scene-option {
+            cursor: pointer;
+            border: 2px solid transparent;
+            padding: 5px;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+
+        .scene-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .scene-option input[type="radio"] {
+            display: none;
+        }
+
+        .scene-option-content {
+            text-align: center;
+            position: relative;
+        }
+        
+        /* 场景选中标记样式 */
+        .scene-check-mark {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background-color: var(--success-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
+        }
+        
+        .scene-check-mark::after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .scene-option input[type="radio"]:checked + .scene-option-content .scene-check-mark {
+            opacity: 1;
+        }
+        
+        /* 选中状态边框和背景 */
+        .scene-option input[type="radio"]:checked + .scene-option-content {
+            border-color: var(--success-color);
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+        
+
+        .scene-option-image {
+            background-color: #f0f0f0;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+
+        .scene-option-text {
+            display: block;
+            font-size: 14px;
+        }
+
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: #fafafa;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-upload-area:hover,
+        .file-upload-area.active {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.04);
+        }
+
+        .file-upload-area input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .file-upload-area:hover .upload-icon {
+            opacity: 0.8;
+        }
+
+        .upload-text {
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .upload-text div:first-child {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .upload-text div:last-child {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* 文件信息样式 */
+        .file-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .file-name {
+            color: var(--text-color);
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            margin-right: 12px;
+        }
+
+        .remove-file {
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .remove-file:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        /* 提炼选项样式 */
+        .extraction-options {
+            margin-bottom: 24px;
+        }
+
+        .extraction-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .option-item label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-right: 12px;
+            min-width: 100px;
+        }
+
+        .option-item select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option-item select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+
+        .action-button.secondary {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .action-button.small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
+            margin: 0;
+        }
+
+        .result-header h4 {
+            margin: 0;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .result-content {
+            flex: 1;
+            background-color:#000;
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 文本结果样式 */
+        .text-result {
+            color: var(--text-color);
+        }
+
+        .text-result h4 {
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .text-result p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+      <!-- 导航组件将通过JavaScript动态加载 -->
+      <script src="../../js/menu.js"></script>
+      <script src="../../js/nav-component.js"></script>
+      
+      <!-- 个人知识库模态框 -->
+    <div id="personal-knowledge-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background-color: white; padding: 20px; border-radius: 8px; width: 80%; max-width: 600px; max-height: 80vh; overflow-y: auto;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3>选择个人知识库</h3>
+                <button class="modal-close" onclick="closeModal('personal-knowledge-modal')" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 知识库分类和文章列表 -->
+                <div class="knowledge-category">
+                    <h4>文案库</h4>
+                    <div class="knowledge-articles">
+                        <label class="knowledge-article-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 8px;">
+                            <span>产品介绍文案模板</span>
+                        </label>
+                        <label class="knowledge-article-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 8px;">
+                            <span>营销话术精选</span>
+                        </label>
+                        <label class="knowledge-article-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 8px;">
+                            <span>行业专业术语库</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="knowledge-category" style="margin-top: 20px;">
+                    <h4>脚本库</h4>
+                    <div class="knowledge-articles">
+                        <label class="knowledge-article-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 8px;">
+                            <span>产品演示脚本</span>
+                        </label>
+                        <label class="knowledge-article-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 8px;">
+                            <span>培训讲解脚本</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="action-button secondary" onclick="closeModal('personal-knowledge-modal')">取消</button>
+                <button class="action-button primary">确认选择</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 新增数字人场景模态框 -->
+    <div id="add-scene-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background-color: white; padding: 20px; border-radius: 8px; width: 80%; max-width: 600px; max-height: 80vh; overflow-y: auto;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3>新增数字人场景</h3>
+                <button class="modal-close" onclick="closeModal('add-scene-modal')" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-section">
+                    <label>上传场景图片</label>
+                    <label class="file-upload-label">
+                        <input type="file" accept="image/*">
+                        <span>📁</span>
+                        <div>点击上传照片</div>
+                        <div>支持 JPG、PNG 格式</div>
+                    </label>
+                </div>
+                <div class="input-section">
+                    <label>命名场景名称</label>
+                    <input type="text" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 14px; margin-top: 8px;" placeholder="请输入场景名称">
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="action-button secondary" onclick="closeModal('add-scene-modal')">取消</button>
+                <button class="action-button primary">确认添加</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 配置本人声音模态框 -->
+    <div id="config-voice-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background-color: white; padding: 20px; border-radius: 8px; width: 80%; max-width: 600px; max-height: 80vh; overflow-y: auto;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3>配置本人声音</h3>
+                <button class="modal-close" onclick="closeModal('config-voice-modal')" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-section">
+                    <label>请念下面一句话（识别声音用）</label>
+                    <div style="padding: 16px; background-color: var(--secondary-color); border-radius: var(--border-radius); margin: 12px 0; font-style: italic; text-align: center; font-size: 16px;">
+                        利客来AI平台提供专业的数字人生成服务，帮助您快速创建个性化的视频内容。
+                    </div>
+                </div>
+                <div class="input-section">
+                    <label>上传您念这句话的声音文件</label>
+                    <label class="file-upload-label">
+                        <input type="file" accept="audio/*">
+                        <span>🎤</span>
+                        <div>点击上传个人声音文件</div>
+                        <div>支持 MP3、WAV 格式，建议录音时长 3-5 分钟</div>
+                    </label>
+                </div>
+                <div class="input-section">
+                    <label>给这个声音起个名字</label>
+                    <input type="text" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 14px; margin-top: 8px;" placeholder="请输入声音名称">
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="action-button secondary" onclick="closeModal('config-voice-modal')">取消</button>
+                <button class="action-button primary">确认配置</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 加载统一导航组件，设置基础路径为上上级目录，激活marketing角色
+        loadNavigation('../../', 'marketing');
+        
+        // 等待DOM加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            // 打开弹窗
+            window.openModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                }
+            }
+            
+            // 关闭弹窗
+            window.closeModal = function(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            // 场景选择交互
+            const sceneOptions = document.querySelectorAll('.scene-option');
+            sceneOptions.forEach(option => {
+                const radio = option.querySelector('input[type="radio"]');
+                
+                // 点击选项时选中对应的单选按钮并添加边框样式
+                option.addEventListener('click', function() {
+                    radio.checked = true;
+                    
+                    // 移除其他选项的选中样式
+                    sceneOptions.forEach(opt => {
+                        opt.style.borderColor = 'transparent';
+                    });
+                    
+                    // 添加当前选项的选中样式
+                    this.style.borderColor = 'var(--primary-color)';
+                });
+                
+                // 初始时检查是否有选中的选项
+                if (radio.checked) {
+                    option.style.borderColor = 'var(--primary-color)';
+                }
+            });
+
+            // 声音试听按钮交互
+            const playButtons = document.querySelectorAll('.play-voice-btn');
+            playButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 防止触发父元素的点击事件
+                    
+                    // 这里可以添加实际的音频播放逻辑
+                    console.log('播放声音');
+                    
+                    // 播放按钮状态变化效果
+                    this.textContent = '⏸️';
+                    setTimeout(() => {
+                        this.textContent = '▶️';
+                    }, 2000);
+                });
+            });
+
+            // 重置按钮功能
+            const resetBtn = document.getElementById('reset-btn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    // 清空文本输入
+                    const scriptTextarea = document.getElementById('digital-human-script');
+                    if (scriptTextarea) {
+                        scriptTextarea.value = '';
+                    }
+                    
+                    // 取消选中的知识库选项
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+                    
+                    // 重置场景选择（默认选中第一个）
+                    const radioButtons = document.querySelectorAll('input[name="digital-human-scene"]');
+                    if (radioButtons.length > 0) {
+                        radioButtons[0].checked = true;
+                        sceneOptions.forEach(opt => {
+                            opt.style.borderColor = 'transparent';
+                        });
+                        sceneOptions[0].style.borderColor = 'var(--primary-color)';
+                    }
+                    
+                    // 重置声音选择（默认选中本人声音）
+                    const voiceRadioButtons = document.querySelectorAll('input[name="voice-selection"]');
+                    voiceRadioButtons.forEach(radio => {
+                        radio.checked = radio.value === 'my-voice';
+                    });
+                });
+            }
+
+            // 生成按钮功能
+            const generateBtn = document.getElementById('generate-btn');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', function() {
+                    const videoPreview = document.getElementById('video-preview');
+                    if (videoPreview) {
+                        // 显示加载状态
+                        videoPreview.innerHTML = '<div class="loading-text"><div class="loading-spinner"></div>正在生成数字人视频...</div>';
+                        
+                        // 模拟生成过程
+                        setTimeout(() => {
+                            videoPreview.innerHTML = `
+                                <video controls style="width: 100%; height: 100%; object-fit: contain;">
+                                    <source src="#" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            `;
+                        }, 3000);
+                    }
+                });
+            }
+
+            // 下载按钮功能
+            const downloadBtn = document.getElementById('download-btn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function() {
+                    // 这里可以添加实际的下载逻辑
+                    alert('开始下载视频');
+                });
+            }
+        });
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>数字人生成助手</h2>
+                <p>快速创建专业数字人形象，助力视频内容制作</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 左右对比布局 -->
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <div class="result-header">
+                            <h3>数字人信息配置</h3>
+                        </div>
+
+                        <!-- 文案素材输入区 -->
+                        <div class="input-section">
+                            <h3>一、文案素材</h3>
+                            <div class="input-section">
+                                <textarea id="digital-human-script" placeholder="请输入数字人讲述文案/脚本内容"></textarea>
+                            </div>
+                            <div>
+                                <button class="action-button secondary" onclick="openModal('personal-knowledge-modal')" style="width: 100%;"> +「个人知识库」选择导入 </button>
+                            </div>
+                        </div>
+
+                        <!-- 数字人场景配置 -->
+                        <div class="input-section">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3>二、数字人场景配置</h3>
+                            </div>
+                            <div>
+                                <div class="scene-options-grid">
+                                    <label class="scene-option">
+                                        <input type="radio" name="digital-human-scene" value="office">
+                                        <div class="scene-option-content">
+                                            <div class="scene-option-image" style="position: relative;">
+                                                <img src="../../images/office-scene.jpg" alt="办公室场景" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">
+                                                <div class="scene-check-mark"></div>
+                                            </div>
+                                            <span class="scene-option-text">办公室场景</span>
+                                        </div>
+                                    </label>
+                                    <label class="scene-option">
+                                        <input type="radio" name="digital-human-scene" value="outdoor">
+                                        <div class="scene-option-content">
+                                            <div class="scene-option-image" style="position: relative;">
+                                                <img src="../../images/outdoor-scene.jpg" alt="室外场景" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">
+                                                <div class="scene-check-mark"></div>
+                                            </div>
+                                            <span class="scene-option-text">室外场景</span>
+                                        </div>
+                                    </label>
+                                    <label class="scene-option">
+                                        <input type="radio" name="digital-human-scene" value="community">
+                                        <div class="scene-option-content">
+                                            <div class="scene-option-image" style="position: relative;">
+                                                <img src="../../images/community-scene.jpg" alt="社区场景" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">
+                                                <div class="scene-check-mark"></div>
+                                            </div>
+                                            <span class="scene-option-text">社区场景</span>
+                                        </div>
+                                    </label>
+                                    <label class="scene-option">
+                                        <input type="radio" name="digital-human-scene" value="showroom">
+                                        <div class="scene-option-content">
+                                            <div class="scene-option-image" style="position: relative;">
+                                                <img src="../../images/showroom-scene.jpg" alt="样板间场景" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">
+                                                <div class="scene-check-mark"></div>
+                                            </div>
+                                            <span class="scene-option-text">样板间场景</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                                <button class="action-button small secondary" onclick="openModal('add-scene-modal')">+新增数字人场景</button>
+                        </div>
+
+                        <!-- 声音选择 -->
+                        <div class="input-section">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3>三、声音选择</h3>
+                            </div>
+                            <div>
+                                <label>选择声音</label>
+                                <div class="voice-options">
+                                    <label class="voice-option">
+                                        <input type="radio" name="voice-selection" value="my-voice" checked>
+                                        <span>本人声音</span>
+                                        <button type="button" class="play-voice-btn">▶️</button>
+                                    </label>
+                                    <label class="voice-option">
+                                        <input type="radio" name="voice-selection" value="professional-male">
+                                        <span>专业男声</span>
+                                        <button type="button" class="play-voice-btn">▶️</button>
+                                    </label>
+                                    <label class="voice-option">
+                                        <input type="radio" name="voice-selection" value="professional-female">
+                                        <span>专业女声</span>
+                                        <button type="button" class="play-voice-btn">▶️</button>
+                                    </label>
+                                    <label class="voice-option">
+                                        <input type="radio" name="voice-selection" value="warm-male">
+                                        <span>温暖男声</span>
+                                        <button type="button" class="play-voice-btn">▶️</button>
+                                    </label>
+                                </div>
+                            </div>
+                                <button class="action-button small secondary" onclick="openModal('config-voice-modal')">+配置本人声音</button>
+
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="generate-btn" class="action-button primary">生成数字人视频</button>
+                            <button id="reset-btn" class="action-button secondary">重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>数字人视频生成</h3>
+                        </div>
+                        <div class="result-content">
+                            <!-- 预览区 -->
+                            <div id="video-preview" style="background-color: #000; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; position: relative; overflow: hidden; cursor: pointer; border: 1px solid #333;">
+                                <!-- 预览视频文字提示 -->
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 1;">
+                                    <div style="font-size: 18px; color: #fff; font-weight: bold; margin-bottom: 10px;">预览视频</div>
+                                    <div style="font-size: 14px; color: rgba(255,255,255,0.8);">点击进入全屏播放</div>
+                                </div>
+                                <!-- 全屏按钮图标 -->
+                                <div style="position: absolute; bottom: 20px; right: 20px; width: 40px; height: 40px; background-color: rgba(0,0,0,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; z-index: 1;">
+                                    ⛶
+                                </div>
+                            </div>
+                        </div>
+
+                            <!-- 操作按钮 -->
+                            <div class="action-buttons" style="justify-content: flex-end;">
+                                <button id="download-btn" class="action-button primary">下载视频</button>
+                            </div>
+
+
+                    </div>
+                </div>
+                
+            </div>
+
+
+            <!-- 使用指南区域 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 配置文案素材：</strong>可以通过文本输入或从个人知识库导入数字人讲述的文案内容
+                </div>
+                <div class="help-item">
+                    <strong>2. 选择数字人场景：</strong>从预设的办公室、室外、社区、样板间等场景中选择，或上传新的场景照片
+                </div>
+                <div class="help-item">
+                    <strong>3. 选择声音：</strong>选择数字人的声音类型，包括本人声音和多种预设声音，可点击试听
+                </div>
+                <div class="help-item">
+                    <strong>4. 生成视频：</strong>点击「生成数字人视频」按钮开始生成
+                </div>
+                <div class="help-item">
+                    <strong>5. 预览与下载：</strong>在右侧预览区查看生成的数字人视频效果，点击下载按钮保存视频文件
+                </div>
+            </div>
+        
+        </main>
+    </div>
+
+    <script>
+        // 视频全屏播放功能
+        // 框架代码和视频预览功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载导航组件
+            if (typeof loadNavComponents === 'function') {
+                loadNavComponents();
+            }
+            
+            // 配置场景选择
+            const sceneOptions = document.querySelectorAll('.scene-option');
+            sceneOptions.forEach(option => {
+                const radio = option.querySelector('input[type="radio"]');
+                const checkMark = option.querySelector('.scene-check-mark');
+                
+                // 设置初始状态
+                if (radio.checked) {
+                    option.classList.add('selected');
+                    checkMark.style.display = 'flex';
+                }
+                
+                // 添加选中事件
+                radio.addEventListener('change', function() {
+                    // 重置所有选项
+                    sceneOptions.forEach(opt => {
+                        opt.classList.remove('selected');
+                        opt.querySelector('.scene-check-mark').style.display = 'none';
+                    });
+                    
+                    // 设置当前选项
+                    if (this.checked) {
+                        option.classList.add('selected');
+                        checkMark.style.display = 'flex';
+                    }
+                });
+            });
+            
+            // 视频预览功能 - 确保可点击
+            const videoPreview = document.getElementById('video-preview');
+            if (videoPreview) {
+                // 设置可点击样式
+                videoPreview.style.userSelect = 'none';
+                videoPreview.style.pointerEvents = 'auto';
+                
+                // 点击事件处理函数 - 使用简单直接的实现
+                videoPreview.addEventListener('click', function(event) {
+                    // 防止事件冒泡和默认行为
+                    event.stopPropagation();
+                    event.preventDefault();
+                    
+                    console.log('视频预览区域被点击'); // 调试日志
+                    
+                    // 创建全屏容器
+                    const overlay = document.createElement('div');
+                    overlay.id = 'video-overlay';
+                    overlay.style.position = 'fixed';
+                    overlay.style.top = '0';
+                    overlay.style.left = '0';
+                    overlay.style.width = '100vw';
+                    overlay.style.height = '100vh';
+                    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.95)';
+                    overlay.style.zIndex = '9999';
+                    overlay.style.display = 'flex';
+                    overlay.style.alignItems = 'center';
+                    overlay.style.justifyContent = 'center';
+                    
+                    // 创建视频元素
+                    const video = document.createElement('video');
+                    // 使用已知可靠的视频源
+                    video.src = 'https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-city-11787-large.mp4';
+                    video.controls = true;
+                    video.autoplay = true;
+                    video.muted = false;
+                    video.style.maxWidth = '90%';
+                    video.style.maxHeight = '90%';
+                    video.style.objectFit = 'contain';
+                    
+                    // 视频加载错误处理
+                    video.onerror = function() {
+                        console.error('视频加载失败');
+                        // 创建一个备用的提示信息
+                        const errorMessage = document.createElement('div');
+                        errorMessage.textContent = '视频加载失败，请检查网络连接';
+                        errorMessage.style.color = 'white';
+                        errorMessage.style.fontSize = '18px';
+                        overlay.appendChild(errorMessage);
+                    };
+                    
+                    // 创建关闭按钮
+                    const closeBtn = document.createElement('button');
+                    closeBtn.textContent = '×';
+                    closeBtn.style.position = 'absolute';
+                    closeBtn.style.top = '20px';
+                    closeBtn.style.right = '20px';
+                    closeBtn.style.width = '40px';
+                    closeBtn.style.height = '40px';
+                    closeBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                    closeBtn.style.color = 'white';
+                    closeBtn.style.border = 'none';
+                    closeBtn.style.borderRadius = '50%';
+                    closeBtn.style.fontSize = '24px';
+                    closeBtn.style.cursor = 'pointer';
+                    
+                    // 关闭按钮点击事件
+                    closeBtn.onclick = function() {
+                        video.pause();
+                        document.body.removeChild(overlay);
+                    };
+                    
+                    // 添加到页面
+                    overlay.appendChild(video);
+                    overlay.appendChild(closeBtn);
+                    document.body.appendChild(overlay);
+                    
+                    // ESC键关闭
+                    function handleEsc(e) {
+                        if (e.key === 'Escape') {
+                            video.pause();
+                            document.body.removeChild(overlay);
+                            document.removeEventListener('keydown', handleEsc);
+                        }
+                    }
+                    document.addEventListener('keydown', handleEsc);
+                    
+                    // 点击空白区域关闭
+                    overlay.addEventListener('click', function(e) {
+                        if (e.target === overlay) {
+                            video.pause();
+                            document.body.removeChild(overlay);
+                            document.removeEventListener('keydown', handleEsc);
+                        }
+                    });
+                });
+                
+                // 鼠标悬停效果
+                videoPreview.addEventListener('mouseenter', function() {
+                    this.style.borderColor = '#555';
+                    this.style.cursor = 'pointer';
+                });
+                
+                videoPreview.addEventListener('mouseleave', function() {
+                    this.style.borderColor = '#333';
+                    this.style.cursor = 'default';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

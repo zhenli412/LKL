@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信息提取助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* 定义CSS变量，便于统一管理样式 */
+        :root {
+            --primary-color: #1890ff;
+            --primary-hover: #40a9ff;
+            --border-color: #e8e8e8;
+            --text-primary: #262626;
+            --text-secondary: #595959;
+            --text-tertiary: #8c8c8c;
+            --bg-primary: #ffffff;
+            --bg-secondary: #fafafa;
+            --bg-hover: #f5f5f5;
+            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+        
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: flex;
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-light);
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-layout {
+                flex-direction: column;
+                padding: 16px;
+                margin: 0 16px;
+            }
+        }
+        
+        .comparison-panel {
+            flex: 1;
+            background-color: var(--bg-primary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-primary);
+        }
+        
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .panel-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            min-height: 300px;
+        }
+        
+        .panel-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+        }
+        
+        /* 输入区域样式 */
+        .input-section label,
+        .file-upload-section label,
+        .extraction-options label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .input-section textarea,
+        .custom-entity input {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            background-color: var(--bg-primary);
+            font-family: inherit;
+        }
+        
+        .input-section textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .input-section textarea:focus,
+        .custom-entity input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+        
+        /* 文件上传区域 */
+        .file-upload-section {
+            margin-top: 24px;
+        }
+        
+        .file-drop-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 32px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--bg-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .file-drop-area:hover,
+        .file-drop-area.highlight {
+            border-color: var(--primary-color);
+            background-color: rgba(24, 144, 255, 0.05);
+        }
+        
+        .file-drop-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .file-drop-text p {
+            margin: 4px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .file-tip {
+            font-size: 12px;
+            color: var(--text-tertiary) !important;
+        }
+        
+        /* 提取选项样式 */
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 24px 0 16px;
+        }
+        
+        .option-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .option-group {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .option-group label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            background-color: var(--bg-primary);
+        }
+        
+        .option-group label:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(24, 144, 255, 0.05);
+        }
+        
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        
+        /* 自定义字段样式 */
+        .custom-entity {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            align-items: flex-end;
+        }
+        
+        .custom-entity input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .custom-fields-list {
+            margin-bottom: 24px;
+        }
+        
+        .custom-field-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 8px;
+            background-color: var(--bg-primary);
+        }
+        
+        .custom-field-item label {
+            margin: 0;
+            cursor: pointer;
+        }
+        
+        .remove-custom-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .remove-custom-btn:hover {
+            background-color: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        
+        /* 按钮样式 */
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            min-height: 36px;
+        }
+        
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .action-button.primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .action-button.primary:active {
+            transform: translateY(0);
+        }
+        
+        .action-button.secondary {
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+            border-color: var(--border-color);
+        }
+        
+        .action-button.secondary:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background-color: var(--bg-primary);
+        }
+        
+        .action-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .button-group,
+            .result-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .action-button {
+                width: 100%;
+            }
+        }
+        
+        /* 结果显示样式 */
+        .result-content {
+            min-height: 300px;
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            transition: var(--transition);
+            overflow-y: auto;
+        }
+        
+        .result-content.loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(24, 144, 255, 0.05);
+        }
+        
+        .placeholder-text {
+            color: var(--text-tertiary);
+            font-size: 14px;
+            text-align: center;
+            margin: 0;
+            padding: 40px 0;
+        }
+        
+        /* 提取结果样式 */
+        .extraction-results {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .result-item {
+            background-color: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: 16px 20px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .result-item h5 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .result-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .result-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .result-list li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .result-list li::before {
+            content: "•";
+            position: absolute;
+            left: 4px;
+            color: var(--primary-color);
+            font-size: 14px;
+        }
+        
+        /* 加载动画 */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(24, 144, 255, 0.2);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        
+        /* 使用指南样式 */
+        .usage-guide {
+            max-width: 1400px;
+            margin: 24px auto 40px;
+            padding: 20px 24px;
+            background-color: var(--bg-primary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+        }
+        
+        .usage-guide h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 16px 0;
+        }
+        
+        .usage-guide ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .usage-guide li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .usage-guide li::before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+        
+        /* 成功提示 */
+        .success-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #52c41a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-medium);
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 加载统一导航组件，设置基础路径为上上级目录，激活company角色
+        loadNavigation('../../', 'company');
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>信息提取助手</h2>
+                <p>高效提取文档关键信息，助力企业数据分析与决策</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 左右对比布局 -->
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">信息提取设置</h3>
+                        </div>
+                        
+                        <div class="panel-content">
+                            <div class="input-section">
+                                <label for="input-text">输入文本</label>
+                                <textarea id="input-text" placeholder="在此粘贴需要提取信息的文本内容..."></textarea>
+                            </div>
+                            
+                            <div class="file-upload-section">
+                                <label>或上传文件</label>
+                                <div class="file-drop-area">
+                                    <input type="file" id="file-upload" accept=".txt,.doc,.docx,.pdf" multiple>
+                                    <div class="file-drop-text">
+                                        <p>点击或拖拽文件到此处</p>
+                                        <p class="file-tip">支持 TXT, DOC, DOCX, PDF 格式</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="section-title">提取选项</h3>
+                            <div class="option-group">
+                                <label><input type="checkbox" checked> 联系人信息</label>
+                                <label><input type="checkbox" checked> 公司名称</label>
+                                <label><input type="checkbox" checked> 产品服务</label>
+                                <label><input type="checkbox"> 时间日期</label>
+                                <label><input type="checkbox"> 金额数值</label>
+                                <label><input type="checkbox"> 关键事件</label>
+                            </div>
+                            
+                            <div class="custom-entity">
+                                <label for="custom-field">自定义提取字段</label>
+                                <input type="text" id="custom-field" placeholder="输入自定义提取字段">
+                                <button id="add-custom-btn" class="action-button secondary">添加</button>
+                            </div>
+                            
+                            <div id="custom-fields-list" class="custom-fields-list">
+                                <!-- 自定义字段将动态添加到这里 -->
+                            </div>
+                        </div>
+                        
+                        <div class="panel-footer">
+                            <div class="button-group">
+                                <button id="extract-btn" class="action-button primary">提取信息</button>
+                                <button id="clear-btn" class="action-button secondary">清空</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧结果面板 -->
+                    <div class="comparison-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">提取结果</h3>
+                            <div class="result-actions">
+                                <button id="export-btn" class="action-button secondary">导出结果</button>
+                                <button id="copy-btn" class="action-button secondary">复制结果</button>
+                            </div>
+                        </div>
+                        
+                        <div class="panel-content">
+                            <div id="extraction-result" class="result-content">
+                                <p class="placeholder-text">提取的信息将显示在这里...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- 使用指南区域 - 移至功能操作区下方 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入内容：</strong>输入文本或上传文件作为信息提取源
+                </div>
+                <div class="help-item">
+                    <strong>2. 选择字段：</strong>选择需要提取的信息类型，可添加自定义字段
+                </div>
+                <div class="help-item">
+                    <strong>3. 开始提取：</strong>点击「提取信息」按钮进行智能分析
+                </div>
+                <div class="help-item">
+                    <strong>4. 查看结果：</strong>提取完成后，查看结构化的提取结果
+                </div>
+                <div class="help-item">
+                    <strong>5. 导出结果：</strong>可导出或复制结果用于数据分析
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // 初始化文件上传功能
+        const fileDropArea = document.querySelector('.file-drop-area');
+        const fileUpload = document.getElementById('file-upload');
+        const fileDropText = document.querySelector('.file-drop-text');
+        
+        // 拖放相关事件处理
+        fileDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.add('highlight');
+        });
+        
+        fileDropArea.addEventListener('dragleave', () => {
+            fileDropArea.classList.remove('highlight');
+        });
+        
+        fileDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.remove('highlight');
+            
+            if (e.dataTransfer.files.length) {
+                handleFiles(e.dataTransfer.files);
+                showSuccessToast(`已选择 ${e.dataTransfer.files.length} 个文件`);
+            }
+        });
+        
+        fileUpload.addEventListener('change', () => {
+            if (fileUpload.files.length) {
+                handleFiles(fileUpload.files);
+                showSuccessToast(`已选择 ${fileUpload.files.length} 个文件`);
+            }
+        });
+        
+        function handleFiles(files) {
+            // 这里是处理文件的逻辑，实际项目中需要实现文件读取和内容解析
+            const validExtensions = ['txt', 'docx', 'pdf'];
+            const validFiles = Array.from(files).filter(file => {
+                const extension = file.name.split('.').pop().toLowerCase();
+                return validExtensions.includes(extension);
+            });
+            
+            if (validFiles.length === 0) {
+                alert('请上传 .txt, .docx 或 .pdf 格式的文件');
+                return;
+            }
+            
+            // 更新文件上传区域显示
+            const fileNames = validFiles.map(file => file.name).join(', ');
+            fileDropText.innerHTML = `
+                <p>已选择 ${validFiles.length} 个文件：</p>
+                <p style="font-size: 12px; color: var(--text-secondary);">${fileNames}</p>
+            `;
+            
+            // 实际项目中这里应该添加文件解析逻辑
+        }
+        
+        // 自定义字段管理
+        const customFieldInput = document.getElementById('custom-field');
+        const addCustomFieldBtn = document.getElementById('add-custom-btn');
+        const customFieldsList = document.getElementById('custom-fields-list');
+        
+        addCustomFieldBtn.addEventListener('click', addCustomField);
+        customFieldInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addCustomField();
+            }
+        });
+        
+        function addCustomField() {
+            const fieldName = customFieldInput.value.trim();
+            if (!fieldName) {
+                alert('请输入自定义字段名称');
+                return;
+            }
+            
+            // 检查是否已存在相同名称的字段
+            const existingFields = Array.from(customFieldsList.querySelectorAll('.custom-field-item label'));
+            if (existingFields.some(label => label.textContent.trim().startsWith(fieldName))) {
+                alert('已存在相同名称的字段');
+                return;
+            }
+            
+            const customFieldId = `custom-${Date.now()}`;
+            
+            const fieldElement = document.createElement('div');
+            fieldElement.className = 'custom-field-item';
+            fieldElement.innerHTML = `
+                <label><input type="checkbox" name="extract-option" value="${customFieldId}" checked> ${fieldName}</label>
+                <button type="button" class="remove-custom-btn" data-field-id="${customFieldId}">×</button>
+            `;
+            
+            customFieldsList.appendChild(fieldElement);
+            
+            // 添加删除事件监听器
+            const removeBtn = fieldElement.querySelector('.remove-custom-btn');
+            removeBtn.addEventListener('click', () => {
+                fieldElement.classList.add('fade-out');
+                setTimeout(() => fieldElement.remove(), 300);
+            });
+            
+            customFieldInput.value = '';
+            showSuccessToast(`已添加自定义字段: ${fieldName}`);
+        }
+        
+        // 提取按钮功能
+        const extractBtn = document.getElementById('extract-btn');
+        const resultContent = document.getElementById('extraction-result');
+        const inputText = document.getElementById('input-text');
+        const copyBtn = document.getElementById('copy-btn');
+        const exportBtn = document.getElementById('export-btn');
+        
+        // 初始化结果按钮状态
+        copyBtn.disabled = true;
+        exportBtn.disabled = true;
+        
+        extractBtn.addEventListener('click', () => {
+            // 检查是否有输入内容
+            if (!inputText.value.trim() && !fileUpload.files.length) {
+                showSuccessToast('请输入文本内容或上传文件');
+                return;
+            }
+            
+            // 收集选中的提取选项
+            const selectedOptions = [];
+            
+            // 收集标准提取选项
+            document.querySelectorAll('.option-group input[type="checkbox"]:checked').forEach(checkbox => {
+                selectedOptions.push(checkbox.nextSibling.textContent.trim());
+            });
+            
+            // 收集自定义字段选项
+            document.querySelectorAll('.custom-field-item input[type="checkbox"]:checked').forEach(checkbox => {
+                selectedOptions.push(checkbox.value);
+            });
+            
+            if (selectedOptions.length === 0) {
+                alert('请至少选择一个提取选项');
+                return;
+            }
+            
+            // 显示加载状态
+            extractBtn.disabled = true;
+            extractBtn.innerHTML = '<span class="loading-spinner" style="width: 16px; height: 16px; margin-right: 8px;"></span>提取中...';
+            resultContent.innerHTML = '<div class="loading-spinner"></div><p>正在提取信息，请稍候...</p>';
+            resultContent.classList.add('loading');
+            
+            // 模拟提取过程
+            setTimeout(() => {
+                // 模拟提取结果
+            const mockResults = generateMockResults(inputText.value.trim() || fileUpload.files[0]?.name || '示例文本', selectedOptions);
+            
+            // 显示结果
+            displayResults(mockResults);
+            
+            // 启用结果按钮
+            copyBtn.disabled = false;
+            exportBtn.disabled = false;
+                
+                // 恢复按钮状态
+                extractBtn.disabled = false;
+                extractBtn.textContent = '提取信息';
+                resultContent.classList.remove('loading');
+                
+                // 显示成功提示
+                showSuccessToast('信息提取成功');
+            }, 1500);
+        });
+        
+        // 生成模拟结果
+        function generateMockResults(input, selectedOptions) {
+            const results = {};
+            
+            if (selectedOptions.includes('联系人信息')) {
+                results['联系人信息'] = ['张三', '李四', '王五'];
+            }
+            
+            if (selectedOptions.includes('公司名称')) {
+                results['公司名称'] = ['科技创新有限公司', '数字智能企业集团', '未来科技发展公司'];
+            }
+            
+            if (selectedOptions.includes('产品服务')) {
+                results['产品服务'] = ['人工智能平台', '大数据分析工具', '云计算服务'];
+            }
+            
+            if (selectedOptions.includes('时间日期')) {
+                results['时间日期'] = ['2023-06-15', '2023-07-20', '2023-08-10'];
+            }
+            
+            if (selectedOptions.includes('金额数值')) {
+                results['金额数值'] = ['¥1,000,000', '¥2,500,000', '$500,000'];
+            }
+            
+            if (selectedOptions.includes('关键事件')) {
+                results['关键事件'] = ['产品发布会', '战略合作签署', '融资完成'];
+            }
+            
+            // 检查自定义字段
+            selectedOptions.forEach(option => {
+                if (option.startsWith('custom-')) {
+                    const fieldName = document.querySelector(`input[value="${option}"]`).parentElement.textContent.trim().replace(' ×', '');
+                    results[fieldName] = [`${fieldName} 值1`, `${fieldName} 值2`];
+                }
+            });
+            
+            return results;
+        }
+        
+        // 显示结果
+        function displayResults(results) {
+            if (Object.keys(results).length === 0) {
+                resultContent.innerHTML = '<p class="placeholder-text">未找到匹配的信息</p>';
+                return;
+            }
+            
+            let html = '<div class="extraction-results">';
+            
+            for (const [key, values] of Object.entries(results)) {
+                html += `
+                    <div class="result-item">
+                        <h5>${key}</h5>
+                        <ul class="result-list">
+                `;
+                
+                values.forEach(value => {
+                    html += `<li>${value}</li>`;
+                });
+                
+                html += `
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            resultContent.innerHTML = html;
+        }
+        
+        // 清空按钮功能
+        const clearBtn = document.getElementById('clear-btn');
+        
+        clearBtn.addEventListener('click', () => {
+            inputText.value = '';
+            fileUpload.value = '';
+            
+            // 重置文件上传区域显示
+            fileDropText.innerHTML = `
+                <p>点击或拖拽文件到此处</p>
+                <p class="file-tip">支持 TXT, DOC, DOCX, PDF 格式</p>
+            `;
+            
+            // 清空自定义字段
+            customFieldsList.innerHTML = '';
+            
+            // 清空结果区域
+            resultContent.innerHTML = '<p class="placeholder-text">提取的信息将显示在这里...</p>';
+            
+            // 禁用结果按钮
+            copyBtn.disabled = true;
+            exportBtn.disabled = true;
+            
+            showSuccessToast('已清空所有内容');
+        });
+        
+        // 复制结果功能
+        const copyBtn = document.getElementById('copy-btn');
+        
+        copyBtn.addEventListener('click', () => {
+            const results = resultContent.querySelector('.extraction-results');
+            if (!results) {
+                alert('暂无结果可复制');
+                return;
+            }
+            
+            let textToCopy = '';
+            const resultItems = results.querySelectorAll('.result-item');
+            
+            resultItems.forEach(item => {
+                const title = item.querySelector('h5').textContent;
+                const values = Array.from(item.querySelectorAll('.result-list li')).map(li => li.textContent);
+                textToCopy += `${title}:\n${values.join('\n')}\n\n`;
+            });
+            
+            navigator.clipboard.writeText(textToCopy.trim())
+                .then(() => {
+                    showSuccessToast('结果已复制到剪贴板');
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    alert('复制失败，请手动选择并复制');
+                });
+        });
+        
+        // 导出结果功能
+        const exportBtn = document.getElementById('export-btn');
+        
+        exportBtn.addEventListener('click', () => {
+            const results = resultContent.querySelector('.extraction-results');
+            if (!results) {
+                alert('暂无结果可导出');
+                return;
+            }
+            
+            let textToDownload = '';
+            const resultItems = results.querySelectorAll('.result-item');
+            
+            resultItems.forEach(item => {
+                const title = item.querySelector('h5').textContent;
+                const values = Array.from(item.querySelectorAll('.result-list li')).map(li => li.textContent);
+                textToDownload += `${title}:\n${values.join('\n')}\n\n`;
+            });
+            
+            // 创建Blob并下载
+            const blob = new Blob([textToDownload.trim()], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `信息提取结果_${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showSuccessToast('结果已导出');
+        });
+        
+        // 显示成功提示
+        function showSuccessToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'success-toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // 使用setTimeout确保DOM已经更新
+            setTimeout(() => {
+                toast.classList.add('show');
+                
+                // 3秒后隐藏提示
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    // 等待动画结束后移除元素
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 3000);
+            }, 10);
+        }
+    </script>
+</body>
+</html>

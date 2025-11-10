@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选题策划岗助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* 营销获客部页面样式 */
+        .marketing-team-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 20px;
+            justify-items: start;
+        }
+        
+        .position-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        /* 原卡片hover效果已移至position-link:hover中 */
+        
+        .avatar-placeholder {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+        
+        .position-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-top: 10px;
+        }
+        
+        .position-description {
+            font-size: 14px;
+            color: #6B7280;
+            line-height: 1.6;
+            padding: 10px 24px 20px 24px;
+
+        }
+        
+        /* 链接样式，保持与原卡片一致 */
+        .position-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .position-link:hover .position-card {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            margin: 20px;
+        }
+        
+        .page-header h1 {
+            font-size: 32px;
+            color: #1831a1;
+            margin-bottom: 12px;
+        }
+        
+        .page-header p {
+            font-size: 16px;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .Mcontent {
+            margin-left: 240px;
+        }
+
+        .Mpage-content {
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 加载统一导航组件
+        // loadNavigation内部已经按顺序加载顶部导航和左侧导航
+        const navigationPromise = new Promise((resolve) => {
+            // 重写loadNavigation的then回调，在导航加载完成后显示主内容
+            const originalLoadNavigation = window.loadNavigation;
+            window.loadNavigation = function(basePath, activeRole) {
+                originalLoadNavigation(basePath, activeRole);
+                // 由于loadNavigation内部是异步加载，我们使用setTimeout确保导航加载完成
+                setTimeout(() => {
+                    resolve();
+                }, 100);
+            };
+            
+            // 调用修改后的loadNavigation
+            window.loadNavigation('../../', 'front');
+        });
+        
+        // 导航加载完成后显示主内容
+        navigationPromise.then(() => {
+            document.getElementById('main-content-container').style.display = 'block';
+        });
+    </script>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar">
+            <!-- 左侧导航将通过JavaScript动态加载 -->
+        </aside>
+
+        <!-- 主内容区域 -->
+        <main class="Mcontent" id="main-content-container" style="display: none;">           
+            <div class="Mpage-content">
+                <h1 style="text-align: left; color: #9a9a9a; font-size: 28px;">「选题策划岗」智能小助手</h1>
+                <div class="marketing-team-container">
+                    <!-- 助手1：信息提取助手 -->
+                    <a href="information-extraction-assistant.html" class="position-link">
+                        <div class="position-card">
+                            <img src="../../images/1xinxitiqu.jpg" alt="信息提取助手" style="width:326px;height: 163px;border-radius: 8%;">
+                            <h3 class="position-name">信息提取助手</h3>
+                            <p class="position-description">自动从各类文档、网页中提取关键信息，快速整理核心数据，帮您高效获取内容要点。</p>
+                        </div>
+                    </a>
+                    
+                    <!-- 助手2：文案提取助手 -->
+                    <a href="copywriting-extraction-assistant.html" class="position-link">
+                        <div class="position-card">
+                            <img src="../../images/2wenantiqu.jpg" alt="文案提取助手" style="width:326px;height: 163px;border-radius: 8%;">
+                            <h3 class="position-name">文案提取助手</h3>
+                            <p class="position-description">精准识别并提取优质文案内容，支持多种格式转换，为您的创作提供丰富参考素材。</p>
+                        </div>
+                    </a>
+                    
+                    <!-- 助手3：选题生成助手 -->
+                    <a href="topic-generation-assistant.html" class="position-link">
+                        <div class="position-card">
+                            <img src="../../images/3xuantishengcheng.jpg" alt="选题生成助手" style="width:326px;height: 163px;border-radius: 8%;">
+                            <h3 class="position-name">选题生成助手</h3>
+                            <p class="position-description">基于热门趋势和用户兴趣，智能生成创意选题方案，帮助您发现有价值的内容方向。</p>
+                        </div>
+                    </a>
+                    
+                    <!-- 助手4：文案二创助手 -->
+                    <a href="copywriting-rewrite-assistant.html" class="position-link">
+                        <div class="position-card">
+                            <img src="../../images/4wenanerchuang.jpg" alt="文案二创助手" style="width:326px;height: 163px;border-radius: 8%;">
+                            <h3 class="position-name">文案二创助手</h3>
+                            <p class="position-description">对现有文案进行创意改写，保持核心信息的同时提升表达效果，打造独特风格内容。</p>
+                        </div>
+                    </a>
+                    
+                    <!-- 助手5：结构分析助手 -->
+                    <a href="structure-analysis-assistant.html" class="position-link">
+                        <div class="position-card">
+                            <img src="../../images/5jiegoufenxi.png" alt="结构分析助手" style="width:326px;height: 163px;border-radius: 8%;">
+                            <h3 class="position-name">结构分析助手</h3>
+                            <p class="position-description">深入分析内容结构特点，提供优化建议，帮助您构建更清晰、更有逻辑性的内容框架。</p>
+                        </div>
+                    </a>
+                    
+                    <!-- 助手6：达人分析助手 -->
+                    <a href="influencer-analysis-assistant.html" class="position-link">
+                        <div class="position-card">
+                            <img src="../../images/6darenfenxi.png" alt="达人分析助手" style="width:326px;height: 163px;border-radius: 8%;">
+                            <h3 class="position-name">达人分析助手</h3>
+                            <p class="position-description">全面分析行业达人内容风格和策略，提供竞品洞察，助您学习借鉴成功经验。</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+</body>
+</html>

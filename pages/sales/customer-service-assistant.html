@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能客服助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/nav-component.js"></script>
+    <style>
+        /* 定义CSS变量 */
+        :root {
+            --primary-color: #1890ff;
+            --primary-hover: #40a9ff;
+            --primary-active: #096dd9;
+            --secondary-color: #f5f5f5;
+            --text-color: #333333;
+            --text-light: #999999;
+            --border-color: #d9d9d9;
+            --white: #ffffff;
+            --transition: all 0.3s ease;
+            --border-radius: 4px;
+            --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--box-shadow);
+            height: fit-content;
+            min-height: 600px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        .input-section select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        .input-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        .input-section input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        .input-section input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        /* 必填项样式 */
+        .input-section label.required::after {
+            content: '*';
+            color: #ff4d4f;
+            margin-left: 4px;
+        }
+
+        /* 选项组样式 */
+        .options-group {
+            margin-bottom: 24px;
+        }
+
+        .options-group h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-item input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        .option-item input[type="radio"] {
+            cursor: pointer;
+        }
+
+        /* 操作按钮样式 */
+        .action-buttons {
+            margin-top: auto;
+            display: flex;
+            gap: 16px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .action-button.primary:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button.primary:active:not(:disabled) {
+            background-color: var(--primary-active);
+        }
+
+        .action-button.secondary {
+            background-color: var(--white);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .action-button.secondary:hover:not(:disabled) {
+            background-color: var(--secondary-color);
+            border-color: var(--border-color);
+            color: var(--text-color);
+        }
+
+        .action-button.secondary:active:not(:disabled) {
+            color: var(--primary-active);
+            border-color: var(--primary-active);
+        }
+
+        .action-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* 小按钮样式 */
+        .action-button.small {
+            padding: 8px 16px;
+            font-size: 14px;
+            flex: none;
+        }
+
+        /* 结果区域样式 */
+        .result-output {
+            flex-grow: 1;
+            min-height: 500px;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            color: var(--text-color);
+        }
+
+        /* 结果控制按钮 */
+        .result-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        /* 帮助说明区域 */
+        .help-section {
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .help-section h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .help-item {
+            margin-bottom: 16px;
+            line-height: 1.6;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .help-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div id="top-navigation"></div>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h2>智能客服助手</h2>
+                <p>创建专业且高效的客服话术，提升客户满意度和转化率</p>
+            </div>
+            
+            <div class="page-content">
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <h3>客服话术设置</h3>
+                        
+                        <div class="input-section">
+                            <label for="company-name">公司名称</label>
+                            <input type="text" id="company-name" placeholder="请输入您的公司名称">
+                        </div>
+
+                        <div class="input-section">
+                            <label for="product-service">产品/服务类型</label>
+                            <select id="product-service">
+                                <option value="">请选择产品/服务类型</option>
+                                <option value="software">软件/应用</option>
+                                <option value="hardware">硬件/设备</option>
+                                <option value="retail">零售商品</option>
+                                <option value="education">教育培训</option>
+                                <option value="finance">金融服务</option>
+                                <option value="healthcare">医疗健康</option>
+                                <option value="tourism">旅游出行</option>
+                                <option value="consulting">咨询服务</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="product-description">产品/服务描述</label>
+                            <textarea id="product-description" placeholder="简要描述您的产品或服务的主要功能和价值"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="target-customers">目标客户群体</label>
+                            <textarea id="target-customers" placeholder="描述您的主要客户群体特征"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="common-issues">常见问题</label>
+                            <textarea id="common-issues" placeholder="列出客户经常咨询的问题，每行一个问题"></textarea>
+                        </div>
+
+                        <div class="input-section">
+                            <label for="service-goals">服务目标</label>
+                            <textarea id="service-goals" placeholder="描述您希望通过客服达成的目标，如提升满意度、促进转化等"></textarea>
+                        </div>
+
+                        <div class="options-group">
+                            <h4>客服风格</h4>
+                            <div class="option-item">
+                                <input type="radio" name="service-style" id="style-professional" value="professional" checked>
+                                <label for="style-professional">专业正式</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="service-style" id="style-friendly" value="friendly">
+                                <label for="style-friendly">亲切友好</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="service-style" id="style-casual" value="casual">
+                                <label for="style-casual">轻松随意</label>
+                            </div>
+                        </div>
+
+                        <div class="options-group">
+                            <h4>话术场景</h4>
+                            <div class="option-item">
+                                <input type="checkbox" id="scene-greeting" value="greeting" checked>
+                                <label for="scene-greeting">开场白/问候语</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="scene-faq" value="faq" checked>
+                                <label for="scene-faq">常见问题解答</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="scene-complaint" value="complaint" checked>
+                                <label for="scene-complaint">投诉处理</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="scene-sales" value="sales" checked>
+                                <label for="scene-sales">促成销售</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="scene-follow-up" value="follow-up" checked>
+                                <label for="scene-follow-up">跟进服务</label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="scene-closing" value="closing" checked>
+                                <label for="scene-closing">结束语</label>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="generate-btn" class="action-button primary">生成客服话术</button>
+                            <button id="reset-btn" class="action-button secondary">重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧输出面板 -->
+                    <div class="comparison-panel output-panel">
+                        <h3>智能客服话术</h3>
+                        
+                        <div class="result-controls">
+                            <button id="copy-btn" class="action-button secondary small">复制话术</button>
+                            <button id="adjust-tone-btn" class="action-button secondary small">调整语气</button>
+                            <button id="download-btn" class="action-button secondary small">导出话术</button>
+                        </div>
+
+                        <div id="result-output" class="result-output">
+                            智能客服话术将显示在这里。请在左侧填写相关信息并点击"生成客服话术"按钮。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 帮助说明 -->
+                <div class="help-section">
+                    <h3>使用帮助</h3>
+                    <div class="help-item">
+                        <strong>什么是智能客服话术？</strong> 智能客服话术是客服人员与客户沟通时使用的标准用语，能够帮助客服人员更专业、高效地处理客户咨询。
+                    </div>
+                    <div class="help-item">
+                        <strong>如何使用生成的话术？</strong> 您可以将生成的话术复制到客服系统或培训材料中，根据实际情况进行适当调整后使用。
+                    </div>
+                    <div class="help-item">
+                        <strong>话术的重要性？</strong> 标准化的客服话术可以确保服务一致性，提升客户体验，同时减少客服人员的培训时间。
+                    </div>
+                    <div class="help-item">
+                        <strong>如何获得最佳效果？</strong> 请尽可能详细地填写产品/服务信息和常见问题，这将帮助生成更符合您业务需求的话术。
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载导航组件
+            try {
+                loadNavigation('../../', 'sales', 'customer-service-assistant.html');
+            } catch (error) {
+                console.error('导航组件加载失败:', error);
+            }
+            
+            // 生成客服话术按钮事件
+            document.getElementById('generate-btn').addEventListener('click', function() {
+                generateServiceScripts();
+            });
+            
+            // 重置按钮事件
+            document.getElementById('reset-btn').addEventListener('click', function() {
+                resetForm();
+            });
+            
+            // 复制话术按钮事件
+            document.getElementById('copy-btn').addEventListener('click', function() {
+                copyResult();
+            });
+            
+            // 调整语气按钮事件
+            document.getElementById('adjust-tone-btn').addEventListener('click', function() {
+                adjustTone();
+            });
+            
+            // 导出话术按钮事件
+            document.getElementById('download-btn').addEventListener('click', function() {
+                downloadScripts();
+            });
+        });
+        
+        // 生成客服话术函数
+        function generateServiceScripts() {
+            // 获取表单数据
+            const companyName = document.getElementById('company-name').value.trim() || '[公司名称]';
+            const productService = document.getElementById('product-service').value;
+            const productDescription = document.getElementById('product-description').value.trim() || '[产品/服务描述]';
+            const targetCustomers = document.getElementById('target-customers').value.trim() || '[目标客户群体]';
+            const commonIssues = document.getElementById('common-issues').value.trim().split('\n').filter(line => line.trim());
+            const serviceGoals = document.getElementById('service-goals').value.trim() || '[服务目标]';
+            
+            // 获取选择的客服风格
+            const serviceStyle = document.querySelector('.options-group input[name="service-style"]:checked').value;
+            
+            // 获取选择的话术场景
+            const selectedScenes = [];
+            document.querySelectorAll('.options-group input[type="checkbox"]:checked').forEach(checkbox => {
+                selectedScenes.push(checkbox.value);
+            });
+            
+            // 显示加载状态
+            document.getElementById('result-output').innerHTML = '正在生成智能客服话术...';
+            
+            // 模拟API延迟
+            setTimeout(() => {
+                let scriptsOutput = `# ${companyName}智能客服话术指南\n\n`;
+                
+                // 话术使用说明
+                scriptsOutput += `## 话术使用说明\n\n`;
+                scriptsOutput += `- **公司**：${companyName}\n`;
+                scriptsOutput += `- **产品/服务**：${getProductServiceName(productService)} - ${productDescription}\n`;
+                scriptsOutput += `- **目标客户**：${targetCustomers}\n`;
+                scriptsOutput += `- **服务目标**：${serviceGoals}\n`;
+                scriptsOutput += `- **话术风格**：${getStyleName(serviceStyle)}\n\n`;
+                
+                // 开场白/问候语
+                if (selectedScenes.includes('greeting')) {
+                    scriptsOutput += `## 1. 开场白/问候语\n\n`;
+                    scriptsOutput += `${generateGreeting(serviceStyle, companyName)}\n\n`;
+                }
+                
+                // 常见问题解答
+                if (selectedScenes.includes('faq')) {
+                    scriptsOutput += `## 2. 常见问题解答\n\n`;
+                    if (commonIssues.length > 0) {
+                        commonIssues.forEach((issue, index) => {
+                            scriptsOutput += `### 问题${index + 1}: ${issue}\n`;
+                            scriptsOutput += `**回答**: ${generateFaqAnswer(serviceStyle, issue, productDescription)}\n\n`;
+                        });
+                    } else {
+                        // 默认问题
+                        const defaultIssues = [
+                            "你们的产品有什么优势？",
+                            "如何使用你们的服务？",
+                            "价格是多少？",
+                            "有没有售后服务？"
+                        ];
+                        defaultIssues.forEach((issue, index) => {
+                            scriptsOutput += `### 问题${index + 1}: ${issue}\n`;
+                            scriptsOutput += `**回答**: ${generateFaqAnswer(serviceStyle, issue, productDescription)}\n\n`;
+                        });
+                    }
+                }
+                
+                // 投诉处理
+                if (selectedScenes.includes('complaint')) {
+                    scriptsOutput += `## 3. 投诉处理话术\n\n`;
+                    scriptsOutput += `### 安抚客户\n`;
+                    scriptsOutput += `**话术**: ${generateComplaintResponse(serviceStyle, 'comfort')}\n\n`;
+                    scriptsOutput += `### 确认问题\n`;
+                    scriptsOutput += `**话术**: ${generateComplaintResponse(serviceStyle, 'confirm')}\n\n`;
+                    scriptsOutput += `### 提出解决方案\n`;
+                    scriptsOutput += `**话术**: ${generateComplaintResponse(serviceStyle, 'solve')}\n\n`;
+                    scriptsOutput += `### 后续跟进\n`;
+                    scriptsOutput += `**话术**: ${generateComplaintResponse(serviceStyle, 'follow-up')}\n\n`;
+                }
+                
+                // 促成销售
+                if (selectedScenes.includes('sales')) {
+                    scriptsOutput += `## 4. 促成销售话术\n\n`;
+                    scriptsOutput += `### 产品介绍\n`;
+                    scriptsOutput += `**话术**: ${generateSalesResponse(serviceStyle, productDescription, 'intro')}\n\n`;
+                    scriptsOutput += `### 应对价格顾虑\n`;
+                    scriptsOutput += `**话术**: ${generateSalesResponse(serviceStyle, productDescription, 'price')}\n\n`;
+                    scriptsOutput += `### 促成下单\n`;
+                    scriptsOutput += `**话术**: ${generateSalesResponse(serviceStyle, productDescription, 'close')}\n\n`;
+                }
+                
+                // 跟进服务
+                if (selectedScenes.includes('follow-up')) {
+                    scriptsOutput += `## 5. 跟进服务话术\n\n`;
+                    scriptsOutput += `### 首次使用跟进\n`;
+                    scriptsOutput += `**话术**: ${generateFollowUpResponse(serviceStyle, companyName, 'first-use')}\n\n`;
+                    scriptsOutput += `### 使用体验跟进\n`;
+                    scriptsOutput += `**话术**: ${generateFollowUpResponse(serviceStyle, companyName, 'experience')}\n\n`;
+                    scriptsOutput += `### 定期维护提醒\n`;
+                    scriptsOutput += `**话术**: ${generateFollowUpResponse(serviceStyle, companyName, 'maintenance')}\n\n`;
+                }
+                
+                // 结束语
+                if (selectedScenes.includes('closing')) {
+                    scriptsOutput += `## 6. 结束语\n\n`;
+                    scriptsOutput += `### 服务完成\n`;
+                    scriptsOutput += `**话术**: ${generateClosingResponse(serviceStyle, 'complete')}\n\n`;
+                    scriptsOutput += `### 未解决问题\n`;
+                    scriptsOutput += `**话术**: ${generateClosingResponse(serviceStyle, 'unresolved')}\n\n`;
+                    scriptsOutput += `### 引导评价\n`;
+                    scriptsOutput += `**话术**: ${generateClosingResponse(serviceStyle, 'feedback')}\n\n`;
+                }
+                
+                // 话术使用技巧
+                scriptsOutput += `## 7. 话术使用技巧\n\n`;
+                scriptsOutput += `- **灵活运用**：根据客户反应适当调整话术内容\n`;
+                scriptsOutput += `- **真诚表达**：避免机械背诵，保持自然沟通\n`;
+                scriptsOutput += `- **关注客户**：倾听客户需求，提供个性化服务\n`;
+                scriptsOutput += `- **持续改进**：根据实际使用效果不断优化话术\n`;
+                scriptsOutput += `- **团队培训**：确保所有客服人员掌握并一致使用话术\n`;
+                
+                // 显示结果
+                document.getElementById('result-output').innerHTML = scriptsOutput;
+            }, 2000);
+        }
+        
+        // 获取产品/服务中文名
+        function getProductServiceName(type) {
+            const typeMap = {
+                'software': '软件/应用',
+                'hardware': '硬件/设备',
+                'retail': '零售商品',
+                'education': '教育培训',
+                'finance': '金融服务',
+                'healthcare': '医疗健康',
+                'tourism': '旅游出行',
+                'consulting': '咨询服务',
+                'other': '其他'
+            };
+            return typeMap[type] || '';
+        }
+        
+        // 获取风格中文名
+        function getStyleName(style) {
+            const styleMap = {
+                'professional': '专业正式',
+                'friendly': '亲切友好',
+                'casual': '轻松随意'
+            };
+            return styleMap[style] || '';
+        }
+        
+        // 生成开场白
+        function generateGreeting(style, companyName) {
+            const greetings = {
+                'professional': [
+                    `您好，欢迎致电${companyName}客服中心。我是客服代表[姓名]，很高兴为您服务。请问有什么可以帮助您的？`,
+                    `尊敬的客户，您好！这里是${companyName}，感谢您的咨询。我是[姓名]，请问今天有什么可以为您提供帮助的？`
+                ],
+                'friendly': [
+                    `嗨，您好！欢迎来到${companyName}~ 我是小[姓氏]，今天有什么能帮到您的呀？`,
+                    `您好呀！感谢选择${companyName}，我是客服[昵称]，很高兴认识您~ 请问有什么可以帮您的呢？`
+                ],
+                'casual': [
+                    `嘿，您好！这里是${companyName}，有什么事儿尽管说~`,
+                    `你好呀！欢迎咨询${companyName}，我是[昵称]，怎么啦？`
+                ]
+            };
+            return greetings[style][Math.floor(Math.random() * greetings[style].length)];
+        }
+        
+        // 生成FAQ回答
+        function generateFaqAnswer(style, question, productDescription) {
+            if (question.includes('优势')) {
+                return style === 'professional' ? 
+                    `我们的产品具有以下核心优势：${productDescription}。相比市场同类产品，我们更注重用户体验和产品质量，同时提供完善的售后服务体系。` :
+                    style === 'friendly' ? 
+                    `我们家的产品可棒啦！${productDescription}~ 最重要的是，我们特别重视用户体验，售后也超贴心的哦~` :
+                    `我们的产品超赞的！${productDescription}。而且我们的售后也很到位，有问题随时找我们就行！`;
+            } else if (question.includes('使用')) {
+                return style === 'professional' ? 
+                    `使用我们的服务非常简便。首先，您需要[注册/登录]，然后按照系统提示完成设置。我们还提供详细的使用手册和视频教程，您也可以随时联系我们获取一对一指导。` :
+                    style === 'friendly' ? 
+                    `使用我们的服务超简单的~ 只需要先[注册/登录]，然后跟着引导一步步操作就行啦！如果有任何不清楚的地方，随时问我，我会耐心教您的~` :
+                    `用我们的服务很简单！先[注册/登录]，然后跟着提示走。有不会的随时问，包教包会！`;
+            } else if (question.includes('价格')) {
+                return style === 'professional' ? 
+                    `我们的产品价格根据不同的配置和服务套餐有所差异，从[最低价格]到[最高价格]不等。我们建议您根据自身需求选择最适合的套餐。目前我们正在进行[促销活动]，您可以享受[折扣优惠]。` :
+                    style === 'friendly' ? 
+                    `我们有多种套餐可以选择呢，价格从[最低价格]到[最高价格]都有~ 您可以根据自己的需求挑选最适合的。而且现在还有[促销活动]，超划算的！` :
+                    `价格方面我们有不同档位，从[最低价格]到[最高价格]。现在还有活动价，赶紧下手吧！`;
+            } else if (question.includes('售后')) {
+                return style === 'professional' ? 
+                    `是的，我们提供全面的售后服务。包括[保修期]的免费维修、7x24小时技术支持热线、在线客服咨询以及定期的系统维护和更新。我们致力于为客户提供最优质的售后体验。` :
+                    style === 'friendly' ? 
+                    `必须有呀！我们提供[保修期]的免费维修，还有7x24小时的客服热线和在线支持~ 您有任何问题，随时都能找到我们帮忙解决，绝对让您用得安心！` :
+                    `必须安排！我们有[保修期]免费维修，7x24小时在线客服。有问题随时call我们，包解决！`;
+            } else {
+                return style === 'professional' ? 
+                    `关于这个问题，我很乐意为您解答。${productDescription}。如果您需要更详细的信息，我可以为您提供相关的资料或者转接给我们的专业顾问。` :
+                    style === 'friendly' ? 
+                    `这个问题我很清楚哦~ ${productDescription}。如果您还想了解更多细节，我可以给您发一些相关资料，或者帮您转接我们的专业顾问~` :
+                    `这个问题简单！${productDescription}。需要更详细的信息吗？我可以给您发点资料。`;
+            }
+        }
+        
+        // 生成投诉处理话术
+        function generateComplaintResponse(style, type) {
+            const responses = {
+                'comfort': {
+                    'professional': "非常抱歉给您带来不好的体验。我们非常重视您的反馈，请问您能详细描述一下遇到的问题吗？",
+                    'friendly': "真的非常抱歉让您感到不满意！您的感受对我们很重要，能和我详细说说发生了什么吗？",
+                    'casual': "哎呀，实在抱歉！这确实是我们的问题。能具体和我说说是怎么回事吗？"
+                },
+                'confirm': {
+                    'professional': "感谢您的详细说明。我理解您遇到的问题是[复述问题]，对吗？为了更好地解决这个问题，我需要向您确认几个信息...",
+                    'friendly': "谢谢您的详细说明~ 我来确认一下，您遇到的是[复述问题]，对吗？为了更好地帮您解决，我想再了解几个细节...",
+                    'casual': "明白了，你遇到的是[复述问题]。为了尽快帮你解决，我需要再确认几个信息..."
+                },
+                'solve': {
+                    'professional': "根据您的情况，我建议采取以下解决方案：[解决方案]。这个方案可以有效解决您的问题，同时我们也会[额外补偿/改进措施]。",
+                    'friendly': "根据您的情况，我给您准备了一个解决方案：[解决方案]。这样应该能解决您的问题，另外我们还会[额外补偿/改进措施]，希望能弥补给您带来的不便~",
+                    'casual': "针对你的情况，我想了个解决办法：[解决方案]。这样应该能搞定，另外我们还会[额外补偿/改进措施]，就当给你的小补偿啦~"
+                },
+                'follow-up': {
+                    'professional': "非常感谢您的理解与支持。我们会持续关注这个问题的解决进展，稍后会安排专人与您联系，确保问题得到妥善处理。如果您还有其他问题，随时欢迎联系我们。",
+                    'friendly': "太感谢您的理解啦！我们一定会认真处理这个问题，稍后会有专人与您联系跟进进展。有任何其他需求，随时都可以找我哦~",
+                    'casual': "超级感谢你的理解！我们会盯着这个问题直到解决，后面也会有人联系你跟进。有事儿随时找我们就行~"
+                }
+            };
+            return responses[type][style];
+        }
+        
+        // 生成销售促成话术
+        function generateSalesResponse(style, productDescription, type) {
+            const responses = {
+                'intro': {
+                    'professional': `我们的${productDescription}是专为解决[客户痛点]而设计的。它具有[核心功能1]、[核心功能2]和[核心功能3]等优势，可以有效提升[客户价值]。许多客户使用后都反馈[客户反馈]。`,
+                    'friendly': `我们家的${productDescription}可厉害啦！它专门为解决[客户痛点]设计，有[核心功能1]、[核心功能2]和[核心功能3]等超实用的功能，用了之后能帮您[客户价值]。好多客户用了都说特别好呢~`,
+                    'casual': `我们的${productDescription}超赞！专门解决[客户痛点]，有[核心功能1]、[核心功能2]这些实用功能，用了绝对超值！`
+                },
+                'price': {
+                    'professional': "我理解您对价格的考虑。从长期来看，我们的产品可以帮助您[节省成本/提高效率]，实际上是为您创造更多价值。目前我们有[优惠方案]，可以为您提供[折扣/赠品]，让您以更合理的价格获得优质产品。",
+                    'friendly': "我完全理解您在意价格~ 不过从长远来看，我们的产品能帮您[节省成本/提高效率]，算下来其实更划算呢！而且现在下单还有[优惠方案]，可以给您[折扣/赠品]，超划算的~",
+                    'casual': "价格方面您不用担心！我们的产品虽然看起来不便宜，但用起来能帮您[节省成本/提高效率]，绝对物超所值！现在下单还有[优惠方案]，赶紧下手吧！"
+                },
+                'close': {
+                    'professional': "基于您的需求，我认为我们的产品非常适合您。您是希望现在就下单，还是需要我为您保留这个优惠价格一段时间？",
+                    'friendly': "根据您的需求，我觉得我们的产品真的很适合您呢~ 您看是现在就下单享受优惠，还是需要我帮您保留这个价格一段时间呀？",
+                    'casual': "看您的需求，这产品绝对适合您！现在下单还是我帮你留着这个优惠？别犹豫啦，晚了可能就没了~"
+                }
+            };
+            return responses[type][style];
+        }
+        
+        // 生成跟进服务话术
+        function generateFollowUpResponse(style, companyName, type) {
+            const responses = {
+                'first-use': {
+                    'professional': `尊敬的客户，您好！我是${companyName}的客服代表[姓名]。得知您最近购买了我们的产品，想了解一下您在使用过程中是否顺利？如果遇到任何问题，欢迎随时联系我们。`,
+                    'friendly': "亲爱的客户，您好呀！我是${companyName}的[昵称]~ 看到您最近购买了我们的产品，想问问您用得还习惯吗？有任何不明白的地方，都可以随时找我帮忙哦~",
+                    'casual': "嘿！我是${companyName}的[昵称]。看到你买了我们的产品，用得怎么样？有啥不会的随时跟我说！"
+                },
+                'experience': {
+                    'professional': "尊敬的客户，感谢您一直以来对${companyName}的支持。我们非常重视您的使用体验，想了解一下您对我们产品的评价和建议，以便我们不断改进，为您提供更好的服务。",
+                    'friendly': "亲爱的客户，感谢您一直支持${companyName}~ 我们特别在意您的使用感受，想听听您对我们产品的评价和建议，这样我们才能越做越好，给您提供更棒的服务~",
+                    'casual': "嗨！感谢你一直支持${companyName}！想听听你对我们产品的看法，有什么好的建议都可以告诉我，我们会努力改进的！"
+                },
+                'maintenance': {
+                    'professional': `尊敬的客户，您好！我们注意到您的产品可能需要进行定期维护。为了确保您的产品性能稳定，我们建议您[维护建议]。如果您需要，我们可以安排专业人员为您提供上门服务。`,
+                    'friendly': "亲爱的客户，您好呀~ 我们提醒您，您的产品可能需要做个小保养啦！为了让它一直保持最佳状态，建议您[维护建议]。如果需要，我们可以安排专业人员上门为您服务哦~",
+                    'casual': "嘿！温馨提醒，你的产品该做保养了！为了让它一直好好工作，建议你[维护建议]。需要上门服务的话跟我说，马上给你安排！"
+                }
+            };
+            return responses[type][style];
+        }
+        
+        // 生成结束语
+        function generateClosingResponse(style, type) {
+            const responses = {
+                'complete': {
+                    'professional': "非常感谢您的咨询。很高兴能够为您提供帮助。如果您在未来有任何其他问题或需求，欢迎随时联系我们。祝您工作顺利，生活愉快！",
+                    'friendly': "非常感谢您的咨询~ 能帮到您我真的很开心！以后有任何问题，随时都可以来找我哦~ 祝您生活愉快，天天开心！",
+                    'casual': "太感谢你的咨询啦！能帮到你我超开心的~ 以后有事儿随时call我！祝你每天都有好心情！"
+                },
+                'unresolved': {
+                    'professional': "非常抱歉我们暂时未能完全解决您的问题。我已经将您的情况记录并转交给相关部门，我们会在[时间]内联系您并提供解决方案。再次感谢您的理解与支持。",
+                    'friendly': "真的很抱歉没能完全解决您的问题~ 我已经把您的情况记下来并转给专门的团队处理了，他们会在[时间]内联系您并给您一个满意的解决方案的。再次感谢您的理解和支持哦~",
+                    'casual': "真的抱歉没能立刻解决你的问题！不过别担心，我已经把情况转给相关团队了，他们会在[时间]内联系你并搞定的！谢谢你的理解啦！"
+                },
+                'feedback': {
+                    'professional': "为了不断提升我们的服务质量，恳请您对本次服务进行评价。您的每一条建议对我们都非常重要。感谢您的宝贵时间和反馈。",
+                    'friendly': "为了让我们的服务越来越棒，希望您能对本次服务评价一下下~ 您的每一条建议我们都会认真对待的！谢谢亲爱的~",
+                    'casual': "为了让我们做得更好，求个评价呗！您的建议对我们超级重要的~ 谢谢啦！"
+                }
+            };
+            return responses[type][style];
+        }
+        
+        // 重置表单函数
+        function resetForm() {
+            document.getElementById('company-name').value = '';
+            document.getElementById('product-service').value = '';
+            document.getElementById('product-description').value = '';
+            document.getElementById('target-customers').value = '';
+            document.getElementById('common-issues').value = '';
+            document.getElementById('service-goals').value = '';
+            
+            // 重置单选框
+            document.getElementById('style-professional').checked = true;
+            
+            // 重置所有复选框为选中状态
+            document.getElementById('scene-greeting').checked = true;
+            document.getElementById('scene-faq').checked = true;
+            document.getElementById('scene-complaint').checked = true;
+            document.getElementById('scene-sales').checked = true;
+            document.getElementById('scene-follow-up').checked = true;
+            document.getElementById('scene-closing').checked = true;
+            
+            // 重置结果输出
+            document.getElementById('result-output').innerHTML = '智能客服话术将显示在这里。请在左侧填写相关信息并点击"生成客服话术"按钮。';
+        }
+        
+        // 复制结果到剪贴板
+        function copyResult() {
+            const resultText = document.getElementById('result-output').innerText;
+            navigator.clipboard.writeText(resultText).then(() => {
+                // 显示成功提示
+                const originalText = document.getElementById('copy-btn').innerText;
+                document.getElementById('copy-btn').innerText = '已复制！';
+                document.getElementById('copy-btn').classList.add('primary');
+                document.getElementById('copy-btn').classList.remove('secondary');
+                
+                // 2秒后恢复原始状态
+                setTimeout(() => {
+                    document.getElementById('copy-btn').innerText = originalText;
+                    document.getElementById('copy-btn').classList.remove('primary');
+                    document.getElementById('copy-btn').classList.add('secondary');
+                }, 2000);
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        }
+        
+        // 调整语气
+        function adjustTone() {
+            const resultOutput = document.getElementById('result-output');
+            const currentContent = resultOutput.innerText;
+            
+            // 检查是否有生成话术
+            if (currentContent.includes('请在左侧填写相关信息')) {
+                alert('请先生成客服话术');
+                return;
+            }
+            
+            // 显示加载状态
+            const originalContent = resultOutput.innerHTML;
+            resultOutput.innerHTML = '正在调整语气...';
+            
+            // 模拟API延迟
+            setTimeout(() => {
+                // 这里可以实现更复杂的语气调整逻辑
+                // 目前仅作为示例，简单提示用户
+                const toneOptions = ['更加专业', '更加友好', '更加活泼', '更加简洁', '更加详细'];
+                const randomTone = toneOptions[Math.floor(Math.random() * toneOptions.length)];
+                
+                // 显示调整后的内容（实际项目中应该有真正的语气调整逻辑）
+                resultOutput.innerHTML = originalContent + `\n\n---\n\n*已将话术调整为${randomTone}的风格*`;
+                
+                // 显示成功提示
+                const originalText = document.getElementById('adjust-tone-btn').innerText;
+                document.getElementById('adjust-tone-btn').innerText = '调整完成';
+                document.getElementById('adjust-tone-btn').classList.add('primary');
+                document.getElementById('adjust-tone-btn').classList.remove('secondary');
+                
+                // 2秒后恢复原始状态
+                setTimeout(() => {
+                    document.getElementById('adjust-tone-btn').innerText = originalText;
+                    document.getElementById('adjust-tone-btn').classList.remove('primary');
+                    document.getElementById('adjust-tone-btn').classList.add('secondary');
+                }, 2000);
+            }, 1500);
+        }
+        
+        // 导出话术
+        function downloadScripts() {
+            const content = document.getElementById('result-output').innerText;
+            
+            // 检查是否有生成话术
+            if (content.includes('请在左侧填写相关信息')) {
+                alert('请先生成客服话术');
+                return;
+            }
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '智能客服话术.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

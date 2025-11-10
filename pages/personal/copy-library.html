@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人知识库 - 文案库</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/knowledge-create.css">
+    <script src="../../js/nav-component.js"></script>
+    <script src="../../js/menu.js"></script>
+    <script src="../../js/knowledge-create.js" type="module"></script>
+    <style>
+        .knowledge-base-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .knowledge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .knowledge-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .category-management {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-right: 10px;
+        }
+        .category-item {
+            padding: 6px 12px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        .category-item.active {
+            background: #dfe0e1;
+            color: white;
+        }
+        .category-edit-btn, .category-delete-btn {
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        .category-edit-btn:hover, .category-delete-btn:hover {
+            opacity: 1;
+        }
+        .add-category-btn {
+            padding: 6px 12px;
+            background: #f0f0f0;
+            border: 1px dashed #d9d9d9;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+        }
+        .add-category-btn:hover {
+            background: #e6f7ff;
+            border-color: #91d5ff;
+            color: #1890ff;
+        }
+        .search-sort-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        
+        /* 确保排序和新建按钮在同一行 */
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+        }
+        .search-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+        .search-btn {
+            padding: 8px 16px;
+            background: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .search-btn:hover {
+            background: #40a9ff;
+        }
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sort-options label {
+            font-size: 14px;
+            color: #666;
+        }
+        .sort-select {
+            padding: 6px 8px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .knowledge-list {
+            margin-bottom: 20px;
+        }
+        .knowledge-item {
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            background: white;
+            transition: box-shadow 0.3s;
+        }
+        .knowledge-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .knowledge-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .knowledge-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin: 0;
+            flex: 1;
+        }
+        .knowledge-meta {
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .knowledge-content {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        .knowledge-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .action-btn {
+            padding: 4px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        .action-btn:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-top: 1px solid #e0e0e0;
+        }
+        .page-size-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        .page-size-select {
+            padding: 4px 8px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .page-btn {
+            padding: 4px 8px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .page-btn:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+        .page-btn.active {
+            background: #1890ff;
+            color: white;
+            border-color: #1890ff;
+        }
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 4px;
+            padding: 20px;
+            width: 400px;
+            max-width: 90%;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .modal-title {
+            font-size: 18px;
+            margin: 0;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+        }
+        .modal-close:hover {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .confirm-btn {
+            padding: 8px 16px;
+            background: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .confirm-btn:hover {
+            background: #40a9ff;
+        }
+        .cancel-btn {
+            padding: 8px 16px;
+            background: white;
+            color: #666;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .cancel-btn:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <div id="top-nav"></div>
+    <div class="app-container">
+        <aside class="sidebar"></aside>
+        <div class="content">
+            <div class="knowledge-base-container">
+                <div class="knowledge-header">
+                    <h1>文案库</h1>
+                </div>
+                
+                <!-- 类目管理 -->
+                <div class="category-management">
+                    <div class="category-list">
+                        <div class="category-item" data-id="1">
+                            <a href="topic-library.html" class="category-name">选题库</a>
+                            <span class="category-edit-btn" onclick="editCategory(1, '选题库')">✏️</span>
+                            <span class="category-delete-btn" onclick="deleteCategory(1)" style="display: none;">🗑️</span>
+                        </div>
+                        <div class="category-item active" data-id="2">
+                            <a href="copy-library.html" class="category-name">文案库</a>
+                            <span class="category-edit-btn" onclick="editCategory(2, '文案库')">✏️</span>
+                            <span class="category-delete-btn" onclick="deleteCategory(2)">🗑️</span>
+                        </div>
+                        <div class="category-item" data-id="3">
+                            <a href="material-library.html" class="category-name">素材库</a>
+                            <span class="category-edit-btn" onclick="editCategory(3, '素材库')">✏️</span>
+                            <span class="category-delete-btn" onclick="deleteCategory(3)">🗑️</span>
+                        </div>
+                    </div>
+                    <button class="add-category-btn" onclick="showAddCategoryModal()">+ 添加类目</button>
+                </div>
+                
+                <!-- 搜索和排序 -->
+                <div class="search-sort-container">
+                    <div class="search-box">
+                        <input type="text" id="search-input" class="search-input" placeholder="按标题或正文搜索">
+                        <button class="search-btn" onclick="searchKnowledge()">搜索</button>
+                    </div>
+                    <div class="sort-options">
+                        <label for="sort-select">排序：</label>
+                        <select id="sort-select" class="sort-select" onchange="sortKnowledge()">
+                            <option value="newest">最新优先</option>
+                            <option value="oldest">最早优先</option>
+                        </select>
+                    </div>
+                    <!-- 新建按钮 -->
+                    <div class="new-btn-container">
+                        <button id="new-btn" class="new-btn" onclick="toggleNewMenu()">
+                            <i class="new-icon"></i> 新建
+                        </button>
+                        <div id="new-menu" class="new-dropdown-menu">
+                            <div class="menu-item" onclick="showLocalFileModal()">
+                                <i class="file-icon"></i> 本地文件
+                            </div>
+                            <div class="menu-item" onclick="showWebLinkModal()">
+                                <i class="link-icon"></i> 网页链接
+                            </div>
+                            <div class="menu-item" onclick="showNoteModal()">
+                                <i class="note-icon"></i> 知识笔记
+                            </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-item" onclick="showAddCategoryModal()">
+                                <i class="category-icon"></i> 新建类目
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 知识列表 -->
+                <div class="knowledge-list" id="knowledge-list">
+                    <!-- 模拟数据 -->
+                    <div class="knowledge-item" data-id="1">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">产品介绍文案：智能空气净化器</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-15 14:30</span>
+                            <span>来源：文案二创助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【让呼吸成为一种享受】
+                            
+                            我们的智能空气净化器，搭载先进HEPA过滤技术，可过滤99.97%的微小颗粒物。内置智能传感器，实时监测空气质量，自动调节净化强度。
+                            
+                            静音设计，夜间模式噪音低至25分贝，让您安心睡眠。APP远程控制，随时掌握家中空气质量，提前净化迎接您回家。
+                            
+                            不止于净化，更是您健康生活的守护者。
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(1)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(1)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(1)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="2">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">促销活动文案：新年焕新季</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-14 09:15</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【新年焕新季 好礼享不停】
+                            
+                            新的一年，给生活来点新改变！即日起至1月31日，全场商品低至5折起，更有满减优惠：
+                            - 满299减50
+                            - 满599减120
+                            - 满999减200
+                            
+                            前100名下单用户还将获得新年限定礼盒一份，数量有限，先到先得！
+                            
+                            新年新气象，焕新正当时！
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(2)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(2)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(2)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="3">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">品牌故事文案：匠心传承</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-13 16:45</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【匠心传承 品质如初】
+                            
+                            1985年，我们的创始人带着对品质的极致追求，在一间小小的作坊里开始了创业之路。三十多年来，我们始终坚持以匠心打造每一件产品，从选材到制作，每一个环节都精益求精。
+                            
+                            我们相信，真正的好产品不需要过多修饰，它会自己说话。三十多年的坚守，只为给您带来最纯粹的品质体验。
+                            
+                            匠心不变，品质如初。
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(3)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(3)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(3)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="4">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">社交媒体文案：每日正能量</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-12 11:20</span>
+                            <span>来源：文案二创助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【今日份正能量】
+                            
+                            生活不会总是一帆风顺，但正是那些磕磕绊绊，让我们学会了成长。
+                            
+                            不要害怕失败，每一次跌倒都是为了更好地站起来；不要畏惧挑战，每一次突破都是为了遇见更好的自己。
+                            
+                            新的一天，给自己一个微笑，相信一切都会越来越好！
+                            
+                            #每日正能量 #励志人生
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(4)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(4)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(4)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="5">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">产品功能文案：智能手表</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-11 15:30</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【腕间智能 掌控生活】
+                            
+                            我们的智能手表不仅仅是一个计时工具，更是您的健康管家和生活助手。
+                            
+                            ✅ 24小时心率监测，异常自动提醒
+                            ✅ 睡眠质量分析，助您改善睡眠
+                            ✅ 50米防水，游泳也能佩戴
+                            ✅ 多种运动模式，科学记录运动数据
+                            ✅ 消息推送，不错过重要信息
+                            ✅ 超长续航，充电一次使用7天
+                            
+                            智能生活，从腕间开始。
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(5)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(5)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(5)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="6">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">节日祝福文案：春节</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-10 10:00</span>
+                            <span>来源：文案二创助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【新春快乐 万事如意】
+                            
+                            爆竹声中一岁除，春风送暖入屠苏。值此新春佳节来临之际，我们向您致以最诚挚的祝福：
+                            
+                            愿您在新的一年里，
+                            身体健康，万事如意；
+                            事业有成，财源广进；
+                            家庭美满，幸福安康；
+                            前程似锦，梦想成真！
+                            
+                            新春快乐！
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(6)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(6)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(6)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="7">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">服务承诺文案：顾客至上</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-09 14:25</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【顾客至上 服务先行】
+                            
+                            我们始终坚信，优质的服务是企业发展的基石。为此，我们向您郑重承诺：
+                            
+                            1. 7天无理由退换：收到产品7天内，不满意随时退换
+                            2. 24小时在线客服：无论何时，我们都在这里为您解答疑惑
+                            3. 全国联保：产品出现质量问题，全国范围内免费维修
+                            4. 专业售后团队：一对一服务，解决您的后顾之忧
+                            
+                            您的满意，是我们最大的追求！
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(7)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(7)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(7)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="8">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">情感营销文案：妈妈的爱</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-08 16:50</span>
+                            <span>来源：文案二创助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【有一种爱，叫做妈妈的爱】
+                            
+                            小时候，她总把最好的留给我们；长大后，我们总说"妈，我不缺"。
+                            
+                            这个母亲节，别再让她等待。我们精心挑选的按摩仪，让她疲惫的身体得到舒缓；智能血压计，随时监测她的健康；温暖的围巾，替你为她抵挡寒风。
+                            
+                            爱，要及时表达。这个母亲节，让我们的礼物替你说："妈妈，我爱你"。
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(8)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(8)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(8)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="9">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">企业价值观文案：创新不止</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-07 09:40</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【创新不止 引领未来】
+                            
+                            创新是我们的基因，也是推动我们不断前行的动力。
+                            
+                            我们鼓励每一位员工勇于尝试，敢于突破；我们重视每一个创意，无论大小；我们相信，每一次创新都有可能改变世界。
+                            
+                            在这个快速变化的时代，我们不满足于现状，不止于优秀，不断挑战自我，追求卓越。
+                            
+                            创新不止，引领未来！
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(9)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(9)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(9)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="10">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">产品对比文案：为什么选择我们</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-06 13:15</span>
+                            <span>来源：文案二创助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【为什么选择我们？】
+                            
+                            市面上同类产品众多，为什么越来越多的用户选择我们？
+                            
+                            🔹 材质升级：采用食品级304不锈钢，安全健康
+                            🔹 工艺精湛：10道工序精密加工，品质更稳定
+                            🔹 功能齐全：集多种功能于一体，满足您的多样化需求
+                            🔹 价格亲民：同等品质，我们的价格更具竞争力
+                            🔹 售后保障：完善的售后服务体系，让您无后顾之忧
+                            
+                            选择我们，选择品质与安心。
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(10)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(10)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(10)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="11">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">用户见证文案：真实用户的声音</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-05 11:30</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【真实用户的声音】
+                            
+                            "使用了这款产品三个月，效果超出我的预期！不仅解决了我长期困扰的问题，而且操作简单，非常适合我这种懒人。" —— 李女士，32岁
+                            
+                            "作为一个挑剔的消费者，我很少给产品好评，但这款产品真的让我惊艳。材质好，设计人性化，值得推荐！" —— 张先生，45岁
+                            
+                            "对比了很多品牌，最终选择了这家。事实证明我的选择是对的，客服态度好，产品质量也有保障。" —— 王女士，28岁
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(11)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(11)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(11)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="12">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">环保理念文案：绿色未来</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-04 15:45</span>
+                            <span>来源：文案二创助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【绿色未来 我们共同守护】
+                            
+                            地球是我们共同的家园，保护环境是我们义不容辞的责任。
+                            
+                            我们承诺：
+                            • 使用可降解环保材料
+                            • 采用节能生产工艺
+                            • 包装简约化，减少资源浪费
+                            • 每售出一件产品，我们将为环保事业捐赠1元
+                            
+                            绿色未来，需要我们共同努力。选择环保产品，就是为地球贡献一份力量。
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(12)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(12)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(12)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="13">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">新品上市文案：颠覆想象</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-03 10:20</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【新品上市 颠覆想象】
+                            
+                            历经两年研发，我们的全新旗舰产品终于震撼上市！
+                            
+                            突破性技术，带来前所未有的使用体验；时尚外观设计，彰显您的独特品味；智能交互系统，让操作更加简单便捷。
+                            
+                            这不仅仅是一款产品，更是一种生活方式的选择。
+                            
+                            新品上市期间，预订即享8折优惠，还有限量版赠品等你来拿！
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(13)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(13)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(13)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="14">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">教育类文案：孩子的未来</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-02 14:10</span>
+                            <span>来源：文案二创助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【给孩子最好的礼物，是优质的教育】
+                            
+                            每个孩子都是独一无二的，都有着无限的潜能。我们致力于为每个孩子提供个性化的教育方案，激发他们的学习兴趣，培养他们的创新思维和实践能力。
+                            
+                            我们的课程体系由教育专家精心设计，结合了先进的教育理念和方法；我们的师资团队经验丰富，充满爱心和耐心。
+                            
+                            选择我们，就是为孩子的未来奠定坚实的基础。
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(14)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(14)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(14)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="15">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">健康生活文案：从现在开始</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-01 16:30</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            【健康生活 从现在开始】
+                            
+                            健康是最大的财富，而健康的生活方式需要从日常生活的点滴做起。
+                            
+                            🍎 均衡饮食：多吃蔬菜水果，少吃油腻食物
+                            💧 充足水分：每天喝够8杯水，保持身体水分平衡
+                            🏃 适量运动：每周至少运动3次，每次30分钟以上
+                            😴 规律作息：早睡早起，保证充足睡眠
+                            😊 心态平和：保持积极乐观的心态，笑口常开
+                            
+                            健康生活，从现在开始，从自己做起！
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(15)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(15)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(15)">删除</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分页 -->
+                <div class="pagination-container">
+                    <div class="page-size-selector">
+                        <span>每页显示：</span>
+                        <select id="page-size-select" class="page-size-select" onchange="changePageSize()">
+                            <option value="10">10条</option>
+                            <option value="20">20条</option>
+                            <option value="30">30条</option>
+                        </select>
+                    </div>
+                    <div class="pagination">
+                        <button class="page-btn" onclick="changePage(1)" disabled>&lt;&lt;</button>
+                        <button class="page-btn" onclick="changePage(1)" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn" onclick="changePage(2)">2</button>
+                        <button class="page-btn" onclick="changePage(2)">&gt;</button>
+                        <button class="page-btn" onclick="changePage(2)">&gt;&gt;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 类目相关模态框 -->
+    <div id="add-category-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">添加新类目</h3>
+                <button class="modal-close" onclick="closeModal('add-category-modal')">×</button>
+            </div>
+            <div class="form-group">
+                <label for="new-category-name">类目名称</label>
+                <input type="text" id="new-category-name" placeholder="请输入类目名称">
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeModal('add-category-modal')">取消</button>
+                <button class="confirm-btn" onclick="confirmAddCategory()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="edit-category-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">编辑类目</h3>
+                <button class="modal-close" onclick="closeModal('edit-category-modal')">×</button>
+            </div>
+            <input type="hidden" id="edit-category-id">
+            <div class="form-group">
+                <label for="edit-category-name">类目名称</label>
+                <input type="text" id="edit-category-name" placeholder="请输入类目名称">
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeModal('edit-category-modal')">取消</button>
+                <button class="confirm-btn" onclick="confirmEditCategory()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 知识相关模态框 -->
+    <div id="edit-knowledge-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">编辑知识</h3>
+                <button class="modal-close" onclick="closeModal('edit-knowledge-modal')">×</button>
+            </div>
+            <input type="hidden" id="edit-knowledge-id">
+            <div class="form-group">
+                <label for="edit-knowledge-title">标题</label>
+                <input type="text" id="edit-knowledge-title" placeholder="请输入标题">
+            </div>
+            <div class="form-group">
+                <label for="edit-knowledge-content">内容</label>
+                <textarea id="edit-knowledge-content" placeholder="请输入内容"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeModal('edit-knowledge-modal')">取消</button>
+                <button class="confirm-btn" onclick="confirmEditKnowledge()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="move-knowledge-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">移动类目</h3>
+                <button class="modal-close" onclick="closeModal('move-knowledge-modal')">×</button>
+            </div>
+            <input type="hidden" id="move-knowledge-id">
+            <div class="form-group">
+                <label for="move-to-category">选择目标类目</label>
+                <select id="move-to-category">
+                    <option value="1">选题库</option>
+                    <option value="2">文案库</option>
+                    <option value="3">素材库</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeModal('move-knowledge-modal')">取消</button>
+                <button class="confirm-btn" onclick="confirmMoveKnowledge()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 初始化导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 使用统一的导航加载函数，设置正确的基础路径和当前页面路径
+            loadNavigation('../../', 'front', 'pages/personal/copy-library.html');
+        });
+        
+        // 类目管理相关函数
+        function showAddCategoryModal() {
+            document.getElementById('add-category-modal').style.display = 'flex';
+        }
+        
+        function editCategory(id, name) {
+            document.getElementById('edit-category-id').value = id;
+            document.getElementById('edit-category-name').value = name;
+            document.getElementById('edit-category-modal').style.display = 'flex';
+        }
+        
+        function deleteCategory(id) {
+            if (id === 2) { // 默认类目不能删除
+                alert('默认类目不能删除');
+                return;
+            }
+            if (confirm('确定要删除这个类目吗？该类目下的知识将被移至默认类目。')) {
+                alert('类目删除成功');
+                // 实际项目中这里应该调用API删除类目
+            }
+        }
+        
+        function confirmAddCategory() {
+            const name = document.getElementById('new-category-name').value.trim();
+            if (!name) {
+                alert('请输入类目名称');
+                return;
+            }
+            alert('类目添加成功');
+            closeModal('add-category-modal');
+            // 实际项目中这里应该调用API添加类目
+        }
+        
+        function confirmEditCategory() {
+            const id = document.getElementById('edit-category-id').value;
+            const name = document.getElementById('edit-category-name').value.trim();
+            if (!name) {
+                alert('请输入类目名称');
+                return;
+            }
+            alert('类目编辑成功');
+            closeModal('edit-category-modal');
+            // 实际项目中这里应该调用API更新类目
+        }
+        
+        // 知识管理相关函数
+        function editKnowledge(id) {
+            const item = document.querySelector(`.knowledge-item[data-id="${id}"]`);
+            if (item) {
+                const title = item.querySelector('.knowledge-title').textContent;
+                const content = item.querySelector('.knowledge-content').textContent;
+                
+                document.getElementById('edit-knowledge-id').value = id;
+                document.getElementById('edit-knowledge-title').value = title;
+                document.getElementById('edit-knowledge-content').value = content;
+                document.getElementById('edit-knowledge-modal').style.display = 'flex';
+            }
+        }
+        
+        function moveKnowledge(id) {
+            document.getElementById('move-knowledge-id').value = id;
+            document.getElementById('move-knowledge-modal').style.display = 'flex';
+        }
+        
+        function deleteKnowledge(id) {
+            if (confirm('确定要删除这条知识吗？')) {
+                const item = document.querySelector(`.knowledge-item[data-id="${id}"]`);
+                if (item) {
+                    item.remove();
+                }
+                alert('删除成功');
+                // 实际项目中这里应该调用API删除知识
+            }
+        }
+        
+        function confirmEditKnowledge() {
+            const id = document.getElementById('edit-knowledge-id').value;
+            const title = document.getElementById('edit-knowledge-title').value.trim();
+            const content = document.getElementById('edit-knowledge-content').value.trim();
+            
+            if (!title || !content) {
+                alert('标题和内容不能为空');
+                return;
+            }
+            
+            const item = document.querySelector(`.knowledge-item[data-id="${id}"]`);
+            if (item) {
+                item.querySelector('.knowledge-title').textContent = title;
+                item.querySelector('.knowledge-content').textContent = content;
+            }
+            
+            alert('编辑成功');
+            closeModal('edit-knowledge-modal');
+            // 实际项目中这里应该调用API更新知识
+        }
+        
+        function confirmMoveKnowledge() {
+            const id = document.getElementById('move-knowledge-id').value;
+            const categoryId = document.getElementById('move-to-category').value;
+            const categoryName = document.getElementById('move-to-category').options[document.getElementById('move-to-category').selectedIndex].text;
+            
+            alert(`已成功移动到类目：${categoryName}`);
+            closeModal('move-knowledge-modal');
+            // 实际项目中这里应该调用API移动知识到新类目
+        }
+        
+        // 搜索和排序
+        function searchKnowledge() {
+            const keyword = document.getElementById('search-input').value.trim();
+            alert(`搜索关键词：${keyword}`);
+            // 实际项目中这里应该调用API进行搜索
+        }
+        
+        function sortKnowledge() {
+            const sortType = document.getElementById('sort-select').value;
+            alert(`排序方式：${sortType === 'newest' ? '最新优先' : '最早优先'}`);
+            // 实际项目中这里应该调用API进行排序
+        }
+        
+        // 分页相关
+        function changePage(page) {
+            alert(`切换到第${page}页`);
+            // 实际项目中这里应该调用API获取对应页的数据
+        }
+        
+        function changePageSize() {
+            const pageSize = document.getElementById('page-size-select').value;
+            alert(`每页显示${pageSize}条`);
+            // 实际项目中这里应该调用API设置每页显示条数并重新加载数据
+        }
+        
+        // 模态框相关
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        // 加载导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNavigation('../../', 'personal');
+            // 初始化新建功能
+            if (typeof initKnowledgeCreate === 'function') {
+                initKnowledgeCreate();
+            }
+        });
+    </script>
+    
+    <!-- 本地文件上传模态框 -->
+    <div id="local-file-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>上传本地文件</h3>
+                <span class="close" onclick="closeLocalFileModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="file-category">存储类目：</label>
+                    <select id="file-category" class="form-control">
+                        <option value="1">选题库</option>
+                        <option value="2">文案库</option>
+                        <option value="3" selected>素材库</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>上传文件：</label>
+                    <input type="file" id="file-upload" style="display: none;" multiple accept=".pdf,.doc,.docx,.txt">
+                    <div id="drop-area" class="file-upload-container" onclick="document.getElementById('file-upload').click()">
+                        <div class="file-upload-text">点击或拖拽文件到此处上传</div>
+                        <div class="upload-tip">支持 PDF、Word、文本、声音wav等文件格式</div>
+                    </div>
+                    <div id="progress-container" class="progress-container" style="display: none;">
+                        <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeLocalFileModal()">取消</button>
+                <button id="upload-btn" class="confirm-btn" disabled>上传</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 网页链接模态框 -->
+    <div id="web-link-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>添加网页链接</h3>
+                <span class="close" onclick="closeWebLinkModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="link-category">存储类目：</label>
+                    <select id="link-category" class="form-control">
+                        <option value="1">选题库</option>
+                        <option value="2">文案库</option>
+                        <option value="3" selected>素材库</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="link-name">文件名称：</label>
+                    <input type="text" id="link-name" class="form-control" placeholder="请输入文件名称">
+                </div>
+                <div class="form-group">
+                    <label for="link-url">链接地址：</label>
+                    <input type="url" id="link-url" class="form-control" placeholder="请输入网页链接">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeWebLinkModal()">取消</button>
+                <button class="confirm-btn" onclick="saveWebLink()">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 知识笔记模态框 -->
+    <div id="note-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>添加知识笔记</h3>
+                <span class="close" onclick="closeNoteModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="note-category">存储类目：</label>
+                    <select id="note-category" class="form-control">
+                        <option value="1">选题库</option>
+                        <option value="2">文案库</option>
+                        <option value="3" selected>素材库</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="note-title">文件名称：</label>
+                    <input type="text" id="note-title" class="form-control" placeholder="请输入笔记标题">
+                </div>
+                <div class="form-group">
+                    <label for="note-content">正文内容：</label>
+                    <textarea id="note-content" class="form-control" rows="6" placeholder="请输入笔记内容"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeNoteModal()">取消</button>
+                <button class="confirm-btn" onclick="saveNote()">保存</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

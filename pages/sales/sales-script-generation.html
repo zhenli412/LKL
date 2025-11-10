@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>销冠话术生成助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/nav-component.js"></script>
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
+            margin: 0;
+        }
+
+        .result-content {
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* 聊天对话窗口样式 */
+        .chat-container {
+            margin-top: 24px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+
+        .chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 16px 16px 0px 3px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 16px;
+            min-height: 150px;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+        }
+
+        .chat-message.assistant {
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin: 0 8px;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .assistant-avatar {
+            background-color: #f0f7ff;
+            border: 1px solid var(--primary-color);
+        }
+
+        .user-avatar {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .chat-message-content {
+            max-width: calc(100% - 8px);
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
+            word-wrap: break-word;
+        }
+
+        .chat-message.user .chat-message-content {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.assistant .chat-message-content {
+            background-color: white;
+            color: var(--text-color);
+            border-bottom-left-radius: 4px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* 调整后的聊天输入容器样式 */
+        .chat-input-container {
+            display: flex;
+            position: relative;
+            width: 100%;
+        }
+
+        .chat-input {
+            flex: 1;
+            min-height: 60px;
+            max-height: 120px;
+            padding: 12px 80px 12px 16px; /* 右侧留出按钮空间 */
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            resize: vertical;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 调整后的发送按钮样式（位于输入框内） */
+        .chat-send-btn {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            width: 64px;
+            height: 36px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-send-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .chat-send-btn:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        /* 扩展按钮 - 位于输入框内左侧 */
+        .chat-extend-btn {
+            position: absolute;
+            left: 8px;
+            bottom: 8px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .extend-btn {
+            width: 36px;
+            height: 36px;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 16px;
+        }
+
+        .extend-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        /* 单行输入框样式 */
+        .input-section input[type="text"],
+        .input-section select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .input-section input[type="text"]:focus,
+        .input-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div id="top-nav-container"></div>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <div class="page-header">
+                <h2>销冠话术生成助手</h2>
+                <p>基于行业经验和销售数据，快速生成高效的销售话术，提升转化率</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 左右对比布局 -->
+                <div class="comparison-layout">
+                    <!-- 左侧输入面板 -->
+                    <div class="comparison-panel input-panel">
+                        <div class="result-header">
+                        <h3>销冠信息配置</h3>
+                        </div>
+                        <div class="input-section">
+                            <label for="product-name">产品或服务名称</label>
+                            <input type="text" id="product-name" placeholder="请输入产品或服务名称">
+                        </div>
+                        <div class="input-section">
+                            <label for="selling-point">核心卖点</label>
+                            <input type="text" id="selling-point" placeholder="请输入产品或服务的核心卖点">
+                        </div>
+                        <div class="input-section">
+                            <label for="target-group">目标群体</label>
+                            <input type="text" id="target-group" placeholder="请输入目标客户群体">
+                        </div>
+                        <div class="input-section">
+                            <label for="competitors">竞争对手</label>
+                            <input type="text" id="competitors" placeholder="请输入主要竞争对手">
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-button primary">生成话术</button>
+                            <button class="action-button secondary">重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 右侧输出面板 -->
+                    <div class="comparison-panel output-panel">
+                        <div class="result-header">
+                            <h3>话术生成结果</h3>
+                        </div>
+                        <div class="result-content" style="position: relative;">
+                            <p class="placeholder-text">话术生成结果将显示在这里...</p>
+                            <!-- 添加个人知识库按钮 -->
+                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                <span style="font-size: 18px;">📝</span>
+                            </button>
+                        </div>
+                        
+                        <!-- 聊天对话窗口 -->
+                        <div class="chat-container">
+                            <div class="chat-header">
+                                <h3>对话交流</h3>
+                            </div>
+                            <div class="chat-messages" id="chat-messages">
+                <div class="chat-message assistant">
+                    <div class="chat-avatar assistant-avatar">Ali</div>
+                    <div class="chat-message-content">
+                        您好！我是销售话术助手。请告诉我您对生成的话术有什么具体需求或修改建议，我可以为您进一步优化。
+                    </div>
+                </div>
+            </div>
+                            <div class="chat-input-container">
+                                <!-- 扩展按钮组 -->
+                                <!-- 输入框 -->
+                                <textarea class="chat-input" id="chat-input" placeholder="请输入您的需求或问题..."></textarea>
+                                <!-- 发送按钮（位于输入框内） -->
+                                <button class="chat-send-btn" id="chat-send-btn">发送</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 帮助说明区 -->
+            <div class="help-section">
+                <h3>使用指南</h3>
+                <div class="help-item">
+                    <strong>1. 输入产品信息：</strong>填写产品或服务名称、核心卖点、目标群体和竞争对手信息
+                </div>
+                <div class="help-item">
+                    <strong>2. 选择话术类型：</strong>从下拉菜单中选择需要生成的话术类型（开场白、产品介绍、异议处理、促单转化）
+                </div>
+                <div class="help-item">
+                    <strong>3. 生成话术：</strong>点击「生成话术」按钮，系统将基于输入信息生成专业的销售话术
+                </div>
+                <div class="help-item">
+                    <strong>4. 查看结果：</strong>在右侧结果面板查看生成的话术内容
+                </div>
+                <div class="help-item">
+                    <strong>5. 重置修改：</strong>如需重新输入，可点击「重置」按钮清空所有输入内容
+                </div>
+            </div>
+
+        </main>
+    </div>
+    
+    <script>
+        // 生成话术函数
+        function generateScript() {
+            // 获取表单数据
+            const productName = document.getElementById('product-name').value || '优质产品';
+            const industry = document.getElementById('industry').value || '科技';
+            const targetAudience = document.getElementById('target-audience').value || '企业客户';
+            const productFeatures = document.getElementById('product-features').value || '高性能,低成本,易操作';
+            const competitors = document.getElementById('competitors').value || '市场同类产品';
+            
+            // 获取选中的话术类型
+            const selectedTypes = [];
+            if (document.getElementById('option-cold-call').checked) selectedTypes.push('cold-call');
+            if (document.getElementById('option-proposal').checked) selectedTypes.push('proposal');
+            if (document.getElementById('option-objection').checked) selectedTypes.push('objection');
+            if (document.getElementById('option-closing').checked) selectedTypes.push('closing');
+            
+            // 模拟生成结果
+            let resultHtml = '';
+            
+            if (selectedTypes.includes('cold-call')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>📞 电话开场白</h4>
+                        <p>您好，我是${productName}的客户经理[姓名]。我们专注于为${targetAudience}提供高效的${industry}解决方案。</p>
+                        <p>最近我们帮助了多家类似企业在[相关领域]提升了30%的效率，想简单了解一下您在这方面是否有类似需求？</p>
+                    </div>
+                `;
+            }
+            
+            if (selectedTypes.includes('proposal')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>💡 产品介绍</h4>
+                        <p>${productName}是一款专为${targetAudience}设计的${industry}解决方案，它具有以下核心优势：</p>
+                        <ul>
+                            <li>高效便捷：操作简单，快速上手，节省50%的时间成本</li>
+                            <li>安全可靠：采用行业领先的安全技术，保障数据安全</li>
+                            <li>智能分析：内置AI分析功能，提供精准的决策支持</li>
+                            <li>定制服务：根据您的实际需求提供个性化解决方案</li>
+                        </ul>
+                        <p>相比${competitors}，我们在[性能/价格/服务]方面具有明显优势。</p>
+                    </div>
+                `;
+            }
+            
+            if (selectedTypes.includes('objection')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>🔍 异议处理</h4>
+                        <p><strong>价格顾虑：</strong>我理解您对价格的关注。${productName}虽然前期投入略高，但考虑到它能为您节省的时间成本和提升的工作效率，投资回报率通常在3-6个月内即可实现。</p>
+                        <p><strong>实施周期：</strong>我们有专业的实施团队，通常在2-4周内即可完成部署，不会影响您的正常业务运营。</p>
+                        <p><strong>功能需求：</strong>我们支持根据客户需求进行定制开发，如果您有特殊的功能需求，我们的技术团队可以为您提供解决方案。</p>
+                    </div>
+                `;
+            }
+            
+            if (selectedTypes.includes('closing')) {
+                resultHtml += `
+                    <div class="result-section">
+                        <h4>✅ 促成交易</h4>
+                        <p>基于我们的讨论，${productName}确实能很好地满足您的需求。我们可以为您提供一个月的免费试用期，让您亲身体验产品的价值。</p>
+                        <p>如果您今天决定合作，我们还可以为您提供[专属优惠/增值服务]。您看是现在就签约，还是需要我为您准备更详细的方案？</p>
+                    </div>
+                `;
+            }
+            
+            // 显示结果
+            document.getElementById('result-output').innerHTML = resultHtml;
+        }
+        
+        // 重置表单函数
+        function resetForm() {
+            document.getElementById('product-name').value = '';
+            document.getElementById('industry').value = '';
+            document.getElementById('target-audience').value = '';
+            document.getElementById('product-features').value = '';
+            document.getElementById('competitors').value = '';
+            
+            document.getElementById('result-output').innerHTML = `
+                <div class="placeholder-text">
+                    <p>请在左侧填写产品信息并点击「生成话术」按钮</p>
+                    <p>生成的销售话术将显示在这里</p>
+                </div>
+            `;
+        }
+        
+        // 复制到剪贴板函数
+        function copyToClipboard() {
+            const resultText = document.getElementById('result-output').innerText;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(resultText)
+                    .then(() => {
+                        alert('已复制到剪贴板');
+                    })
+                    .catch(err => {
+                        console.error('复制失败:', err);
+                        alert('复制失败，请手动复制');
+                    });
+            } else {
+                // 兼容性处理
+                const textArea = document.createElement('textarea');
+                textArea.value = resultText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('已复制到剪贴板');
+            }
+        }
+        
+        // 下载话术函数
+        function downloadScript() {
+            const productName = document.getElementById('product-name').value || '销售话术';
+            const resultText = document.getElementById('result-output').innerText;
+            
+            const blob = new Blob([resultText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${productName}_销售话术.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 聊天功能相关函数
+        function addMessage(role, content) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', role);
+            
+            // 添加头像
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = `chat-avatar ${role}-avatar`;
+            avatarDiv.textContent = role === 'user' ? 'U' : 'A';
+            
+            const contentElement = document.createElement('div');
+            contentElement.classList.add('chat-message-content');
+            contentElement.textContent = content;
+            
+            messageElement.appendChild(avatarDiv);
+            messageElement.appendChild(contentElement);
+            chatMessages.appendChild(messageElement);
+            
+            // 自动滚动到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function handleChatSubmit() {
+            const chatInput = document.getElementById('chat-input');
+            const userMessage = chatInput.value.trim();
+            
+            if (userMessage === '') return;
+            
+            // 添加用户消息
+            addMessage('user', userMessage);
+            chatInput.value = '';
+            
+            // 禁用发送按钮
+            const chatSendBtn = document.getElementById('chat-send-btn');
+            chatSendBtn.disabled = true;
+            
+            // 模拟助手回复
+            setTimeout(() => {
+                let assistantReply = '';
+                
+                // 根据用户输入内容生成不同的回复
+                if (userMessage.includes('修改') || userMessage.includes('优化')) {
+                    assistantReply = '我已经根据您的建议优化了话术内容。新的话术更加突出产品优势，并针对目标客户群体进行了调整。您可以继续提供反馈。';
+                } else if (userMessage.includes('示例') || userMessage.includes('案例')) {
+                    assistantReply = '以下是一个示例：\n"您好，我是[公司名称]的[您的姓名]。我们专为[目标群体]提供[产品/服务]，已经帮助[类似客户]提升了[具体成效]。您在这方面有什么需求或挑战吗？"';
+                } else if (userMessage.includes('价格') || userMessage.includes('成本')) {
+                    assistantReply = '关于价格相关的话术，建议您可以强调产品的投资回报率、长期价值以及与竞争对手相比的优势。例如："虽然我们的产品初期投入可能略高，但考虑到它能为您节省的运营成本和提升的效率，投资回收期通常在[X]个月内。"';
+                } else {
+                    assistantReply = '感谢您的反馈！根据您的需求，我已经为您调整了话术内容。您可以尝试使用这些话术与客户沟通，如有其他需求请随时告诉我。';
+                }
+                
+                addMessage('assistant', assistantReply);
+                chatSendBtn.disabled = false;
+            }, 1000);
+        }
+        
+        // 初始化事件监听和导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 使用统一的导航加载函数
+            loadNavigation('../../', 'sales', 'sales/sales-script-generation.html');
+            
+            // 生成按钮点击事件
+            document.querySelector('.action-button.primary').addEventListener('click', function() {
+                // 这里可以实现实际的话术生成逻辑
+                const resultContent = document.querySelector('.result-content');
+                resultContent.innerHTML = `
+                    <div class="script-content">
+                        <h5>生成的销售话术</h5>
+                        <p>您好！我是[您的姓名]，来自[公司名称]。我们是专注于为[目标群体]提供[产品/服务]的专业团队。</p>
+                        <p>我们的[产品/服务]具有[核心卖点]，能够帮助像您这样的客户有效解决[问题]，提升[效果]。</p>
+                        <p>相比市场上的其他解决方案，我们的优势在于[差异化优势]。不知道您目前在这方面有什么需求或挑战吗？</p>
+                    </div>
+                    <!-- 添加个人知识库按钮 -->
+                    <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                        <span style="font-size: 18px;">📝</span>
+                    </button>
+                `;
+            });
+            
+            // 重置按钮点击事件
+            document.querySelector('.action-button.secondary').addEventListener('click', function() {
+                document.getElementById('product-name').value = '';
+                document.getElementById('selling-point').value = '';
+                document.getElementById('target-group').value = '';
+                document.getElementById('competitors').value = '';
+                document.getElementById('script-type').selectedIndex = 0;
+                
+                const resultContent = document.querySelector('.result-content');
+                resultContent.innerHTML = `
+                    <p class="placeholder-text">话术生成结果将显示在这里...</p>
+                    <!-- 添加个人知识库按钮 -->
+                    <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                        <span style="font-size: 18px;">📝</span>
+                    </button>
+                `;
+            });
+            
+            // 聊天发送按钮点击事件
+            document.getElementById('chat-send-btn').addEventListener('click', handleChatSubmit);
+            
+            // 聊天输入框回车发送（按住Shift+Enter换行）
+            document.getElementById('chat-input').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleChatSubmit();
+                }
+            });
+        });    
+    </script>
+</body>
+</html>

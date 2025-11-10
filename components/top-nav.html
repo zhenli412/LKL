@@ -1,0 +1,241 @@
+<!-- 顶部导航栏组件 -->
+<header>
+    <style>
+        .top-nav {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+            
+        .website-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #13245b; /* 深蓝色 */
+        }
+        
+
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .role-switcher {
+            display: flex;
+            gap: 5px;
+            background-color: #f0f2f5;
+            padding: 3px;
+            border-radius: 4px;
+        }
+        
+        .role-btn {
+            padding: 4px 12px;
+            border: none;
+            background: transparent;
+            color: #666;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .role-btn:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #4A90E2;
+        }
+        
+        .role-btn.active {
+            background-color: #fff;
+            color: #4A90E2;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        #current-user {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .logout-btn {
+            padding: 5px 12px;
+            background-color: transparent;
+            border: 1px solid #d9d9d9;
+            color: #666;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+        
+        .logout-btn:hover {
+            border-color: #ff4d4f;
+            color: #ff4d4f;
+        }
+        
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 帮助中心按钮样式 */
+        .help-center-btn {
+            position: fixed;
+            top: 70px;
+            right: 30px;
+            background-color: #f0f0f0;
+            color: #666;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 14px;
+            font-weight: normal;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 999; /* 低于顶部导航栏但高于其他内容 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .help-center-btn:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.05);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .help-center-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* 帮助提示浮层样式 - 鼠标悬停显示 */
+        .help-tooltip {
+            position: fixed;
+            top: 130px; /* 按钮下方 */
+            right: 30px;
+            background-color: #fff;
+            color: #333;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 300px;
+            border: 1px solid #e0e0e0; /* 淡灰色边框 */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        /* 鼠标悬停时显示浮层 */
+        .help-center-btn:hover + .help-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* 浮层箭头 */
+        .help-tooltip::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            right: 20px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent transparent #e0e0e0 transparent;
+        }
+        
+        /* 浮层内容箭头 */
+        .help-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            right: 20px;
+            border-width: 7px;
+            border-style: solid;
+            border-color: transparent transparent #fff transparent;
+            margin-bottom: -1px;
+        }
+        
+
+        
+        /* 确保主内容区域有足够的顶部间距，避免被固定导航栏遮挡 */
+        body {
+            padding-top: 60px;
+        }
+    </style>
+    
+    <div class="top-nav">
+        <div class="logo-container">
+            <a href="../../index.html" class="logo-link">
+                <img src="../../images/logo.png" alt="利客来" class="logo-image">
+            </a>
+            <div class="logo-text">           
+                <div class="slogan">
+                    <span class="slogan-l">AI智能巧获客</span>
+                    <span class="slogan-t">利润客户</span>
+                    <span class="slogan">立刻来!</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="user-info">
+            <div class="role-switcher">
+                <button class="role-btn active" id="role-front">前台</button>
+                <button class="role-btn" id="role-company">企业</button>
+                <button class="role-btn" id="role-admin">管理</button>
+            </div>
+            
+            <div class="user-profile">
+                <span id="current-user">登录用户名</span>
+                <button id="logout-btn" class="logout-btn">登出</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 帮助中心按钮 -->
+    <button class="help-center-btn">
+        <span>帮助</span>
+    </button>
+    
+    <!-- 帮助提示浮层 -->
+    <div class="help-tooltip">
+        在我们每个功能页面的下方，都有《使用指南》。根据指南提示进行操作，内容生成的结果质量会更高喔~
+    </div>
+    
+
+</header>

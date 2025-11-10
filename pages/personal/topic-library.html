@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人知识库 - 选题库</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/nav-component.js"></script>
+    <script src="../../js/menu.js"></script>
+    <link rel="stylesheet" href="../../css/knowledge-create.css">
+    <script src="../../js/knowledge-create.js"></script>
+    <style>
+        /* 排序和新建按钮同行显示样式 */
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .knowledge-base-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .knowledge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .knowledge-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .category-management {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-right: 10px;
+        }
+        .category-item {
+            padding: 6px 12px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        .category-item.active {
+            background: #dfe0e1;
+            color: white;
+        }
+        .category-edit-btn, .category-delete-btn {
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        .category-edit-btn:hover, .category-delete-btn:hover {
+            opacity: 1;
+        }
+        .add-category-btn {
+            padding: 6px 12px;
+            background: #f0f0f0;
+            border: 1px dashed #d9d9d9;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+        }
+        .add-category-btn:hover {
+            background: #e6f7ff;
+            border-color: #91d5ff;
+            color: #1890ff;
+        }
+        .search-sort-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+        }
+        .search-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+        .search-btn {
+            padding: 8px 16px;
+            background: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .search-btn:hover {
+            background: #40a9ff;
+        }
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sort-options label {
+            font-size: 14px;
+            color: #666;
+        }
+        .sort-select {
+            padding: 6px 8px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .knowledge-list {
+            margin-bottom: 20px;
+        }
+        .knowledge-item {
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            background: white;
+            transition: box-shadow 0.3s;
+        }
+        .knowledge-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .knowledge-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .knowledge-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin: 0;
+            flex: 1;
+        }
+        .knowledge-meta {
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .knowledge-content {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .knowledge-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .action-btn {
+            padding: 4px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        .action-btn:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-top: 1px solid #e0e0e0;
+        }
+        .page-size-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        .page-size-select {
+            padding: 4px 8px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .page-btn {
+            padding: 4px 8px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .page-btn:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+        .page-btn.active {
+            background: #1890ff;
+            color: white;
+            border-color: #1890ff;
+        }
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 4px;
+            padding: 20px;
+            width: 400px;
+            max-width: 90%;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .modal-title {
+            font-size: 18px;
+            margin: 0;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+        }
+        .modal-close:hover {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .confirm-btn {
+            padding: 8px 16px;
+            background: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .confirm-btn:hover {
+            background: #40a9ff;
+        }
+        .cancel-btn {
+            padding: 8px 16px;
+            background: white;
+            color: #666;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .cancel-btn:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+        
+        /* 新建按钮和下拉菜单样式 */
+        .new-btn-container {
+            position: relative;
+        }
+        
+        .new-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            background: #1890ff;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .new-btn:hover {
+            background: #40a9ff;
+        }
+        
+        .new-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 4px;
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 160px;
+            display: none;
+            z-index: 100;
+        }
+        
+        .new-dropdown-menu.show {
+            display: block;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #333;
+        }
+        
+        .menu-item:hover {
+            background: #f5f7fa;
+        }
+        
+        .menu-divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 4px 0;
+        }
+        
+        /* 图标样式 */
+        .new-icon::before,
+        .file-icon::before,
+        .link-icon::before,
+        .note-icon::before,
+        .category-icon::before {
+            font-style: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .new-icon::before { content: '+'; font-weight: bold; }
+        .file-icon::before { content: '📄'; }
+        .link-icon::before { content: '🔗'; }
+        .note-icon::before { content: '📝'; }
+        .category-icon::before { content: '📁'; }
+        
+        /* 文件上传样式 */
+        .file-upload-container {
+            border: 2px dashed #d9d9d9;
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+        
+        .file-upload-container:hover {
+            border-color: #1890ff;
+            background: #f6ffed;
+        }
+        
+        .file-upload-container.drag-over {
+            border-color: #52c41a;
+            background: #f6ffed;
+        }
+        
+        .file-upload-text {
+            font-size: 14px;
+            color: #8c8c8c;
+            margin-top: 8px;
+        }
+        
+        .upload-tip {
+            font-size: 12px;
+            color: #bfbfbf;
+            margin-top: 8px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #1890ff;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载导航组件 -->
+    <div id="top-nav"></div>
+    <div class="app-container">
+        <aside class="sidebar"></aside>
+        <div class="content">
+            <div class="knowledge-base-container">
+                <div class="knowledge-header">
+                    <h1>选题库</h1>
+                </div>
+                
+                <!-- 类目管理 -->
+                <div class="category-management">
+                    <div class="category-list">
+                        <div class="category-item active" data-id="1">
+                            <a href="topic-library.html" class="category-name">选题库</a>
+                            <span class="category-edit-btn" onclick="editCategory(1, '选题库')">✏️</span>
+                            <span class="category-delete-btn" onclick="deleteCategory(1)" style="display: none;">🗑️</span>
+                        </div>
+                        <div class="category-item" data-id="2">
+                            <a href="copy-library.html" class="category-name">文案库</a>
+                            <span class="category-edit-btn" onclick="editCategory(2, '文案库')">✏️</span>
+                            <span class="category-delete-btn" onclick="deleteCategory(2)">🗑️</span>
+                        </div>
+                        <div class="category-item" data-id="3">
+                            <a href="material-library.html" class="category-name">素材库</a>
+                            <span class="category-edit-btn" onclick="editCategory(3, '素材库')">✏️</span>
+                            <span class="category-delete-btn" onclick="deleteCategory(3)">🗑️</span>
+                        </div>
+                    </div>
+                    <button class="add-category-btn" onclick="showAddCategoryModal()">+ 添加类目</button>
+                </div>
+                
+                <!-- 搜索和排序 -->
+                <div class="search-sort-container">
+                    <div class="search-box">
+                        <input type="text" id="search-input" class="search-input" placeholder="按标题或正文搜索">
+                        <button class="search-btn" onclick="searchKnowledge()">搜索</button>
+                    </div>
+                    <div class="sort-options">
+                        <label for="sort-select">排序：</label>
+                        <select id="sort-select" class="sort-select" onchange="sortKnowledge()">
+                            <option value="newest">上传时间</option>
+                            <option value="textname">名称</option>
+                        </select>
+                    </div>
+                    <!-- 新建按钮 -->
+                    <div class="new-btn-container">
+                        <button id="new-btn" class="new-btn" onclick="toggleNewMenu()">
+                            <i class="new-icon"></i> 新建
+                        </button>
+                        <div id="new-menu" class="new-dropdown-menu">
+                            <div class="menu-item" onclick="showLocalFileModal()">
+                                <i class="file-icon"></i> 本地文件
+                            </div>
+                            <div class="menu-item" onclick="showWebLinkModal()">
+                                <i class="link-icon"></i> 网页链接
+                            </div>
+                            <div class="menu-item" onclick="showNoteModal()">
+                                <i class="note-icon"></i> 知识笔记
+                            </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-item" onclick="showAddCategoryModal()">
+                                <i class="category-icon"></i> 新建类目
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 知识列表 -->
+                <div class="knowledge-list" id="knowledge-list">
+                    <!-- 模拟数据 -->
+                    <div class="knowledge-item" data-id="1">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">如何打造爆款短视频标题的5个技巧</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-15 14:30</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            爆款标题需要抓住用户好奇心，使用数字、问题、悬念等元素。本文详细分析了5种标题类型，帮助创作者快速掌握爆款标题的创作方法...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(1)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(1)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(1)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="2">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">2024年最流行的10个视频内容方向</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-14 09:15</span>
+                            <span>来源：选题生成助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            基于平台数据分析，2024年最受欢迎的内容方向包括：AI应用分享、职场技能提升、生活方式优化、小众爱好展示、美食探店等10个热门领域...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(2)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(2)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(2)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="3">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">新手创作者如何快速涨粉的实用策略</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-13 16:45</span>
+                            <span>来源：达人分析助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            分析了30位成功创作者的成长路径，总结出新手快速涨粉的关键策略：内容垂直化、发布时间优化、互动回复、话题参与、跨平台引流等...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(3)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(3)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(3)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="4">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">短视频脚本结构解析：3秒法则与黄金15秒</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-12 11:20</span>
+                            <span>来源：结构分析助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            详细解析了短视频的关键时间节点：前3秒必须抓住注意力，15秒内必须展示核心价值，完整脚本结构应包含钩子、展开、高潮、收尾等部分...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(4)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(4)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(4)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="5">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">如何利用热点话题提升内容曝光度</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-11 15:30</span>
+                            <span>来源：选题生成助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            热点话题能快速提升内容曝光，但需要巧妙结合。本文分享了热点监测工具、热点选择标准、内容结合方法，帮助创作者高效利用热点流量...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(5)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(5)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(5)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="6">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">垂直领域内容创作：如何建立专业形象</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-10 10:00</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            在竞争激烈的内容环境中，垂直领域创作更容易脱颖而出。本文从专业知识积累、内容深度、表达风格等方面，分享建立专业形象的方法...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(6)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(6)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(6)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="7">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">短视频内容数据化运营：关键指标解析</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-09 14:25</span>
+                            <span>来源：结构分析助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            数据分析是内容创作的重要指导。本文详细解释了播放量、完播率、互动率、粉丝转化率等关键指标的含义及优化方法，帮助创作者科学运营...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(7)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(7)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(7)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="8">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">情感共鸣类内容创作技巧：如何打动观众</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-08 16:50</span>
+                            <span>来源：文案二创助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            情感共鸣是内容传播的核心动力。本文总结了引发共鸣的5种方法：真实故事分享、情绪价值提供、共同痛点挖掘、身份认同构建、希望感传递...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(8)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(8)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(8)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="9">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">专业知识科普视频：如何做到深入浅出</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-07 09:40</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            科普类内容需要平衡专业性和易懂性。本文分享了专业知识通俗化的技巧：生活化类比、视觉化呈现、分步骤讲解、案例结合、互动式教学等...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(9)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(9)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(9)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="10">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">创作者个人品牌打造：差异化定位策略</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-06 13:15</span>
+                            <span>来源：达人分析助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            个人品牌是创作者长期发展的核心资产。本文从独特视角、表达方式、视觉识别、价值主张等方面，分享如何建立差异化的个人品牌定位...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(10)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(10)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(10)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="11">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">短视频封面设计：提升点击率的视觉技巧</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-05 11:30</span>
+                            <span>来源：信息提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            封面是决定内容是否被点击的关键因素。本文分析了高点击率封面的设计要素：主体明确、色彩对比、文字突出、情感表达、信息密度控制...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(11)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(11)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(11)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="12">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">内容系列化创作：如何建立观众期待感</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-04 15:45</span>
+                            <span>来源：选题生成助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            系列化内容能有效提升观众粘性和期待感。本文分享了系列内容规划方法：主题连贯性、悬念设置、固定更新频率、系列标识、预告策略等...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(12)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(12)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(12)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="13">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">如何高效收集和整理创作灵感</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-03 10:20</span>
+                            <span>来源：文案二创助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            持续创作需要稳定的灵感来源。本文推荐了灵感收集工具和方法：素材库建立、日常观察记录、跨领域借鉴、用户反馈挖掘、趋势分析等...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(13)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(13)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(13)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="14">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">互动式内容创作：提升用户参与感的方法</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-02 14:10</span>
+                            <span>来源：结构分析助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            互动能显著提升内容表现。本文总结了提升互动的技巧：提问设计、投票互动、挑战参与、评论引导、回应粉丝、共创内容等多种互动方式...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(14)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(14)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(14)">删除</button>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-item" data-id="15">
+                        <div class="knowledge-header-info">
+                            <h3 class="knowledge-title">短视频节奏控制：如何让内容更吸引人</h3>
+                        </div>
+                        <div class="knowledge-meta">
+                            <span>2024-01-01 16:30</span>
+                            <span>来源：文案提取助手</span>
+                        </div>
+                        <div class="knowledge-content">
+                            内容节奏直接影响观看体验。本文详细讲解了节奏控制技巧：镜头切换频率、音效配合、情节起伏设计、信息密度变化、情感曲线规划等...
+                        </div>
+                        <div class="knowledge-actions">
+                            <button class="action-btn" onclick="editKnowledge(15)">编辑</button>
+                            <button class="action-btn" onclick="moveKnowledge(15)">移动类目</button>
+                            <button class="action-btn" onclick="deleteKnowledge(15)">删除</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分页 -->
+                <div class="pagination-container">
+                    <div class="page-size-selector">
+                        <span>每页显示：</span>
+                        <select id="page-size-select" class="page-size-select" onchange="changePageSize()">
+                            <option value="10">10条</option>
+                            <option value="20">20条</option>
+                            <option value="30">30条</option>
+                        </select>
+                    </div>
+                    <div class="pagination">
+                        <button class="page-btn" onclick="changePage(1)" disabled>&lt;&lt;</button>
+                        <button class="page-btn" onclick="changePage(1)" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn" onclick="changePage(2)">2</button>
+                        <button class="page-btn" onclick="changePage(2)">&gt;</button>
+                        <button class="page-btn" onclick="changePage(2)">&gt;&gt;</button>
+                    </div>
+                </div>
+                
+                <!-- 本地文件上传模态框 -->
+                <div id="local-file-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>上传本地文件</h3>
+                            <span class="close" onclick="closeLocalFileModal()">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="file-category">存储类目：</label>
+                                <select id="file-category" class="form-control">
+                                    <option value="1">选题库</option>
+                                    <option value="2">文案库</option>
+                                    <option value="3" selected>素材库</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>上传文件：</label>
+                                <input type="file" id="file-upload" style="display: none;" multiple accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                <div id="drop-area" class="file-upload-container" onclick="document.getElementById('file-upload').click()">
+                                    <div class="file-upload-text">点击或拖拽文件到此处上传</div>
+                                    <div class="upload-tip">支持 PDF、Word、文本、声音wav等文件格式</div>
+                                </div>
+                                <div id="progress-container" class="progress-container" style="display: none;">
+                                    <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="cancel-btn" onclick="closeLocalFileModal()">取消</button>
+                            <button id="upload-btn" class="confirm-btn" disabled>上传</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 网页链接模态框 -->
+                <div id="web-link-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>添加网页链接</h3>
+                            <span class="close" onclick="closeWebLinkModal()">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="link-category">存储类目：</label>
+                                <select id="link-category" class="form-control">
+                                    <option value="1">选题库</option>
+                                    <option value="2">文案库</option>
+                                    <option value="3" selected>素材库</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="link-name">文件名称：</label>
+                                <input type="text" id="link-name" class="form-control" placeholder="请输入文件名称">
+                            </div>
+                            <div class="form-group">
+                                <label for="link-url">链接地址：</label>
+                                <input type="url" id="link-url" class="form-control" placeholder="请输入网页链接">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="cancel-btn" onclick="closeWebLinkModal()">取消</button>
+                            <button class="confirm-btn" onclick="saveWebLink()">保存</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 知识笔记模态框 -->
+                <div id="note-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>添加知识笔记</h3>
+                            <span class="close" onclick="closeNoteModal()">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="note-category">存储类目：</label>
+                                <select id="note-category" class="form-control">
+                                    <option value="1">选题库</option>
+                                    <option value="2">文案库</option>
+                                    <option value="3" selected>素材库</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="note-title">文件名称：</label>
+                                <input type="text" id="note-title" class="form-control" placeholder="请输入笔记标题">
+                            </div>
+                            <div class="form-group">
+                                <label for="note-content">正文内容：</label>
+                                <textarea id="note-content" class="form-control" rows="6" placeholder="请输入笔记内容"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="cancel-btn" onclick="closeNoteModal()">取消</button>
+                            <button class="confirm-btn" onclick="saveNote()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 类目相关模态框 -->
+    <div id="add-category-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">添加新类目</h3>
+                <button class="modal-close" onclick="closeModal('add-category-modal')">×</button>
+            </div>
+            <div class="form-group">
+                <label for="new-category-name">类目名称</label>
+                <input type="text" id="new-category-name" placeholder="请输入类目名称">
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeModal('add-category-modal')">取消</button>
+                <button class="confirm-btn" onclick="confirmAddCategory()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="edit-category-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">编辑类目</h3>
+                <button class="modal-close" onclick="closeModal('edit-category-modal')">×</button>
+            </div>
+            <input type="hidden" id="edit-category-id">
+            <div class="form-group">
+                <label for="edit-category-name">类目名称</label>
+                <input type="text" id="edit-category-name" placeholder="请输入类目名称">
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeModal('edit-category-modal')">取消</button>
+                <button class="confirm-btn" onclick="confirmEditCategory()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 知识相关模态框 -->
+    <div id="edit-knowledge-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">编辑知识</h3>
+                <button class="modal-close" onclick="closeModal('edit-knowledge-modal')">×</button>
+            </div>
+            <input type="hidden" id="edit-knowledge-id">
+            <div class="form-group">
+                <label for="edit-knowledge-title">标题</label>
+                <input type="text" id="edit-knowledge-title" placeholder="请输入标题">
+            </div>
+            <div class="form-group">
+                <label for="edit-knowledge-content">内容</label>
+                <textarea id="edit-knowledge-content" placeholder="请输入内容"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeModal('edit-knowledge-modal')">取消</button>
+                <button class="confirm-btn" onclick="confirmEditKnowledge()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="move-knowledge-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">移动类目</h3>
+                <button class="modal-close" onclick="closeModal('move-knowledge-modal')">×</button>
+            </div>
+            <input type="hidden" id="move-knowledge-id">
+            <div class="form-group">
+                <label for="move-to-category">选择目标类目</label>
+                <select id="move-to-category">
+                    <option value="1">选题库</option>
+                    <option value="2">文案库</option>
+                    <option value="3">素材库</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeModal('move-knowledge-modal')">取消</button>
+                <button class="confirm-btn" onclick="confirmMoveKnowledge()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../../js/nav-component.js"></script>
+    <script>
+        // 初始化导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 使用统一的导航加载函数，设置正确的基础路径和当前页面路径
+            loadNavigation('../../', 'front', 'pages/personal/topic-library.html');
+        });
+        
+        // 类目管理相关函数
+        function showAddCategoryModal() {
+            document.getElementById('add-category-modal').style.display = 'flex';
+        }
+        
+        function editCategory(id, name) {
+            document.getElementById('edit-category-id').value = id;
+            document.getElementById('edit-category-name').value = name;
+            document.getElementById('edit-category-modal').style.display = 'flex';
+        }
+        
+        function deleteCategory(id) {
+            if (id === 1) { // 默认类目不能删除
+                alert('默认类目不能删除');
+                return;
+            }
+            if (confirm('确定要删除这个类目吗？该类目下的知识将被移至默认类目。')) {
+                alert('类目删除成功');
+                // 实际项目中这里应该调用API删除类目
+            }
+        }
+        
+        function confirmAddCategory() {
+            const name = document.getElementById('new-category-name').value.trim();
+            if (!name) {
+                alert('请输入类目名称');
+                return;
+            }
+            alert('类目添加成功');
+            closeModal('add-category-modal');
+            // 实际项目中这里应该调用API添加类目
+        }
+        
+        function confirmEditCategory() {
+            const id = document.getElementById('edit-category-id').value;
+            const name = document.getElementById('edit-category-name').value.trim();
+            if (!name) {
+                alert('请输入类目名称');
+                return;
+            }
+            alert('类目编辑成功');
+            closeModal('edit-category-modal');
+            // 实际项目中这里应该调用API更新类目
+        }
+        
+        // 知识管理相关函数
+        function editKnowledge(id) {
+            const item = document.querySelector(`.knowledge-item[data-id="${id}"]`);
+            if (item) {
+                const title = item.querySelector('.knowledge-title').textContent;
+                const content = item.querySelector('.knowledge-content').textContent;
+                
+                document.getElementById('edit-knowledge-id').value = id;
+                document.getElementById('edit-knowledge-title').value = title;
+                document.getElementById('edit-knowledge-content').value = content;
+                document.getElementById('edit-knowledge-modal').style.display = 'flex';
+            }
+        }
+        
+        function moveKnowledge(id) {
+            document.getElementById('move-knowledge-id').value = id;
+            document.getElementById('move-knowledge-modal').style.display = 'flex';
+        }
+        
+        function deleteKnowledge(id) {
+            if (confirm('确定要删除这条知识吗？')) {
+                const item = document.querySelector(`.knowledge-item[data-id="${id}"]`);
+                if (item) {
+                    item.remove();
+                }
+                alert('删除成功');
+                // 实际项目中这里应该调用API删除知识
+            }
+        }
+        
+        function confirmEditKnowledge() {
+            const id = document.getElementById('edit-knowledge-id').value;
+            const title = document.getElementById('edit-knowledge-title').value.trim();
+            const content = document.getElementById('edit-knowledge-content').value.trim();
+            
+            if (!title || !content) {
+                alert('标题和内容不能为空');
+                return;
+            }
+            
+            const item = document.querySelector(`.knowledge-item[data-id="${id}"]`);
+            if (item) {
+                item.querySelector('.knowledge-title').textContent = title;
+                item.querySelector('.knowledge-content').textContent = content;
+            }
+            
+            alert('编辑成功');
+            closeModal('edit-knowledge-modal');
+            // 实际项目中这里应该调用API更新知识
+        }
+        
+        function confirmMoveKnowledge() {
+            const id = document.getElementById('move-knowledge-id').value;
+            const categoryId = document.getElementById('move-to-category').value;
+            const categoryName = document.getElementById('move-to-category').options[document.getElementById('move-to-category').selectedIndex].text;
+            
+            alert(`已成功移动到类目：${categoryName}`);
+            closeModal('move-knowledge-modal');
+            // 实际项目中这里应该调用API移动知识到新类目
+        }
+        
+        // 搜索和排序
+        function searchKnowledge() {
+            const keyword = document.getElementById('search-input').value.trim();
+            alert(`搜索关键词：${keyword}`);
+            // 实际项目中这里应该调用API进行搜索
+        }
+        
+        function sortKnowledge() {
+            const sortType = document.getElementById('sort-select').value;
+            alert(`排序方式：${sortType === 'newest' ? '最新优先' : '名称优先'}`);
+            // 实际项目中这里应该调用API进行排序
+        }
+        
+        // 分页相关
+        function changePage(page) {
+            alert(`切换到第${page}页`);
+            // 实际项目中这里应该调用API获取对应页的数据
+        }
+        
+        function changePageSize() {
+            const pageSize = document.getElementById('page-size-select').value;
+            alert(`每页显示${pageSize}条`);
+            // 实际项目中这里应该调用API设置每页显示条数并重新加载数据
+        }
+        
+        // 模态框相关
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        // 加载导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNavigation('../../', 'personal');
+            // 初始化新建功能（使用公共组件）
+            if (typeof initKnowledgeCreate === 'function') {
+                initKnowledgeCreate();
+            }
+        });
+            // 点击文档其他地方关闭下拉菜单
+            document.addEventListener('click', function(event) {
+                const newBtn = document.getElementById('new-btn');
+                const newMenu = document.getElementById('new-menu');
+                if (newBtn && newMenu && !newBtn.contains(event.target) && !newMenu.contains(event.target)) {
+                    newMenu.classList.remove('show');
+                }
+            });
+            
+            // 文件上传相关事件
+            const fileUpload = document.getElementById('file-upload');
+            const dropArea = document.getElementById('drop-area');
+            const uploadBtn = document.getElementById('upload-btn');
+            
+            if (fileUpload) {
+                fileUpload.addEventListener('change', function() {
+                    if (uploadBtn) uploadBtn.disabled = this.files.length === 0;
+                });
+            }
+            
+            if (dropArea) {
+                // 拖拽事件
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropArea.addEventListener(eventName, preventDefaults, false);
+                });
+                
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    dropArea.addEventListener(eventName, highlight, false);
+                });
+                
+                ['dragleave', 'drop'].forEach(eventName => {
+                    dropArea.addEventListener(eventName, unhighlight, false);
+                });
+                
+                function highlight() {
+                    dropArea.classList.add('drag-over');
+                }
+                
+                function unhighlight() {
+                    dropArea.classList.remove('drag-over');
+                }
+                
+                dropArea.addEventListener('drop', handleDrop, false);
+                
+                function handleDrop(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    
+                    if (fileUpload) {
+                        fileUpload.files = files;
+                        if (uploadBtn) uploadBtn.disabled = files.length === 0;
+                    }
+                }
+            }
+            
+            // 模拟文件上传
+            if (uploadBtn) {
+                uploadBtn.addEventListener('click', function() {
+                    const files = document.getElementById('file-upload')?.files;
+                    if (!files || files.length === 0) return;
+                    
+                    const progressContainer = document.getElementById('progress-container');
+                    const progressBar = document.getElementById('progress-bar');
+                    
+                    if (progressContainer && progressBar) {
+                        progressContainer.style.display = 'block';
+                        uploadBtn.disabled = true;
+                        
+                        // 模拟上传进度
+                        let progress = 0;
+                        const interval = setInterval(function() {
+                            progress += 5;
+                            progressBar.style.width = progress + '%';
+                            
+                            if (progress >= 100) {
+                                clearInterval(interval);
+                                setTimeout(function() {
+                                    alert('文件上传成功');
+                                    closeLocalFileModal();
+                                    
+                                    // 刷新知识列表
+                                    initKnowledgeList();
+                                }, 500);
+                            }
+                        }, 200);
+                    }
+                });
+            }
+        
+        
+        // 切换新建下拉菜单
+        function toggleNewMenu() {
+            const newMenu = document.getElementById('new-menu');
+            if (newMenu) newMenu.classList.toggle('show');
+        }
+        
+        // 显示本地文件上传模态框
+        function showLocalFileModal() {
+            const newMenu = document.getElementById('new-menu');
+            const modal = document.getElementById('local-file-modal');
+            const fileUpload = document.getElementById('file-upload');
+            const uploadBtn = document.getElementById('upload-btn');
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            
+            if (newMenu) newMenu.classList.remove('show');
+            if (modal) modal.style.display = 'block';
+            
+            // 重置上传状态
+            if (fileUpload) fileUpload.value = '';
+            if (uploadBtn) uploadBtn.disabled = true;
+            if (progressContainer) progressContainer.style.display = 'none';
+            if (progressBar) progressBar.style.width = '0%';
+        }
+        
+        // 关闭本地文件上传模态框
+        function closeLocalFileModal() {
+            const modal = document.getElementById('local-file-modal');
+            if (modal) modal.style.display = 'none';
+        }
+        
+        // 显示网页链接模态框
+        function showWebLinkModal() {
+            const newMenu = document.getElementById('new-menu');
+            const modal = document.getElementById('web-link-modal');
+            const linkName = document.getElementById('link-name');
+            const linkUrl = document.getElementById('link-url');
+            
+            if (newMenu) newMenu.classList.remove('show');
+            if (modal) modal.style.display = 'block';
+            
+            // 重置表单
+            if (linkName) linkName.value = '';
+            if (linkUrl) linkUrl.value = '';
+        }
+        
+        // 关闭网页链接模态框
+        function closeWebLinkModal() {
+            const modal = document.getElementById('web-link-modal');
+            if (modal) modal.style.display = 'none';
+        }
+        
+        // 显示知识笔记模态框
+        function showNoteModal() {
+            const newMenu = document.getElementById('new-menu');
+            const modal = document.getElementById('note-modal');
+            const noteTitle = document.getElementById('note-title');
+            const noteContent = document.getElementById('note-content');
+            
+            if (newMenu) newMenu.classList.remove('show');
+            if (modal) modal.style.display = 'block';
+            
+            // 重置表单
+            if (noteTitle) noteTitle.value = '';
+            if (noteContent) noteContent.value = '';
+        }
+        
+        // 关闭知识笔记模态框
+        function closeNoteModal() {
+            const modal = document.getElementById('note-modal');
+            if (modal) modal.style.display = 'none';
+        }
+        
+        // 保存网页链接
+        function saveWebLink() {
+            const linkCategory = document.getElementById('link-category');
+            const linkName = document.getElementById('link-name');
+            const linkUrl = document.getElementById('link-url');
+            
+            if (!linkCategory || !linkName || !linkUrl) return;
+            
+            const category = linkCategory.value;
+            const name = linkName.value.trim();
+            const url = linkUrl.value.trim();
+            
+            if (!name || !url) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            // 模拟保存操作
+            console.log('保存网页链接:', { category, name, url });
+            
+            // 显示成功提示并关闭模态框
+            alert('网页链接保存成功');
+            closeWebLinkModal();
+            
+            // 刷新知识列表
+            initKnowledgeList();
+        }
+        
+        // 保存知识笔记
+        function saveNote() {
+            const noteCategory = document.getElementById('note-category');
+            const noteTitle = document.getElementById('note-title');
+            const noteContent = document.getElementById('note-content');
+            
+            if (!noteCategory || !noteTitle || !noteContent) return;
+            
+            const category = noteCategory.value;
+            const title = noteTitle.value.trim();
+            const content = noteContent.value.trim();
+            
+            if (!title || !content) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            // 模拟保存操作
+            console.log('保存知识笔记:', { category, title, content });
+            
+            // 显示成功提示并关闭模态框
+            alert('知识笔记保存成功');
+            closeNoteModal();
+            
+            // 刷新知识列表
+            initKnowledgeList();
+        }
+    </script>
+</body>
+</html>
