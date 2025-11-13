@@ -68,7 +68,7 @@ function loadNavigation() {
                             <div class="nav-children">
                                 <a href="../marketing/info-extraction.html" class="nav-item level-3">
                                     <span class="nav-icon">🔍</span>
-                                    <span class="nav-title">信息提取助手</span>
+                                    <span class="nav-title">链接提取助手</span>
                                 </a>
                                 <a href="../marketing/copy-extraction.html" class="nav-item level-3">
                                     <span class="nav-icon">📄</span>

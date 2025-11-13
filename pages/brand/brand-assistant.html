@@ -383,7 +383,7 @@
                     <button class="tab-btn active" onclick="switchToTab('brand-story-tab')">品牌故事</button>
                     <button class="tab-btn" onclick="switchToTab('speech-tab')">发言稿</button>
                     <button class="tab-btn" onclick="switchToTab('product-name-tab')">产品起名</button>
-                    <button class="tab-btn" onclick="switchToTab('hot-marketing-tab')">热点营销</button>
+                    <button class="tab-btn" onclick="switchToTab('hot-marketing-tab')">内容萃取</button>
                     <button class="tab-btn" onclick="switchToTab('slogan-tab')">广告语生成</button>
                     <button class="tab-btn" onclick="switchToTab('official-doc-tab')">公文撰写</button>
                 </div>
@@ -487,11 +487,11 @@
                             </div>
                         </div>
                         
-                        <!-- 热点营销 -->
+                        <!-- 内容萃取 -->
                         <div class="tab-content" id="hot-marketing-tab" style="display: none;">
-                            <h3 class="result-header">热点营销配置输入</h3>
+                            <h3 class="result-header">内容萃取配置输入</h3>
                             <div class="input-section">
-                                <textarea id="hot-marketing-content" placeholder="请输入热点营销相关内容，如营销活动、客户案例等..." rows="3"></textarea>
+                                <textarea id="hot-marketing-content" placeholder="请输入内容萃取相关内容，如营销活动、客户案例等..." rows="3"></textarea>
                             </div>
 
                             <div class="input-section">
@@ -772,7 +772,7 @@
             document.getElementById('product-name-content').value = '';
         });
         
-        // 热点营销生成功能
+        // 内容萃取生成功能
         document.getElementById('generate-hot-marketing-btn').addEventListener('click', function() {
             const inputContent = document.getElementById('hot-marketing-content').value.trim();
             
@@ -786,7 +786,7 @@
             
             // 模拟生成延迟
             setTimeout(() => {
-                const mockMarketing = `# 热点营销方案\n\n## 热点分析\n${inputContent}\n\n## 营销切入点\n1. 情感共鸣：结合热点事件的情感内核，传递品牌温度\n2. 价值连接：将热点话题与品牌价值自然连接\n3. 创新表达：采用新颖有趣的形式呈现，提升传播效果\n4. 互动参与：设计互动环节，增强用户参与感\n\n## 执行建议\n- 时效性：抓住热点黄金期，快速响应\n- 合规性：确保内容符合法律法规和品牌调性\n- 持续性：制定阶段性传播计划，保持热度\n- 数据跟踪：实时监测传播效果，及时调整策略`;
+                const mockMarketing = `# 内容萃取方案\n\n## 热点分析\n${inputContent}\n\n## 营销切入点\n1. 情感共鸣：结合热点事件的情感内核，传递品牌温度\n2. 价值连接：将热点话题与品牌价值自然连接\n3. 创新表达：采用新颖有趣的形式呈现，提升传播效果\n4. 互动参与：设计互动环节，增强用户参与感\n\n## 执行建议\n- 时效性：抓住热点黄金期，快速响应\n- 合规性：确保内容符合法律法规和品牌调性\n- 持续性：制定阶段性传播计划，保持热度\n- 数据跟踪：实时监测传播效果，及时调整策略`;
                 
                 resultElement.innerHTML = `
                     <div style="white-space: pre-wrap; font-family: inherit;">${mockMarketing}</div>
@@ -794,11 +794,11 @@
                         <span style="font-size: 18px;">📝</span>
                     </button>
                 `;
-                showSuccessToast('热点营销方案生成成功');
+                showSuccessToast('内容萃取方案生成成功');
             }, 1500);
         });
         
-        // 清空热点营销表单
+        // 清空内容萃取表单
         document.getElementById('clear-hot-marketing-btn').addEventListener('click', function() {
             document.getElementById('hot-marketing-content').value = '';
         });
