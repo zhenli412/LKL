@@ -41,6 +41,7 @@ if (file_put_contents($savePath, $html)) {
         ]
     ]);
 } else {
-    echo json_encode(['code' => 500, 'msg' => '文件保存失败，请检查文件夹权限']);
-}
+    echo json_encode([
+        'link' => $fullUrl  // 直接用 link 作为键名，对应你在 Coze 设置的参数名
+    ]);}
 ?>
