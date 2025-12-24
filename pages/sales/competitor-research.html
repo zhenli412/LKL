@@ -26,6 +26,44 @@
             --panel-padding: 20px;
             --panel-gap: 24px;
         }
+        
+        /* 功能选项卡样式 */
+        .function-tabs {
+            display: flex;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-light);
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .tab-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        /* 标签页内容区域 */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
 
         /* 左右对比布局 */
         .comparison-layout {
@@ -113,7 +151,6 @@
             padding: 10px 16px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
-            font-size: 16px;
             background-color: var(--white);
             cursor: pointer;
             transition: var(--transition);
@@ -362,6 +399,59 @@
             font-family: inherit;
             transition: var(--transition);
         }
+        
+        /* 自定义单选按钮样式 */
+        .radio-group {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-color);
+        }
+        
+        .radio-label input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .radio-label input[type="radio"]:not(:checked) {
+            border-color: var(--border-color);
+            background-color: var(--white);
+        }
+        
+        .radio-label input[type="radio"]:checked {
+            border-color: var(--primary-color);
+            background-color: var(--white);
+        }
+        
+        .radio-label input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+        
+        .radio-label input[type="radio"]:hover {
+            border-color: var(--primary-color);
+        }
 
         .input-section input[type="text"]:focus,
         .input-section select:focus {
@@ -439,59 +529,226 @@
             <!-- 页面标题 -->
             <div class="page-header">
                 <h2>竞品调研助手</h2>
-                <p>全面分析竞争对手，制定差异化竞争策略</p>
+                <p>在瞬息万变的商战中，我将为您提供全天候的竞品监测与深度博弈分析，助您看清局势，决胜千里。</p>
             </div>
             
             <div class="page-content">
-                <div class="comparison-layout">
-                    <!-- 左侧输入面板 -->
-                    <div class="comparison-panel input-panel">
-                        <div class="result-header">
-                            <h3>内容配置输入</h3>
-                        </div>
-                        <div class="input-section">
-                                <textarea id="topic-content" placeholder="内容输入..." rows="3"></textarea>
+                <!-- 功能选项卡 -->
+                <div class="function-tabs">
+                    <button class="tab-btn active" onclick="switchToTab('research-report')">竞争态势深度研报</button>
+                    <button class="tab-btn" onclick="switchToTab('intelligence-scan')">竞品情报透视</button>
+                    <button class="tab-btn" onclick="switchToTab('search-config')">竞品检索周期配置</button>
+                </div>
+                <!-- 竞争态势研报标签页 -->
+                <div id="research-report" class="tab-content active">
+                    <!-- 左右对比布局 -->
+                    <div class="comparison-layout">
+                        <!-- 左侧输入面板 -->
+                        <div class="comparison-panel input-panel">
+                            <div class="result-header">
+                                <h3>竞争罗盘</h3>
+                            </div>
+                            <div class="input-section">
+                                <label>竞品品牌 1</label>
+                                <input type="text" id="competitor-brand-1" placeholder="请输入第一个竞品品牌">
+                            </div>
+                            <div class="input-section">
+                                <label>竞品品牌 2</label>
+                                <input type="text" id="competitor-brand-2" placeholder="请输入第二个竞品品牌">
+                            </div>
+                            <div class="input-section">
+                                <label>竞品品牌 3</label>
+                                <input type="text" id="competitor-brand-3" placeholder="请输入第三个竞品品牌">
+                            </div>
+                            <div class="input-section">
+                                <label>我方生态位简述</label>
+                                <textarea type="text" id="our-niche" placeholder="请输入我方情况简述,如：背靠化工巨头万华生态，国内无醛建材辅料供应商，提供家装所需各类粘合剂、腻子、涂料产品，主打无醛科技。" rows="3"></textarea>
+                            </div>
+                            <div class="input-section">
+                                <label>我方优势</label>
+                                <input type="text" id="our-advantages" placeholder="请输入我方优势,如：绿色原料 无醛 无苯 超低VOC">
+                            </div>
+                            <div class="input-section">
+                                <label>竞争痛点</label>
+                                <input type="text" id="competition-pains" placeholder="请输入竞争痛点,如：城市渠道扩张 品牌认知度提升">
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button id="generate-research" class="action-button primary">生成创作内容</button>
+                                <button id="reset-form" class="action-button secondary">清空</button>
+                            </div>
+                            
                         </div>
 
-                        <div class="input-section">
-                                <labelh>选择参考资料</label>
-                                <!-- 知识标题复选框 -->
-                                <div style="margin: 15px 0;">
-                                    <label style="display: block; margin-bottom: 8px; cursor: pointer;">
-                                        <input type="checkbox" checked style="margin-right: 8px;">
-                                        <span>🗂️[企业知识库] </span><span>产品营销策略与市场定位分析</span>
+                        <!-- 右侧结果面板 -->
+                        <div class="comparison-panel output-panel">
+                            <div class="result-header">
+                                <h3>竞争态势深度研报</h3>
+                            </div>
+                            <div id="extraction-result" class="result-content" style="position: relative;">
+                                <p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>
+                                <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                    <span style="font-size: 18px;">📝</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 竞品情报扫描标签页 -->
+                <div id="intelligence-scan" class="tab-content">
+                    <!-- 左右对比布局 -->
+                    <div class="comparison-layout">
+                        <!-- 左侧输入面板 -->
+                        <div class="comparison-panel input-panel">
+                            <div class="result-header">
+                                <h3>竞品情报库查询</h3>
+                            </div>
+                            <!-- 预留输入区域 -->
+                            <div class="input-section">
+                                <label>检索品牌（多品牌请用逗号或者空格分隔）</label>
+                                <input type="text" id="scan-keywords" placeholder="请输入品牌关键词">
+                            </div>
+                            <div class="input-section">
+                                <label>检索类型范围</label>
+                                <select id="scan-scope">
+                                    <option value="all">全面检索</option>
+                                    <option value="market">市场动态</option>
+                                    <option value="tech">产品技术</option>
+                                    <option value="sentiment">舆情监测</option>
+                                </select>
+                            </div>
+                            <div class="input-section">
+                                <label>情报入库时间</label>
+                                <select id="time-range">
+                                    <option value="365">不限定</option>
+                                    <option value="7">最新7天</option>
+                                    <option value="30">最新30天</option>
+                                    <option value="90">最新90天</option>
+                                </select>
+                            </div>
+                            <div class="input-section">
+                                <label>品牌检索条数</label>
+                                <select id="retrieve-count">
+                                    <option value="20">最新20条</option>
+                                    <option value="50">最新50条</option>
+                                    <option value="100">最新100条</option>
+                                </select>
+                            </div>                            
+                            <div class="action-buttons">
+                                <button id="start-scan" class="action-button primary">开始扫描</button>
+                                <button id="clear-scan" class="action-button secondary">清空</button>
+                            </div>
+                        </div>
+
+                        <!-- 右侧结果面板 -->
+                        <div class="comparison-panel output-panel">
+                            <div class="result-header">
+                                <h3>竞品情报检索结果</h3>
+                            </div>
+                            <div id="scan-result" class="result-content" style="position: relative;">
+                                <p class="placeholder-text">请设置扫描参数后，点击「开始扫描」按钮</p>
+                                <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                    <span style="font-size: 18px;">📝</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 竞品检索配置标签页 -->
+                <div id="search-config" class="tab-content">
+                    <!-- 单页功能配置 -->
+                     <div class="comparison-layout">
+
+                        <div class="comparison-panel input-panel">
+                            <div class="result-header">
+                                <h3>竞品检索配置</h3>
+                            </div>
+                            
+                            <div class="input-section">
+                                <label>设定全部竞对品牌的循检周期（设定后，系统将根据设定的周期自动进行全部品牌情报检索并记录到情报库）</label>
+                                <div class="radio-group" style="display: flex; gap: 16px; margin-top: 15px;">
+                                    <label class="radio-label" style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                        <input type="radio" name="search-mode" value="interval" checked onchange="toggleSearchMode()"> 隔天检索
                                     </label>
-                                    <label style="display: block; margin-bottom: 8px; cursor: pointer;">
-                                        <input type="checkbox" checked style="margin-right: 8px;">
-                                        <span>📚[个人知识库] </span><span>客户需求洞察与痛点解决方案</span>
+                                    <label class="radio-label" style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                        <input type="radio" name="search-mode" value="fixed" onchange="toggleSearchMode()"> 固定周期
                                     </label>
                                 </div>
-                                <div class="action-buttons" style="margin-top: 10px;">
-                                    <button class="action-button secondary"  onclick="openModal('enterprise-knowledge-modal')">+「企业知识库」导入</button>
-                                    <button class="action-button secondary"  onclick="openModal('personal-knowledge-modal')">+「个人知识库」导入</button>
+                            </div>
+                            <!-- 周期与时间设置行 -->
+                            <div style="display: flex; gap: 24px;">
+                                <!-- 隔天检索配置 -->
+                                <div id="interval-config" class="search-config-section" style="flex: 1;">
+                                    <div class="input-section">
+                                        <label>隔天数</label>
+                                        <input type="number" id="interval-days" placeholder="请输入隔天数" min="1" value="7" style="width: 120px; padding: 10px 16px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 16px; transition: var(--transition);">
+                                    </div>
                                 </div>
                                 
+                                <!-- 固定周期配置 -->
+                                <div id="fixed-config" class="search-config-section" style="display: none; flex: 1;">
+                                    <div class="input-section">
+                                        <label>设定每周</label>
+                                        <select id="weekday" style="width: 120px; padding: 10px 16px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 16px; transition: var(--transition); background-color: var(--white);">
+                                            <option value="1">周一</option>
+                                            <option value="2">周二</option>
+                                            <option value="3">周三</option>
+                                            <option value="4">周四</option>
+                                            <option value="5">周五</option>
+                                            <option value="6">周六</option>
+                                            <option value="0">周日</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <!-- 共同的检索时间设置 -->
+                                <div style="flex: 2;">
+                                    <div class="input-section">
+                                        <label>检索时间</label>
+                                        <div style="display: flex; gap: 12px; margin-top: 8px;">
+                                            <input type="number" id="search-hour" placeholder="时" min="0" max="23" style="width: 70px; padding: 10px 16px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 16px; transition: var(--transition);">
+                                            <span style="margin-top: 4px;">:</span>
+                                            <input type="number" id="search-minute" placeholder="分" min="0" max="59" style="width: 70px; padding: 10px 16px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 16px; transition: var(--transition);">
+                                            <span style="margin-top: 4px;">:</span>
+                                            <input type="number" id="search-second" placeholder="秒" min="0" max="59" style="width: 70px; padding: 10px 16px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 16px; transition: var(--transition);">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-section">
+                                <label>我方生态位简述</label>
+                                <textarea type="text" id="our-niche" placeholder="请输入我方情况简述,如：背靠化工巨头万华生态，国内无醛建材辅料供应商，提供家装所需各类粘合剂、腻子、涂料产品，主打无醛科技。" rows="3"></textarea>
+                            </div>
+                            <div class="input-section">
+                                <label>我方优势</label>
+                                <input type="text" id="our-advantages" placeholder="请输入我方优势,如：绿色原料 无醛 无苯 超低VOC">
+                            </div>
+                            <div class="input-section">
+                                <label>竞争痛点</label>
+                                <input type="text" id="competition-pains" placeholder="请输入竞争痛点,如：城市渠道扩张 品牌认知度提升">
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button id="save-config" class="action-button primary">保存设定</button>
+                                <button id="search-now" class="action-button secondary">立即检索</button>
+                            </div>
                         </div>
-                        
-                        <div class="action-buttons">
-                            <button class="action-button primary">生成创作内容</button>
-                            <button class="action-button secondary">清空</button>
-                        </div>
-                        
-                    </div>
 
-                    <!-- 右侧结果面板 -->
-                    <div class="comparison-panel output-panel">
-                        <div class="result-header">
-                            <h3>创作结果</h3>
+                        <!-- 右侧结果面板 -->
+                        <div class="comparison-panel output-panel">
+                            <div class="result-header">
+                                <h3>竞品检索结果</h3>
+                            </div>
+                            <div id="scan-result" class="result-content" style="position: relative;">
+                                <p class="placeholder-text">请设置扫描参数后，点击「开始扫描」按钮</p>
+                                <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
+                                    <span style="font-size: 18px;">📝</span>
+                                </button>
+                            </div>
                         </div>
-                        <div id="extraction-result" class="result-content" style="position: relative;">
-                            <p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>
-                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
-                                <span style="font-size: 18px;">📝</span>
-                            </button>
-                        </div>
-                    </div>
+                     </div>
                 </div>
 
             </div>
@@ -515,9 +772,126 @@
         </main>
     </div>
 
-    <script src="../../components/nav-framework.js"></script>
     <script src="../../js/nav-component.js"></script>
     <script>
+        // 标签页切换函数
+        function switchToTab(tabId) {
+            // 隐藏所有标签内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 移除所有标签按钮的active类
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 显示选中的标签内容
+            document.getElementById(tabId).classList.add('active');
+            
+            // 为选中的标签按钮添加active类
+            const activeTab = document.querySelector(`.tab-btn[onclick="switchToTab('${tabId}')"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+        }
+        
+        // 生成调研报告
+        function generateResearchReport() {
+            // 获取输入值
+            const competitor1 = document.getElementById('competitor-brand-1').value;
+            const competitor2 = document.getElementById('competitor-brand-2').value;
+            const competitor3 = document.getElementById('competitor-brand-3').value;
+            const ourNiche = document.getElementById('our-niche').value;
+            const ourAdvantages = document.getElementById('our-advantages').value;
+            const competitionPains = document.getElementById('competition-pains').value;
+            
+            // 简单的生成逻辑（实际项目中会调用后端API）
+            const result = `# 竞品调研报告\n\n## 竞品分析\n1. **竞品品牌 1**: ${competitor1 || '未输入'}\n2. **竞品品牌 2**: ${competitor2 || '未输入'}\n3. **竞品品牌 3**: ${competitor3 || '未输入'}\n\n## 我方分析\n- **我方生态位**: ${ourNiche || '未输入'}\n- **我方优势**: ${ourAdvantages || '未输入'}\n- **竞争痛点**: ${competitionPains || '未输入'}\n\n## 竞争策略建议\n基于以上分析，建议从以下几个方面制定竞争策略：\n1. 突出我方优势，强化品牌差异化\n2. 针对竞争痛点，提供更好的解决方案\n3. 巩固我方生态位，构建竞争壁垒`;
+            
+            // 显示结果
+            const resultElement = document.getElementById('extraction-result');
+            resultElement.innerHTML = `<div class="script-content">${result.replace(/\n/g, '<br>')}</div>`;
+        }
+        
+        // 重置表单
+        function resetResearchForm() {
+            document.getElementById('competitor-brand-1').value = '';
+            document.getElementById('competitor-brand-2').value = '';
+            document.getElementById('competitor-brand-3').value = '';
+            document.getElementById('our-niche').value = '';
+            document.getElementById('our-advantages').value = '';
+            document.getElementById('competition-pains').value = '';
+            
+            // 重置结果区域
+            const resultElement = document.getElementById('extraction-result');
+            resultElement.innerHTML = '<p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>';
+        }
+        
+        // 开始情报扫描
+        function startIntelligenceScan() {
+            const keywords = document.getElementById('scan-keywords').value;
+            const scope = document.getElementById('scan-scope').value;
+            const timeRange = document.getElementById('time-range').value;
+            
+            // 简单的扫描模拟
+            const result = `# 竞品情报扫描结果\n\n## 扫描参数\n- **关键词**: ${keywords || '未指定'}\n- **扫描范围**: ${scope === 'market' ? '市场动态' : scope === 'product' ? '产品信息' : scope === 'pricing' ? '价格策略' : '全面扫描'}\n- **时间范围**: ${timeRange === '7d' ? '最近7天' : timeRange === '30d' ? '最近30天' : timeRange === '90d' ? '最近90天' : '全部时间'}\n\n## 扫描结果\n1. **市场动态**: 暂无最新动态\n2. **产品信息**: 暂无更新\n3. **价格策略**: 暂无调整\n\n## 扫描总结\n当前未发现重大竞争情报更新。建议持续监控竞品动态。`;
+            
+            // 显示结果
+            const resultElement = document.getElementById('scan-result');
+            resultElement.innerHTML = `<div class="script-content">${result.replace(/\n/g, '<br>')}</div>`;
+        }
+        
+        // 清空扫描表单
+        function clearIntelligenceScan() {
+            document.getElementById('scan-keywords').value = '';
+            document.getElementById('scan-scope').value = 'market';
+            document.getElementById('time-range').value = '7d';
+            
+            // 重置结果区域
+            const resultElement = document.getElementById('scan-result');
+            resultElement.innerHTML = '<p class="placeholder-text">请设置扫描参数后，点击「开始扫描」按钮</p>';
+        }
+        
+        // 检索方式切换函数
+        function toggleSearchMode() {
+            const intervalConfig = document.getElementById('interval-config');
+            const fixedConfig = document.getElementById('fixed-config');
+            const mode = document.querySelector('input[name="search-mode"]:checked').value;
+            
+            if (mode === 'interval') {
+                intervalConfig.style.display = 'block';
+                fixedConfig.style.display = 'none';
+            } else {
+                intervalConfig.style.display = 'none';
+                fixedConfig.style.display = 'block';
+            }
+        }
+        
+        // 保存检索配置
+        function saveSearchConfig() {
+            const mode = document.querySelector('input[name="search-mode"]:checked').value;
+            const config = {
+                mode: mode,
+                intervalDays: document.getElementById('interval-days').value,
+                weekday: document.getElementById('weekday').value,
+                hour: document.getElementById('search-hour').value,
+                minute: document.getElementById('search-minute').value,
+                second: document.getElementById('search-second').value
+            };
+            
+            // 保存配置（实际项目中会调用后端API）
+            console.log('保存检索配置:', config);
+            alert('配置保存成功！');
+        }
+        
+        // 立即检索
+        function searchNow() {
+            // 执行检索操作（实际项目中会调用后端API）
+            console.log('执行立即检索');
+            alert('正在执行检索，请稍后...');
+        }
+        
         // 全局初始化
         document.addEventListener('DOMContentLoaded', function() {
             // 加载导航组件
@@ -526,10 +900,43 @@
             // 绑定按钮事件
             document.getElementById('generate-research').onclick = generateResearchReport;
             document.getElementById('reset-form').onclick = resetResearchForm;
-            document.getElementById('copy-result').onclick = copyResearchResult;
-            document.getElementById('export-report').onclick = exportResearchReport;
+            document.getElementById('start-scan').onclick = startIntelligenceScan;
+            document.getElementById('clear-scan').onclick = clearIntelligenceScan;
+            document.getElementById('save-config').onclick = saveSearchConfig;
+            document.getElementById('search-now').onclick = searchNow;
         });
 
+        // 生成调研报告
+        function generateResearchReport() {
+            // 获取输入值
+            const competitor1 = document.getElementById('competitor-brand-1').value;
+            const competitor2 = document.getElementById('competitor-brand-2').value;
+            const competitor3 = document.getElementById('competitor-brand-3').value;
+            const ourNiche = document.getElementById('our-niche').value;
+            const ourAdvantages = document.getElementById('our-advantages').value;
+            const competitionPains = document.getElementById('competition-pains').value;
+            
+            // 简单的生成逻辑（实际项目中会调用后端API）
+            const result = `# 竞品调研报告\n\n## 竞品分析\n1. **竞品品牌 1**: ${competitor1 || '未输入'}\n2. **竞品品牌 2**: ${competitor2 || '未输入'}\n3. **竞品品牌 3**: ${competitor3 || '未输入'}\n\n## 我方分析\n- **我方生态位**: ${ourNiche || '未输入'}\n- **我方优势**: ${ourAdvantages || '未输入'}\n- **竞争痛点**: ${competitionPains || '未输入'}\n\n## 竞争策略建议\n基于以上分析，建议从以下几个方面制定竞争策略：\n1. 突出我方优势，强化品牌差异化\n2. 针对竞争痛点，提供更好的解决方案\n3. 巩固我方生态位，构建竞争壁垒`;
+            
+            // 显示结果
+            const resultElement = document.getElementById('extraction-result');
+            resultElement.innerHTML = `<div class="script-content">${result.replace(/\n/g, '<br>')}</div>`;
+        }
+        
+        // 重置表单
+        function resetResearchForm() {
+            document.getElementById('competitor-brand-1').value = '';
+            document.getElementById('competitor-brand-2').value = '';
+            document.getElementById('competitor-brand-3').value = '';
+            document.getElementById('our-niche').value = '';
+            document.getElementById('our-advantages').value = '';
+            document.getElementById('competition-pains').value = '';
+            
+            // 重置结果区域
+            const resultElement = document.getElementById('extraction-result');
+            resultElement.innerHTML = '<p class="placeholder-text">请选择功能并设置参数后，点击「开始提取」按钮</p>';
+        }
     </script>
 </body>
 </html>
