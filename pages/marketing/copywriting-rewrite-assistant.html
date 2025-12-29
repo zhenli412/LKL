@@ -430,7 +430,7 @@
                 <script src="https://cdn.tailwindcss.com"></script>
                 
                 <!-- 上下分栏布局 -->
-                <div class="flex flex-col h-[calc(100vh-200px)] relative">
+                <div class="flex flex-col h-[calc(100vh-180px)] relative">
                     
                     <!-- 模式选择悬浮栏 -->
                     <div class="absolute top-0 left-0 right-0 z-20 h-[52px] bg-white/60 border-b border-white/40 flex items-center justify-center">
@@ -488,7 +488,7 @@
                                 <!-- AI 消息容器 -->
                                 <div class="flex-1 max-w-2xl">
                                     <!-- 发送者名称 -->
-                                    <p class="text-gray-700 text-base font-semibold mb-1">文案二创助手<span class="text-indigo-600" id="mode-label">· 常规类</span></p>
+                                    <p class="text-gray-700 text-base font-semibold mb-1">文案二创助手<span class="text-indigo-600" id="mode-label">· 文本二创(常规)</span></p>
                                     
                                     <!-- 气泡内容 -->
                                     <div class="bg-white rounded-2xl rounded-tl-sm shadow-sm p-4">
@@ -565,7 +565,7 @@
                                 <!-- AI 消息容器 -->
                                 <div class="flex-1 max-w-2xl">
                                     <!-- 发送者名称 -->
-                                    <p class="text-gray-700 text-base font-semibold mb-1">文案二创助手<span class="text-indigo-600" id="mode-label-2">· 常规类</span></p>
+                                    <p class="text-gray-700 text-base font-semibold mb-1">文案二创助手<span class="text-indigo-600" id="mode-label-2">· 文本二创(常规)</span></p>
                                     
                                     <!-- 气泡内容 -->
                                     <div class="bg-white rounded-2xl rounded-tl-sm shadow-sm p-4">
@@ -945,196 +945,92 @@
         }
 
         // 模式切换函数
+        // 模式切换函数
         function switchMode(mode) {
+            // 获取所有模式按钮
             const normalBtn = document.getElementById('mode-normal');
-            const salesBtn = document.getElementById('mode-sales');
+            const trafficBtn = document.getElementById('mode-traffic');
+            const xiaohongshuBtn = document.getElementById('mode-xiaohongshu');
+            const douyinBtn = document.getElementById('mode-douyin');
+            const xhsOriginalBtn = document.getElementById('mode-xhs-original');
             const modeLabel = document.getElementById('mode-label');
             const modeLabel2 = document.getElementById('mode-label-2');
 
+            // 重置所有按钮为未激活状态
+            normalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
+            normalBtn.innerHTML = `
+                <span class="text-lg">📝</span>
+                <span class="font-medium">文本二创(常规)</span>
+            `;
+            
+            trafficBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
+            trafficBtn.innerHTML = `
+                <span class="text-lg">🎯</span>
+                <span class="font-medium">文本二创(引流类)</span>
+            `;
+            
+            xiaohongshuBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
+            xiaohongshuBtn.innerHTML = `
+                <span class="text-lg">📕</span>
+                <span class="font-medium">文本二创(小红书)</span>
+            `;
+            
+            douyinBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
+            douyinBtn.innerHTML = `
+                <span class="text-lg">🎬</span>
+                <span class="font-medium">选题原创(抖音)</span>
+            `;
+            
+            xhsOriginalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
+            xhsOriginalBtn.innerHTML = `
+                <span class="text-lg">🌟</span>
+                <span class="font-medium">选题原创(小红书)</span>
+            `;
+
+            // 根据模式设置激活状态
             if (mode === 'normal') {
-                // 设置常规类为激活状态
                 normalBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
                 normalBtn.innerHTML = `
-                    <span class="text-lg">🌿</span>
-                    <span class="font-medium">常规类</span>
+                    <span class="text-lg">📝</span>
+                    <span class="font-medium">文本二创(常规)</span>
                     <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
                 `;
-                
-                // 设置销售类为未激活状态
-                salesBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                salesBtn.innerHTML = `
-                    <span class="text-lg">💰</span>
-                    <span class="font-medium">销售类</span>
-                `;
-                
-                // 更新AI回复中的模式标识
-                modeLabel.textContent = '· 常规类';
-                modeLabel2.textContent = '· 常规类';
-            } else if (mode === 'sales') {
-                // 设置销售类为激活状态
-                salesBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
-                salesBtn.innerHTML = `
-                    <span class="text-lg">💰</span>
-                    <span class="font-medium">销售类</span>
-                    <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
-                `;
-                
-                // 设置其他模式为未激活状态
-                normalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                normalBtn.innerHTML = `
-                    <span class="text-lg">🌿</span>
-                    <span class="font-medium">常规类</span>
-                `;
-
-                // 更新AI回复中的模式标识
-                modeLabel.textContent = '· 销售类';
-                modeLabel2.textContent = '· 销售类';
+                modeLabel.textContent = '· 文本二创(常规)';
+                modeLabel2.textContent = '· 文本二创(常规)';
             } else if (mode === 'traffic') {
-                // 设置文本二创(引流类)为激活状态
                 trafficBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
                 trafficBtn.innerHTML = `
                     <span class="text-lg">🎯</span>
                     <span class="font-medium">文本二创(引流类)</span>
                     <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
                 `;
-                
-                // 设置其他模式为未激活状态
-                normalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                normalBtn.innerHTML = `
-                    <span class="text-lg">📝</span>
-                    <span class="font-medium">文本二创(常规)</span>
-                `;
-                
-                xiaohongshuBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                xiaohongshuBtn.innerHTML = `
-                    <span class="text-lg">📕</span>
-                    <span class="font-medium">文本二创(小红书)</span>
-                `;
-                
-                douyinBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                douyinBtn.innerHTML = `
-                    <span class="text-lg">🎬</span>
-                    <span class="font-medium">选题原创(抖音)</span>
-                `;
-                
-                xhsOriginalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                xhsOriginalBtn.innerHTML = `
-                    <span class="text-lg">🌟</span>
-                    <span class="font-medium">选题原创(小红书)</span>
-                `;
-                
-                // 更新AI回复中的模式标识
                 modeLabel.textContent = '· 文本二创(引流类)';
                 modeLabel2.textContent = '· 文本二创(引流类)';
             } else if (mode === 'xiaohongshu') {
-                // 设置文本二创(小红书)为激活状态
                 xiaohongshuBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
                 xiaohongshuBtn.innerHTML = `
                     <span class="text-lg">📕</span>
                     <span class="font-medium">文本二创(小红书)</span>
                     <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
                 `;
-                
-                // 设置其他模式为未激活状态
-                normalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                normalBtn.innerHTML = `
-                    <span class="text-lg">📝</span>
-                    <span class="font-medium">文本二创(常规)</span>
-                `;
-                
-                trafficBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                trafficBtn.innerHTML = `
-                    <span class="text-lg">🎯</span>
-                    <span class="font-medium">文本二创(引流类)</span>
-                `;
-                
-                douyinBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                douyinBtn.innerHTML = `
-                    <span class="text-lg">🎬</span>
-                    <span class="font-medium">选题原创(抖音)</span>
-                `;
-                
-                xhsOriginalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                xhsOriginalBtn.innerHTML = `
-                    <span class="text-lg">🌟</span>
-                    <span class="font-medium">选题原创(小红书)</span>
-                `;
-                
-                // 更新AI回复中的模式标识
                 modeLabel.textContent = '· 文本二创(小红书)';
                 modeLabel2.textContent = '· 文本二创(小红书)';
             } else if (mode === 'douyin') {
-                // 设置选题原创(抖音)为激活状态
                 douyinBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
                 douyinBtn.innerHTML = `
                     <span class="text-lg">🎬</span>
                     <span class="font-medium">选题原创(抖音)</span>
                     <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
                 `;
-                
-                // 设置其他模式为未激活状态
-                normalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                normalBtn.innerHTML = `
-                    <span class="text-lg">📝</span>
-                    <span class="font-medium">文本二创(常规)</span>
-                `;
-                
-                trafficBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                trafficBtn.innerHTML = `
-                    <span class="text-lg">🎯</span>
-                    <span class="font-medium">文本二创(引流类)</span>
-                `;
-                
-                xiaohongshuBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                xiaohongshuBtn.innerHTML = `
-                    <span class="text-lg">📕</span>
-                    <span class="font-medium">文本二创(小红书)</span>
-                `;
-                
-                xhsOriginalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                xhsOriginalBtn.innerHTML = `
-                    <span class="text-lg">🌟</span>
-                    <span class="font-medium">选题原创(小红书)</span>
-                `;
-                
-                // 更新AI回复中的模式标识
                 modeLabel.textContent = '· 选题原创(抖音)';
                 modeLabel2.textContent = '· 选题原创(抖音)';
             } else if (mode === 'xhs-original') {
-                // 设置选题原创(小红书)为激活状态
                 xhsOriginalBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
                 xhsOriginalBtn.innerHTML = `
                     <span class="text-lg">🌟</span>
                     <span class="font-medium">选题原创(小红书)</span>
                     <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
                 `;
-                
-                // 设置其他模式为未激活状态
-                normalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                normalBtn.innerHTML = `
-                    <span class="text-lg">📝</span>
-                    <span class="font-medium">文本二创(常规)</span>
-                `;
-                
-                trafficBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                trafficBtn.innerHTML = `
-                    <span class="text-lg">🎯</span>
-                    <span class="font-medium">文本二创(引流类)</span>
-                `;
-                
-                xiaohongshuBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                xiaohongshuBtn.innerHTML = `
-                    <span class="text-lg">📕</span>
-                    <span class="font-medium">文本二创(小红书)</span>
-                `;
-                
-                douyinBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                douyinBtn.innerHTML = `
-                    <span class="text-lg">🎬</span>
-                    <span class="font-medium">选题原创(抖音)</span>
-                `;
-                
-                // 更新AI回复中的模式标识
                 modeLabel.textContent = '· 选题原创(小红书)';
                 modeLabel2.textContent = '· 选题原创(小红书)';
             }
