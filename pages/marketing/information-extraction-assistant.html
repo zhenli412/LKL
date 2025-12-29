@@ -684,71 +684,30 @@
                             </div>
                             
                             <!-- 采集方式选择 - 内联点击事件版本 -->
-                            <div class="input-section">
-                                <label>采集方式 <span class="required">*</span></label>
-                                <div class="collection-method-container" style="display: flex; border-radius: 4px; overflow: hidden;">
-                                    <div id="method-link-tab" class="collection-method-tab active" style="padding: 8px 16px; background: #1E88E5; color: white; border: none; cursor: pointer; user-select: none; flex: 1; text-align: center;" onclick="switchCollectionMethod('link')">
-                                        达人链接
-                                    </div>
-                                    <div id="method-keyword-tab" class="collection-method-tab" style="padding: 8px 16px; background: #fff; color: #333; border: none; cursor: pointer; user-select: none; flex: 1; text-align: center;" onclick="switchCollectionMethod('keyword')">
-                                        达人关键词
-                                    </div>
-                                </div>
-                            </div>
-
                                 <div class="input-section">
                                     <label for="influencer-platform">支持平台</label>
                                     <div class="platform-options">
                                         <label><input type="radio" name="influencer-platform" value="douyin" checked> 抖音</label>
                                         <label><input type="radio" name="influencer-platform" value="xiaohongshu"> 小红书</label>
-                                        <label><input type="radio" name="influencer-platform" value="wechat"> 公众号</label>
-                                        <label><input type="radio" name="influencer-platform" value="bilibili"> Bilibili</label>
-                                        <label><input type="radio" name="influencer-platform" value="video号"> 视频号</label>
+                                    </div>
+                                </div>                            
+                                <!-- 达人链接方式输入 -->
+                                <div id="link-method-panel">
+                                    <div class="input-section">
+                                        <label for="influencer-link">达人主页链接地址 <span class="required">*</span></label>
+                                        <input type="text" id="influencer-link" placeholder="请输入达人主页链接地址">
                                     </div>
                                 </div>
 
-                                <!-- 达人链接方式输入 -->
-                            <div id="link-method-panel">
-                                <div class="input-section">
-                                    <label for="influencer-link">达人主页链接地址 <span class="required">*</span></label>
-                                    <input type="text" id="influencer-link" placeholder="请输入达人主页链接地址">
+                                <!-- 小红书Cookie输入框（默认隐藏） -->
+                                <div id="xiaohongshu-cookie-section" class="input-section">
+                                    <label for="xiaohongshu-cookie">小红书Cookie</label>
+                                    <input type="text" id="xiaohongshu-cookie" placeholder="小红书平台检索，需输入小红书Cookie">
                                 </div>
-                            </div>
-                            
+
+
                             <!-- 达人关键词方式输入 -->
-                            <div id="keyword-method-panel" style="display: none;">
-                                <div class="input-section">
-                                    <label for="influencer-keyword">达人关键词 <span class="required">*</span></label>
-                                    <input type="text" id="influencer-keyword" placeholder="请输入达人关键词">
-                                </div>
-                                
-                                <div class="input-section">
-                                    <label for="influencer-fans">粉丝数量</label>
-                                    <select id="influencer-fans">
-                                        <option value="">不限</option>
-                                        <option value="1000000-10000000">100w-1000w</option>
-                                        <option value="10000-1000000">1w-100w</option>
-                                        <option value="1000-10000">1000-1w</option>
-                                        <option value="0-1000">0-1000</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="input-section">
-                                    <label for="influencer-type">用户类型</label>
-                                    <select id="influencer-type">
-                                        <option value="">不限</option>
-                                        <option value="normal">普通用户</option>
-                                        <option value="enterprise">企业认证</option>
-                                        <option value="personal">个人认证</option>
-                                    </select>
-                                </div>
-                                
-                                
-                                <div class="input-section">
-                                    <label for="influencer-count">导出数量 <span class="required">*</span></label>
-                                    <input type="number" id="influencer-count" min="1" max="1000" placeholder="请输入导出数量">
-                                </div>
-                            </div>
+
                             
                             <div class="action-buttons">
                                 <button id="extract-influencer-btn" class="action-button">开始提取</button>
@@ -765,13 +724,14 @@
                                 <label>采集方式 <span class="required">*</span></label>
                                 <div class="extraction-method" style="display: flex; border-radius: 4px; overflow: hidden; margin-bottom: 15px;">
                                     <div id="video-method-keyword" class="video-method-tab active" style="padding: 8px 16px; background: #1E88E5; color: white; border: none; cursor: pointer; user-select: none; flex: 1; text-align: center;" onclick="switchVideoMethod('keyword')">
-                                        关键词搜索
+                                        关键词搜视频链接
                                     </div>
                                     <div id="video-method-account" class="video-method-tab" style="padding: 8px 16px; background: #fff; color: #333; border: none; cursor: pointer; user-select: none; flex: 1; text-align: center;" onclick="switchVideoMethod('account')">
-                                        达人对标账号
+                                        达人账号提取作品链接
                                     </div>
                                 </div>
                             </div>
+
                             <div id="keyword-search-panel">
 
                             <div class="input-section">
@@ -779,9 +739,6 @@
                                 <div class="platform-options">
                                     <label><input type="radio" name="video-platform" value="douyin" checked> 抖音</label>
                                     <label><input type="radio" name="video-platform" value="xiaohongshu"> 小红书</label>
-                                    <label><input type="radio" name="video-platform" value="wechat"> 公众号</label>
-                                    <label><input type="radio" name="video-platform" value="bilibili"> Bilibili</label>
-                                    <label><input type="radio" name="video-platform" value="video号"> 视频号</label>
                                 </div>
                             </div>
                                 <div class="input-section">
@@ -790,17 +747,19 @@
                                 </div>
                                 
                                 <div class="input-section">
-                                    <label for="video-sort">排序方式 <span class="required">*</span></label>
+                                    <label for="video-sort">排序方式</label>
                                     <select id="video-sort">
+                                        <option value="zonghe">综合排序</option>
                                         <option value="likes">点赞最多</option>
                                         <option value="latest">最新发布</option>
+                                        <option value="store">收藏最多</option>
                                     </select>
                                 </div>
                                 
                                 <div class="input-section">
                                     <label for="video-time">发布时间</label>
                                     <select id="video-time">
-                                        <option value="">不限</option>
+                                        <option value="0">不限</option>
                                         <option value="day">一天内</option>
                                         <option value="week">一周内</option>
                                         <option value="half-year">半年内</option>
@@ -810,12 +769,43 @@
                                 <div class="input-section">
                                     <label for="video-duration">视频时长</label>
                                     <select id="video-duration">
-                                        <option value="">不限</option>
+                                        <option value="0">不限</option>
                                         <option value="short">1分钟以内</option>
                                         <option value="medium">1-5分钟</option>
                                         <option value="long">5分钟以上</option>
                                     </select>
                                 </div>
+
+                                <div class="input-section">
+                                    <label for="video-cursor">翻页索引（cursor）</label>
+                                    <input type="text" id="video-cursor" placeholder="抖音翻页索引，首次检索不需要输入，翻页时输入">
+                                </div>
+                                <div class="input-section">
+                                    <label for="video-search-id">搜索ID（search_id）</label>
+                                    <input type="text" id="video-search-id" placeholder="抖音搜索ID，首次检索不需要输入，翻页时输入">
+                                </div>
+
+                                <div class="input-section">
+                                    <label for="video-sort">小红书作品类型</label>
+                                    <select id="video-sort">
+                                        <option value="0">全部</option>
+                                        <option value="1">视频</option>
+                                        <option value="2">图文</option>
+                                    </select>
+                                </div>
+                                <div class="input-section">
+                                    <label for="video-page">搜索页码（page）</label>
+                                    <input type="text" id="video-page" placeholder="小红书检索页码，首次为1，翻页时输入检索页码">
+                                </div>
+                                <div class="input-section">
+                                    <label for="video-search-id">搜索ID（search_id）</label>
+                                    <input type="text" id="video-search-id" placeholder="小红书搜索ID，首次检索不需要输入，翻页时输入">
+                                </div>
+                                <div class="input-section">
+                                    <label for="video-session-id">会话ID（session_id)</label>
+                                    <input type="text" id="video-session-id" placeholder="小红书会话ID，首次检索不需要输入，翻页时输入">
+                                </div>
+
                             </div>
                             
                             <div id="account-search-panel" style="display: none;">
@@ -825,9 +815,6 @@
                                     <div class="platform-options">
                                         <label><input type="radio" name="influencer-platform" value="douyin" checked> 抖音</label>
                                         <label><input type="radio" name="influencer-platform" value="xiaohongshu"> 小红书</label>
-                                        <label><input type="radio" name="influencer-platform" value="wechat"> 公众号</label>
-                                        <label><input type="radio" name="influencer-platform" value="bilibili"> Bilibili</label>
-                                        <label><input type="radio" name="influencer-platform" value="video号"> 视频号</label>
                                     </div>
                                 </div>
                                 
@@ -835,13 +822,17 @@
                                     <label for="account-link">达人对标账号链接 <span class="required">*</span></label>
                                     <input type="text" id="account-link" placeholder="请输入账号链接">
                                 </div>
+
+                                <div class="input-section">
+                                    <label for="video-cursor">翻页索引（cursor）</label>
+                                    <input type="text" id="video-cursor" placeholder="抖音/小红书翻页索引，首次检索不需要输入，翻页时输入">
+                                </div>
+
+
+
                             </div>
                             
                             
-                            <div class="input-section">
-                                <label for="video-count">导出数量 <span class="required">*</span></label>
-                                <input type="number" id="video-count" min="1" max="1000" placeholder="请输入导出数量">
-                            </div>
                             
                             <div class="action-buttons">
                                 <button id="extract-video-btn" class="action-button">开始提取</button>
@@ -869,10 +860,20 @@
                                 <input type="text" id="video-url" placeholder="请输入视频链接">
                             </div>
                             
-                            <div class="input-section">
-                                <label for="comment-count">导出数量 <span class="required">*</span></label>
-                                <input type="number" id="comment-count" min="1" max="1000" placeholder="请输入导出数量">
-                            </div>
+
+
+                                <div class="input-section">
+                                    <label for="video-cursor">翻页索引（cursor）</label>
+                                    <input type="text" id="video-cursor" placeholder="抖音/小红书翻页索引，首次检索不需要输入，翻页时输入">
+                                </div>
+
+                                <div class="input-section">
+                                    <label for="coment-sort">排序方式（小红书评论）</label>
+                                    <select id="coment-sort">
+                                        <option value="2">最新评论</option>
+                                        <option value="1">默认排序</option>
+                                    </select>
+                                </div>
                             
                             <div class="action-buttons">
                                 <button id="extract-comment-btn" class="action-button">开始提取</button>
@@ -1061,63 +1062,16 @@
                 tab.style.zIndex = '100';
             });
             console.log('已设置所有标签按钮为可点击状态');
-            
-            // 全局的采集方式切换函数，供内联onclick调用
-            window.switchCollectionMethod = function(method) {
-                console.log('调用全局切换函数，切换到方式:', method);
-                
-                const linkTab = document.getElementById('method-link-tab');
-                const keywordTab = document.getElementById('method-keyword-tab');
-                const linkMethodPanel = document.getElementById('link-method-panel');
-                const keywordMethodPanel = document.getElementById('keyword-method-panel');
 
-                // 确保所有元素存在
-                if (linkTab && keywordTab && linkMethodPanel && keywordMethodPanel) {
-                    console.log('切换元素存在，执行切换逻辑');
-                    
-                    // 重置所有标签样式
-                    linkTab.classList.remove('active');
-                    keywordTab.classList.remove('active');
-                    linkTab.style.background = '#fff';
-                    keywordTab.style.background = '#fff';
-                    linkTab.style.color = '#333';
-                    keywordTab.style.color = '#333';
-                    
-                    // 隐藏所有面板
-                    linkMethodPanel.style.display = 'none';
-                    keywordMethodPanel.style.display = 'none';
-                    
-                    // 设置选中的标签和面板
-                    if (method === 'link') {
-                        linkTab.classList.add('active');
-                        linkTab.style.background = '#1E88E5';
-                        linkTab.style.color = 'white';
-                        linkMethodPanel.style.display = 'block';
-                        console.log('已切换到达人链接面板');
-                    } else if (method === 'keyword') {
-                        keywordTab.classList.add('active');
-                        keywordTab.style.background = '#1E88E5';
-                        keywordTab.style.color = 'white';
-                        keywordMethodPanel.style.display = 'block';
-                        console.log('已切换到达人关键词面板');
-                    }
-                } else {
-                    console.error('切换元素不存在');
-                    console.log('linkTab:', linkTab);
-                    console.log('keywordTab:', keywordTab);
-                    console.log('linkMethodPanel:', linkMethodPanel);
-                    console.log('keywordMethodPanel:', keywordMethodPanel);
-                }
-            };
+            // 达人数据面板平台选择变更事件处理
+            const influencerPlatformRadios = document.querySelectorAll('input[name="influencer-platform"]');
+            const xiaohongshuCookieSection = document.getElementById('xiaohongshu-cookie-section');
             
-            // 页面加载时初始化
-            window.addEventListener('load', function() {
-                console.log('页面加载完成，初始化默认采集方式');
-                window.switchCollectionMethod('link');
+            influencerPlatformRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+            
+                });
             });
-            
-            // 采集方式切换功能已通过新的标签点击事件实现
-            
             // 全局的视频提取方式切换函数，供内联onclick调用
             window.switchVideoMethod = function(method) {
                 console.log('切换视频提取方式:', method);

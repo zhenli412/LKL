@@ -783,7 +783,7 @@
                 <!-- 功能切换选项卡 -->
                 <div class="function-tabs">
                     <button class="tab-btn active" onclick="switchToTab('video-link-tab')">短视频链接提取文案</button>
-                    <button class="tab-btn" onclick="switchToTab('influencer-tab')">达人主页提取文案</button>
+                    <button class="tab-btn" onclick="switchToTab('influencer-tab')">网页链接提取文案</button>
                 </div>
                 
                 <div class="comparison-layout">
@@ -795,11 +795,7 @@
 
                             <!-- 平台选择 -->
                             <div class="input-section">
-                                <label>平台选择 <span class="required">*</span></label>
-                                <div class="platform-options">
-                                    <label><input type="radio" name="platform" value="douyin" checked> 抖音</label>
-                                    <label><input type="radio" name="platform" value="xiaohongshu"> 小红书</label>
-                                </div>
+                                <label>平台支持：抖音/小红书短视频链接</label>
                             </div>
                             <!-- 链接输入区域 -->
                             <div class="input-section">
@@ -818,18 +814,16 @@
                         
                         <!-- 达人主页方式 -->
                         <div class="tab-content" id="influencer-tab" style="display: none;">
-                            <h3 class="result-header">输入达人主页链接</h3>
+                            <h3 class="result-header">输入内容网页链接</h3>
                             
-                            <!-- 达人链接输入 -->
+                            <!-- 平台选择 -->
                             <div class="input-section">
-                                <label for="influencer-link">达人链接地址（抖音平台） <span class="required">*</span></label>
-                                <input type="text" id="influencer-link" placeholder="请输入达人主页链接地址">
+                                <label>平台支持：网页/公众号链接</label>
                             </div>
-                            
-                            <!-- 提取文案数量 -->
+                            <!-- 链接输入区域 -->
                             <div class="input-section">
-                                <label for="extract-count">提取短视频数量 <span class="required">*</span></label>
-                                <input type="number" id="extract-count" min="1" max="100" placeholder="请输入提取数量">
+                                <label for="influencer-links-input">网页/公众号链接 <span class="required">*</span></label>
+                                <textarea id="influencer-links-input" placeholder="请输入网页/公众号链接（多条请换行分隔）" rows="6"></textarea>
                             </div>
                             
                             
