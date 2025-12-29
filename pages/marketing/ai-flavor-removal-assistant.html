@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>选题生成助手 - 利客来</title>
+    <title>去AI味助手 - 利客来</title>
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/nav-component.js"></script>
     <style>
@@ -406,6 +406,10 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        .page-content {
+            border-top: 1px solid rgb(229, 229, 229);
+            border-radius: 0;
+        }
     </style>
 </head>
 <body>
@@ -421,8 +425,8 @@
         <main class="content">
             <!-- 页面标题 -->
             <div class="page-header">
-                <h2>选题生成助手</h2>
-                <p>智能生成优质内容选题，提升内容曝光率和用户关注度</p>
+                <h2>去AI味助手</h2>
+                <p>智能去除AI生成痕迹,让内容更自然更人性化</p>
             </div>
             
             <div class="page-content">
@@ -433,37 +437,13 @@
                 <div class="flex flex-col h-[calc(100vh-180px)] relative">
                     
                     <!-- 模式选择悬浮栏 -->
-                    <div class="absolute top-0 left-0 right-0 z-20 h-[52px] bg-white/60 border-b border-white/40 flex items-center justify-center">
-                        <!-- 分段切换器 -->
-                        <div class="bg-gray-100/80 rounded-full p-1 flex items-center gap-1">
-                            <!-- 选项A：文档选题（激活状态） -->
-                            <button id="mode-document" class="relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all" onclick="switchMode('document')">
-                                <span class="text-lg">📄</span>
-                                <span class="font-medium">文档选题</span>
-                                <!-- 紫色状态小圆点 -->
-                                <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
-                            </button>
-                            
-                            <!-- 选项B：评论选题（未激活状态） -->
-                            <button id="mode-comment" class="bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all" onclick="switchMode('comment')">
-                                <span class="text-lg">💬</span>
-                                <span class="font-medium">评论选题</span>
-                            </button>
-                            
-                            <!-- 选项C：组合选题（未激活状态） -->
-                            <button id="mode-combination" class="bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all" onclick="switchMode('combination')">
-                                <span class="text-lg">🔗</span>
-                                <span class="font-medium">组合选题</span>
-                            </button>
-                            
-                        </div>
-                    </div>
+
                     
                     <!-- 上方：对话列表区域 -->
                     <div class="flex-1 rounded-2xl overflow-hidden flex flex-col min-h-0 max-w-4xl mx-auto w-full pt-[0px]">
+                        
                         <!-- 对话列表容器 -->
                         <div class="flex-1 overflow-y-auto px-0 py-5 space-y-6 scrollbar-hide">
-                        <p style="color:white;">｜</p>
 
                             <!-- AI 回复气泡 (左侧) -->
                             <div class="flex items-start gap-3">
@@ -477,11 +457,14 @@
                                 <!-- AI 消息容器 -->
                                 <div class="flex-1 max-w-2xl">
                                     <!-- 发送者名称 -->
-                                    <p class="text-gray-700 text-base font-semibold mb-1">选题生成助手<span class="text-indigo-600" id="mode-label">· 文档选题</span></p>
+                                    <p class="text-gray-700 text-base font-semibold mb-1">去AI味助手</p>
                                     
                                     <!-- 气泡内容 -->
                                     <div class="bg-white rounded-2xl rounded-tl-sm shadow-sm p-4">
-                                        <p class="text-gray-800 leading-relaxed">👋 你好！我是你的选题生成助手。请上传文档或提供资料，我会帮你智能生成优质内容选题。</p>
+                                        <p class="text-gray-800 leading-relaxed">📝 根据您提供的资料，我为您完成了去AI味优化：</p>
+                                        <p class="text-gray-800 leading-relaxed mt-2">✨ 优化一：调整句式结构，增加文本变化</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 优化二：替换生硬连接词，提升流畅度</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 优化三：增加个性化表达，增强人情味</p>
                                     </div>
                                     
                                     <!-- 底部操作栏 -->
@@ -519,7 +502,7 @@
                                                 <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                 </svg>
-                                                <span class="text-white text-xs">我的私藏爆款文案集.text</span>
+                                                <span class="text-white text-xs">待去AI味文本资料.text</span>
                                             </div>
                                             <div class="bg-indigo-700 rounded-lg px-3 py-2 flex items-center gap-2">
                                                 <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -530,7 +513,7 @@
                                         </div>
                                         
                                         <!-- 正文文本 -->
-                                        <p class="text-white leading-relaxed">请帮我生成一个关于灵荃新品发布的选题。</p>
+                                        <p class="text-white leading-relaxed">请帮我去除这段文字的AI味，让它读起来更自然。</p>
                                     </div>
                                     
                                     <!-- 时间 -->
@@ -559,14 +542,14 @@
                                 <!-- AI 消息容器 -->
                                 <div class="flex-1 max-w-2xl">
                                     <!-- 发送者名称 -->
-                                    <p class="text-gray-700 text-base font-semibold mb-1">选题生成助手<span class="text-indigo-600" id="mode-label-2">· 文档选题</span></p>
+                                    <p class="text-gray-700 text-base font-semibold mb-1">去AI味助手</p>
                                     
                                     <!-- 气泡内容 -->
                                     <div class="bg-white rounded-2xl rounded-tl-sm shadow-sm p-4">
-                                        <p class="text-gray-800 leading-relaxed">📝 根据您提供的资料，我为您生成了以下选题：</p>
-                                        <p class="text-gray-800 leading-relaxed mt-2">✨ 选题一：突出新品特色，适合正式推广</p>
-                                        <p class="text-gray-800 leading-relaxed">✨ 选题二：融入情感元素，增强用户共鸣</p>
-                                        <p class="text-gray-800 leading-relaxed">✨ 选题三：简洁有力，直击核心卖点</p>
+                                        <p class="text-gray-800 leading-relaxed">📝 根据您提供的资料，我为您完成了去AI味优化：</p>
+                                        <p class="text-gray-800 leading-relaxed mt-2">✨ 优化一：调整句式结构，增加文本变化</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 优化二：替换生硬连接词，提升流畅度</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 优化三：增加个性化表达，增强人情味</p>
                                     </div>
                                     
                                     <!-- 底部操作栏 -->
@@ -676,10 +659,10 @@
             <!-- 功能介绍 -->
             <div class="mb-6 p-4 rounded-xl border-2 border-dashed border-blue-200 bg-blue-50/50">
                 <div class="flex items-start gap-3">
-                    <span class="text-2xl">💡</span>
+                    <span class="text-2xl">🚀</span>
                     <div>
                         <h3 class="font-semibold text-gray-800 mb-2">功能介绍</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">智能选题生成助手，基于行业趋势和用户需求，快速生成高质量的内容选题，帮助您突破创作瓶颈，持续产出优质内容。</p>
+                        <p class="text-gray-600 text-sm leading-relaxed">智能识别并去除文章中的AI生成痕迹,让内容更加自然流畅。支持多种文本类型的去AI味处理,帮助您创作出更有人情味的原创内容。</p>
                     </div>
                 </div>
             </div>
@@ -690,7 +673,7 @@
                     <span class="text-2xl">✍️</span>
                     <div>
                         <h3 class="font-semibold text-gray-800 mb-2">输入参考</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">输入行业领域、目标受众、内容方向或关键词，系统将智能分析并生成多个选题方案，包含标题、内容框架和创作要点。</p>
+                        <p class="text-gray-600 text-sm leading-relaxed">粘贴需要去AI味的文章内容、段落或章节,系统将智能识别并去除AI生成的痕迹,让内容更加自然。</p>
                     </div>
                 </div>
             </div>
@@ -701,11 +684,12 @@
                     <span class="text-2xl">📊</span>
                     <div>
                         <h3 class="font-semibold text-gray-800 mb-2">输出说明</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">每次生成5-10个精选选题，包含：</p>
+                        <p class="text-gray-600 text-sm leading-relaxed">提供去AI味后的优化内容,包含:</p>
                         <ul class="mt-2 space-y-1 text-gray-600 text-sm">
-                            <li>• 选题标题：吸引眼球的标题建议</li>
-                            <li>• 内容框架：核心观点和结构建议</li>
-                            <li>• 创作要点：关键信息和素材建议</li>
+                            <li>• 自然流畅的文本表达</li>
+                            <li>• 去除AI痕迹的修改建议</li>
+                            <li>• 人性化润色方案</li>
+                            <li>• 原创性提升</li>
                         </ul>
                     </div>
                 </div>
@@ -714,14 +698,14 @@
             <!-- 应用场景 -->
             <div class="mb-6">
                 <div class="flex items-start gap-3">
-                    <span class="text-2xl">🎯</span>
+                    <span class="text-2xl">💡</span>
                     <div>
                         <h3 class="font-semibold text-gray-800 mb-2">应用场景</h3>
                         <div class="flex flex-wrap gap-2 mt-2">
-                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">内容策划</span>
-                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">选题规划</span>
-                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">热点追踪</span>
-                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">创意激发</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">AI文章改写</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">内容人性化处理</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">原创性提升</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">文案自然化</span>
                         </div>
                     </div>
                 </div>
@@ -737,7 +721,7 @@
                     输入 (USER INPUT)
                 </h3>
                 <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <p class="text-gray-700 text-sm leading-relaxed">行业：装修行业 | 目标受众：装修公司老板 | 内容方向：获客技巧、营销策略 | 关键词：获客、流量、转化、客户开发</p>
+                    <p class="text-gray-700 text-sm leading-relaxed">请帮我去除这段文字的AI味：随着互联网技术的快速发展，人工智能已经深入到我们生活的方方面面。本文将从技术发展、应用场景和未来展望三个方面，全面探讨人工智能的发展现状。</p>
                 </div>
             </div>
 
@@ -748,37 +732,21 @@
                     输出 (AI RESPONSE)
                 </h3>
                 <div class="p-4 rounded-xl bg-white border-2 border-blue-100">
-                    <h4 class="font-semibold text-gray-800 mb-3">【选题方案】</h4>
-                    <div class="space-y-4 text-sm text-gray-700">
-                        <div class="p-3 bg-blue-50 rounded-lg">
-                            <p class="font-semibold text-blue-800 mb-2">选题1：装修公司获客难的3个真相，90%的老板都错了</p>
-                            <p class="text-gray-600 text-xs mb-1"><strong>内容框架：</strong>揭露行业痛点 → 分析根本原因 → 提供解决方案</p>
-                            <p class="text-gray-600 text-xs"><strong>创作要点：</strong>用数据说话，对比传统获客方式与新方法的效果</p>
-                        </div>
+                    <h4 class="font-semibold text-gray-800 mb-3">【去AI味优化报告】</h4>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <p><strong>优化方向:自然化表达</strong></p>
+                        <p class="leading-relaxed">去除AI生成痕迹,让文本更加自然流畅,贴近人类写作风格。</p>
                         
-                        <div class="p-3 bg-green-50 rounded-lg">
-                            <p class="font-semibold text-green-800 mb-2">选题2：从月签单5单到30单，这家装修公司做对了什么？</p>
-                            <p class="text-gray-600 text-xs mb-1"><strong>内容框架：</strong>案例背景介绍 → 具体操作步骤 → 成果数据展示</p>
-                            <p class="text-gray-600 text-xs"><strong>创作要点：</strong>真实案例，具体数据，可复制的方法论</p>
-                        </div>
+                        <p><strong>主要修改:</strong></p>
+                        <ul class="list-disc list-inside space-y-1 ml-2">
+                            <li>调整句式结构,增加变化</li>
+                            <li>替换生硬的连接词</li>
+                            <li>增加个性化表达</li>
+                            <li>优化段落过渡</li>
+                        </ul>
                         
-                        <div class="p-3 bg-purple-50 rounded-lg">
-                            <p class="font-semibold text-purple-800 mb-2">选题3：装修公司老板必看：2024年最有效的5种获客渠道</p>
-                            <p class="text-gray-600 text-xs mb-1"><strong>内容框架：</strong>渠道1介绍 → 渠道2介绍 → 渠道3介绍 → 渠道4介绍 → 渠道5介绍</p>
-                            <p class="text-gray-600 text-xs"><strong>创作要点：</strong>每个渠道配成功案例，提供实操建议</p>
-                        </div>
-
-                        <div class="p-3 bg-orange-50 rounded-lg">
-                            <p class="font-semibold text-orange-800 mb-2">选题4：为什么你的装修公司获客成本越来越高？深度解析</p>
-                            <p class="text-gray-600 text-xs mb-1"><strong>内容框架：</strong>现象描述 → 原因分析 → 趋势预测 → 应对策略</p>
-                            <p class="text-gray-600 text-xs"><strong>创作要点：</strong>行业洞察，专业分析，前瞻性建议</p>
-                        </div>
-                        
-                        <div class="p-3 bg-pink-50 rounded-lg">
-                            <p class="font-semibold text-pink-800 mb-2">选题5：装修公司获客新玩法：短视频+私域流量，轻松实现客户倍增</p>
-                            <p class="text-gray-600 text-xs mb-1"><strong>内容框架：</strong>传统获客困境 → 短视频获客优势 → 私域流量运营 → 实操步骤</p>
-                            <p class="text-gray-600 text-xs"><strong>创作要点：</strong>新旧对比，方法创新，步骤清晰</p>
-                        </div>
+                        <p><strong>优化建议:</strong></p>
+                        <p class="leading-relaxed">建议增加具体案例和个人观点,使内容更具说服力和人情味;适当使用口语化表达,增强文本的自然度。</p>
                     </div>
                 </div>
             </div>
@@ -856,7 +824,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // 确保loadNavigation函数存在后再调用
             if (window.loadNavigation) {
-                loadNavigation('../../', 'marketing', 'marketing/topic-generation-assistant.html');
+                loadNavigation('../../', 'marketing', 'pages/marketing/ai-flavor-removal-assistant.html');
             } else {
                 console.error('loadNavigation函数未定义');
             }
@@ -945,94 +913,7 @@
             }
         }
 
-        // 模式切换函数
-        function switchMode(mode) {
-            const documentBtn = document.getElementById('mode-document');
-            const commentBtn = document.getElementById('mode-comment');
-            const combinationBtn = document.getElementById('mode-combination');
-            const modeLabel = document.getElementById('mode-label');
-            const modeLabel2 = document.getElementById('mode-label-2');
-
-            if (mode === 'document') {
-                // 设置文档选题为激活状态
-                documentBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
-                documentBtn.innerHTML = `
-                    <span class="text-lg">📄</span>
-                    <span class="font-medium">文档选题</span>
-                    <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
-                `;
-                
-                // 设置评论选题为未激活状态
-                commentBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                commentBtn.innerHTML = `
-                    <span class="text-lg">💬</span>
-                    <span class="font-medium">评论选题</span>
-                `;
-                
-                // 设置组合选题为未激活状态
-                combinationBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                combinationBtn.innerHTML = `
-                    <span class="text-lg">🔗</span>
-                    <span class="font-medium">组合选题</span>
-                `;
-
-                // 更新AI回复中的模式标识
-                modeLabel.textContent = '· 文档选题';
-                modeLabel2.textContent = '· 文档选题';
-            } else if (mode === 'comment') {
-                // 设置评论选题为激活状态
-                commentBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
-                commentBtn.innerHTML = `
-                    <span class="text-lg">💬</span>
-                    <span class="font-medium">评论选题</span>
-                    <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
-                `;
-                
-                // 设置文档选题为未激活状态
-                documentBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                documentBtn.innerHTML = `
-                    <span class="text-lg">📄</span>
-                    <span class="font-medium">文档选题</span>
-                `;
-                
-                // 设置组合选题为未激活状态
-                combinationBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                combinationBtn.innerHTML = `
-                    <span class="text-lg">🔗</span>
-                    <span class="font-medium">组合选题</span>
-                `;
-
-                // 更新AI回复中的模式标识
-                modeLabel.textContent = '· 评论选题';
-                modeLabel2.textContent = '· 评论选题';
-            } else if (mode === 'combination') {
-                // 设置组合选题为激活状态
-                combinationBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
-                combinationBtn.innerHTML = `
-                    <span class="text-lg">🔗</span>
-                    <span class="font-medium">组合选题</span>
-                    <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
-                `;
-                
-                // 设置文档选题为未激活状态
-                documentBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                documentBtn.innerHTML = `
-                    <span class="text-lg">📄</span>
-                    <span class="font-medium">文档选题</span>
-                `;
-                
-                // 设置评论选题为未激活状态
-                commentBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-                commentBtn.innerHTML = `
-                    <span class="text-lg">💬</span>
-                    <span class="font-medium">评论选题</span>
-                `;
-
-                // 更新AI回复中的模式标识
-                modeLabel.textContent = '· 组合选题';
-                modeLabel2.textContent = '· 组合选题';
-            }
-        }
+        
     </script>
 </body>
 </html>
