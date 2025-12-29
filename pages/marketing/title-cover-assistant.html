@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文案二创助手 - 利客来</title>
+    <title>标题及封面助手 - 利客来</title>
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/nav-component.js"></script>
     <style>
@@ -421,8 +421,8 @@
         <main class="content">
             <!-- 页面标题 -->
             <div class="page-header">
-                <h2>文案二创助手</h2>
-                <p>智能对原文案进行创意改写，保留核心信息的同时优化表达方式</p>
+                <h2>标题及封面助手</h2>
+                <p>创建吸引人的标题和封面，提升内容点击率和传播效果</p>
             </div>
             
             <div class="page-content">
@@ -436,41 +436,23 @@
                     <div class="absolute top-0 left-0 right-0 z-20 h-[52px] bg-white/60 border-b border-white/40 flex items-center justify-center">
                         <!-- 分段切换器 -->
                         <div class="bg-gray-100/80 rounded-full p-1 flex items-center gap-1">
-                            <!-- 选项A：文本二创(抖音)（激活状态） -->
+                            <!-- 选项A：抖音方案（激活状态） -->
                             <button id="mode-normal" class="relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all" onclick="switchMode('normal')">
-                                <span class="text-lg">📝</span>
-                                <span class="font-medium">文本二创(抖音)</span>
+                                <span class="text-lg">🎬</span>
+                                <span class="font-medium">抖音方案</span>
                                 <!-- 紫色状态小圆点 -->
                                 <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
                             </button>
                             
-                            <!-- 选项B：文本二创(抖音-引流)（未激活状态） -->
-                            <button id="mode-traffic" class="bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all" onclick="switchMode('traffic')">
-                                <span class="text-lg">🎯</span>
-                                <span class="font-medium">文本二创(抖音-引流)</span>
-                            </button>
-                            
-                            <!-- 选项C：文本二创(小红书)（未激活状态） -->
-                            <button id="mode-xiaohongshu" class="bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all" onclick="switchMode('xiaohongshu')">
+                            <!-- 选项B：小红书方案（未激活状态） -->
+                            <button id="mode-sales" class="bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all" onclick="switchMode('sales')">
                                 <span class="text-lg">📕</span>
-                                <span class="font-medium">文本二创(小红书)</span>
-                            </button>
-                            
-                            <!-- 选项D：选题原创(抖音)（未激活状态） -->
-                            <button id="mode-douyin" class="bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all" onclick="switchMode('douyin')">
-                                <span class="text-lg">🎬</span>
-                                <span class="font-medium">选题原创(抖音)</span>
-                            </button>
-                            
-                            <!-- 选项E：选题原创(小红书)（未激活状态） -->
-                            <button id="mode-xhs-original" class="bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all" onclick="switchMode('xhs-original')">
-                                <span class="text-lg">🌟</span>
-                                <span class="font-medium">选题原创(小红书)</span>
+                                <span class="font-medium">小红书方案</span>
                             </button>
                             
                         </div>
                     </div>
-
+                    
                     <!-- 上方：对话列表区域 -->
                     <div class="flex-1 rounded-2xl overflow-hidden flex flex-col min-h-0 max-w-4xl mx-auto w-full pt-[0px]">
                         
@@ -490,11 +472,11 @@
                                 <!-- AI 消息容器 -->
                                 <div class="flex-1 max-w-2xl">
                                     <!-- 发送者名称 -->
-                                    <p class="text-gray-700 text-base font-semibold mb-1">文案二创助手<span class="text-indigo-600" id="mode-label">· 文本二创(抖音)</span></p>
+                                    <p class="text-gray-700 text-base font-semibold mb-1">标题及封面助手<span class="text-indigo-600" id="mode-label">· 抖音方案</span></p>
                                     
                                     <!-- 气泡内容 -->
                                     <div class="bg-white rounded-2xl rounded-tl-sm shadow-sm p-4">
-                                        <p class="text-gray-800 leading-relaxed">👋 你好！我是你的文案二创助手。请提供你的原文案，我会帮你进行创意改写，保留核心信息的同时优化表达方式，让文案更具吸引力和传播力。</p>
+                                        <p class="text-gray-800 leading-relaxed">👋 你好！我是你的朋友圈文案顾问。请告诉我你想发的内容主题，我会按"70/25/5"黄金法则为你生成文案。</p>
                                     </div>
                                     
                                     <!-- 底部操作栏 -->
@@ -524,21 +506,26 @@
                                         <div class="flex flex-wrap gap-2 mb-3">
                                             <div class="bg-indigo-700 rounded-lg px-3 py-2 flex items-center gap-2">
                                                 <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
                                                 </svg>
-                                                <span class="text-white text-xs">产品介绍文档.docx</span>
+                                                <span class="text-white text-xs">季度总结会议录音.mp3</span>
                                             </div>
                                             <div class="bg-indigo-700 rounded-lg px-3 py-2 flex items-center gap-2">
                                                 <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                 </svg>
-                                                <span class="text-white text-xs">品牌调性说明.pdf</span>
+                                                <span class="text-white text-xs">我的私藏爆款文案集.text</span>
+                                            </div>
+                                            <div class="bg-indigo-700 rounded-lg px-3 py-2 flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                                </svg>
+                                                <span class="text-white text-xs">个人年度工作计划.pdf</span>
                                             </div>
                                         </div>
                                         
                                         <!-- 正文文本 -->
-                                        <p class="text-white leading-relaxed">这是我们的产品介绍文案，请帮我进行二创改写，让它更吸引年轻用户：</p>
-                                        <p class="text-white/80 leading-relaxed mt-2 text-sm">"灵荃智能营销平台，提供全方位的营销解决方案，包括数据分析、内容创作、客户管理等核心功能，帮助企业提升营销效率，实现业务增长。"</p>
+                                        <p class="text-white leading-relaxed">请帮我写个朋友圈文案，灵荃新品发布。</p>
                                     </div>
                                     
                                     <!-- 时间 -->
@@ -567,17 +554,14 @@
                                 <!-- AI 消息容器 -->
                                 <div class="flex-1 max-w-2xl">
                                     <!-- 发送者名称 -->
-                                    <p class="text-gray-700 text-base font-semibold mb-1">文案二创助手<span class="text-indigo-600" id="mode-label-2">· 文本二创(抖音)</span></p>
+                                    <p class="text-gray-700 text-base font-semibold mb-1">标题及封面助手<span class="text-indigo-600" id="mode-label-2">· 抖音方案</span></p>
                                     
                                     <!-- 气泡内容 -->
                                     <div class="bg-white rounded-2xl rounded-tl-sm shadow-sm p-4">
-                                        <p class="text-gray-800 leading-relaxed">📝 根据您的原文案和品牌调性，我为您生成了以下二创版本：</p>
-                                        <p class="text-gray-800 leading-relaxed mt-2">✨ <strong>版本一：年轻活力风</strong></p>
-                                        <p class="text-gray-600 text-sm leading-relaxed ml-4">"灵荃智能营销平台，让营销变得简单有趣！数据分析+内容创作+客户管理，一站式搞定，助你轻松实现业绩翻倍！"</p>
-                                        <p class="text-gray-800 leading-relaxed mt-2">✨ <strong>版本二：简洁有力风</strong></p>
-                                        <p class="text-gray-600 text-sm leading-relaxed ml-4">"灵荃智能营销平台：数据驱动，内容为王，客户至上。三大核心功能，让营销效率提升300%！"</p>
-                                        <p class="text-gray-800 leading-relaxed mt-2">✨ <strong>版本三：情感共鸣风</strong></p>
-                                        <p class="text-gray-600 text-sm leading-relaxed ml-4">"告别营销焦虑，灵荃智能营销平台懂你所需。从数据洞察到内容输出，从客户触达到转化变现，全程陪伴，让每一次营销都精准命中！"</p>
+                                        <p class="text-gray-800 leading-relaxed">📝 根据您提供的资料，我为您生成了以下文案：</p>
+                                        <p class="text-gray-800 leading-relaxed mt-2">✨ 版本一：突出新品特色，适合正式推广</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 版本二：融入情感元素，增强用户共鸣</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 版本三：简洁有力，直击核心卖点</p>
                                     </div>
                                     
                                     <!-- 底部操作栏 -->
@@ -690,7 +674,7 @@
                     <span class="text-2xl">🚀</span>
                     <div>
                         <h3 class="font-semibold text-gray-800 mb-2">功能介绍</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">专业的文案二创改写工具，基于原文案进行创意优化，保留核心信息的同时提升表达质量。支持多种风格改写，让您的文案更具吸引力和传播力。</p>
+                        <p class="text-gray-600 text-sm leading-relaxed">专为灵荃新媒体团队打造的短视频爆款文案创作引擎，支持多场景、多风格的智能文案生成，助您快速产出高质量内容。</p>
                     </div>
                 </div>
             </div>
@@ -701,7 +685,7 @@
                     <span class="text-2xl">✍️</span>
                     <div>
                         <h3 class="font-semibold text-gray-800 mb-2">输入参考</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">提供您的原文案内容，可同时上传品牌调性文档、目标用户画像等参考材料。系统将智能识别文案类型，并生成适配品牌调性的二创版本。</p>
+                        <p class="text-gray-600 text-sm leading-relaxed">粘贴任意素材（行业新闻/博主文案/产品资料...），输入含"ToB/工长/装企"等关键词自动切换B端模式，系统将智能识别并生成适配的商务文案。</p>
                     </div>
                 </div>
             </div>
@@ -712,11 +696,11 @@
                     <span class="text-2xl">📊</span>
                     <div>
                         <h3 class="font-semibold text-gray-800 mb-2">输出说明</h3>
-                        <p class="text-gray-600 text-sm leading-relaxed">每次生成3篇不同风格的二创文案，包含：</p>
+                        <p class="text-gray-600 text-sm leading-relaxed">每次生成2-3篇不同风格的口播文案，包含：</p>
                         <ul class="mt-2 space-y-1 text-gray-600 text-sm">
-                            <li>• 版本一：年轻活力风，适合年轻用户群体</li>
-                            <li>• 版本二：简洁有力风，适合商务场景</li>
-                            <li>• 版本三：情感共鸣风，适合品牌传播</li>
+                            <li>• 篇章一：直击痛点，引发共鸣</li>
+                            <li>• 篇章二：提供价值，建立信任</li>
+                            <li>• 篇章三：引导转化，促成行动</li>
                         </ul>
                     </div>
                 </div>
@@ -729,10 +713,10 @@
                     <div>
                         <h3 class="font-semibold text-gray-800 mb-2">应用场景</h3>
                         <div class="flex flex-wrap gap-2 mt-2">
-                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">产品介绍优化</span>
-                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">广告文案改写</span>
-                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">宣传材料升级</span>
-                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">品牌故事重塑</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">日常内容批量生产</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">热点快速响应</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">节日营销活动</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">产品推广宣传</span>
                         </div>
                     </div>
                 </div>
@@ -748,11 +732,7 @@
                     输入 (USER INPUT)
                 </h3>
                 <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <p class="text-gray-700 text-sm leading-relaxed mb-2">原文案：</p>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-3">"灵荃智能营销平台，提供全方位的营销解决方案，包括数据分析、内容创作、客户管理等核心功能，帮助企业提升营销效率，实现业务增长。"</p>
-                    <p class="text-gray-700 text-sm leading-relaxed mb-2">参考文档：</p>
-                    <p class="text-gray-600 text-sm leading-relaxed">• 产品介绍文档.docx</p>
-                    <p class="text-gray-600 text-sm leading-relaxed">• 品牌调性说明.pdf</p>
+                    <p class="text-gray-700 text-sm leading-relaxed">【ToB/装企】针对目前装修市场获客难的问题，写一篇吸引装饰公司老板的口播文案。</p>
                 </div>
             </div>
 
@@ -763,23 +743,19 @@
                     输出 (AI RESPONSE)
                 </h3>
                 <div class="p-4 rounded-xl bg-white border-2 border-blue-100">
-                    <h4 class="font-semibold text-gray-800 mb-3">📝 根据您的原文案和品牌调性，我为您生成了以下二创版本：</h4>
-                    
-                    <div class="space-y-4 text-sm">
-                        <div class="p-3 bg-indigo-50 rounded-lg">
-                            <p class="font-semibold text-gray-800 mb-2">✨ 版本一：年轻活力风</p>
-                            <p class="text-gray-700 leading-relaxed">"灵荃智能营销平台，让营销变得简单有趣！数据分析+内容创作+客户管理，一站式搞定，助你轻松实现业绩翻倍！"</p>
-                        </div>
+                    <h4 class="font-semibold text-gray-800 mb-3">【口播文案 A版：老板扎心篇】</h4>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <p><strong>(0-70% 干货：揭露行业现状)</strong></p>
+                        <p class="leading-relaxed">老板们，现在装修行业是不是越来越难做？客户越来越挑剔，获客成本越高，利润越来越薄...你每天忙得团团转，但业绩就是上不去，对不对？</p>
                         
-                        <div class="p-3 bg-purple-50 rounded-lg">
-                            <p class="font-semibold text-gray-800 mb-2">✨ 版本二：简洁有力风</p>
-                            <p class="text-gray-700 leading-relaxed">"灵荃智能营销平台：数据驱动，内容为王，客户至上。三大核心功能，让营销效率提升300%！"</p>
-                        </div>
+                        <p><strong>(70-95% 解决方案：抛出核心优势)</strong></p>
+                        <p class="leading-relaxed">其实不是你不够努力，而是你没有找到对的方法。我们利客来帮你解决获客难题，精准锁定目标客户，让客户主动找上门，让你的业绩翻倍增长！</p>
+                        <p><strong>(0-70% 干货：揭露行业现状)</strong></p>
+                        <p class="leading-relaxed">老板们，现在装修行业是不是越来越难做？客户越来越挑剔，获客成本越高，利润越来越薄...你每天忙得团团转，但业绩就是上不去，对不对？</p>
                         
-                        <div class="p-3 bg-pink-50 rounded-lg">
-                            <p class="font-semibold text-gray-800 mb-2">✨ 版本三：情感共鸣风</p>
-                            <p class="text-gray-700 leading-relaxed">"告别营销焦虑，灵荃智能营销平台懂你所需。从数据洞察到内容输出，从客户触达到转化变现，全程陪伴，让每一次营销都精准命中！"</p>
-                        </div>
+                        <p><strong>(70-95% 解决方案：抛出核心优势)</strong></p>
+                        <p class="leading-relaxed">其实不是你不够努力，而是你没有找到对的方法。我们利客来帮你解决获客难题，精准锁定目标客户，让客户主动找上门，让你的业绩翻倍增长！</p>
+
                     </div>
                 </div>
             </div>
@@ -857,7 +833,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // 确保loadNavigation函数存在后再调用
             if (window.loadNavigation) {
-                loadNavigation('../../', 'marketing', 'marketing/copywriting-rewrite-assistant.html');
+                loadNavigation('../../', 'marketing', 'marketing/title-cover-assistant.html');
             } else {
                 console.error('loadNavigation函数未定义');
             }
@@ -947,94 +923,50 @@
         }
 
         // 模式切换函数
-        // 模式切换函数
         function switchMode(mode) {
-            // 获取所有模式按钮
             const normalBtn = document.getElementById('mode-normal');
-            const trafficBtn = document.getElementById('mode-traffic');
-            const xiaohongshuBtn = document.getElementById('mode-xiaohongshu');
-            const douyinBtn = document.getElementById('mode-douyin');
-            const xhsOriginalBtn = document.getElementById('mode-xhs-original');
+            const salesBtn = document.getElementById('mode-sales');
             const modeLabel = document.getElementById('mode-label');
             const modeLabel2 = document.getElementById('mode-label-2');
 
-            // 重置所有按钮为未激活状态
-            normalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-            normalBtn.innerHTML = `
-                <span class="text-lg">📝</span>
-                <span class="font-medium">文本二创(抖音)</span>
-            `;
-            
-            trafficBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-            trafficBtn.innerHTML = `
-                <span class="text-lg">🎯</span>
-                <span class="font-medium">文本二创(抖音-引流)</span>
-            `;
-            
-            xiaohongshuBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-            xiaohongshuBtn.innerHTML = `
-                <span class="text-lg">📕</span>
-                <span class="font-medium">文本二创(小红书)</span>
-            `;
-            
-            douyinBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-            douyinBtn.innerHTML = `
-                <span class="text-lg">🎬</span>
-                <span class="font-medium">选题原创(抖音)</span>
-            `;
-            
-            xhsOriginalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
-            xhsOriginalBtn.innerHTML = `
-                <span class="text-lg">🌟</span>
-                <span class="font-medium">选题原创(小红书)</span>
-            `;
-
-            // 根据模式设置激活状态
             if (mode === 'normal') {
+                // 设置抖音方案为激活状态
                 normalBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
                 normalBtn.innerHTML = `
-                    <span class="text-lg">📝</span>
-                    <span class="font-medium">文本二创(抖音)</span>
-                    <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
-                `;
-                modeLabel.textContent = '· 文本二创(抖音)';
-                modeLabel2.textContent = '· 文本二创(抖音)';
-            } else if (mode === 'traffic') {
-                trafficBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
-                trafficBtn.innerHTML = `
-                    <span class="text-lg">🎯</span>
-                    <span class="font-medium">文本二创(抖音-引流)</span>
-                    <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
-                `;
-                modeLabel.textContent = '· 文本二创(抖音-引流)';
-                modeLabel2.textContent = '· 文本二创(抖音-引流)';
-            } else if (mode === 'xiaohongshu') {
-                xiaohongshuBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
-                xiaohongshuBtn.innerHTML = `
-                    <span class="text-lg">📕</span>
-                    <span class="font-medium">文本二创(小红书)</span>
-                    <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
-                `;
-                modeLabel.textContent = '· 文本二创(小红书)';
-                modeLabel2.textContent = '· 文本二创(小红书)';
-            } else if (mode === 'douyin') {
-                douyinBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
-                douyinBtn.innerHTML = `
                     <span class="text-lg">🎬</span>
-                    <span class="font-medium">选题原创(抖音)</span>
+                    <span class="font-medium">抖音方案</span>
                     <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
                 `;
-                modeLabel.textContent = '· 选题原创(抖音)';
-                modeLabel2.textContent = '· 选题原创(抖音)';
-            } else if (mode === 'xhs-original') {
-                xhsOriginalBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
-                xhsOriginalBtn.innerHTML = `
-                    <span class="text-lg">🌟</span>
-                    <span class="font-medium">选题原创(小红书)</span>
+                
+                // 设置小红书方案为未激活状态
+                salesBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
+                salesBtn.innerHTML = `
+                    <span class="text-lg">📕</span>
+                    <span class="font-medium">小红书方案</span>
+                `;
+
+                // 更新AI回复中的模式标识
+                modeLabel.textContent = '· 抖音方案';
+                modeLabel2.textContent = '· 抖音方案';
+            } else if (mode === 'sales') {
+                // 设置小红书方案为激活状态
+                salesBtn.className = 'relative bg-white shadow-sm rounded-full px-5 py-1.5 flex items-center gap-2 text-gray-800 transition-all';
+                salesBtn.innerHTML = `
+                    <span class="text-lg">📕</span>
+                    <span class="font-medium">小红书方案</span>
                     <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-500 rounded-full"></span>
                 `;
-                modeLabel.textContent = '· 选题原创(小红书)';
-                modeLabel2.textContent = '· 选题原创(小红书)';
+                
+                // 设置抖音方案为未激活状态
+                normalBtn.className = 'bg-transparent text-gray-500 rounded-full px-5 py-1.5 flex items-center gap-2 hover:text-gray-700 hover:bg-gray-200/50 transition-all';
+                normalBtn.innerHTML = `
+                    <span class="text-lg">🎬</span>
+                    <span class="font-medium">抖音方案</span>
+                `;
+
+                // 更新AI回复中的模式标识
+                modeLabel.textContent = '· 小红书方案';
+                modeLabel2.textContent = '· 小红书方案';
             }
         }
     </script>
