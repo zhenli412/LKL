@@ -159,6 +159,7 @@
         .action-buttons {
             display: flex;
             gap: 12px;
+            margin-top: 20px;
             margin-bottom: 0;
             padding-top: 20px;
             border-top: 1px solid var(--border-color);
@@ -218,6 +219,12 @@
 
         .result-header h3 {
             margin: 0;
+        }
+        .page-content{
+            background-color:#f5f7fa;
+            border-radius: 8px;
+            padding: 0px;
+            box-shadow:none;
         }
 
         .result-content {
@@ -350,177 +357,6 @@
                 flex-direction: column;
             }
         }
-
-        /* 聊天对话窗口样式 */
-        .chat-container {
-            margin-top: 24px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 20px;
-        }
-
-        .chat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .chat-header h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            color: var(--text-color);
-        }
-
-        .chat-messages {
-            max-height: 300px;
-            overflow-y: auto;
-            padding: 16px 16px 0px 3px;
-            background-color: var(--secondary-color);
-            border-radius: var(--border-radius);
-            margin-bottom: 16px;
-            min-height: 150px;
-        }
-
-        .chat-message {
-            margin-bottom: 12px;
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .chat-message.user {
-            flex-direction: row-reverse;
-            justify-content: flex-start;
-        }
-
-        .chat-message.assistant {
-            flex-direction: row;
-            justify-content: flex-start;
-        }
-
-        .chat-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            margin: 0 8px;
-            background-color: var(--secondary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-            color: var(--primary-color);
-            flex-shrink: 0;
-        }
-
-        .assistant-avatar {
-            background-color: #f0f7ff;
-            border: 1px solid var(--primary-color);
-        }
-
-        .user-avatar {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .chat-message-content {
-            max-width: calc(100% - 8px);
-            padding: 12px 16px;
-            border-radius: var(--border-radius);
-            word-wrap: break-word;
-        }
-
-        .chat-message.user .chat-message-content {
-            background-color: var(--primary-color);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .chat-message.assistant .chat-message-content {
-            background-color: white;
-            color: var(--text-color);
-            border-bottom-left-radius: 4px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* 调整后的聊天输入容器样式 */
-        .chat-input-container {
-            display: flex;
-            position: relative;
-            width: 100%;
-        }
-
-        .chat-input {
-            flex: 1;
-            min-height: 60px;
-            max-height: 120px;
-            padding: 12px 80px 12px 16px; /* 右侧留出按钮空间 */
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            resize: vertical;
-            font-family: inherit;
-            font-size: 16px;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        /* 调整后的发送按钮样式（位于输入框内） */
-        .chat-send-btn {
-            position: absolute;
-            right: 8px;
-            bottom: 8px;
-            width: 64px;
-            height: 36px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chat-send-btn:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .chat-send-btn:disabled {
-            background-color: var(--text-light);
-            cursor: not-allowed;
-        }
-
-        /* 扩展按钮 - 位于输入框内左侧 */
-        .chat-extend-btn {
-            position: absolute;
-            left: 8px;
-            bottom: 8px;
-            display: flex;
-            gap: 4px;
-        }
-
-        .extend-btn {
-            width: 36px;
-            height: 36px;
-            background-color: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            font-size: 16px;
-        }
-
-        .extend-btn:hover {
-            background-color: var(--secondary-color);
-        }
         
         /* 单行输入框样式 */
         .input-section input[type="text"],
@@ -540,6 +376,40 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
+        
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--secondary-color);
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .file-upload-area input[type="file"] {
+            display: none;
+        }
+        
+        /* 隐藏滚动条但保留滚动功能 */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .page-content {
+            border-top: 1px solid rgb(229, 229, 229);
+            border-radius: 0;
+        }
     </style>
 </head>
 <body>
@@ -553,339 +423,492 @@
 
         <!-- 主内容区域 -->
         <main class="content">
+            <!-- 页面标题 -->
             <div class="page-header">
                 <h2>销冠话术生成助手</h2>
                 <p>基于行业经验和销售数据，快速生成高效的销售话术，提升转化率</p>
             </div>
             
             <div class="page-content">
-                <!-- 左右对比布局 -->
-                <div class="comparison-layout">
-                    <!-- 左侧输入面板 -->
-                    <div class="comparison-panel input-panel">
-                        <div class="result-header">
-                        <h3>销冠信息配置</h3>
-                        </div>
-                        <div class="input-section">
-                            <label for="product-name">产品或服务名称</label>
-                            <input type="text" id="product-name" placeholder="请输入产品或服务名称">
-                        </div>
-                        <div class="input-section">
-                            <label for="selling-point">核心卖点</label>
-                            <input type="text" id="selling-point" placeholder="请输入产品或服务的核心卖点">
-                        </div>
-                        <div class="input-section">
-                            <label for="target-group">目标群体</label>
-                            <input type="text" id="target-group" placeholder="请输入目标客户群体">
-                        </div>
-                        <div class="input-section">
-                            <label for="competitors">竞争对手</label>
-                            <input type="text" id="competitors" placeholder="请输入主要竞争对手">
-                        </div>
-                        <div class="action-buttons">
-                            <button class="action-button primary">生成话术</button>
-                            <button class="action-button secondary">重置</button>
-                        </div>
-                    </div>
+                <!-- 引入 Tailwind CSS -->
+                <script src="https://cdn.tailwindcss.com"></script>
+                
+                <!-- 上下分栏布局 -->
+                <div class="flex flex-col h-[calc(100vh-180px)] relative">
+                    
+                    <!-- 模式选择悬浮栏 -->
 
-                    <!-- 右侧输出面板 -->
-                    <div class="comparison-panel output-panel">
-                        <div class="result-header">
-                            <h3>话术生成结果</h3>
-                        </div>
-                        <div class="result-content" style="position: relative;">
-                            <p class="placeholder-text">话术生成结果将显示在这里...</p>
-                            <!-- 添加个人知识库按钮 -->
-                            <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
-                                <span style="font-size: 18px;">📝</span>
-                            </button>
-                        </div>
+                    
+                    <!-- 上方：对话列表区域 -->
+                    <div class="flex-1 rounded-2xl overflow-hidden flex flex-col min-h-0 max-w-4xl mx-auto w-full pt-[0px]">
                         
-                        <!-- 聊天对话窗口 -->
-                        <div class="chat-container">
-                            <div class="chat-header">
-                                <h3>对话交流</h3>
+                        <!-- 对话列表容器 -->
+                        <div class="flex-1 overflow-y-auto px-0 py-5 space-y-6 scrollbar-hide">
+
+                            <!-- AI 回复气泡 (左侧) -->
+                            <div class="flex items-start gap-3">
+                                <!-- AI 头像 -->
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                
+                                <!-- AI 消息容器 -->
+                                <div class="flex-1 max-w-2xl">
+                                    <!-- 发送者名称 -->
+                                    <p class="text-gray-700 text-base font-semibold mb-1">销冠话术生成助手</p>
+                                    
+                                    <!-- 气泡内容 -->
+                                    <div class="bg-white rounded-2xl rounded-tl-sm shadow-sm p-4">
+                                        <p class="text-gray-800 leading-relaxed">📝 根据您提供的资料，我为您生成了销售话术：</p>
+                                        <p class="text-gray-800 leading-relaxed mt-2">✨ 话术一：开场白话术，快速建立信任</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 话术二：产品介绍话术，突出核心卖点</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 话术三：异议处理话术，化解客户疑虑</p>
+                                    </div>
+                                    
+                                    <!-- 底部操作栏 -->
+                                    <div class="flex items-center gap-4 mt-2">
+                                        <span class="text-gray-400 text-xs">20:55</span>
+                                        <button class="text-gray-400 hover:text-gray-600 transition-colors" title="复制">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-indigo-600 transition-colors" onclick="openModal('personal-knowledge-modal')" title="添加个人知识库">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="chat-messages" id="chat-messages">
-                <div class="chat-message assistant">
-                    <div class="chat-avatar assistant-avatar">Ali</div>
-                    <div class="chat-message-content">
-                        您好！我是销售话术助手。请告诉我您对生成的话术有什么具体需求或修改建议，我可以为您进一步优化。
+                            
+                            <!-- 用户回复气泡 (右侧) -->
+                            <div class="flex items-start gap-3 justify-end">
+                                <!-- 用户消息容器 -->
+                                <div class="flex-1 max-w-2xl">
+                                    <!-- 气泡内容 -->
+                                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl rounded-tr-sm p-4">
+                                        <!-- 文件引用标签 -->
+                                        <div class="flex flex-wrap gap-2 mb-3">
+                                            <div class="bg-indigo-700 rounded-lg px-3 py-2 flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                                </svg>
+                                                <span class="text-white text-xs">产品销售培训录音.mp3</span>
+                                            </div>
+                                            <div class="bg-indigo-700 rounded-lg px-3 py-2 flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                </svg>
+                                                <span class="text-white text-xs">销售话术案例集.text</span>
+                                            </div>
+                                            <div class="bg-indigo-700 rounded-lg px-3 py-2 flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                                </svg>
+                                                <span class="text-white text-xs">客户常见问题解答.pdf</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- 正文文本 -->
+                                        <p class="text-white leading-relaxed">请帮我生成针对企业客户的销售话术，我需要了解如何快速建立信任并突出产品优势。</p>
+                                    </div>
+                                    
+                                    <!-- 时间 -->
+                                    <div class="flex justify-end mt-2">
+                                        <span class="text-gray-400 text-xs">20:57</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 用户头像 -->
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <!-- AI 回复气泡 (左侧) - 新增 -->
+                            <div class="flex items-start gap-3">
+                                <!-- AI 头像 -->
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                
+                                <!-- AI 消息容器 -->
+                                <div class="flex-1 max-w-2xl">
+                                    <!-- 发送者名称 -->
+                                    <p class="text-gray-700 text-base font-semibold mb-1">销冠话术生成助手</p>
+                                    
+                                    <!-- 气泡内容 -->
+                                    <div class="bg-white rounded-2xl rounded-tl-sm shadow-sm p-4">
+                                        <p class="text-gray-800 leading-relaxed">📝 根据您提供的资料，我为您生成了销售话术：</p>
+                                        <p class="text-gray-800 leading-relaxed mt-2">✨ 话术一：开场白话术，快速建立信任</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 话术二：产品介绍话术，突出核心卖点</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 话术三：异议处理话术，化解客户疑虑</p>
+                                    </div>
+                                    
+                                    <!-- 底部操作栏 -->
+                                    <div class="flex items-center gap-4 mt-2">
+                                        <span class="text-gray-400 text-xs">21:02</span>
+                                        <button class="text-gray-400 hover:text-gray-600 transition-colors" title="复制">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-indigo-600 transition-colors" onclick="openModal('personal-knowledge-modal')" title="添加个人知识库">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
                     </div>
-                </div>
-            </div>
-                            <div class="chat-input-container">
-                                <!-- 扩展按钮组 -->
-                                <!-- 输入框 -->
-                                <textarea class="chat-input" id="chat-input" placeholder="请输入您的需求或问题..."></textarea>
-                                <!-- 发送按钮（位于输入框内） -->
-                                <button class="chat-send-btn" id="chat-send-btn">发送</button>
+                    
+                    <!-- 分隔线 -->
+                    <div class="w-full border-b border-gray-200"></div>
+                    
+                    <!-- 下方：输入区域 -->
+                    <div class="flex flex-shrink-0 mt-2">
+                        <div class="flex flex-col gap-3 max-w-4xl mx-auto w-full">
+                            <!-- 标题行 -->
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-gray-800 font-semibold text-base" id="materials-title">就绪·等待指令</h3>
+                                <button class="text-base bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full hover:bg-indigo-100 transition-colors" onclick="openDrawer()">
+                                    ℹ️ 如何输入获取更好回答？
+                                </button>
+                            </div>
+                            
+                            <!-- 文件列表 - 动态显示 -->
+                            <div id="file-list" class="flex flex-wrap gap-2 max-h-32 overflow-hidden" style="display: none;">
+                                <!-- 文件项将通过JavaScript动态添加 -->
+                            </div>
+                            
+                            <!-- 整体输入区 -->
+                            <div class="bg-white rounded-2xl shadow-lg p-4 flex flex-col">
+                                <!-- 文本输入框 -->
+                                <textarea 
+                                    class="w-full border-0 resize-none text-gray-800 placeholder-gray-400 focus:outline-none text-lg"
+                                    placeholder="在此输入您的指令..."
+                                    rows="2"
+                                ></textarea>
+                                
+                                <!-- 工具栏和发送按钮 -->
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+                                    <!-- 附件按钮 -->
+                                    <div class="flex items-center gap-2">
+                                        <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="添加附件">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="添加图片">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onclick="openModal('enterprise-knowledge-modal')" title="添加企业知识库">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onclick="openModal('personal-knowledge-modal')" title="添加个人知识库">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- 发送指令按钮 -->
+                                    <button class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-full text-base font-semibold hover:shadow-lg hover:shadow-indigo-500/30 transition-all flex items-center gap-1.5">
+                                        发送指令
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+    <!-- 抽屉遮罩层 -->
+    <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity duration-300" onclick="closeDrawer()"></div>
 
-            <!-- 帮助说明区 -->
-            <div class="help-section">
-                <h3>使用指南</h3>
-                <div class="help-item">
-                    <strong>1. 输入产品信息：</strong>填写产品或服务名称、核心卖点、目标群体和竞争对手信息
-                </div>
-                <div class="help-item">
-                    <strong>2. 选择话术类型：</strong>从下拉菜单中选择需要生成的话术类型（开场白、产品介绍、异议处理、促单转化）
-                </div>
-                <div class="help-item">
-                    <strong>3. 生成话术：</strong>点击「生成话术」按钮，系统将基于输入信息生成专业的销售话术
-                </div>
-                <div class="help-item">
-                    <strong>4. 查看结果：</strong>在右侧结果面板查看生成的话术内容
-                </div>
-                <div class="help-item">
-                    <strong>5. 重置修改：</strong>如需重新输入，可点击「重置」按钮清空所有输入内容
+    <!-- 右侧抽屉组件 -->
+    <div id="drawer" class="fixed right-0 top-0 h-full w-[420px] bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <!-- 抽屉头部 -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <h2 id="drawer-title" class="text-xl font-semibold text-gray-800">📖 钛尖技巧</h2>
+            <button onclick="closeDrawer()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- 抽屉内容区域 - State A: 钛尖技巧 -->
+        <div id="drawer-content-tips" class="flex-1 overflow-y-auto px-6 py-4">
+            <!-- 功能介绍 -->
+            <div class="mb-6 p-4 rounded-xl border-2 border-dashed border-blue-200 bg-blue-50/50">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">🚀</span>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">功能介绍</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">智能生成销售话术，基于行业经验和销售数据，快速创建高效的销售话术，提升转化率。支持多种销售场景的话术生成，帮助您快速建立信任并突出产品优势。</p>
+                    </div>
                 </div>
             </div>
 
-        </main>
-    </div>
-    
-    <script>
-        // 生成话术函数
-        function generateScript() {
-            // 获取表单数据
-            const productName = document.getElementById('product-name').value || '优质产品';
-            const industry = document.getElementById('industry').value || '科技';
-            const targetAudience = document.getElementById('target-audience').value || '企业客户';
-            const productFeatures = document.getElementById('product-features').value || '高性能,低成本,易操作';
-            const competitors = document.getElementById('competitors').value || '市场同类产品';
-            
-            // 获取选中的话术类型
-            const selectedTypes = [];
-            if (document.getElementById('option-cold-call').checked) selectedTypes.push('cold-call');
-            if (document.getElementById('option-proposal').checked) selectedTypes.push('proposal');
-            if (document.getElementById('option-objection').checked) selectedTypes.push('objection');
-            if (document.getElementById('option-closing').checked) selectedTypes.push('closing');
-            
-            // 模拟生成结果
-            let resultHtml = '';
-            
-            if (selectedTypes.includes('cold-call')) {
-                resultHtml += `
-                    <div class="result-section">
-                        <h4>📞 电话开场白</h4>
-                        <p>您好，我是${productName}的客户经理[姓名]。我们专注于为${targetAudience}提供高效的${industry}解决方案。</p>
-                        <p>最近我们帮助了多家类似企业在[相关领域]提升了30%的效率，想简单了解一下您在这方面是否有类似需求？</p>
+            <!-- 输入参考 -->
+            <div class="mb-6 p-4 rounded-xl bg-yellow-50">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">✍️</span>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">输入参考</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">提供产品或服务信息、目标客户群体、核心卖点等资料，系统将智能生成针对性的销售话术，包括开场白、产品介绍、异议处理等环节。</p>
                     </div>
-                `;
-            }
-            
-            if (selectedTypes.includes('proposal')) {
-                resultHtml += `
-                    <div class="result-section">
-                        <h4>💡 产品介绍</h4>
-                        <p>${productName}是一款专为${targetAudience}设计的${industry}解决方案，它具有以下核心优势：</p>
-                        <ul>
-                            <li>高效便捷：操作简单，快速上手，节省50%的时间成本</li>
-                            <li>安全可靠：采用行业领先的安全技术，保障数据安全</li>
-                            <li>智能分析：内置AI分析功能，提供精准的决策支持</li>
-                            <li>定制服务：根据您的实际需求提供个性化解决方案</li>
-                        </ul>
-                        <p>相比${competitors}，我们在[性能/价格/服务]方面具有明显优势。</p>
-                    </div>
-                `;
-            }
-            
-            if (selectedTypes.includes('objection')) {
-                resultHtml += `
-                    <div class="result-section">
-                        <h4>🔍 异议处理</h4>
-                        <p><strong>价格顾虑：</strong>我理解您对价格的关注。${productName}虽然前期投入略高，但考虑到它能为您节省的时间成本和提升的工作效率，投资回报率通常在3-6个月内即可实现。</p>
-                        <p><strong>实施周期：</strong>我们有专业的实施团队，通常在2-4周内即可完成部署，不会影响您的正常业务运营。</p>
-                        <p><strong>功能需求：</strong>我们支持根据客户需求进行定制开发，如果您有特殊的功能需求，我们的技术团队可以为您提供解决方案。</p>
-                    </div>
-                `;
-            }
-            
-            if (selectedTypes.includes('closing')) {
-                resultHtml += `
-                    <div class="result-section">
-                        <h4>✅ 促成交易</h4>
-                        <p>基于我们的讨论，${productName}确实能很好地满足您的需求。我们可以为您提供一个月的免费试用期，让您亲身体验产品的价值。</p>
-                        <p>如果您今天决定合作，我们还可以为您提供[专属优惠/增值服务]。您看是现在就签约，还是需要我为您准备更详细的方案？</p>
-                    </div>
-                `;
-            }
-            
-            // 显示结果
-            document.getElementById('result-output').innerHTML = resultHtml;
-        }
-        
-        // 重置表单函数
-        function resetForm() {
-            document.getElementById('product-name').value = '';
-            document.getElementById('industry').value = '';
-            document.getElementById('target-audience').value = '';
-            document.getElementById('product-features').value = '';
-            document.getElementById('competitors').value = '';
-            
-            document.getElementById('result-output').innerHTML = `
-                <div class="placeholder-text">
-                    <p>请在左侧填写产品信息并点击「生成话术」按钮</p>
-                    <p>生成的销售话术将显示在这里</p>
                 </div>
-            `;
+            </div>
+
+            <!-- 输出说明 -->
+            <div class="mb-6">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">📊</span>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">输出说明</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">提供完整的销售话术方案，包含：</p>
+                        <ul class="mt-2 space-y-1 text-gray-600 text-sm">
+                            <li>• 开场白话术，快速建立信任</li>
+                            <li>• 产品介绍话术，突出核心卖点</li>
+                            <li>• 异议处理话术，化解客户疑虑</li>
+                            <li>• 促成交易话术，提升转化率</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 应用场景 -->
+            <div class="mb-6">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">💡</span>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">应用场景</h3>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">企业客户开发</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">产品销售推广</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">客户关系维护</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">销售培训学习</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 抽屉内容区域 - State B: 输出案例 -->
+        <div id="drawer-content-example" class="flex-1 overflow-y-auto px-6 py-4 hidden">
+            <!-- 输入示例 -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <span class="text-lg">📥</span>
+                    输入 (USER INPUT)
+                </h3>
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <p class="text-gray-700 text-sm leading-relaxed">请帮我生成针对企业客户的销售话术，我需要了解如何快速建立信任并突出产品优势。</p>
+                </div>
+            </div>
+
+            <!-- 输出示例 -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <span class="text-lg">📤</span>
+                    输出 (AI RESPONSE)
+                </h3>
+                <div class="p-4 rounded-xl bg-white border-2 border-blue-100">
+                    <h4 class="font-semibold text-gray-800 mb-3">【销售话术方案】</h4>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <p><strong>开场白话术：</strong></p>
+                        <p class="leading-relaxed">您好，我是[公司名称]的[您的名字]。我们专注于为[目标客户群体]提供[核心产品/服务]，已经帮助超过[数字]家企业实现了[具体成果]。</p>
+                        
+                        <p><strong>产品介绍话术：</strong></p>
+                        <p class="leading-relaxed">我们的产品具有三大核心优势：第一，[优势1]；第二，[优势2]；第三，[优势3]。相比同类产品，我们能够为您节省[具体数据]的成本。</p>
+                        
+                        <p><strong>异议处理话术：</strong></p>
+                        <p class="leading-relaxed">我理解您的顾虑。很多客户一开始也有类似的疑问，但使用我们的产品后，他们发现[具体案例]。您可以先试用[试用期]，亲身体验我们的服务。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 抽屉底部按钮栏 - State A -->
+        <div id="drawer-footer-tips" class="flex-shrink-0 px-6 py-4 bg-white border-t border-gray-200">
+            <div class="flex gap-3">
+                <button onclick="closeDrawer()" class="flex-1 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                    我知道了
+                </button>
+                <button onclick="switchToExample()" class="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all font-medium">
+                    查看案例 ⚡️
+                </button>
+            </div>
+        </div>
+
+        <!-- 抽屉底部按钮栏 - State B -->
+        <div id="drawer-footer-example" class="flex-shrink-0 px-6 py-4 bg-white border-t border-gray-200 hidden">
+            <div class="flex gap-3">
+                <button onclick="closeDrawer()" class="flex-1 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                    我知道了
+                </button>
+                <button onclick="switchToTips()" class="flex-1 px-4 py-2.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium">
+                    ⚡️ 返回技巧
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 已引用资料数组
+        let referencedMaterials = [];
+        let currentDrawerState = 'tips'; // 'tips' 或 'example'
+
+        // 打开抽屉
+        function openDrawer() {
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.remove('translate-x-full');
+            overlay.classList.remove('hidden');
+            // 重置到钛尖技巧状态
+            switchToTips();
         }
-        
-        // 复制到剪贴板函数
-        function copyToClipboard() {
-            const resultText = document.getElementById('result-output').innerText;
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(resultText)
-                    .then(() => {
-                        alert('已复制到剪贴板');
-                    })
-                    .catch(err => {
-                        console.error('复制失败:', err);
-                        alert('复制失败，请手动复制');
-                    });
+
+        // 关闭抽屉
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('hidden');
+        }
+
+        // 切换到输出案例
+        function switchToExample() {
+            currentDrawerState = 'example';
+            document.getElementById('drawer-title').textContent = '✨ 输出案例';
+            document.getElementById('drawer-content-tips').classList.add('hidden');
+            document.getElementById('drawer-content-example').classList.remove('hidden');
+            document.getElementById('drawer-footer-tips').classList.add('hidden');
+            document.getElementById('drawer-footer-example').classList.remove('hidden');
+        }
+
+        // 切换到钛尖技巧
+        function switchToTips() {
+            currentDrawerState = 'tips';
+            document.getElementById('drawer-title').textContent = '📖 钛尖技巧';
+            document.getElementById('drawer-content-tips').classList.remove('hidden');
+            document.getElementById('drawer-content-example').classList.add('hidden');
+            document.getElementById('drawer-footer-tips').classList.remove('hidden');
+            document.getElementById('drawer-footer-example').classList.add('hidden');
+        }
+
+        // 页面加载完成后初始化导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保loadNavigation函数存在后再调用
+            if (window.loadNavigation) {
+                loadNavigation('../../', 'sales', 'pages/sales/sales-script-generation.html');
             } else {
-                // 兼容性处理
-                const textArea = document.createElement('textarea');
-                textArea.value = resultText;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('已复制到剪贴板');
+                console.error('loadNavigation函数未定义');
+            }
+        });
+
+        // 添加资料到已引用列表
+        function addMaterial(name, type) {
+            // 检查是否已存在
+            if (referencedMaterials.find(m => m.name === name)) {
+                alert('该资料已在引用列表中');
+                return;
+            }
+
+            // 添加资料
+            referencedMaterials.push({
+                id: Date.now(),
+                name: name,
+                type: type
+            });
+
+            // 更新显示
+            updateMaterialsDisplay();
+        }
+
+        // 删除资料
+        function removeMaterial(id) {
+            referencedMaterials = referencedMaterials.filter(m => m.id !== id);
+            updateMaterialsDisplay();
+        }
+
+        // 更新资料显示
+        function updateMaterialsDisplay() {
+            const fileList = document.getElementById('file-list');
+            const titleElement = document.getElementById('materials-title');
+
+            // 根据是否有资料更新标题文案
+            if (referencedMaterials.length > 0) {
+                titleElement.textContent = '已引用资料';
+                fileList.style.display = 'flex';
+            } else {
+                titleElement.textContent = '就绪·等待指令';
+                fileList.style.display = 'none';
+            }
+
+            // 清空文件列表
+            fileList.innerHTML = '';
+
+            // 重新渲染文件列表
+            referencedMaterials.forEach(material => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2';
+                fileItem.innerHTML = `
+                    ${getFileIcon(material.type)}
+                    <span class="text-gray-700 text-base">${material.name}</span>
+                    <button class="text-gray-400 hover:text-red-500 transition-colors ml-1" onclick="removeMaterial(${material.id})">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        // 根据文件类型获取图标
+        function getFileIcon(type) {
+            const icons = {
+                'text': '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V9.414a1 1 0 01.293-.707l-5.414-5.414A1 1 0 0112.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>',
+                'audio': '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>',
+                'pdf': '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>',
+                'enterprise': '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>',
+                'personal': '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>'
+            };
+            return icons[type] || icons['text'];
+        }
+
+        // 打开模态框（企业知识库或个人知识库）
+        function openModal(modalId) {
+            // 这里应该打开对应的模态框
+            // 暂时用prompt模拟添加资料
+            const materialName = prompt('请输入要添加的资料名称：');
+            if (materialName && materialName.trim()) {
+                // 根据模态框类型判断资料类型
+                const type = modalId === 'enterprise-knowledge-modal' ? 'enterprise' : 'personal';
+                addMaterial(materialName.trim(), type);
             }
         }
+
         
-        // 下载话术函数
-        function downloadScript() {
-            const productName = document.getElementById('product-name').value || '销售话术';
-            const resultText = document.getElementById('result-output').innerText;
-            
-            const blob = new Blob([resultText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${productName}_销售话术.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-        
-        // 聊天功能相关函数
-        function addMessage(role, content) {
-            const chatMessages = document.getElementById('chat-messages');
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('chat-message', role);
-            
-            // 添加头像
-            const avatarDiv = document.createElement('div');
-            avatarDiv.className = `chat-avatar ${role}-avatar`;
-            avatarDiv.textContent = role === 'user' ? 'U' : 'A';
-            
-            const contentElement = document.createElement('div');
-            contentElement.classList.add('chat-message-content');
-            contentElement.textContent = content;
-            
-            messageElement.appendChild(avatarDiv);
-            messageElement.appendChild(contentElement);
-            chatMessages.appendChild(messageElement);
-            
-            // 自动滚动到底部
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-        
-        function handleChatSubmit() {
-            const chatInput = document.getElementById('chat-input');
-            const userMessage = chatInput.value.trim();
-            
-            if (userMessage === '') return;
-            
-            // 添加用户消息
-            addMessage('user', userMessage);
-            chatInput.value = '';
-            
-            // 禁用发送按钮
-            const chatSendBtn = document.getElementById('chat-send-btn');
-            chatSendBtn.disabled = true;
-            
-            // 模拟助手回复
-            setTimeout(() => {
-                let assistantReply = '';
-                
-                // 根据用户输入内容生成不同的回复
-                if (userMessage.includes('修改') || userMessage.includes('优化')) {
-                    assistantReply = '我已经根据您的建议优化了话术内容。新的话术更加突出产品优势，并针对目标客户群体进行了调整。您可以继续提供反馈。';
-                } else if (userMessage.includes('示例') || userMessage.includes('案例')) {
-                    assistantReply = '以下是一个示例：\n"您好，我是[公司名称]的[您的姓名]。我们专为[目标群体]提供[产品/服务]，已经帮助[类似客户]提升了[具体成效]。您在这方面有什么需求或挑战吗？"';
-                } else if (userMessage.includes('价格') || userMessage.includes('成本')) {
-                    assistantReply = '关于价格相关的话术，建议您可以强调产品的投资回报率、长期价值以及与竞争对手相比的优势。例如："虽然我们的产品初期投入可能略高，但考虑到它能为您节省的运营成本和提升的效率，投资回收期通常在[X]个月内。"';
-                } else {
-                    assistantReply = '感谢您的反馈！根据您的需求，我已经为您调整了话术内容。您可以尝试使用这些话术与客户沟通，如有其他需求请随时告诉我。';
-                }
-                
-                addMessage('assistant', assistantReply);
-                chatSendBtn.disabled = false;
-            }, 1000);
-        }
-        
-        // 初始化事件监听和导航组件
-        document.addEventListener('DOMContentLoaded', function() {
-            // 使用统一的导航加载函数
-            loadNavigation('../../', 'sales', 'sales/sales-script-generation.html');
-            
-            // 生成按钮点击事件
-            document.querySelector('.action-button.primary').addEventListener('click', function() {
-                // 这里可以实现实际的话术生成逻辑
-                const resultContent = document.querySelector('.result-content');
-                resultContent.innerHTML = `
-                    <div class="script-content">
-                        <h5>生成的销售话术</h5>
-                        <p>您好！我是[您的姓名]，来自[公司名称]。我们是专注于为[目标群体]提供[产品/服务]的专业团队。</p>
-                        <p>我们的[产品/服务]具有[核心卖点]，能够帮助像您这样的客户有效解决[问题]，提升[效果]。</p>
-                        <p>相比市场上的其他解决方案，我们的优势在于[差异化优势]。不知道您目前在这方面有什么需求或挑战吗？</p>
-                    </div>
-                    <!-- 添加个人知识库按钮 -->
-                    <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
-                        <span style="font-size: 18px;">📝</span>
-                    </button>
-                `;
-            });
-            
-            // 重置按钮点击事件
-            document.querySelector('.action-button.secondary').addEventListener('click', function() {
-                document.getElementById('product-name').value = '';
-                document.getElementById('selling-point').value = '';
-                document.getElementById('target-group').value = '';
-                document.getElementById('competitors').value = '';
-                document.getElementById('script-type').selectedIndex = 0;
-                
-                const resultContent = document.querySelector('.result-content');
-                resultContent.innerHTML = `
-                    <p class="placeholder-text">话术生成结果将显示在这里...</p>
-                    <!-- 添加个人知识库按钮 -->
-                    <button class="btn btn-primary" style="position: absolute; bottom: 10px; right: 10px; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: none; border-radius: 4px; cursor: pointer;" title="+ 添加至个人知识库">
-                        <span style="font-size: 18px;">📝</span>
-                    </button>
-                `;
-            });
-            
-            // 聊天发送按钮点击事件
-            document.getElementById('chat-send-btn').addEventListener('click', handleChatSubmit);
-            
-            // 聊天输入框回车发送（按住Shift+Enter换行）
-            document.getElementById('chat-input').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleChatSubmit();
-                }
-            });
-        });    
     </script>
 </body>
 </html>
