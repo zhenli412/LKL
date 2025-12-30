@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发言稿写作助手 - 利客来</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/nav-component.js"></script>
+    <style>
+        /* CSS变量定义 */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #f3f4f6;
+            --text-color: #374151;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --panel-padding: 20px;
+            --panel-gap: 24px;
+        }
+
+        /* 左右对比布局 */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--panel-gap);
+        }
+
+        /* 面板样式 */
+        .comparison-panel {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: var(--panel-padding);
+            min-height: 500px;
+        }
+
+        /* 输入面板样式 */
+        .input-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 输出面板样式 */
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e8e8e8;
+        }
+
+        /* 面板标题样式 */
+        .comparison-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 输入区域样式 */
+        .input-section {
+            margin-bottom: 24px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .input-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 参数组样式 */
+        .parameter-group {
+            margin-top: 16px;
+        }
+
+        .parameter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .parameter-group select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .parameter-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* 话术选项样式 */
+        .script-options {
+            margin-bottom: 24px;
+        }
+
+        .script-options h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .action-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .action-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .secondary-btn {
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* 结果面板样式 */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-header h3 {
+            margin: 0;
+        }
+        .page-content{
+            background-color:#f5f7fa;
+            border-radius: 8px;
+            padding: 0px;
+            box-shadow:none;
+        }
+
+        .result-content {
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            overflow-y: auto;
+        }
+
+        /* 话术内容样式 */
+        .script-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .script-content h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .script-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* 占位符文本样式 */
+        .placeholder-text {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* 加载状态样式 */
+        .loading-text {
+            text-align: center;
+            color: var(--primary-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 使用指南样式 */
+        .usage-guide {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .usage-guide h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .usage-guide ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .usage-guide li {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        /* 成功提示组件 */
+        .success-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .success-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-panel {
+                padding: 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* 单行输入框样式 */
+        .input-section input[type="text"],
+        .input-section select {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .input-section input[type="text"]:focus,
+        .input-section select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        /* 文件上传区域样式 */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--secondary-color);
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .file-upload-area input[type="file"] {
+            display: none;
+        }
+        
+        /* 隐藏滚动条但保留滚动功能 */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .page-content {
+            border-top: 1px solid rgb(229, 229, 229);
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div id="top-nav-container"></div>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 左侧导航菜单 -->
+        <aside class="sidebar"></aside>
+
+        <!-- 主内容区域 -->
+        <main class="content">
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h2>发言稿写作助手</h2>
+                <p>智能生成各类场合的发言稿，让您的演讲更加精彩动人</p>
+            </div>
+            
+            <div class="page-content">
+                <!-- 引入 Tailwind CSS -->
+                <script src="https://cdn.tailwindcss.com"></script>
+                
+                <!-- 上下分栏布局 -->
+                <div class="flex flex-col h-[calc(100vh-180px)] relative">
+                    
+                    <!-- 模式选择悬浮栏 -->
+
+                    
+                    <!-- 上方：对话列表区域 -->
+                    <div class="flex-1 rounded-2xl overflow-hidden flex flex-col min-h-0 max-w-4xl mx-auto w-full pt-[0px]">
+                        
+                        <!-- 对话列表容器 -->
+                        <div class="flex-1 overflow-y-auto px-0 py-5 space-y-6 scrollbar-hide">
+
+                            <!-- AI 回复气泡 (左侧) -->
+                            <div class="flex items-start gap-3">
+                                <!-- AI 头像 -->
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                
+                                <!-- AI 消息容器 -->
+                                <div class="flex-1 max-w-2xl">
+                                    <!-- 发送者名称 -->
+                                    <p class="text-gray-700 text-base font-semibold mb-1">发言稿写作助手</p>
+                                    
+                                    <!-- 气泡内容 -->
+                                    <div class="bg-white rounded-2xl rounded-tl-sm shadow-sm p-4">
+                                        <p class="text-gray-800 leading-relaxed">📝 根据您提供的资料，我为您生成了发言稿：</p>
+                                        <p class="text-gray-800 leading-relaxed mt-2">✨ 开场致辞，吸引听众注意</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 主体内容，传递核心信息</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 结束语，留下深刻印象</p>
+                                    </div>
+                                    
+                                    <!-- 底部操作栏 -->
+                                    <div class="flex items-center gap-4 mt-2">
+                                        <span class="text-gray-400 text-xs">20:55</span>
+                                        <button class="text-gray-400 hover:text-gray-600 transition-colors" title="复制">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-indigo-600 transition-colors" onclick="openModal('personal-knowledge-modal')" title="添加个人知识库">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 用户回复气泡 (右侧) -->
+                            <div class="flex items-start gap-3 justify-end">
+                                <!-- 用户消息容器 -->
+                                <div class="flex-1 max-w-2xl">
+                                    <!-- 气泡内容 -->
+                                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl rounded-tr-sm p-4">
+                                        <!-- 文件引用标签 -->
+                                        <div class="flex flex-wrap gap-2 mb-3">
+                                            <div class="bg-indigo-700 rounded-lg px-3 py-2 flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                                </svg>
+                                                <span class="text-white text-xs">产品销售培训录音.mp3</span>
+                                            </div>
+                                            <div class="bg-indigo-700 rounded-lg px-3 py-2 flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                </svg>
+                                                <span class="text-white text-xs">销售话术案例集.text</span>
+                                            </div>
+                                            <div class="bg-indigo-700 rounded-lg px-3 py-2 flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                                </svg>
+                                                <span class="text-white text-xs">客户常见问题解答.pdf</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- 正文文本 -->
+                                        <p class="text-white leading-relaxed">请帮我生成针对企业客户的销售话术，我需要了解如何快速建立信任并突出产品优势。</p>
+                                    </div>
+                                    
+                                    <!-- 时间 -->
+                                    <div class="flex justify-end mt-2">
+                                        <span class="text-gray-400 text-xs">20:57</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 用户头像 -->
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <!-- AI 回复气泡 (左侧) - 新增 -->
+                            <div class="flex items-start gap-3">
+                                <!-- AI 头像 -->
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                
+                                <!-- AI 消息容器 -->
+                                <div class="flex-1 max-w-2xl">
+                                    <!-- 发送者名称 -->
+                                    <p class="text-gray-700 text-base font-semibold mb-1">发言稿写作助手</p>
+                                    
+                                    <!-- 气泡内容 -->
+                                    <div class="bg-white rounded-2xl rounded-tl-sm shadow-sm p-4">
+                                        <p class="text-gray-800 leading-relaxed">📝 根据您提供的资料，我为您生成了销售话术：</p>
+                                        <p class="text-gray-800 leading-relaxed mt-2">✨ 话术一：开场白话术，快速建立信任</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 话术二：产品介绍话术，突出核心卖点</p>
+                                        <p class="text-gray-800 leading-relaxed">✨ 话术三：异议处理话术，化解客户疑虑</p>
+                                    </div>
+                                    
+                                    <!-- 底部操作栏 -->
+                                    <div class="flex items-center gap-4 mt-2">
+                                        <span class="text-gray-400 text-xs">21:02</span>
+                                        <button class="text-gray-400 hover:text-gray-600 transition-colors" title="复制">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-indigo-600 transition-colors" onclick="openModal('personal-knowledge-modal')" title="添加个人知识库">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- 分隔线 -->
+                    <div class="w-full border-b border-gray-200"></div>
+                    
+                    <!-- 下方：输入区域 -->
+                    <div class="flex flex-shrink-0 mt-2">
+                        <div class="flex flex-col gap-3 max-w-4xl mx-auto w-full">
+                            <!-- 标题行 -->
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-gray-800 font-semibold text-base" id="materials-title">就绪·等待指令</h3>
+                                <button class="text-base bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full hover:bg-indigo-100 transition-colors" onclick="openDrawer()">
+                                    ℹ️ 如何输入获取更好回答？
+                                </button>
+                            </div>
+                            
+                            <!-- 文件列表 - 动态显示 -->
+                            <div id="file-list" class="flex flex-wrap gap-2 max-h-32 overflow-hidden" style="display: none;">
+                                <!-- 文件项将通过JavaScript动态添加 -->
+                            </div>
+                            
+                            <!-- 整体输入区 -->
+                            <div class="bg-white rounded-2xl shadow-lg p-4 flex flex-col">
+                                <!-- 文本输入框 -->
+                                <textarea 
+                                    class="w-full border-0 resize-none text-gray-800 placeholder-gray-400 focus:outline-none text-lg"
+                                    placeholder="在此输入您的指令..."
+                                    rows="2"
+                                ></textarea>
+                                
+                                <!-- 工具栏和发送按钮 -->
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+                                    <!-- 附件按钮 -->
+                                    <div class="flex items-center gap-2">
+                                        <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="添加附件">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="添加图片">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onclick="openModal('enterprise-knowledge-modal')" title="添加企业知识库">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" onclick="openModal('personal-knowledge-modal')" title="添加个人知识库">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- 发送指令按钮 -->
+                                    <button class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-full text-base font-semibold hover:shadow-lg hover:shadow-indigo-500/30 transition-all flex items-center gap-1.5">
+                                        发送指令
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <!-- 抽屉遮罩层 -->
+    <div id="drawer-overlay" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity duration-300" onclick="closeDrawer()"></div>
+
+    <!-- 右侧抽屉组件 -->
+    <div id="drawer" class="fixed right-0 top-0 h-full w-[420px] bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <!-- 抽屉头部 -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <h2 id="drawer-title" class="text-xl font-semibold text-gray-800">📖 钛尖技巧</h2>
+            <button onclick="closeDrawer()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- 抽屉内容区域 - State A: 钛尖技巧 -->
+        <div id="drawer-content-tips" class="flex-1 overflow-y-auto px-6 py-4">
+            <!-- 功能介绍 -->
+            <div class="mb-6 p-4 rounded-xl border-2 border-dashed border-blue-200 bg-blue-50/50">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">🚀</span>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">功能介绍</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">智能生成各类场合的发言稿，包括会议发言、庆典致辞、演讲稿等。根据您的需求和场合特点，快速创建专业、动人的发言稿内容。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 输入参考 -->
+            <div class="mb-6 p-4 rounded-xl bg-yellow-50">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">✍️</span>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">输入参考</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">提供发言场合、听众对象、核心观点、发言时长等信息，系统将智能生成针对性的发言稿，包括开场致辞、主体内容、结束语等部分。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 输出说明 -->
+            <div class="mb-6">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">📊</span>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">输出说明</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">提供完整的发言稿方案，包含：</p>
+                        <ul class="mt-2 space-y-1 text-gray-600 text-sm">
+                            <li>• 开场致辞，吸引听众注意</li>
+                            <li>• 主体内容，传递核心信息</li>
+                            <li>• 结束语，留下深刻印象</li>
+                            <li>• 演讲提示，增强表达效果</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 应用场景 -->
+            <div class="mb-6">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">💡</span>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">应用场景</h3>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">会议发言</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">庆典致辞</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">演讲稿</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm">工作汇报</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 抽屉内容区域 - State B: 输出案例 -->
+        <div id="drawer-content-example" class="flex-1 overflow-y-auto px-6 py-4 hidden">
+            <!-- 输入示例 -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <span class="text-lg">📥</span>
+                    输入 (USER INPUT)
+                </h3>
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <p class="text-gray-700 text-sm leading-relaxed">请帮我生成一份年度总结会议的发言稿，时长约5分钟，重点总结今年的工作成果和明年的计划。</p>
+                </div>
+            </div>
+
+            <!-- 输出示例 -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <span class="text-lg">📤</span>
+                    输出 (AI RESPONSE)
+                </h3>
+                <div class="p-4 rounded-xl bg-white border-2 border-blue-100">
+                    <h4 class="font-semibold text-gray-800 mb-3">【发言稿方案】</h4>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <p><strong>开场致辞：</strong></p>
+                        <p class="leading-relaxed">尊敬的各位领导、同事们，大家好！今天很荣幸能在这里与大家分享我们过去一年的工作成果。</p>
+                        
+                        <p><strong>主体内容：</strong></p>
+                        <p class="leading-relaxed">回顾过去一年，我们团队在[具体领域]取得了显著成绩：完成了[项目名称]，实现了[具体成果]，客户满意度提升了[数据]。这些成绩离不开每一位同事的辛勤付出。</p>
+                        <p class="leading-relaxed">展望明年，我们将重点推进[新项目]，目标是在[时间节点]前实现[具体目标]。</p>
+                        
+                        <p><strong>结束语：</strong></p>
+                        <p class="leading-relaxed">感谢大家的支持与配合，让我们携手并进，共创更加辉煌的明天！谢谢大家！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 抽屉底部按钮栏 - State A -->
+        <div id="drawer-footer-tips" class="flex-shrink-0 px-6 py-4 bg-white border-t border-gray-200">
+            <div class="flex gap-3">
+                <button onclick="closeDrawer()" class="flex-1 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                    我知道了
+                </button>
+                <button onclick="switchToExample()" class="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all font-medium">
+                    查看案例 ⚡️
+                </button>
+            </div>
+        </div>
+
+        <!-- 抽屉底部按钮栏 - State B -->
+        <div id="drawer-footer-example" class="flex-shrink-0 px-6 py-4 bg-white border-t border-gray-200 hidden">
+            <div class="flex gap-3">
+                <button onclick="closeDrawer()" class="flex-1 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                    我知道了
+                </button>
+                <button onclick="switchToTips()" class="flex-1 px-4 py-2.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium">
+                    ⚡️ 返回技巧
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 已引用资料数组
+        let referencedMaterials = [];
+        let currentDrawerState = 'tips'; // 'tips' 或 'example'
+
+        // 打开抽屉
+        function openDrawer() {
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.remove('translate-x-full');
+            overlay.classList.remove('hidden');
+            // 重置到钛尖技巧状态
+            switchToTips();
+        }
+
+        // 关闭抽屉
+        function closeDrawer() {
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('hidden');
+        }
+
+        // 切换到输出案例
+        function switchToExample() {
+            currentDrawerState = 'example';
+            document.getElementById('drawer-title').textContent = '✨ 输出案例';
+            document.getElementById('drawer-content-tips').classList.add('hidden');
+            document.getElementById('drawer-content-example').classList.remove('hidden');
+            document.getElementById('drawer-footer-tips').classList.add('hidden');
+            document.getElementById('drawer-footer-example').classList.remove('hidden');
+        }
+
+        // 切换到钛尖技巧
+        function switchToTips() {
+            currentDrawerState = 'tips';
+            document.getElementById('drawer-title').textContent = '📖 钛尖技巧';
+            document.getElementById('drawer-content-tips').classList.remove('hidden');
+            document.getElementById('drawer-content-example').classList.add('hidden');
+            document.getElementById('drawer-footer-tips').classList.remove('hidden');
+            document.getElementById('drawer-footer-example').classList.add('hidden');
+        }
+
+        // 页面加载完成后初始化导航组件
+        // 页面加载完成后初始化导航组件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 确保loadNavigation函数存在后再调用
+            if (window.loadNavigation) {
+                loadNavigation('../../', 'brand', 'pages/brand/speech-writing.html');
+            } else {
+                console.error('loadNavigation函数未定义');
+            }
+        });
+
+        // 添加资料到已引用列表
+        function addMaterial(name, type) {
+            // 检查是否已存在
+            if (referencedMaterials.find(m => m.name === name)) {
+                alert('该资料已在引用列表中');
+                return;
+            }
+
+            // 添加资料
+            referencedMaterials.push({
+                id: Date.now(),
+                name: name,
+                type: type
+            });
+
+            // 更新显示
+            updateMaterialsDisplay();
+        }
+
+        // 删除资料
+        function removeMaterial(id) {
+            referencedMaterials = referencedMaterials.filter(m => m.id !== id);
+            updateMaterialsDisplay();
+        }
+
+        // 更新资料显示
+        function updateMaterialsDisplay() {
+            const fileList = document.getElementById('file-list');
+            const titleElement = document.getElementById('materials-title');
+
+            // 根据是否有资料更新标题文案
+            if (referencedMaterials.length > 0) {
+                titleElement.textContent = '已引用资料';
+                fileList.style.display = 'flex';
+            } else {
+                titleElement.textContent = '就绪·等待指令';
+                fileList.style.display = 'none';
+            }
+
+            // 清空文件列表
+            fileList.innerHTML = '';
+
+            // 重新渲染文件列表
+            referencedMaterials.forEach(material => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2';
+                fileItem.innerHTML = `
+                    ${getFileIcon(material.type)}
+                    <span class="text-gray-700 text-base">${material.name}</span>
+                    <button class="text-gray-400 hover:text-red-500 transition-colors ml-1" onclick="removeMaterial(${material.id})">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        // 根据文件类型获取图标
+        function getFileIcon(type) {
+            const icons = {
+                'text': '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V9.414a1 1 0 01.293-.707l-5.414-5.414A1 1 0 0112.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>',
+                'audio': '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>',
+                'pdf': '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>',
+                'enterprise': '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>',
+                'personal': '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>'
+            };
+            return icons[type] || icons['text'];
+        }
+
+        // 打开模态框（企业知识库或个人知识库）
+        function openModal(modalId) {
+            // 这里应该打开对应的模态框
+            // 暂时用prompt模拟添加资料
+            const materialName = prompt('请输入要添加的资料名称：');
+            if (materialName && materialName.trim()) {
+                // 根据模态框类型判断资料类型
+                const type = modalId === 'enterprise-knowledge-modal' ? 'enterprise' : 'personal';
+                addMaterial(materialName.trim(), type);
+            }
+        }
+
+        
+    </script>
+</body>
+</html>

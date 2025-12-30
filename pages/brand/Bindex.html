@@ -3,59 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>品牌支持小助手 - 利客来</title>
+    <title>品牌支持部 - 利客来</title>
     <link rel="stylesheet" href="../../css/style.css">
     <style>
-        /* 品牌支持小助手页面样式 */
+        /* 营销获客部页面样式 */
         .marketing-team-container {
             display: flex;
-            flex-wrap: wrap;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
             padding: 20px;
             justify-items: start;
         }
         
         .position-card {
-            width: 330px;
-            background: white;
+            background: #ffffff;
             border-radius: 12px;
+            padding: 24px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
         
-        /* 原卡片hover效果已移至position-link:hover中 */
+        .position-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            background-color: #fff;
+        }
         
         .avatar-placeholder {
             width: 120px;
             height: 120px;
             margin: 0 auto 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #eff2e7;
             border-radius: 50%;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            color: white;
-            font-size: 48px;
+            color: #ebebeb;
+            font-size: 30px;
+            font-weight: 600;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.3"><path d="M50,15 C60,15 68,23 68,33 C68,43 60,51 50,51 C40,51 32,43 32,33 C32,23 40,15 50,15 Z M72,60 L72,85 L28,85 L28,60 C30,56 40,50 50,50 C60,50 70,56 72,60 Z" fill="%23666"/></svg>');
+            background-size: 100%;
+            background-position: center 20px;
+            background-repeat: no-repeat;
+            padding-bottom: 15px;
+            position: relative;
         }
         
         .position-name {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 600;
-            color: #1F2937;
-            margin-top: 10px;
+            color: #666;
+            margin-bottom: 12px;
         }
         
         .position-description {
             font-size: 14px;
             color: #6B7280;
             line-height: 1.6;
-            padding: 10px 24px 20px 24px;
-
         }
         
-        /* 链接样式，保持与原卡片一致 */
+        /* 链接样式 - 保持与普通卡片一致 */
+        .position-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: 330px;
+        }
+        
+        /* 链接样式 - 保持与普通卡片一致 */
         .position-link {
             text-decoration: none;
             color: inherit;
@@ -138,31 +155,28 @@
             <!-- 左侧导航将通过JavaScript动态加载 -->
         </aside>
 
-        <!-- 主内容区域 -->
+        <!-- 主内容区域 (初始隐藏，等待导航加载完成后显示) -->
         <main class="Mcontent" id="main-content-container" style="display: none;">           
             <div class="Mpage-content">
-                <h1 style="text-align: left; color: #9a9a9a; font-size: 28px;">「品牌&支持部」智能小助手</h1>
+                <h1 style="text-align: left; color: #9a9a9a; font-size: 28px;">「品牌支持部」</h1>
                 <div class="marketing-team-container">
-                    <!-- 助手1：品牌管理小助手 -->
-                    <a href="brand-assistant.html" class="position-link">
+                    <!-- 岗位1：品牌岗 -->
+                    <a href="Bindex-B.html" class="position-link">
                         <div class="position-card">
-                            <img src="../../images/10-1pinpai.jpg" alt="品牌管理小助手" style="width:326px;height: 163px;border-radius: 8%;">
-                            <h3 class="position-name">品牌小助手</h3>
-                            <p class="position-description">品牌故事、发言稿、产品起名、热点营销、广告语、公文智能转写，助您优化品牌形象。</p>
+                            <div class="avatar-placeholder"></div>
+                            <h3 class="position-name">品牌岗</h3>
+                            <p class="position-description">负责品牌故事策划、发言稿、产品命名、公文写作、广告语生成等，打造专业品牌形象。</p>
                         </div>
                     </a>
                     
-                    <!-- 助手2：行政支持小助手 -->
-                    <a href="../support/support-assistant.html" class="position-link">
+                    <!-- 岗位2：支持岗 -->
+                    <a href="../support/Sindex-S.html" class="position-link">
                         <div class="position-card">
-                            <img src="../../images/10-2fawurenli 2.jpg" alt="行政支持小助手" style="width:326px;height: 163px;border-radius: 8%;">
-                            <h3 class="position-name">人力行政法务小助手</h3>
-                            <p class="position-description">帮您完成岗位职责撰写、合同法务文书撰写，优化人力行政效率和法务服务。</p>
+                            <div class="avatar-placeholder"></div>
+                            <h3 class="position-name">支持岗</h3>
+                            <p class="position-description">负责合同法务文书、合同审核和岗位职责JD，提供专业的法律支持和人力资源文档服务。</p>
                         </div>
                     </a>
-                    
-
-
                 </div>
             </div>
         </main>
@@ -202,18 +216,15 @@
                 });
             });
             
-            // 确保左侧导航正确加载
-            if (typeof loadSidebar === 'function') {
-                loadSidebar('marketing');
-            }
+            // 导航已通过loadNavigation统一加载
             
-            // 确保导航停留在销售部位置且选题策划岗不展开
+            // 确保导航停留在营销获客部位置且选题策划岗不展开
             setTimeout(function() {
-                // 查找销售部相关的导航项（使用原生JavaScript替换:contains()选择器）
+                // 查找营销获客部相关的导航项（使用原生JavaScript）
                 const sidebarLinks = document.querySelectorAll('.sidebar a');
                 sidebarLinks.forEach(link => {
-                    if (link.getAttribute('href') && link.getAttribute('href').includes('sales') || 
-                        link.textContent && link.textContent.includes('销售转化部')) {
+                    if (link.getAttribute('href') && link.getAttribute('href').includes('marketing') || 
+                        link.textContent && link.textContent.includes('营销获客部')) {
                         link.classList.add('active');
                     }
                 });
@@ -238,5 +249,6 @@
             }, 200);
         });
     </script>
+
 </body>
 </html>
