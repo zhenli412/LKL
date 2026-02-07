@@ -78,6 +78,21 @@
             color: #333;
             font-weight: 500;
         }
+
+        .user-avatar-placeholder {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f0f2f5;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ccc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'%3E%3C/path%3E%3Ccircle cx='12' cy='7' r='4'%3E%3C/circle%3E%3C/svg%3E");
+            background-size: 20px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
         
         .logout-btn {
             padding: 5px 12px;
@@ -201,16 +216,9 @@
     
     <div class="top-nav">
         <div class="logo-container">
-            <a href="../../index.html" class="logo-link">
-                <img src="../../images/logo.png" alt="利客来" class="logo-image">
+            <a href="{{basePath}}index.html" class="logo-link">
+                <img src="{{basePath}}images/logo.png" alt="利客来" class="logo-image" style="height: 40px; width: auto;">
             </a>
-            <div class="logo-text">           
-                <div class="slogan">
-                    <span class="slogan-l">AI智能巧获客</span>
-                    <span class="slogan-t">利润客户</span>
-                    <span class="slogan">立刻来!</span>
-                </div>
-            </div>
         </div>
         
         <div class="user-info">
@@ -222,6 +230,7 @@
             </div>
             -->
             <div class="user-profile">
+                <div class="user-avatar-placeholder"></div>
                 <span id="current-user">登录用户名</span>
                 <button id="logout-btn" class="logout-btn">登出</button>
             </div>

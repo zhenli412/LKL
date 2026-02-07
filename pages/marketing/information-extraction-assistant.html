@@ -701,8 +701,8 @@
 
                                 <!-- 小红书Cookie输入框（默认隐藏） -->
                                 <div id="xiaohongshu-cookie-section" class="input-section">
-                                    <label for="xiaohongshu-cookie">小红书Cookie</label>
-                                    <input type="text" id="xiaohongshu-cookie" placeholder="小红书平台检索，需输入小红书Cookie">
+                                    <label for="xiaohongshu-cookie">Cookie <span class="required">*</span></label>
+                                    <input type="text" id="xiaohongshu-cookie" placeholder="输入抖音/小红书Cookie">
                                 </div>
 
 
@@ -902,21 +902,27 @@
             <div class="help-section">
                 <h3>使用指南</h3>
                 <div class="help-item">
-                    <strong>1. 选择提取功能：</strong>根据需求选择达人数据、视频数据或评论数据提取
+                    <strong>1. 选择提取功能：</strong>根据需求选择达人数据、视频数据或评论数据提取功能
                 </div>
                 <div class="help-item">
-                    <strong>2. 设置提取参数：</strong>填写相应的关键词、链接或筛选条件
+                    <strong>2. 选择支持平台：</strong>支持抖音和小红书两大主流平台，根据目标数据来源选择对应平台
                 </div>
                 <div class="help-item">
-                    <strong>3. 开始提取：</strong>点击「开始提取」按钮获取数据
+                    <strong>3. 设置提取参数：</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li><strong>达人数据：</strong>输入达人主页链接地址（小红书需提供Cookie）</li>
+                        <li><strong>视频数据：</strong>可选择关键词搜索或达人账号提取两种方式，支持排序、时间、时长等筛选条件，支持翻页检索</li>
+                        <li><strong>评论数据：</strong>输入视频链接，支持翻页和排序方式设置</li>
+                    </ul>
                 </div>
                 <div class="help-item">
-                    <strong>4. 查看结果：</strong>在右侧面板查看提取结果表格
+                    <strong>4. 开始提取：</strong>点击「开始提取」按钮获取数据，提取结果以表格形式展示
                 </div>
                 <div class="help-item">
-                    <strong>5. 导出或保存：</strong>可以导出数据或保存到个人知识库
+                    <strong>5. 查看结果：</strong>在右侧面板查看提取结果，支持数据导出和保存到个人知识库
                 </div>
             </div>
+
         </main>
     </div>
     
