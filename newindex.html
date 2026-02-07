@@ -4,1003 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>利客来 - AI智能获客营销平台，利润客户立刻来!</title>
-    <style>
-        /* 全局样式重置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* 全局样式 */
-        html, body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
-            font-size: 14px;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f5f7fa;
-            height: 100%;
-            overflow: auto; /* 允许滚动 */
-        }
-
-        /* 自定义滚动条样式 */
-        *::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        *::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-
-        *::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 4px;
-        }
-
-        *::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
-        }
-
-        /* 顶部导航栏 */
-        .top-navbar {
-            background-color: #e4e7ed;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 0 0px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 0px;
-        }
-
-        .logo-image {
-            width: 220px;
-            height: 50px;
-            padding-top: 5px;
-            object-fit: contain;
-        }
-        .slogan-l {
-            width: 250px;
-            font-size: 16px;
-            font-family: SF Pro SC,SF Pro Display,SF Pro Icons,PingFang SC,'微软雅黑',Helvetica Neue,Helvetica,Arial,sans-serif;
-            color: #1831a1; /* 淡灰色 */
-        }
-        .slogan {
-            width: 250px;
-            font-size: 16px;
-            font-family: SF Pro SC,SF Pro Display,SF Pro Icons,PingFang SC,'微软雅黑',Helvetica Neue,Helvetica,Arial,sans-serif;
-            color: #dc2626; /* 淡灰色 */
-        }
-        .slogan-t {
-            width: 250px;
-            font-size: 16px;
-            font-family: SF Pro SC,SF Pro Display,SF Pro Icons,PingFang SC,'微软雅黑',Helvetica Neue,Helvetica,Arial,sans-serif;
-            color: #454544; /* 淡灰色 */
-        }
-
-        .logo-text {
-            font-size: 24px;
-            color: #1831a1; /* 使用品牌主色调 */
-        }
-        .logo-text2 {
-            font-size: 20px;
-            color: #60ade0; /* 使用品牌主色调 */
-            font-weight: bold;
-            margin: 0;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .role-switcher {
-            display: flex;
-            gap: 5px;
-            background-color: #f0f2f5;
-            padding: 3px;
-            border-radius: 4px;
-        }
-
-        .role-btn {
-            padding: 4px 12px;
-            border: none;
-            background: transparent;
-            color: #666;
-            cursor: pointer;
-            border-radius: 3px;
-            transition: all 0.3s ease;
-        }
-
-        .role-btn.active {
-            background-color: #fff;
-            color: #4A90E2;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .user-avatar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* 用户头像已移除，保留文本样式 */
-        .user-avatar span {
-            color: #7C3AED;
-            font-weight: 500;
-        }
-
-        .logout-button {
-            margin-left: 10px;
-            padding: 4px 12px;
-            background-color: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.3s ease;
-        }
-
-        .logout-button:hover {
-            background-color: #dc2626;
-            transform: translateY(-1px);
-        }
-
-        .logout-button:active {
-            transform: translateY(0);
-        }
-
-        /* 主容器 */
-        .main-container {
-            display: flex;
-            margin-top: 60px;
-        }
-
-        /* 左侧导航菜单 */
-        .sidebar,
-        .nav-container {
-            width: 240px;
-            background-color: #fff;
-            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
-            position: fixed;
-            left: 0;
-            top: 60px;
-            bottom: 0;
-            overflow-y: auto;
-            /* 隐藏滚动条但保持滚动功能 */
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Chrome, Safari 和 Opera 隐藏滚动条 */
-        .sidebar::-webkit-scrollbar,
-        .nav-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .main-nav {
-            padding: 10px 0;
-        }
-
-        .nav-item {
-            position: relative;
-        }
-
-        .nav-item.level-1 > .nav-header {
-            padding: 12px 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size:16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .nav-item.level-1 > .nav-header:hover {
-            background-color: #ebeef5;
-            font-size:16px;
-        }
-
-        .nav-item.level-2 > .nav-header {
-            padding: 10px 20px 10px 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        .nav-item.level-2 > .nav-header:hover {
-            background-color: #f5f7fa;
-        }
-
-        /* 确保所有二级菜单项的样式统一，无论是否有子菜单 */
-        .nav-item.level-2 > .nav-header .nav-title {
-            flex-grow: 1;
-        }
-
-        /* 统一二级类目样式 - 确保视觉一致性 */
-        .nav-item.level-2 > .nav-header {
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-
-        .nav-item.level-2 > .nav-header > .expand-icon {
-            margin-left: auto;
-            opacity: 0.5; /* 视觉上区分有子菜单的项 */
-            pointer-events: none; /* 禁用空展开图标的点击事件 */
-        }
-
-        /* 有三级类目的二级菜单的展开图标样式 */
-        .nav-item.level-2.expanded > .nav-header > .expand-icon,
-        .nav-item.level-2:has(.nav-children) > .nav-header > .expand-icon {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* 确保导航链接样式统一 */
-        .nav-link {
-            color: inherit;
-            text-decoration: none;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .nav-item.level-3 {
-            padding: 8px 20px 8px 60px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        /* 角色切换菜单显示控制 */
-        /* 默认状态：显示普通菜单 */
-        .nav-item.level-1 {
-            display: block;
-            font-weight: bold;
-            color: #555;
-        }
-
-        /* 默认隐藏企业和管理员菜单 */
-        .nav-item.level-1.company-menu,
-        .nav-item.level-1.admin-menu {
-            display: none;
-        }
-
-        /* 确保企业知识库和个人知识库在所有角色下都能显示 */
-        .nav-item.level-1.knowledge-menu,
-        .nav-item.level-1.personal-menu {
-            display: block !important;
-        }
-
-        /* 当body有company-role类时，显示企业管理菜单和知识库 */
-        body.company-role .nav-item.level-1 {
-            display: none;
-        }
-        body.company-role .nav-item.level-1.company-menu,
-        body.company-role .nav-item.level-1.knowledge-menu,
-        body.company-role .nav-item.level-1.personal-menu {
-            display: block !important;
-        }
-
-        /* 当body有admin-role类时，显示平台管理菜单和知识库 */
-        body.admin-role .nav-item.level-1 {
-            display: none;
-        }
-        body.admin-role .nav-item.level-1.admin-menu,
-        body.admin-role .nav-item.level-1.knowledge-menu,
-        body.admin-role .nav-item.level-1.personal-menu {
-            display: block !important;
-        }
-
-        .nav-item.level-3:hover {
-            background-color: #e6f2ff;
-            color: #4A90E2;
-        }
-
-        .nav-item.level-3.active {
-            background-color: #05448C;
-            color: #fff;
-        }
-
-        .nav-icon {
-            font-size: 16px;
-            width: 25px;
-        }
-
-        .nav-title {
-            flex: 1;
-            font-size: 15px;
-            text-decoration: none;
-        }
-
-        .expand-icon {
-            font-size: 12px;
-            transition: transform 0.3s ease;
-        }
-
-        /* 方案1: 使用CSS边框创建三角形 (推荐) */
-        .expand-icon.css-arrow {
-            font-size: 0;
-            width: 0;
-            height: 0;
-            border-top: 4px solid transparent;
-            border-bottom: 4px solid transparent;
-            border-left: 6px solid #666;
-            display: inline-block;
-        }
-
-        /* 方案2: 使用不同的Unicode字符 */
-        .expand-icon.unicode-chevron::before {
-            content: "›";
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .expand-icon.unicode-plus::before {
-            content: "+";
-        }
-
-        .expand-icon.unicode-minus::before {
-            content: "−";
-        }
-
-        /* 方案3: 使用CSS transform创建的箭头 */
-        .expand-icon.transform-arrow {
-            width: 8px;
-            height: 8px;
-            position: relative;
-            font-size: 0;
-            display: inline-block;
-        }
-
-        .expand-icon.transform-arrow::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: #666;
-            transform: rotate(45deg);
-            transform-origin: left center;
-        }
-
-        .expand-icon.transform-arrow::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: #666;
-            transform: rotate(-45deg);
-            transform-origin: left center;
-        }
-
-        /* 导航菜单展开状态 */
-        .nav-item.expanded > .nav-header .expand-icon {
-            transform: rotate(90deg);
-        }
-
-        /* 确保所有二级菜单项的视觉效果统一 */
-        .nav-item.level-2 > .nav-header .nav-title {
-            flex-grow: 1;
-            color:#333;
-            font-weight: 500;
-        }
-
-        /* 统一所有二级菜单的展开/折叠交互效果 */
-        .nav-item.level-2.expanded > .nav-header {
-            background-color: #f5f7fa;
-        }
-
-        /* 确保展开图标在所有二级菜单中显示一致 */
-        .nav-item.level-2 > .nav-header .expand-icon {
-            opacity: 0.7;
-        }
-
-        .nav-item.level-2.expanded > .nav-header .expand-icon {
-            opacity: 1;
-        }
-
-        /* 展开状态时对不同样式的特殊处理 */
-        .nav-item.expanded > .nav-header .expand-icon.css-arrow {
-            transform: rotate(90deg);
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-            border-top: 6px solid #666;
-        }
-
-        .nav-item.expanded > .nav-header .expand-icon.unicode-plus::before {
-            content: "−";
-            /* 加号不需要旋转，直接替换为减号 */
-        }
-
-        /* 方案4: SVG图标方案 (在HTML中使用) */
-        .expand-icon.svg-icon svg {
-            width: 12px;
-            height: 12px;
-            fill: #666;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-item.expanded > .nav-header .expand-icon.svg-icon svg {
-            transform: rotate(90deg);
-        }
-
-        .nav-item > .nav-children {
-            display: none;
-        }
-
-        .nav-item.expanded > .nav-children {
-            display: block;
-        }
-
-        /* 主内容区域 */
-        .content {
-            flex: 1;
-            margin-left: 240px;
-            padding-left: 20px;
-            padding-top: 20px;
-            padding-right: 20px;
-            background-color: #f5f7fa;
-            position: fixed;
-            top: 60px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            overflow-y: auto;
-        }
-
-        .page-header {
-            margin-bottom: 20px;
-        }
-
-        .page-header h2 {
-            font-size: 24px;
-            color: #555;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .page-header p {
-            color: #999;
-        }
-
-        .page-content {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-        .input-section {
-            font-family: '微软雅黑', sans-serif;
-        }
-        /* 仪表盘样式 */
-        .tool-section {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* 左右布局容器 */
-        .tool-layout {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        /* 左侧面板 */
-        .tool-left-panel {
-            flex: 1;
-            background: #fff;
-            border: 1px solid #e4e7ed;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        /* 右侧面板 */
-        .tool-right-panel {
-            flex: 1;
-            background: #fff;
-            border: 1px solid #e4e7ed;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        /* 面板标题 */
-        .panel-title {
-            background: #fafafa;
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: 500;
-            color: #303133;
-            border-bottom: 1px solid #e4e7ed;
-        }
-
-        /* 面板内容 */
-        .panel-content {
-            padding: 20px;
-        }
-
-        .dashboard-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 20px;
-        }
-
-        .dashboard-card {
-            padding: 0px;
-            border-radius: 1px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .dashboard-card h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .dashboard-card p {
-            margin-bottom: 15px;
-            opacity: 0.9;
-        }
-
-        .dashboard-card a {
-            color: white;
-            text-decoration: none;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            display: inline-block;
-            transition: background-color 0.3s ease;
-        }
-
-        .dashboard-card a:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .quick-actions {
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-
-        .quick-actions h3 {
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .quick-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .quick-links a {
-            text-decoration: none;
-            color: #1831a1;
-            background-color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid #e0e0e0;
-            transition: all 0.3s ease;
-        }
-
-        .quick-links a:hover {
-            background-color: #4A90E2;
-            color: white;
-            border-color: #4A90E2;
-        }
-
-        .platform-info {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #4A90E2;
-        }
-
-        .platform-info h3 {
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .platform-info p {
-            color: #666;
-            line-height: 1.8;
-        }
-
-        /* 功能页面样式 */
-        .function-section {
-            margin-bottom: 20px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .function-description {
-            line-height: 1.8;
-        }
-
-        .function-description strong {
-            color: #333;
-        }
-
-        .help-section {
-            margin-top: 30px;
-            padding: 20px;
-            background-color:#FFFFFF;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border-radius: var(--border-radius);
-        }
-
-        .help-section h3 {
-            color: #1a68b3;
-            margin-bottom: 15px;
-        }
-
-        .help-list {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .help-list li {
-            position: relative;
-            padding-left: 25px;
-            margin-bottom: 10px;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .help-list li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #4A90E2;
-            font-weight: bold;
-        }
-        .help-item{
-            height: 32px;
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 200px;
-            }
-            
-            .content {
-                margin-left: 200px;
-            }
-            
-            .dashboard-cards {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* 角色切换相关样式 */
-        .company-role-only,
-        .admin-role-only {
-            display: none;
-        }
-
-        body.company-role .company-role-only {
-            display: block;
-        }
-
-        body.admin-role .admin-role-only {
-            display: block;
-        }
-
-        body.company-role .nav-item.level-1:not(.company-role-only) {
-            display: none;
-        }
-
-        body.admin-role .nav-item.level-1:not(.admin-role-only) {
-            display: none;
-        }
-
-        /* 侧边栏滚动行为 - 保持滚动功能但隐藏滚动条 */
-        .sidebar, .nav-container {
-            overflow-y: auto;
-            /* 已经通过上面的全局样式隐藏了滚动条 */
-        }
-
-        /* 结果内容样式 */
-        .result-content {
-            background: #fff;
-            border: 1px solid #e4e7ed;
-            border-radius: 6px;
-            padding: 15px;
-            min-height: 150px;
-            white-space: pre-wrap;
-            word-break: break-word;
-            color: #303133;
-        }
-
-        /* 输入方式样式 */
-        .input-method {
-            margin-bottom: 20px;
-            background: #fff;
-            border-radius: 6px;
-            padding: 15px;
-            border: 1px solid #e4e7ed;
-        }
-
-        .input-method h4 {
-            margin: 0 0 10px 0;
-            color: #1890ff;
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        /* Windows设置界面风格样式 */
-        :root {
-            /* Windows主题颜色 */
-            --bg-primary: #F3F3F3;
-            --bg-secondary: #FFFFFF;
-            --bg-hover: #F2F2F2;
-            --bg-active: #E8E8E8;
-            --text-primary: #1A1A1A;
-            --text-secondary: #6E6E6E;
-            --text-tertiary: #8A8A8A;
-            --border-color: #DDDDDD;
-            --accent-color: #0078D4;
-            --accent-hover: #0063B1;
-            --success-bg: #E6F4EA;
-            --success-text: #0D6E3E;
-            --success-border: #4CAF50;
-            --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            --spacing-xs: 4px;
-            --spacing-sm: 8px;
-            --spacing-md: 12px;
-            --spacing-lg: 16px;
-            --spacing-xl: 20px;
-            --spacing-xxl: 24px;
-        }
-
-        /* 页面基础样式 - Windows设置界面风格 */
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: 'Segoe UI', 'Microsoft YaHei', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.5;
-        }
-
-        .page-content {
-            padding: var(--spacing-xl);
-            overflow-y: auto;
-        }
-
-        /* Windows设置布局 */
-        .settings-layout {
-            display: flex;
-            gap: var(--spacing-xl);
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .settings-section,
-        .results-section {
-            flex: 1;
-        }
-
-        /* Windows卡片样式 */
-        .settings-card {
-            background-color: var(--bg-secondary);
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: var(--spacing-xl);
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-
-        /* 卡片头部样式 */
-        .settings-header {
-            padding: var(--spacing-lg) var(--spacing-xl);
-            border-bottom: 1px solid var(--border-color);
-            background-color: var(--bg-secondary);
-        }
-
-        .settings-header h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        /* 卡片内容样式 */
-        .settings-content {
-            padding: var(--spacing-xl);
-        }
-
-        /* 设置组样式 */
-        .settings-group {
-            margin-bottom: var(--spacing-xxl);
-        }
-
-        .settings-label {
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-md);
-            display: block;
-        }
-
-        /* 输入框样式 - Windows风格 */
-        .settings-textarea {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 14px;
-            color: var(--text-primary);
-            background-color: var(--bg-secondary);
-            resize: vertical;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-
-        .settings-textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
-        }
-
-        /* 下拉选择器样式 */
-        .knowledge-selector {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-        }
-
-        .selector-item {
-            width: 100%;
-        }
-
-        .settings-select {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 14px;
-            color: var(--text-primary);
-            background-color: var(--bg-secondary);
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-
-        .settings-select:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
-        }
-
-        /* 复选框样式 */
-        .checkbox-group {
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .checkbox-item {
-            display: block;
-            margin-bottom: var(--spacing-md);
-            padding: var(--spacing-xs) 0;
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--text-primary);
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            margin-right: var(--spacing-md);
-            accent-color: var(--accent-color);
-        }
-
-        /* Windows按钮样式 */
-        .button-group {
-            display: flex;
-            gap: var(--spacing-md);
-        }
-
-        .action-button {
-            padding: var(--spacing-md) var(--spacing-xl);
-            border: 1px solid transparent;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs);
-        }
-
-        .action-button.primary {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        .action-button.primary:hover {
-            background-color: var(--accent-hover);
-        }
-
-        .action-button.secondary {
-            background-color: var(--bg-secondary);
-            color: var(--text-primary);
-            border-color: var(--border-color);
-        }
-
-        .action-button.secondary:hover {
-            background-color: var(--bg-hover);
-        }
-
-        .action-button.small {
-            padding: var(--spacing-xs) var(--spacing-md);
-            font-size: 13px;
-        }
-
-        /* 结果区域样式 */
-        .result-container {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg);
-        }
-
-        .result-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .result-title {
-            margin: 0;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .result-output {
-            min-height: 250px;
-            padding: var(--spacing-lg);
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            white-space: pre-wrap;
-            word-break: break-word;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            color: var(--text-primary);
-        }
-
-        .result-actions {
-            display: flex;
-            justify-content: flex-end;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
     <style>
         /* 覆盖 sidebar 样式以匹配图片 */
         .sidebar {
@@ -1090,6 +94,14 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .scene-card:hover {
+            border-color: #1831a1;
+            box-shadow: 0 4px 12px rgba(24, 49, 161, 0.1);
+            transform: translateY(-2px);
         }
 
         .scene-bg-icon {
@@ -1186,47 +198,575 @@
             display: none; /* 展开后隐藏介绍文案 */
         }
 
-        /* 开干/收起按钮样式 */
+        /* 速查/收起按钮样式 */
         .scene-toggle-container {
             display: flex;
             justify-content: center;
-            margin-top: 10px; /* 15px * 0.7 = 10.5px, 取整为 10px */
+            gap: 12px;
+            margin-top: 10px;
             border-top: 1px solid #f0f0f0;
-            padding-top: 10px; /* 15px * 0.7 = 10.5px, 取整为 10px */
+            padding-top: 10px;
         }
 
-        .scene-toggle-btn {
+        .scene-toggle-btn, .scene-detail-btn {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 24px;
+            padding: 8px 20px;
             border-radius: 30px;
-            background: #1831a1;
-            color: #fff;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
             border: none;
+            text-decoration: none;
+        }
+
+        .scene-toggle-btn {
+            background: #1831a1;
+            color: #fff;
             box-shadow: 0 4px 12px rgba(24, 49, 161, 0.2);
         }
 
-        .scene-toggle-btn:hover {
+        .scene-detail-btn {
+            background: #fff;
+            color: #1831a1;
+            border: 1px solid #1831a1;
+        }
+
+        .scene-toggle-btn:hover, .scene-detail-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(24, 49, 161, 0.3);
-            background: #14288a;
+            box-shadow: 0 6px 16px rgba(24, 49, 161, 0.15);
+        }
+
+        .scene-detail-btn:hover {
+            background: #f0f4ff;
         }
 
         .scene-toggle-btn .btn-icon {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             background: #fff;
             color: #1831a1;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .scene-toggle-btn .btn-icon svg, .scene-detail-btn .detail-icon svg {
+            width: 12px;
+            height: 12px;
+            fill: currentColor;
+        }
+
+        .scene-detail-btn .detail-icon {
+            width: 18px;
+            height: 18px;
+            background: #1831a1;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 一站式工作流推荐样式 */
+        .workflow-nav-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+        }
+
+        .workflow-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .workflow-nav-item {
+            background: #f8fbff;
+            border: 1px solid #eef4ff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .workflow-nav-item:hover {
+            background: #fff;
+            border-color: #1831a1;
+            box-shadow: 0 4px 12px rgba(24, 49, 161, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .workflow-nav-item:hover .workflow-link {
+            background: #f0f4ff;
+            box-shadow: 0 4px 12px rgba(24, 49, 161, 0.1);
+        }
+
+        .workflow-info h3 {
+            margin: 0 0 4px 0;
+            font-size: 16px;
+            color: #1831a1;
+        }
+
+        .workflow-info p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .workflow-link {
+            color: #1831a1;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid #1831a1;
+            background: #fff;
+            transition: all 0.3s;
+        }
+
+        .workflow-link .link-icon {
+            width: 18px;
+            height: 18px;
+            background: #1831a1;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .workflow-link .link-icon svg {
+            width: 12px;
+            height: 12px;
+            fill: currentColor;
+        }
+
+        /* 详述部分通用样式 */
+        .detail-section {
+            margin-top: 40px;
+            background: #fff;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(24, 49, 161, 0.03);
+            border: 1px solid #f0f4ff;
+        }
+
+        .detail-title {
+            font-size: 22px;
+            color: #1831a1;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f4ff;
+        }
+
+        /* 场景详述重构样式 */
+        .scene-group {
+            margin-bottom: 50px;
+            border-bottom: 1px solid #f0f4ff;
+            padding-bottom: 20px;
+        }
+
+        .scene-group:last-child {
+            border-bottom: none;
+        }
+
+        .scene-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1831a1;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+
+        .series-group {
+            margin-bottom: 35px;
+            padding-left: 5px;
+        }
+
+        .series-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .series-header-icon {
+            width: 22px;
+            height: 22px;
+            color: #ff9d00; /* 亮橙色 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .scene-header-icon {
+            width: 24px;
+            height: 24px;
+            color: #1831a1; /* 蓝色 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-right: 10px;
+        }
+
+        .scene-header-icon svg, .series-header-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .series-description-box {
+            border-left: 4px solid #1831a1;
+            padding-left: 15px;
+            margin-bottom: 20px;
+            background: transparent;
+        }
+
+        .series-desc-title {
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .series-desc-text {
+            color: #444;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .agent-list-new {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+            justify-items: start;
+        }
+
+        html, body {
+            scroll-behavior: smooth;
+        }
+
+        /* 回到顶部按钮样式 */
+        .back-to-top {
+            position: fixed;
+            right: 40px;
+            bottom: 40px;
+            width: 50px;
+            height: 50px;
+            background-color: #1831a1;
+            color: white;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99999;
+            text-decoration: none; /* 确保链接没有下划线 */
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: #0d1e6b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .agent-item-v2 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            padding: 10px;
+            border-radius: 12px;
+            width: 100%;
+        }
+
+        .agent-avatar-v2 {
+            width: 54px;
+            height: 54px;
+            background: #f0f4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #1831a1;
+            transition: all 0.2s;
+        }
+
+        .agent-avatar-v2 svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .agent-item-v2:hover .agent-avatar-v2 {
+            background: #1831a1;
+            color: #fff;
+        }
+
+        .agent-name-v2 {
             font-size: 12px;
+            color: #666;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .agent-item-v2:hover .agent-name-v2 {
+            color: #1831a1;
+            font-weight: bold;
+        }
+
+        /* 表格样式优化 */
+        .detail-table-container {
+            margin-bottom: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #f0f4ff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .detail-table th {
+            background: #f8fbff;
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+            color: #1831a1;
+            border-bottom: 1px solid #f0f4ff;
+        }
+
+        .detail-table th:not(:first-child) {
+            text-align: center;
+        }
+
+        .detail-table td {
+            padding: 14px 15px;
+            border-bottom: 1px solid #f8f9fa;
+            color: #444;
+            vertical-align: middle;
+        }
+
+        .detail-table td:not(:first-child) {
+            text-align: center;
+        }
+
+        .detail-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .detail-table tr:hover td {
+            background: #fcfdfe;
+        }
+
+        .table-link {
+            color: #1831a1;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+
+        .table-agent {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.2s;
+            padding: 8px;
+            border-radius: 8px;
+            min-width: 80px;
+        }
+
+        .table-agent-avatar {
+            width: 36px;
+            height: 36px;
+            background: #f0f4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1831a1;
+            transition: all 0.2s;
+        }
+
+        .table-agent-avatar svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .table-agent:hover .table-agent-avatar {
+            background: #1831a1;
+            color: #fff;
+        }
+
+        .table-agent-name {
+            font-size: 12px;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .table-agent:hover .table-agent-name {
+            color: #1831a1;
+            font-weight: bold;
+        }
+
+        .table-link:hover {
+            text-decoration: underline;
+        }
+
+        /* 移除旧的详述样式 */
+        .scenario-detail-item, .scenario-detail-header, .scenario-detail-content, .work-content-list, .detail-agents {
+            display: none;
+        }
+
+        .detail-agents-title {
+            font-size: 13px;
+            color: #999;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .detail-agents-list {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* 工作流可视化样式 */
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .flow-item {
+            background: #fcfdfe;
+            border: 1px solid #f0f4ff;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .flow-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1831a1;
+            margin-bottom: 20px;
+        }
+
+        .flow-steps {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .flow-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100px;
+            cursor: pointer;
+        }
+
+        .flow-node:hover .agent-avatar {
+            background: #1831a1;
+            color: #fff;
+            /* 移除上移效果 */
+        }
+
+        .flow-node:hover .agent-name {
+            color: #1831a1;
+            font-weight: bold;
+        }
+
+        .flow-arrow {
+            color: #bbc6ff;
+            font-size: 18px;
+        }
+
+        .flow-description {
+            margin-top: 20px;
+            padding: 12px 16px;
+            background: #f5f5f5;
+            border-radius: 0;
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+            border-left: 4px solid #1831a1;
+        }
+
+        .flow-tip {
+            background: #fef6e0;
+            border-radius: 0;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #fbe7b5;
+        }
+
+        .flow-tip-icon {
+            color: #f6ad55;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flow-tip-text {
+            font-size: 16px;
+            color: #2d3748;
+            font-weight: 500;
         }
 
         .scene-card.is-expanded .scene-toggle-btn {
@@ -1381,7 +921,7 @@
         .agent-item:hover .agent-avatar {
             background: #1831a1;
             color: #fff;
-            transform: translateY(-2px);
+            /* 移除上移效果 */
         }
 
         .agent-item:hover .agent-name {
@@ -1409,98 +949,144 @@
         }
     </style>
 </head>
-<body>
-    <div class="top-nav">
-        <div class="logo-container">
-            <a href="./index.html" class="logo-link">
-                <img src="./images/logo.png" alt="利客来" class="logo-image" style="height: 40px; width: auto;">
-            </a>
-        </div>
-        
-        <div class="user-info">
-            <!-- 
-            <div class="role-switcher">
-                <button class="role-btn active" id="role-front">前台</button>
-                <button class="role-btn" id="role-company">企业</button>
-                <button class="role-btn" id="role-admin">管理</button>
-            </div>
-            -->
-            <div class="user-profile">
-                <div class="user-avatar-placeholder"></div>
-                <span id="current-user">登录用户名</span>
-                <button id="logout-btn" class="logout-btn">登出</button>
-            </div>
-        </div>
-    </div>
-
+<body id="top">
+    <!-- 导航组件将通过JavaScript动态加载 -->
+    <script src="js/menu.js"></script>
+    <script src="js/nav-component.js"></script>
+    
     <script>
-        // 模拟用户信息更新
-        (function() {
-            const userElement = document.getElementById('current-user');
-            if (userElement) {
-                const storedUser = localStorage.getItem('loggedInUser') || localStorage.getItem('currentUsername') || '管理员';
-                userElement.textContent = storedUser;
-            }
+        // 修改导航加载逻辑，只加载顶部导航，不加载侧边导航
+        async function loadDemoNavigation() {
+            const basePath = './';
+            const activeRole = 'front';
             
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', function() {
-                    if (confirm('确定要退出登录吗？')) {
-                        localStorage.removeItem('loggedInUser');
-                        localStorage.removeItem('currentUsername');
-                        localStorage.removeItem('userLoggedIn');
-                        window.location.href = './login.html';
-                    }
-                });
-            }
-        })();
+            // 加载顶部导航
+            await loadTopNavigation(basePath, activeRole);
+            
+            // 导航加载完成后显示主内容
+            document.getElementById('main-content-container').style.display = 'block';
 
-        // 场景卡片 展开/收起 逻辑
-        document.querySelectorAll('.scene-toggle-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const sceneCard = btn.closest('.scene-card');
-                const isExpanded = sceneCard.classList.toggle('is-expanded');
-                
-                // 更新按钮文字和图标
-                const btnText = btn.querySelector('.btn-text');
-                const btnIcon = btn.querySelector('.btn-icon');
-                
-                if (isExpanded) {
-                    btnText.textContent = '收起';
-                    btnIcon.textContent = '▲';
+            // 场景卡片 展开/收起 逻辑
+            document.querySelectorAll('.scene-toggle-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // 阻止冒泡到 scene-card
+                    const sceneCard = btn.closest('.scene-card');
+                    const isExpanded = sceneCard.classList.toggle('is-expanded');
                     
-                    // 默认展开第一个工作项
-                    const firstWorkItem = sceneCard.querySelector('.work-item');
-                    if (firstWorkItem) {
-                        sceneCard.querySelectorAll('.work-item').forEach(item => {
-                            item.classList.remove('active');
-                        });
-                        firstWorkItem.classList.add('active');
+                    // 更新按钮文字和图标
+                    const btnText = btn.querySelector('.btn-text');
+                    const btnIcon = btn.querySelector('.btn-icon');
+                    
+                    if (isExpanded) {
+                        btnText.textContent = '收起';
+                        btnIcon.innerHTML = '<svg viewBox="0 0 24 24" style="transform: rotate(-90deg)"><path d="M8 5v14l11-7z"></path></svg>';
+                        
+                        // 默认展开第一个工作项
+                        const firstWorkItem = sceneCard.querySelector('.work-item');
+                        if (firstWorkItem) {
+                            sceneCard.querySelectorAll('.work-item').forEach(item => {
+                                item.classList.remove('active');
+                            });
+                            firstWorkItem.classList.add('active');
+                        }
+                    } else {
+                        btnText.textContent = '速查';
+                        btnIcon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>';
                     }
-                } else {
-                    btnText.textContent = '开干';
-                    btnIcon.textContent = '▶';
-                }
-            });
-        });
-
-        // 绑定系列工作的展开/收起事件（手风琴模式）
-        document.querySelectorAll('.work-title').forEach(title => {
-            title.addEventListener('click', () => {
-                const currentItem = title.parentElement;
-                const isActive = currentItem.classList.contains('active');
-                
-                // 先收起当前场景下所有已展开的项
-                const sceneCard = currentItem.closest('.scene-card');
-                sceneCard.querySelectorAll('.work-item').forEach(item => {
-                    item.classList.remove('active');
                 });
-                
-                // 如果点击的项之前不是展开状态，则展开它
-                if (!isActive) {
-                    currentItem.classList.add('active');
-                }
             });
+
+            // 场景卡片 整体点击跳转 逻辑
+            document.querySelectorAll('.scene-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const detailBtn = card.querySelector('.scene-detail-btn');
+                    if (detailBtn) {
+                        const targetId = detailBtn.getAttribute('href').substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // 绑定系列工作的展开/收起事件（手风琴模式）
+            document.querySelectorAll('.work-title').forEach(title => {
+                title.addEventListener('click', (e) => {
+                    e.stopPropagation(); // 阻止冒泡到 scene-card，防止点击手风琴时跳转
+                    const currentItem = title.parentElement;
+                    const isActive = currentItem.classList.contains('active');
+                    
+                    // 先收起当前场景下所有已展开的项
+                    const sceneCard = currentItem.closest('.scene-card');
+                    sceneCard.querySelectorAll('.work-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // 如果点击的项之前不是展开状态，则展开它
+                    if (!isActive) {
+                        currentItem.classList.add('active');
+                    }
+                });
+            });
+
+            // 回到顶部按钮逻辑 - 增加脚本兜底，强制容器滚动
+              const btt = document.getElementById('back-to-top');
+              const detailSection = document.getElementById('scene-details');
+              
+              if (btt) {
+                    const updateVisibility = () => {
+                        const detailSection = document.getElementById('scene-details');
+                        if (detailSection) {
+                            const rect = detailSection.getBoundingClientRect();
+                            // 如果详述区域顶部进入视口（90%位置），或者已经滚过头了（top < 0）
+                            if (rect.top <= window.innerHeight * 0.9) {
+                                btt.classList.add('show');
+                            } else {
+                                btt.classList.remove('show');
+                            }
+                        }
+                    };
+
+                    // 使用 IntersectionObserver
+                    const observer = new IntersectionObserver((entries) => {
+                        updateVisibility();
+                    }, { threshold: [0, 0.1] });
+
+                    const detailSection = document.getElementById('scene-details');
+                    if (detailSection) {
+                        observer.observe(detailSection);
+                    }
+
+                    // 监听多种滚动容器
+                    window.addEventListener('scroll', updateVisibility, true);
+                    const contentContainer = document.getElementById('main-content-container') || document.querySelector('.content');
+                    if (contentContainer) {
+                        contentContainer.addEventListener('scroll', updateVisibility);
+                    }
+                    
+                    // 定期检查作为兜底（解决某些动态加载导致的布局变化）
+                    setInterval(updateVisibility, 500);
+
+                    btt.addEventListener('click', function(e) {
+                      // 不阻止默认行为，让锚点生效，但增加脚本确保万无一失
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      document.body.scrollTop = 0;
+                      document.documentElement.scrollTop = 0;
+                      
+                      // 针对可能的内部滚动容器
+                      const content = document.querySelector('.content');
+                      if (content) content.scrollTop = 0;
+                  });
+              }
+         }
+        
+        // 在页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDemoNavigation();
         });
     </script>
 
@@ -1591,6 +1177,7 @@
 
         <!-- 主内容区域 -->
         <main class="content" id="main-content-container" style="display: none;">
+            <div id="top-anchor" style="position: absolute; top: 0; left: 0;"></div>
             <div class="page-header" style="display: flex; align-items: center; gap: 20px; min-width: 100%;">
                 <h2 class="logo-text" style="color: #1831a1; margin: 0; white-space: nowrap;"> 场景化功能导航</h2>
             </div>
@@ -1683,14 +1270,70 @@
                             </div>
                         </div>
                         <div class="scene-toggle-container">
-                            <button class="scene-toggle-btn">
-                                <span class="btn-text">开干</span>
-                                <span class="btn-icon">▶</span>
-                            </button>
-                        </div>
+                    <button class="scene-toggle-btn">
+                        <span class="btn-text">速查</span>
+                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                    </button>
+                    <a href="#detail-content" class="scene-detail-btn">
+                        <span class="detail-text">详查</span>
+                        <span class="detail-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                    </a>
+                </div>
                     </div>
 
-                    <!-- 场景2：做推广 -->
+                    <!-- 场景2：做销售 -->
+                    <div class="scene-card">
+                        <div class="scene-bg-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="18" x2="12" y2="6"></line></svg>
+                        </div>
+                        <div class="scene-header">
+                            <span class="scene-header-icon">
+                                <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            </span>
+                            <div class="scene-title-group">
+                                <span>做销售</span>
+                                <span class="scene-subtitle">从不知道输在哪→知道怎么赢</span>
+                            </div>
+                        </div>
+                        <div class="scene-intro">
+                            <div class="scene-problem">
+                                <div class="contrast-icon">
+                                    <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#ff4d4f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                </div>
+                                不知道哪句把人聊跑了？录音听三遍也没听出来。
+                            </div>
+                            <div class="scene-solution">
+                                <div class="contrast-icon">
+                                    <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#1831a1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                </div>
+                                AI逐句标问题、给改法、附跟进，<strong>听完就能改</strong>
+                            </div>
+                        </div>
+                        <div class="work-list">
+                            <div class="work-item">
+                                <div class="work-title">提升销售力</div>
+                                <div class="agent-container" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));">
+                                    <div class="agent-item"><div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><div class="agent-name">销冠话术生成助手</div></div>
+                                    <div class="agent-item"><div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><div class="agent-name">通话/录音话术诊断助手</div></div>
+                                    <div class="agent-item"><div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div><div class="agent-name">话术诊断助手</div></div>
+                                    <div class="agent-item"><div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></div><div class="agent-name">业绩分析助手</div></div>
+                                    <div class="agent-item"><div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><div class="agent-name">直播话术生成助手</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="scene-toggle-container">
+                    <button class="scene-toggle-btn">
+                        <span class="btn-text">速查</span>
+                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                    </button>
+                    <a href="#detail-sales" class="scene-detail-btn">
+                        <span class="detail-text">详查</span>
+                        <span class="detail-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                    </a>
+                </div>
+                    </div>
+
+                    <!-- 场景3：做推广 -->
                     <div class="scene-card">
                         <div class="scene-bg-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.71-2.13.09-2.91a2.18 2.18 0 0 0-3.09-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-5c1.62-2.2 5-3 5-3"></path><path d="M12 15v5s3.03-.55 5-2c2.2-1.62 3-5 3-5"></path></svg>
@@ -1747,59 +1390,15 @@
                             </div>
                         </div>
                         <div class="scene-toggle-container">
-                            <button class="scene-toggle-btn">
-                                <span class="btn-text">开干</span>
-                                <span class="btn-icon">▶</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 场景3：做销售 -->
-                    <div class="scene-card">
-                        <div class="scene-bg-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="18" x2="12" y2="6"></line></svg>
-                        </div>
-                        <div class="scene-header">
-                            <span class="scene-header-icon">
-                                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                            </span>
-                            <div class="scene-title-group">
-                                <span>做销售</span>
-                                <span class="scene-subtitle">从不知道输在哪→知道怎么赢</span>
-                            </div>
-                        </div>
-                        <div class="scene-intro">
-                            <div class="scene-problem">
-                                <div class="contrast-icon">
-                                    <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#ff4d4f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                                </div>
-                                不知道哪句把人聊跑了？录音听三遍也没听出来。
-                            </div>
-                            <div class="scene-solution">
-                                <div class="contrast-icon">
-                                    <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#1831a1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                                </div>
-                                AI逐句标问题、给改法、附跟进，<strong>听完就能改</strong>
-                            </div>
-                        </div>
-                        <div class="work-list">
-                            <div class="work-item">
-                                <div class="work-title">提升销售力</div>
-                                <div class="agent-container" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));">
-                                    <div class="agent-item"><div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><div class="agent-name">销冠话术生成助手</div></div>
-                                    <div class="agent-item"><div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><div class="agent-name">通话/录音话术诊断助手</div></div>
-                                    <div class="agent-item"><div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div><div class="agent-name">话术诊断助手</div></div>
-                                    <div class="agent-item"><div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg></div><div class="agent-name">业绩分析助手</div></div>
-                                    <div class="agent-item"><div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><div class="agent-name">直播话术生成助手</div></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="scene-toggle-container">
-                            <button class="scene-toggle-btn">
-                                <span class="btn-text">开干</span>
-                                <span class="btn-icon">▶</span>
-                            </button>
-                        </div>
+                    <button class="scene-toggle-btn">
+                        <span class="btn-text">速查</span>
+                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                    </button>
+                    <a href="#detail-promotion" class="scene-detail-btn">
+                        <span class="detail-text">详查</span>
+                        <span class="detail-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                    </a>
+                </div>
                     </div>
 
                     <!-- 场景4：做事务 -->
@@ -1809,7 +1408,7 @@
                         </div>
                         <div class="scene-header">
                             <span class="scene-header-icon">
-                                <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2 4-4"></path></svg>
+                                <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
                             </span>
                             <div class="scene-title-group">
                                 <span>做事务</span>
@@ -1840,19 +1439,750 @@
                             </div>
                         </div>
                         <div class="scene-toggle-container">
-                            <button class="scene-toggle-btn">
-                                <span class="btn-text">开干</span>
-                                <span class="btn-icon">▶</span>
-                            </button>
-                        </div>
+                    <button class="scene-toggle-btn">
+                        <span class="btn-text">速查</span>
+                        <span class="btn-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                    </button>
+                    <a href="#detail-admin" class="scene-detail-btn">
+                        <span class="detail-text">详查</span>
+                        <span class="detail-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                    </a>
+                </div>
                     </div>
                 </div>
                 
                 <div class="section-divider" style="margin-top: 30px; margin-bottom: 20px;">
-                    <h2 style="color: #1831a1; font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                        🔥 一站式工作推荐
-                    </h2>
                 </div>
+
+                <section class="workflow-nav-card">
+                    <h2 style="color: #1831a1; margin-bottom: 20px; font-size: 20px; display: flex; align-items: center; gap: 10px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        一站式工作流推荐
+                    </h2>
+                    <div class="workflow-nav-grid">
+                        <a href="#flow-douyin-recreate" class="workflow-nav-item">
+                            <div class="workflow-info">
+                                <h3>抖音二创工作流</h3>
+                                <p>从链接提取到文案二创，快速量产爆款视频</p>
+                            </div>
+                            <div class="workflow-link">
+                                <span>点击详情</span>
+                                <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                            </div>
+                        </a>
+                        <a href="#flow-douyin-original" class="workflow-nav-item">
+                            <div class="workflow-info">
+                                <h3>抖音原创工作流</h3>
+                                <p>智能选题、脚本原创，助力账号从0到1</p>
+                            </div>
+                            <div class="workflow-link">
+                                <span>点击详情</span>
+                                <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                            </div>
+                        </a>
+                        <a href="#flow-pyq-product" class="workflow-nav-item">
+                            <div class="workflow-info">
+                                <h3>产品推荐朋友圈</h3>
+                                <p>IP化人设构建，打造高转化朋友圈文案</p>
+                            </div>
+                            <div class="workflow-link">
+                                <span>点击详情</span>
+                                <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                            </div>
+                        </a>
+                        <a href="#flow-sales-talk" class="workflow-nav-item">
+                            <div class="workflow-info">
+                                <h3>销售人员话术提升</h3>
+                                <p>语音转文本分析，销冠级话术诊断与优化</p>
+                            </div>
+                            <div class="workflow-link">
+                                <span>点击详情</span>
+                                <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+
+                <section id="scene-details" class="detail-section">
+                    <h2 class="detail-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        场景 & 智能体功能详述
+                    </h2>
+
+                    <!-- 场景一：做内容 -->
+                    <div id="detail-content" class="scene-group">
+                        <div class="scene-header">
+                            <div class="scene-header-icon">
+                                <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                            </div>
+                            场景一：做内容 — 从没素材到能发布
+                        </div>
+                        
+                        <!-- 1系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                </div>
+                                1系列 · 我要获取链接（8个）
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">想快速锁定热门内容？</div>
+                                <div class="series-desc-text">抖音/小红书达人、视频、评论数据一键获取，先把素材范围圈出来。</div>
+                            </div>
+                            <div class="detail-table-container">
+                                <table class="detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th>平台 / 数据类型</th>
+                                            <th>达人数据</th>
+                                            <th>视频数据-关键词</th>
+                                            <th>视频数据-达人账号</th>
+                                            <th>评论数据</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="font-weight: 500; background: #f8faff;">抖音</td>
+                                            <td>
+                                                <a href="#" class="table-agent">
+                                                    <div class="table-agent-avatar">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                                    </div>
+                                                    <span class="table-agent-name">抖音达人搜索</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="table-agent">
+                                                    <div class="table-agent-avatar">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                                    </div>
+                                                    <span class="table-agent-name">抖音关键词搜索</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="table-agent">
+                                                    <div class="table-agent-avatar">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                                    </div>
+                                                    <span class="table-agent-name">抖音主页监控</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="table-agent">
+                                                    <div class="table-agent-avatar">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                                    </div>
+                                                    <span class="table-agent-name">抖音评论提取</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 500; background: #f8faff;">小红书</td>
+                                            <td>
+                                                <a href="#" class="table-agent">
+                                                    <div class="table-agent-avatar">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                                    </div>
+                                                    <span class="table-agent-name">小红书达人搜索</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="table-agent">
+                                                    <div class="table-agent-avatar">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                                    </div>
+                                                    <span class="table-agent-name">小红书关键词搜索</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="table-agent">
+                                                    <div class="table-agent-avatar">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                                    </div>
+                                                    <span class="table-agent-name">小红书主页监控</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="table-agent">
+                                                    <div class="table-agent-avatar">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                                    </div>
+                                                    <span class="table-agent-name">小红书评论提取</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 2系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+                                </div>
+                                2系列 · 我要提取文案/语音（3个）
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">想把内容变成可改的文本？</div>
+                                <div class="series-desc-text">短视频口播、网页文案、语音内容一键提取成文字。</div>
+                            </div>
+                            <ul class="agent-list-new">
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
+                                        <span class="agent-name-v2">短视频提取文案</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
+                                        <span class="agent-name-v2">网页提取文案</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21s2.5 2.1 5 2.1 5-2.1 5-2.1V3s-2.5 2.1-5 2.1-5-2.1-5-2.1z"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+                                        <span class="agent-name-v2">语音文本提炼助手</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 3系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                </div>
+                                3系列 · 我要做分析（4个）
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">想知道为什么别人能爆？</div>
+                                <div class="series-desc-text">拆结构、萃精华、查竞品，先看清套路再下手。</div>
+                            </div>
+                            <ul class="agent-list-new">
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+                                        <span class="agent-name-v2">结构分析助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                                        <span class="agent-name-v2">达人分析助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></div>
+                                        <span class="agent-name-v2">内容萃取助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+                                        <span class="agent-name-v2">竞品调研助手</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 4系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg>
+                                </div>
+                                4系列 · 我要找选题（3个）
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">不知道今天发什么？</div>
+                                <div class="series-desc-text">从文档、评论、用户需求挖选题，直接给可拍方向。</div>
+                            </div>
+                            <ul class="agent-list-new">
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22v-2"></path><path d="M14 22v-2"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.32 1.04 4.39 2.74 5.76C8.82 15.68 9 16.44 9 17.1V18h6v-.9c0-.66.18-1.42 1.26-2.34A7.003 7.003 0 0 0 12 2z"></path></svg></div>
+                                        <span class="agent-name-v2">选题生成-文档选题</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></div>
+                                        <span class="agent-name-v2">选题生成-评论选题</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></div>
+                                        <span class="agent-name-v2">选题生成-组合选题</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 5系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                </div>
+                                5系列 · 我要写内容（8个）
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">想从0到可发布？</div>
+                                <div class="series-desc-text">二创出稿、标题封面、批量出 10 条、分镜脚本一次配齐。</div>
+                            </div>
+                            <ul class="agent-list-new">
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></div>
+                                        <span class="agent-name-v2">文案二创-抖音引流</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></div>
+                                        <span class="agent-name-v2">文案二创-小红书</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
+                                        <span class="agent-name-v2">文案二创-选题原创-抖音</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
+                                        <span class="agent-name-v2">文案二创-选题原创-小红书</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div>
+                                        <span class="agent-name-v2">标题封面-抖音方案</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div>
+                                        <span class="agent-name-v2">标题封面-小红书方案</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg></div>
+                                        <span class="agent-name-v2">批量二创助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg></div>
+                                        <span class="agent-name-v2">分镜头助手</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 6系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                </div>
+                                6系列 · 我要查质量
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">发之前先检查。</div>
+                                <div class="series-desc-text">去AI味、错别字、违禁词三连检，降低限流/下架风险。</div>
+                            </div>
+                            <ul class="agent-list-new">
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="M4.93 4.93l1.41 1.41"></path><path d="M17.66 17.66l1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="M6.34 17.66l-1.41 1.41"></path><path d="M19.07 4.93l-1.41 1.41"></path></svg></div>
+                                        <span class="agent-name-v2">去AI味助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></div>
+                                        <span class="agent-name-v2">文字纠错助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                                        <span class="agent-name-v2">违禁词助手</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 场景二：做销售 -->
+                    <div id="detail-sales" class="scene-group">
+                        <div class="scene-header">
+                            <div class="scene-header-icon">
+                                <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            </div>
+                            场景二：做销售 — 从不知道输在哪到知道怎么赢
+                        </div>
+                        
+                        <!-- 7系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                                </div>
+                                7系列 · 我要提升销售力
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">把销售改进做成可执行清单。</div>
+                                <div class="series-desc-text">话术生成 + 录音诊断 + 数据分析 + 直播稿，一套拉起成交。</div>
+                            </div>
+                            <ul class="agent-list-new">
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></div>
+                                        <span class="agent-name-v2">销冠话术生成助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg></div>
+                                        <span class="agent-name-v2">通话/录音话术诊断助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+                                        <span class="agent-name-v2">话术诊断助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg></div>
+                                        <span class="agent-name-v2">业绩分析助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
+                                        <span class="agent-name-v2">直播话术生成助手</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 场景三：做推广 -->
+                    <div id="detail-promotion" class="scene-group">
+                        <div class="scene-header">
+                            <div class="scene-header-icon">
+                                <svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                            </div>
+                            场景三：做推广 — 从产品说不清到客户主动问
+                        </div>
+                        
+                        <!-- 8系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                </div>
+                                8系列 · 我要打造个人IP
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">让客户一眼记住你是谁。</div>
+                                <div class="series-desc-text">把人设标签、表达风格、内容方向一次梳理清。</div>
+                            </div>
+                            <ul class="agent-list-new">
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+                                        <span class="agent-name-v2">个人IP打造助手</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 9系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M10 18l5-5c.9-.9.9-2.3 0-3.2s-2.3-.9-3.2 0l-5 5V18h3.2z"></path></svg>
+                                </div>
+                                9系列 · 我要写营销文书
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">不想从空白写到深夜。</div>
+                                <div class="series-desc-text">朋友圈、活动方案、品牌故事、广告语、发言稿、PPT 快速出稿。</div>
+                            </div>
+                            <ul class="agent-list-new">
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></div>
+                                        <span class="agent-name-v2">朋友圈文案助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                                        <span class="agent-name-v2">活动策划助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
+                                        <span class="agent-name-v2">品牌故事助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></div>
+                                        <span class="agent-name-v2">广告语生成助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
+                                        <span class="agent-name-v2">公文写作助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
+                                        <span class="agent-name-v2">发言稿写作助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22v-2"></path><path d="M14 22v-2"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.32 1.04 4.39 2.74 5.76C8.82 15.68 9 16.44 9 17.1V18h6v-.9c0-.66.18-1.42 1.26-2.34A7.003 7.003 0 0 0 12 2z"></path></svg></div>
+                                        <span class="agent-name-v2">产品起名助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+                                        <span class="agent-name-v2">PPT文案生成器</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 10系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                                </div>
+                                10系列 · 我要推产品
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">不知道怎么讲产品更好卖？</div>
+                                <div class="series-desc-text">提炼卖点 + 挖掘场景，让产品自己会“说话”。</div>
+                            </div>
+                            <ul class="agent-list-new">
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"></path><path d="M11 3L8 9l4 12 4-12-3-6"></path><path d="M2 9h20"></path></svg></div>
+                                        <span class="agent-name-v2">卖点提炼助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                                        <span class="agent-name-v2">产品应用场景挖掘助手</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 场景四：做事务 -->
+                    <div id="detail-admin" class="scene-group">
+                        <div class="scene-header">
+                            <div class="scene-header-icon">
+                                <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                            </div>
+                            场景四：做事务 — 把耗时杂活变成标准件
+                        </div>
+                        
+                        <!-- 11系列 -->
+                        <div class="series-group">
+                            <div class="series-header">
+                                <div class="series-header-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                                </div>
+                                11系列 · 我要处理商务HR事务
+                            </div>
+                            <div class="series-description-box">
+                                <div class="series-desc-title">杂活别耗你。</div>
+                                <div class="series-desc-text">合同风险先筛一遍，JD一键生成可用版本。</div>
+                            </div>
+                            <ul class="agent-list-new">
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg></div>
+                                        <span class="agent-name-v2">合同审核助手</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="agent-item-v2">
+                                        <div class="agent-avatar-v2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></div>
+                                        <span class="agent-name-v2">岗位职责JD助手</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="workflow-details" class="detail-section">
+                    <h2 class="detail-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                        一站式工作流详述（进阶用法）
+                    </h2>
+                    <div class="flow-tip">
+                        <div class="flow-tip-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14H11V21L20 10H13Z"/></svg>
+                        </div>
+                        <div class="flow-tip-text">当你知道自己要做什么了，就用这里把多个助手串起来，一次把任务做完。</div>
+                    </div>
+                    <div class="flow-container">
+                        <div id="flow-douyin-recreate" class="flow-item">
+                            <div class="flow-title">抖音二创全流程</div>
+                            <div class="flow-steps">
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></div>
+                                    <div class="agent-name">链接提取</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
+                                    <div class="agent-name">文案提取</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
+                                    <div class="agent-name">文案二创</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
+                                    <div class="agent-name">标题封面</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div>
+                                    <div class="agent-name">分镜助手</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                                    <div class="agent-name">违禁词检查</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></div>
+                                    <div class="agent-name">文字校对</div>
+                                </div>
+                            </div>
+                            <div class="flow-description">
+                                从一条爆款视频出发，提取文案 → 二次创作 → 包装标题封面 → 拆分镜脚本 → 合规检查 → 文字精修。
+                            </div>
+                        </div>
+
+                        <div id="flow-douyin-original" class="flow-item">
+                            <div class="flow-title">抖音原创全流程</div>
+                            <div class="flow-steps">
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
+                                    <div class="agent-name">选题生成</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
+                                    <div class="agent-name">选题原创</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></div>
+                                    <div class="agent-name">标题封面</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div>
+                                    <div class="agent-name">分镜助手</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                                    <div class="agent-name">违禁词检查</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></div>
+                                    <div class="agent-name">文字校对</div>
+                                </div>
+                            </div>
+                            <div class="flow-description">
+                                从零开始找选题 → 原创文案 → 包装标题封面 → 拆分镜 → 合规 → 精修。
+                            </div>
+                        </div>
+
+                        <div id="flow-pyq-product" class="flow-item">
+                            <div class="flow-title">产品推荐朋友圈</div>
+                            <div class="flow-steps">
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg></div>
+                                    <div class="agent-name">IP提取</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+                                    <div class="agent-name">卖点提炼</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
+                                    <div class="agent-name">场景挖掘</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+                                    <div class="agent-name">朋友圈文案</div>
+                                </div>
+                            </div>
+                            <div class="flow-description">
+                                先提炼你的人设IP → 再挖产品卖点和使用场景 → 最后生成符合你调性的种草文案，4步发圈。
+                            </div>
+                        </div>
+
+                        <div id="flow-sales-talk" class="flow-item">
+                            <div class="flow-title">销售话术提升</div>
+                            <div class="flow-steps">
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
+                                    <div class="agent-name">语音转文本</div>
+                                </div>
+                                <div class="flow-arrow">➜</div>
+                                <div class="flow-node">
+                                    <div class="agent-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+                                    <div class="agent-name">话术诊断</div>
+                                </div>
+                            </div>
+                            <div class="flow-description">
+                                把通话录音转成文字 → AI 10维度深度诊断，输出评分与改进建议，2步提升。
+                            </div>
+                        </div>
+                    </div>
+                </section>
         </main>
     </div>
     
@@ -1905,12 +2235,27 @@
                     
                     if (isExpanded) {
                         card.classList.remove('is-expanded');
-                        this.querySelector('.btn-text').textContent = '开干';
-                        this.querySelector('.btn-icon').textContent = '▶';
+                        this.querySelector('.btn-text').textContent = '速查';
+                        this.querySelector('.btn-icon').innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>';
                     } else {
                         card.classList.add('is-expanded');
                         this.querySelector('.btn-text').textContent = '收起';
-                        this.querySelector('.btn-icon').textContent = '▲';
+                        this.querySelector('.btn-icon').innerHTML = '<svg viewBox="0 0 24 24" style="transform: rotate(-90deg)"><path d="M8 5v14l11-7z"></path></svg>';
+                    }
+                });
+            });
+
+            // 添加平滑滚动效果
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80, // 留出顶部导航栏空间
+                            behavior: 'smooth'
+                        });
                     }
                 });
             });
@@ -1931,5 +2276,12 @@
             // }
         });
     </script>
+    
+    <!-- 回到顶部按钮 - 放在 body 末尾确保不被覆盖 -->
+    <a href="#top-anchor" id="back-to-top" class="back-to-top" title="回到顶部">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path>
+        </svg>
+    </a>
 </body>
 </html>
